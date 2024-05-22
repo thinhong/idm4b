@@ -251,14 +251,15 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#methods" id="toc-methods" class="nav-link active" data-scroll-target="#methods"><span class="header-section-number">2.1</span> Methods</a></li>
-  <li><a href="#tsir-framework" id="toc-tsir-framework" class="nav-link" data-scroll-target="#tsir-framework"><span class="header-section-number">2.2</span> <code>tsiR</code> framework</a>
+  <li><a href="#assumptions" id="toc-assumptions" class="nav-link active" data-scroll-target="#assumptions"><span class="header-section-number">2.1</span> Assumptions</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods"><span class="header-section-number">2.2</span> Methods</a></li>
+  <li><a href="#tsir-framework" id="toc-tsir-framework" class="nav-link" data-scroll-target="#tsir-framework"><span class="header-section-number">2.3</span> <code>tsiR</code> framework</a>
   <ul class="collapse">
-  <li><a href="#reconstruct-susceptible-dynamics" id="toc-reconstruct-susceptible-dynamics" class="nav-link" data-scroll-target="#reconstruct-susceptible-dynamics"><span class="header-section-number">2.2.1</span> Reconstruct susceptible dynamics</a></li>
-  <li><a href="#estimate-parameters" id="toc-estimate-parameters" class="nav-link" data-scroll-target="#estimate-parameters"><span class="header-section-number">2.2.2</span> Estimate parameters</a></li>
+  <li><a href="#reconstruct-susceptible-dynamics" id="toc-reconstruct-susceptible-dynamics" class="nav-link" data-scroll-target="#reconstruct-susceptible-dynamics"><span class="header-section-number">2.3.1</span> Reconstruct susceptible dynamics</a></li>
+  <li><a href="#estimate-parameters" id="toc-estimate-parameters" class="nav-link" data-scroll-target="#estimate-parameters"><span class="header-section-number">2.3.2</span> Estimate parameters</a></li>
   </ul></li>
-  <li><a href="#basic-reproduction-number" id="toc-basic-reproduction-number" class="nav-link" data-scroll-target="#basic-reproduction-number"><span class="header-section-number">2.3</span> Basic reproduction number</a></li>
-  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">2.4</span> Examples</a></li>
+  <li><a href="#basic-reproduction-number" id="toc-basic-reproduction-number" class="nav-link" data-scroll-target="#basic-reproduction-number"><span class="header-section-number">2.4</span> Basic reproduction number</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">2.5</span> Examples</a></li>
   </ul>
 </nav>
     </div>
@@ -292,13 +293,16 @@ window.Quarto = {
 <li>The model is a continuous-time process, whereas the data are discretely collected weekly or monthly.</li>
 </ol>
 <p>The TSIR handle (2) by reconstructing the susceptible dynamics, and (3) by switching continuous to discrete time with an assumption such that the infectious period is equal to data collecting interval.</p>
+<section id="assumptions" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="assumptions"><span class="header-section-number">2.1</span> Assumptions</h2>
 <p>The TSIR model relies on two main assumptions<span class="citation" data-cites="becker2017"><sup><a href="references.html#ref-becker2017" role="doc-biblioref">1</a></sup></span>:</p>
 <ul>
 <li>Infectious period is fixed at the sampling interval of the data (e.g., bi-weekly for measles). The time step of the model is equal to the infectious period.</li>
 <li>Over a long enough time (e.g., 10-20 years), the sum of births and cases should be approximately equal due to the high infectivity of pathogens such as measles and other childhood infections, in the pre-vaccine era.</li>
 </ul>
-<section id="methods" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="methods"><span class="header-section-number">2.1</span> Methods</h2>
+</section>
+<section id="methods" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="methods"><span class="header-section-number">2.2</span> Methods</h2>
 <p><span class="math display">\[\mathbb{E}(I_{t + 1}) = \beta_{t + 1} S_t I_t^{\alpha}\]</span></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -340,10 +344,10 @@ Explain
 </div>
 </div>
 </section>
-<section id="tsir-framework" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="tsir-framework"><span class="header-section-number">2.2</span> <code>tsiR</code> framework</h2>
-<section id="reconstruct-susceptible-dynamics" class="level3" data-number="2.2.1">
-<h3 data-number="2.2.1" class="anchored" data-anchor-id="reconstruct-susceptible-dynamics"><span class="header-section-number">2.2.1</span> Reconstruct susceptible dynamics</h3>
+<section id="tsir-framework" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="tsir-framework"><span class="header-section-number">2.3</span> <code>tsiR</code> framework</h2>
+<section id="reconstruct-susceptible-dynamics" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="reconstruct-susceptible-dynamics"><span class="header-section-number">2.3.1</span> Reconstruct susceptible dynamics</h3>
 <p>Fit a regression between cumulative cases and cumulative births. The slope is assumed to be the report rate <span class="math inline">\(\rho_t\)</span> (rho)<span class="citation" data-cites="du2017"><sup><a href="references.html#ref-du2017" role="doc-biblioref">3</a></sup></span>, the residuals is assumed to be the shape of the susceptible dynamics (<span class="math inline">\(Z_t\)</span>).</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
@@ -382,8 +386,8 @@ Explain
 </div>
 </div>
 </section>
-<section id="estimate-parameters" class="level3" data-number="2.2.2">
-<h3 data-number="2.2.2" class="anchored" data-anchor-id="estimate-parameters"><span class="header-section-number">2.2.2</span> Estimate parameters</h3>
+<section id="estimate-parameters" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="estimate-parameters"><span class="header-section-number">2.3.2</span> Estimate parameters</h3>
 <p>Set the expectation to the mean, then take log of both sides:</p>
 <p><span class="math display">\[\mathbb{E}(I_{t + 1}) = \beta_{t + 1} S_t I_t^{\alpha}\]</span></p>
 <p><span class="math display">\[log I_{t + 1} = log \beta_{t + 1} + log(Z_t + \bar{S}) + \alpha log I_t\]</span></p>
@@ -394,12 +398,12 @@ Explain
 </ul>
 </section>
 </section>
-<section id="basic-reproduction-number" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="basic-reproduction-number"><span class="header-section-number">2.3</span> Basic reproduction number</h2>
+<section id="basic-reproduction-number" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="basic-reproduction-number"><span class="header-section-number">2.4</span> Basic reproduction number</h2>
 <p><span class="math display">\[R_0 = \beta \times \bar{S}\]</span></p>
 </section>
-<section id="examples" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="examples"><span class="header-section-number">2.4</span> Examples</h2>
+<section id="examples" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="examples"><span class="header-section-number">2.5</span> Examples</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsiR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>

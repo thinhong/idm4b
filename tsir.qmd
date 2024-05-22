@@ -10,6 +10,8 @@ Fitting SIR-type models is challenging due to[@becker2017]:
 
 The TSIR handle (2) by reconstructing the susceptible dynamics, and (3) by switching continuous to discrete time with an assumption such that the infectious period is equal to data collecting interval.
 
+## Assumptions
+
 The TSIR model relies on two main assumptions[@becker2017]:
 
 -   Infectious period is fixed at the sampling interval of the data (e.g., bi-weekly for measles). The time step of the model is equal to the infectious period.
