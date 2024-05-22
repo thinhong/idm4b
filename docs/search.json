@@ -14,7 +14,51 @@
     "href": "sir-det.html",
     "title": "1  SIR",
     "section": "",
-    "text": "Assumptions:\n\nWell-mixed population (a single contact rate \\(\\beta\\)).\nThe most basic form balances demographic processes (births B and deaths \\(\\mu\\)).\nInfectious disease properties is for a single pathogen.\n\nForce of infection \\(\\lambda = \\frac{\\beta I}{N}\\)\n\\[\\frac{dS}{dt} = B - \\lambda S - \\mu S\\]\n\\[\\frac{dI}{dt} = \\lambda S - \\gamma I - \\mu I\\]\n\\[\\frac{dR}{dt} = \\gamma I - \\mu R\\]",
+    "text": "1.1 Assumptions",
+    "crumbs": [
+      "Deterministic models",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>SIR</span>"
+    ]
+  },
+  {
+    "objectID": "sir-det.html#assumptions",
+    "href": "sir-det.html#assumptions",
+    "title": "1  SIR",
+    "section": "",
+    "text": "Well-mixed population (a single contact rate \\(\\beta\\)).\nThe most basic form balances demographic processes (births B and deaths \\(\\mu\\)).\nInfectious disease properties is for a single pathogen.",
+    "crumbs": [
+      "Deterministic models",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>SIR</span>"
+    ]
+  },
+  {
+    "objectID": "sir-det.html#structure",
+    "href": "sir-det.html#structure",
+    "title": "1  SIR",
+    "section": "1.2 Structure",
+    "text": "1.2 Structure\nForce of infection \\(\\lambda = \\frac{\\beta I}{N}\\)\n\\[\\frac{dS}{dt} = B - \\lambda S - \\mu S\\]\n\\[\\frac{dI}{dt} = \\lambda S - \\gamma I - \\mu I\\]\n\\[\\frac{dR}{dt} = \\gamma I - \\mu R\\]\n\n# sir_1() returns a data frame consists S, I, R, In values by time\nsir_1 &lt;- function(beta, gamma, S0, I0, R0, times) {\n  \n  sir_equations &lt;- function(time, variables, parameters) {\n    with(as.list(c(variables, parameters)), {\n      dS &lt;- -beta * I * S\n      # In to store the number of new cases, we fit the data with In not I\n      # I is the number of people remaining infectious, the number we get from public health surveillance is new cases (In)\n      dIn &lt;- beta * I * S\n      dI &lt;-  dIn - gamma * I\n      dR &lt;-  gamma * I\n      return(list(c(dS, dI, dR, dIn)))\n    })\n  }\n  \n  parameters_values &lt;- c(beta = beta, gamma = gamma)\n  initial_values &lt;- c(S = S0, I = I0, R = R0, In = 0)\n  \n  out &lt;- ode(initial_values, times, sir_equations, parameters_values)\n\n  as.data.frame(out)\n}",
+    "crumbs": [
+      "Deterministic models",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>SIR</span>"
+    ]
+  },
+  {
+    "objectID": "sir-det.html#poisson-distribution",
+    "href": "sir-det.html#poisson-distribution",
+    "title": "1  SIR",
+    "section": "1.3 Poisson distribution",
+    "text": "1.3 Poisson distribution\nPoisson distribution is a discrete probability distribution that expresses probability of a given number of events occurring in a fixed interval of time1.\nSuitable to use because here we are fitting a number of cases occurring in this period.\n\n\n\n\n\n\nWhy use log-likelihood?\n\n\n\nThe likelihood is the probability of observing data \\(x\\) given that our model is true2, \\(\\mathbb{P}(x|M)\\).\nWe have a lot of data points, and they are independent. The probability of observing all these data points at the same time is the production of these likelihood \\(\\mathbb{P}(x_1|M) \\times \\mathbb{P}(x_2|M) \\times \\mathbb{P}(x_3|M)... = \\prod\\mathbb{P}(x|M)\\).\nMultiplying things together, you will end up losing precision if the numbers are too low. Here you are dealing with probability (a value &lt; 1), multiplying 100 probabilities you will end up with 1e-100.\nBut remember that \\(log(a \\times b) = log(a) + log(b)\\), and very convenient that \\(log(1^{-100} = -230.2585)\\).\nSo \\(log(\\mathbb{P}(x_1|M) \\times \\mathbb{P}(x_2|M) \\times \\mathbb{P}(x_3|M)...)\\) \\(=\\) \\(log(\\mathbb{P}(x_1|M)) + log(\\mathbb{P}(x_2|M)) + log(\\mathbb{P}(x_3|M))...\\) and it is so much easier to handle.\n\n\n\n\n\n\n\n\nWhy use negative log-likelihood?\n\n\n\nBecause statistical packages optimizers work by minimizing a function. Minimizing means decrease the distance of two distributions to its lowest, this is fairly easy because we get this when the distance close to 0 (just like the trick we do in hypothesis testing).\nMinimizing negative log-likelihood (meaning that \\(-1 \\times \\text{log-likelihood}\\)) is equivalent to maximizing the log-likelihood, which is what we want to do (MLE: maximum likelihood estimation).",
+    "crumbs": [
+      "Deterministic models",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>SIR</span>"
+    ]
+  },
+  {
+    "objectID": "sir-det.html#footnotes",
+    "href": "sir-det.html#footnotes",
+    "title": "1  SIR",
+    "section": "",
+    "text": "Wikipedia https://en.wikipedia.org/wiki/Poisson_distribution↩︎\nhttps://en.wikipedia.org/wiki/Bayesian_inference↩︎",
     "crumbs": [
       "Deterministic models",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>SIR</span>"

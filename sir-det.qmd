@@ -1,10 +1,19 @@
 # SIR
 
-Assumptions:
+```{r}
+library(deSolve)
+library(bbmle)
+
+flu <- readRDS("data/flu.rds")
+```
+
+## Assumptions
 
 -   Well-mixed population (a single contact rate $\beta$).
 -   The most basic form balances demographic processes (births B and deaths $\mu$).
 -   Infectious disease properties is for a single pathogen.
+
+## Structure
 
 Force of infection $\lambda = \frac{\beta I}{N}$
 
@@ -13,3 +22,60 @@ $$\frac{dS}{dt} = B - \lambda S - \mu S$$
 $$\frac{dI}{dt} = \lambda S - \gamma I - \mu I$$
 
 $$\frac{dR}{dt} = \gamma I - \mu R$$
+
+```{r}
+# sir_1() returns a data frame consists S, I, R, In values by time
+sir_1 <- function(beta, gamma, S0, I0, R0, times) {
+  
+  sir_equations <- function(time, variables, parameters) {
+    with(as.list(c(variables, parameters)), {
+      dS <- -beta * I * S
+      # In to store the number of new cases, we fit the data with In not I
+      # I is the number of people remaining infectious, the number we get from public health surveillance is new cases (In)
+      dIn <- beta * I * S
+      dI <-  dIn - gamma * I
+      dR <-  gamma * I
+      return(list(c(dS, dI, dR, dIn)))
+    })
+  }
+  
+  parameters_values <- c(beta = beta, gamma = gamma)
+  initial_values <- c(S = S0, I = I0, R = R0, In = 0)
+  
+  out <- ode(initial_values, times, sir_equations, parameters_values)
+
+  as.data.frame(out)
+}
+```
+
+## Poisson distribution
+
+Poisson distribution is a **discrete probability distribution** that expresses probability of a given **number of events** occurring **in a fixed interval of time**[^1].
+
+[^1]: Wikipedia <https://en.wikipedia.org/wiki/Poisson_distribution>
+
+Suitable to use because here we are fitting a number of cases occurring in this period.
+
+::: callout-note
+## Why use log-likelihood?
+
+The likelihood is the probability of observing data $x$ given that our model is true[^2], $\mathbb{P}(x|M)$.
+
+We have a lot of data points, and they are independent. The probability of observing all these data points at the same time is the production of these likelihood $\mathbb{P}(x_1|M) \times \mathbb{P}(x_2|M) \times \mathbb{P}(x_3|M)... = \prod\mathbb{P}(x|M)$.
+
+Multiplying things together, you will end up losing precision if the numbers are too low. Here you are dealing with probability (a value \< 1), multiplying 100 probabilities you will end up with 1e-100.
+
+But remember that $log(a \times b) = log(a) + log(b)$, and very convenient that $log(1^{-100} = -230.2585)$.
+
+So $log(\mathbb{P}(x_1|M) \times \mathbb{P}(x_2|M) \times \mathbb{P}(x_3|M)...)$ $=$ $log(\mathbb{P}(x_1|M)) + log(\mathbb{P}(x_2|M)) + log(\mathbb{P}(x_3|M))...$ and it is so much easier to handle.
+:::
+
+[^2]: <https://en.wikipedia.org/wiki/Bayesian_inference>
+
+::: callout-note
+## Why use negative log-likelihood?
+
+Because statistical packages optimizers work by minimizing a function. Minimizing means **decrease the distance of two distributions** to its lowest, this is fairly easy because we get this when the distance close to 0 (just like the trick we do in hypothesis testing).
+
+Minimizing negative log-likelihood (meaning that $-1 \times \text{log-likelihood}$) is equivalent to maximizing the log-likelihood, which is what we want to do (MLE: maximum likelihood estimation).
+:::
