@@ -1,0 +1,86 @@
+# Deterministic model
+
+```{r, message=F}
+library(tsiR)
+```
+
+## SIR
+
+Assumptions:
+
+-   Well-mixed population (a single contact rate $\beta$).
+-   The most basic form balances demographic processes (births B and deaths $\mu$).
+-   Infectious disease properties is for a single pathogen.
+
+Force of infection $\lambda = \frac{\beta I}{N}$
+
+$$\frac{dS}{dt} = B - \lambda S - \mu S$$
+
+$$\frac{dI}{dt} = \lambda S - \gamma I - \mu I$$
+
+$$\frac{dR}{dt} = \gamma I - \mu R$$
+
+## tsiR
+
+### Methods
+
+Fitting SIR-type models is challenging due to[@becker2017]:
+
+1.  Only one state variable (the number of cases over time) is observed.
+2.  Substantial under-reporting of disease incidence.
+3.  The model is a continuous-time process, whereas the data are discretely collected weekly or monthly.
+
+The TSIR handle (2) by reconstructing the susceptible dynamics, and (3) by switching continuous to discrete time with an assumption such that the infectious period is equal to data collecting interval.
+
+$$\mathbb{E}(I_{t + 1}) = \beta_{t + 1} S_t I_t^{\alpha}$$
+
+$$S_{t + 1} = B_{t + 1} - S_t - I_{t + 1}$$
+
+The TSIR model relies on two main assumptions[@becker2017]:
+
+-   Infectious period ($\frac{1}{\gamma}$) is fixed at the sampling interval of the data (e.g., bi-weekly for measles). The time step of the model is equal to the infectious period.
+-   Over a long enough time (e.g., 10-20 years), the sum of births and cases should be approximately equal due to the high infectivity of pathogens such as measles and other childhood infections, in the pre-vaccine era.
+
+### `tsiR` framework
+
+1.  **Reconstruct susceptible dynamics**: fit a regression between cumulative cases and cumulative births. The slope is assumed to be the report rate $\rho_t$ (rho)[@du2017], the residuals is assumed to be the shape of the susceptible dynamics ($Z_t$).
+
+$$\rho = \frac{d \hat{Y}_\text{cumBirths}}{dX_\text{cumCases}}$$
+
+2.  **Estimate parameters**: set the expectation to the mean, then take log of both sides:
+
+$$\mathbb{E}(I_{t + 1}) = \beta_{t + 1} S_t I_t^{\alpha}$$
+
+$$log I_{t + 1} = log \beta_{t + 1} + log(Z_t + \bar{S}) + \alpha log I_t$$
+
+-   $\bar{S}$: mean susceptible individuals across the time-series. $Z_t$ is the residuals or the shape of the susceptible dynamics, so $Z_t + \bar{S} = S_t$
+-   $\beta_t$: contact rate at time t.
+-   $\alpha$: describes the epidemic saturation, a correction factor for switching from continuous to discrete time.
+
+### Basic reproduction number
+
+$$R_0 = \beta \times \bar{S}$$
+
+### Examples
+
+```{r}
+LondonMeas <- twentymeas[["London"]]
+head(LondonMeas)
+```
+
+```{r}
+plotdata(LondonMeas)
+```
+
+```{r}
+LondonRes <- runtsir(data = LondonMeas, IP = 2, xreg = "cumcases", regtype = "gaussian", alpha = NULL, sbar = NULL, method = "negbin", nsim = 100, family = "gaussian", link = "identity")
+```
+
+$$log I_{t + 1} = log \beta_{t + 1} + log(Z_t + \bar{S}) + \alpha log I_t$$
+
+-   `alpha`: describes the epidemic saturation, a correction factor for switching from continuous to discrete time.
+-   `mean beta`: mean of the contact rate across the time-series.
+-   `mean rho`: mean of the report rate across the time-series.
+-   `mean sus`: mean of the number of susceptible across the time-series.
+-   `prop. init. sus.`: proportion of the initial susceptible individuals.
+-   `prop. init. inf.`: proportion of the initial infectious individuals.

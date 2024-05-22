@@ -1,0 +1,25 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "Modelling"
+  author: "Thinh Ong"
+  date: "22/05/2024"
+  chapters:
+    - index.qmd
+    - det.qmd
+    - sto.qmd
+    - references.qmd
+
+bibliography: references.bib
+csl: nature.csl
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+
+
