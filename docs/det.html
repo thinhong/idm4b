@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Modelling - 1&nbsp; Deterministic model</title>
+<title>Modelling - Deterministic models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,61 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -84,7 +30,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./sto.html" rel="next">
+<link href="./sir-det.html" rel="next">
 <link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -123,35 +69,6 @@ div.csl-indent {
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -164,7 +81,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./det.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Deterministic model</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./det.html">Deterministic models</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -195,18 +112,46 @@ window.Quarto = {
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./det.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Deterministic models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./det.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Deterministic model</span></span></a>
+  <a href="./sir-det.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">SIR</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./sto.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  <a href="./tsir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">tsiR</span></span></a>
   </div>
 </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./sto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Stochastic models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sir-sto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SIR</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
@@ -219,27 +164,14 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#sir" id="toc-sir" class="nav-link active" data-scroll-target="#sir"><span class="header-section-number">1.1</span> SIR</a></li>
-  <li><a href="#tsir" id="toc-tsir" class="nav-link" data-scroll-target="#tsir"><span class="header-section-number">1.2</span> tsiR</a>
-  <ul class="collapse">
-  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods"><span class="header-section-number">1.2.1</span> Methods</a></li>
-  <li><a href="#tsir-framework" id="toc-tsir-framework" class="nav-link" data-scroll-target="#tsir-framework"><span class="header-section-number">1.2.2</span> <code>tsiR</code> framework</a></li>
-  <li><a href="#basic-reproduction-number" id="toc-basic-reproduction-number" class="nav-link" data-scroll-target="#basic-reproduction-number"><span class="header-section-number">1.2.3</span> Basic reproduction number</a></li>
-  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">1.2.4</span> Examples</a></li>
-  </ul></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Deterministic model</span></h1>
+<h1 class="title">Deterministic models</h1>
 </div>
 
 
@@ -256,117 +188,8 @@ window.Quarto = {
 </header>
 
 
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsiR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<section id="sir" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="sir"><span class="header-section-number">1.1</span> SIR</h2>
-<p>Assumptions:</p>
-<ul>
-<li>Well-mixed population (a single contact rate <span class="math inline">\(\beta\)</span>).</li>
-<li>The most basic form balances demographic processes (births B and deaths <span class="math inline">\(\mu\)</span>).</li>
-<li>Infectious disease properties is for a single pathogen.</li>
-</ul>
-<p>Force of infection <span class="math inline">\(\lambda = \frac{\beta I}{N}\)</span></p>
-<p><span class="math display">\[\frac{dS}{dt} = B - \lambda S - \mu S\]</span></p>
-<p><span class="math display">\[\frac{dI}{dt} = \lambda S - \gamma I - \mu I\]</span></p>
-<p><span class="math display">\[\frac{dR}{dt} = \gamma I - \mu R\]</span></p>
-</section>
-<section id="tsir" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="tsir"><span class="header-section-number">1.2</span> tsiR</h2>
-<section id="methods" class="level3" data-number="1.2.1">
-<h3 data-number="1.2.1" class="anchored" data-anchor-id="methods"><span class="header-section-number">1.2.1</span> Methods</h3>
-<p>Fitting SIR-type models is challenging due to<span class="citation" data-cites="becker2017"><sup><a href="references.html#ref-becker2017" role="doc-biblioref">1</a></sup></span>:</p>
-<ol type="1">
-<li>Only one state variable (the number of cases over time) is observed.</li>
-<li>Substantial under-reporting of disease incidence.</li>
-<li>The model is a continuous-time process, whereas the data are discretely collected weekly or monthly.</li>
-</ol>
-<p>The TSIR handle (2) by reconstructing the susceptible dynamics, and (3) by switching continuous to discrete time with an assumption such that the infectious period is equal to data collecting interval.</p>
-<p><span class="math display">\[\mathbb{E}(I_{t + 1}) = \beta_{t + 1} S_t I_t^{\alpha}\]</span></p>
-<p><span class="math display">\[S_{t + 1} = B_{t + 1} - S_t - I_{t + 1}\]</span></p>
-<p>The TSIR model relies on two main assumptions<span class="citation" data-cites="becker2017"><sup><a href="references.html#ref-becker2017" role="doc-biblioref">1</a></sup></span>:</p>
-<ul>
-<li>Infectious period (<span class="math inline">\(\frac{1}{\gamma}\)</span>) is fixed at the sampling interval of the data (e.g., bi-weekly for measles). The time step of the model is equal to the infectious period.</li>
-<li>Over a long enough time (e.g., 10-20 years), the sum of births and cases should be approximately equal due to the high infectivity of pathogens such as measles and other childhood infections, in the pre-vaccine era.</li>
-</ul>
-</section>
-<section id="tsir-framework" class="level3" data-number="1.2.2">
-<h3 data-number="1.2.2" class="anchored" data-anchor-id="tsir-framework"><span class="header-section-number">1.2.2</span> <code>tsiR</code> framework</h3>
-<ol type="1">
-<li><strong>Reconstruct susceptible dynamics</strong>: fit a regression between cumulative cases and cumulative births. The slope is assumed to be the report rate <span class="math inline">\(\rho_t\)</span> (rho)<span class="citation" data-cites="du2017"><sup><a href="references.html#ref-du2017" role="doc-biblioref">2</a></sup></span>, the residuals is assumed to be the shape of the susceptible dynamics (<span class="math inline">\(Z_t\)</span>).</li>
-</ol>
-<p><span class="math display">\[\rho = \frac{d \hat{Y}_\text{cumBirths}}{dX_\text{cumCases}}\]</span></p>
-<ol start="2" type="1">
-<li><strong>Estimate parameters</strong>: set the expectation to the mean, then take log of both sides:</li>
-</ol>
-<p><span class="math display">\[\mathbb{E}(I_{t + 1}) = \beta_{t + 1} S_t I_t^{\alpha}\]</span></p>
-<p><span class="math display">\[log I_{t + 1} = log \beta_{t + 1} + log(Z_t + \bar{S}) + \alpha log I_t\]</span></p>
-<ul>
-<li><span class="math inline">\(\bar{S}\)</span>: mean susceptible individuals across the time-series. <span class="math inline">\(Z_t\)</span> is the residuals or the shape of the susceptible dynamics, so <span class="math inline">\(Z_t + \bar{S} = S_t\)</span></li>
-<li><span class="math inline">\(\beta_t\)</span>: contact rate at time t.</li>
-<li><span class="math inline">\(\alpha\)</span>: describes the epidemic saturation, a correction factor for switching from continuous to discrete time.</li>
-</ul>
-</section>
-<section id="basic-reproduction-number" class="level3" data-number="1.2.3">
-<h3 data-number="1.2.3" class="anchored" data-anchor-id="basic-reproduction-number"><span class="header-section-number">1.2.3</span> Basic reproduction number</h3>
-<p><span class="math display">\[R_0 = \beta \times \bar{S}\]</span></p>
-</section>
-<section id="examples" class="level3" data-number="1.2.4">
-<h3 data-number="1.2.4" class="anchored" data-anchor-id="examples"><span class="header-section-number">1.2.4</span> Examples</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>LondonMeas <span class="ot">&lt;-</span> twentymeas[[<span class="st">"London"</span>]]</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(LondonMeas)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>      time cases   births     pop
-1 1944.016   180 1725.038 2462500
-2 1944.055   271 1726.429 2467578
-3 1944.093   423 1727.820 2472655
-4 1944.131   465 1729.211 2477733
-5 1944.170   523 1730.602 2482810
-6 1944.208   649 1731.992 2487888</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotdata</span>(LondonMeas)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="det_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>LondonRes <span class="ot">&lt;-</span> <span class="fu">runtsir</span>(<span class="at">data =</span> LondonMeas, <span class="at">IP =</span> <span class="dv">2</span>, <span class="at">xreg =</span> <span class="st">"cumcases"</span>, <span class="at">regtype =</span> <span class="st">"gaussian"</span>, <span class="at">alpha =</span> <span class="cn">NULL</span>, <span class="at">sbar =</span> <span class="cn">NULL</span>, <span class="at">method =</span> <span class="st">"negbin"</span>, <span class="at">nsim =</span> <span class="dv">100</span>, <span class="at">family =</span> <span class="st">"gaussian"</span>, <span class="at">link =</span> <span class="st">"identity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>           alpha        mean beta         mean rho         mean sus 
-        9.60e-01         1.19e-05         4.57e-01         1.14e+05 
-prop. init. sus. prop. init. inf. 
-        3.01e-02         6.12e-05 </code></pre>
-</div>
-</div>
-<p><span class="math display">\[log I_{t + 1} = log \beta_{t + 1} + log(Z_t + \bar{S}) + \alpha log I_t\]</span></p>
-<ul>
-<li><code>alpha</code>: describes the epidemic saturation, a correction factor for switching from continuous to discrete time.</li>
-<li><code>mean beta</code>: mean of the contact rate across the time-series.</li>
-<li><code>mean rho</code>: mean of the report rate across the time-series.</li>
-<li><code>mean sus</code>: mean of the number of susceptible across the time-series.</li>
-<li><code>prop. init. sus.</code>: proportion of the initial susceptible individuals.</li>
-<li><code>prop. init. inf.</code>: proportion of the initial infectious individuals.</li>
-</ul>
 
 
-<div id="refs" class="references csl-bib-body" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
-<div id="ref-becker2017" class="csl-entry" role="listitem">
-<div class="csl-left-margin">1. </div><div class="csl-right-inline">Becker, A. D. &amp; Grenfell, B. T. <a href="https://doi.org/10.1371/journal.pone.0185528">tsiR: An R package for time-series Susceptible-Infected-Recovered models of epidemics</a>. <em>PLOS ONE</em> <strong>12</strong>, e0185528 (2017).</div>
-</div>
-<div id="ref-du2017" class="csl-entry" role="listitem">
-<div class="csl-left-margin">2. </div><div class="csl-right-inline">Du, Z., Zhang, W., Zhang, D., Yu, S. &amp; Hao, Y. <a href="https://doi.org/10.1371/journal.pone.0179623">Estimating the basic reproduction rate of HFMD using the time series SIR model in Guangdong, China</a>. <em>PLOS ONE</em> <strong>12</strong>, e0179623 (2017).</div>
-</div>
-</div>
-</section>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -785,8 +608,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./sto.html" class="pagination-link" aria-label="Summary">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./sir-det.html" class="pagination-link" aria-label="SIR">
+        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">SIR</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

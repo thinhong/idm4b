@@ -8,8 +8,13 @@ book:
   date: "22/05/2024"
   chapters:
     - index.qmd
-    - det.qmd
-    - sto.qmd
+    - part: det.qmd
+      chapters: 
+        - sir-det.qmd
+        - tsir.qmd
+    - part: sto.qmd
+      chapters: 
+        - sir-sto.qmd
     - references.qmd
 
 bibliography: references.bib

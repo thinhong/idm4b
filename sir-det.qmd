@@ -1,0 +1,15 @@
+# SIR
+
+Assumptions:
+
+-   Well-mixed population (a single contact rate $\beta$).
+-   The most basic form balances demographic processes (births B and deaths $\mu$).
+-   Infectious disease properties is for a single pathogen.
+
+Force of infection $\lambda = \frac{\beta I}{N}$
+
+$$\frac{dS}{dt} = B - \lambda S - \mu S$$
+
+$$\frac{dI}{dt} = \lambda S - \gamma I - \mu I$$
+
+$$\frac{dR}{dt} = \gamma I - \mu R$$

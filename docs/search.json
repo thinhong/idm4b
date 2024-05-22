@@ -10,43 +10,69 @@
     ]
   },
   {
-    "objectID": "det.html",
-    "href": "det.html",
-    "title": "1  Deterministic model",
+    "objectID": "sir-det.html",
+    "href": "sir-det.html",
+    "title": "1  SIR",
     "section": "",
-    "text": "1.1 SIR\nAssumptions:\nForce of infection \\(\\lambda = \\frac{\\beta I}{N}\\)\n\\[\\frac{dS}{dt} = B - \\lambda S - \\mu S\\]\n\\[\\frac{dI}{dt} = \\lambda S - \\gamma I - \\mu I\\]\n\\[\\frac{dR}{dt} = \\gamma I - \\mu R\\]",
+    "text": "Assumptions:\n\nWell-mixed population (a single contact rate \\(\\beta\\)).\nThe most basic form balances demographic processes (births B and deaths \\(\\mu\\)).\nInfectious disease properties is for a single pathogen.\n\nForce of infection \\(\\lambda = \\frac{\\beta I}{N}\\)\n\\[\\frac{dS}{dt} = B - \\lambda S - \\mu S\\]\n\\[\\frac{dI}{dt} = \\lambda S - \\gamma I - \\mu I\\]\n\\[\\frac{dR}{dt} = \\gamma I - \\mu R\\]",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Deterministic model</span>"
+      "Deterministic models",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>SIR</span>"
     ]
   },
   {
-    "objectID": "det.html#sir",
-    "href": "det.html#sir",
-    "title": "1  Deterministic model",
+    "objectID": "tsir.html",
+    "href": "tsir.html",
+    "title": "2  tsiR",
     "section": "",
-    "text": "Well-mixed population (a single contact rate \\(\\beta\\)).\nThe most basic form balances demographic processes (births B and deaths \\(\\mu\\)).\nInfectious disease properties is for a single pathogen.",
+    "text": "2.1 Methods\nFitting SIR-type models is challenging due to1:\nThe TSIR handle (2) by reconstructing the susceptible dynamics, and (3) by switching continuous to discrete time with an assumption such that the infectious period is equal to data collecting interval.\n\\[\\mathbb{E}(I_{t + 1}) = \\beta_{t + 1} S_t I_t^{\\alpha}\\]\n\\[S_{t + 1} = B_{t + 1} - S_t - I_{t + 1}\\]\nThe TSIR model relies on two main assumptions1:",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Deterministic model</span>"
+      "Deterministic models",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>tsiR</span>"
     ]
   },
   {
-    "objectID": "det.html#tsir",
-    "href": "det.html#tsir",
-    "title": "1  Deterministic model",
-    "section": "1.2 tsiR",
-    "text": "1.2 tsiR\n\n1.2.1 Methods\nFitting SIR-type models is challenging due to1:\n\nOnly one state variable (the number of cases over time) is observed.\nSubstantial under-reporting of disease incidence.\nThe model is a continuous-time process, whereas the data are discretely collected weekly or monthly.\n\nThe TSIR handle (2) by reconstructing the susceptible dynamics, and (3) by switching continuous to discrete time with an assumption such that the infectious period is equal to data collecting interval.\n\\[\\mathbb{E}(I_{t + 1}) = \\beta_{t + 1} S_t I_t^{\\alpha}\\]\n\\[S_{t + 1} = B_{t + 1} - S_t - I_{t + 1}\\]\nThe TSIR model relies on two main assumptions1:\n\nInfectious period (\\(\\frac{1}{\\gamma}\\)) is fixed at the sampling interval of the data (e.g., bi-weekly for measles). The time step of the model is equal to the infectious period.\nOver a long enough time (e.g., 10-20 years), the sum of births and cases should be approximately equal due to the high infectivity of pathogens such as measles and other childhood infections, in the pre-vaccine era.\n\n\n\n1.2.2 tsiR framework\n\nReconstruct susceptible dynamics: fit a regression between cumulative cases and cumulative births. The slope is assumed to be the report rate \\(\\rho_t\\) (rho)2, the residuals is assumed to be the shape of the susceptible dynamics (\\(Z_t\\)).\n\n\\[\\rho = \\frac{d \\hat{Y}_\\text{cumBirths}}{dX_\\text{cumCases}}\\]\n\nEstimate parameters: set the expectation to the mean, then take log of both sides:\n\n\\[\\mathbb{E}(I_{t + 1}) = \\beta_{t + 1} S_t I_t^{\\alpha}\\]\n\\[log I_{t + 1} = log \\beta_{t + 1} + log(Z_t + \\bar{S}) + \\alpha log I_t\\]\n\n\\(\\bar{S}\\): mean susceptible individuals across the time-series. \\(Z_t\\) is the residuals or the shape of the susceptible dynamics, so \\(Z_t + \\bar{S} = S_t\\)\n\\(\\beta_t\\): contact rate at time t.\n\\(\\alpha\\): describes the epidemic saturation, a correction factor for switching from continuous to discrete time.\n\n\n\n1.2.3 Basic reproduction number\n\\[R_0 = \\beta \\times \\bar{S}\\]\n\n\n1.2.4 Examples\n\nLondonMeas &lt;- twentymeas[[\"London\"]]\nhead(LondonMeas)\n\n      time cases   births     pop\n1 1944.016   180 1725.038 2462500\n2 1944.055   271 1726.429 2467578\n3 1944.093   423 1727.820 2472655\n4 1944.131   465 1729.211 2477733\n5 1944.170   523 1730.602 2482810\n6 1944.208   649 1731.992 2487888\n\n\n\nplotdata(LondonMeas)\n\n\n\n\n\n\n\n\n\nLondonRes &lt;- runtsir(data = LondonMeas, IP = 2, xreg = \"cumcases\", regtype = \"gaussian\", alpha = NULL, sbar = NULL, method = \"negbin\", nsim = 100, family = \"gaussian\", link = \"identity\")\n\n           alpha        mean beta         mean rho         mean sus \n        9.60e-01         1.19e-05         4.57e-01         1.14e+05 \nprop. init. sus. prop. init. inf. \n        3.01e-02         6.12e-05 \n\n\n\\[log I_{t + 1} = log \\beta_{t + 1} + log(Z_t + \\bar{S}) + \\alpha log I_t\\]\n\nalpha: describes the epidemic saturation, a correction factor for switching from continuous to discrete time.\nmean beta: mean of the contact rate across the time-series.\nmean rho: mean of the report rate across the time-series.\nmean sus: mean of the number of susceptible across the time-series.\nprop. init. sus.: proportion of the initial susceptible individuals.\nprop. init. inf.: proportion of the initial infectious individuals.\n\n\n\n\n\n1. Becker, A. D. & Grenfell, B. T. tsiR: An R package for time-series Susceptible-Infected-Recovered models of epidemics. PLOS ONE 12, e0185528 (2017).\n\n\n2. Du, Z., Zhang, W., Zhang, D., Yu, S. & Hao, Y. Estimating the basic reproduction rate of HFMD using the time series SIR model in Guangdong, China. PLOS ONE 12, e0179623 (2017).",
+    "objectID": "tsir.html#methods",
+    "href": "tsir.html#methods",
+    "title": "2  tsiR",
+    "section": "",
+    "text": "Only one state variable (the number of cases over time) is observed.\nSubstantial under-reporting of disease incidence.\nThe model is a continuous-time process, whereas the data are discretely collected weekly or monthly.\n\n\n\n\n\n\nInfectious period (\\(\\frac{1}{\\gamma}\\)) is fixed at the sampling interval of the data (e.g., bi-weekly for measles). The time step of the model is equal to the infectious period.\nOver a long enough time (e.g., 10-20 years), the sum of births and cases should be approximately equal due to the high infectivity of pathogens such as measles and other childhood infections, in the pre-vaccine era.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Deterministic model</span>"
+      "Deterministic models",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>tsiR</span>"
     ]
   },
   {
-    "objectID": "sto.html",
-    "href": "sto.html",
-    "title": "2  Summary",
-    "section": "",
-    "text": "In summary, this book has no content whatsoever.\n\n1 + 1\n\n[1] 2",
+    "objectID": "tsir.html#tsir-framework",
+    "href": "tsir.html#tsir-framework",
+    "title": "2  tsiR",
+    "section": "2.2 tsiR framework",
+    "text": "2.2 tsiR framework\n\nReconstruct susceptible dynamics: fit a regression between cumulative cases and cumulative births. The slope is assumed to be the report rate \\(\\rho_t\\) (rho)2, the residuals is assumed to be the shape of the susceptible dynamics (\\(Z_t\\)).\n\n\\[\\rho = \\frac{d \\hat{Y}_\\text{cumBirths}}{dX_\\text{cumCases}}\\]\n\nEstimate parameters: set the expectation to the mean, then take log of both sides:\n\n\\[\\mathbb{E}(I_{t + 1}) = \\beta_{t + 1} S_t I_t^{\\alpha}\\]\n\\[log I_{t + 1} = log \\beta_{t + 1} + log(Z_t + \\bar{S}) + \\alpha log I_t\\]\n\n\\(\\bar{S}\\): mean susceptible individuals across the time-series. \\(Z_t\\) is the residuals or the shape of the susceptible dynamics, so \\(Z_t + \\bar{S} = S_t\\)\n\\(\\beta_t\\): contact rate at time t.\n\\(\\alpha\\): describes the epidemic saturation, a correction factor for switching from continuous to discrete time.",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Summary</span>"
+      "Deterministic models",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>tsiR</span>"
+    ]
+  },
+  {
+    "objectID": "tsir.html#basic-reproduction-number",
+    "href": "tsir.html#basic-reproduction-number",
+    "title": "2  tsiR",
+    "section": "2.3 Basic reproduction number",
+    "text": "2.3 Basic reproduction number\n\\[R_0 = \\beta \\times \\bar{S}\\]",
+    "crumbs": [
+      "Deterministic models",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>tsiR</span>"
+    ]
+  },
+  {
+    "objectID": "tsir.html#examples",
+    "href": "tsir.html#examples",
+    "title": "2  tsiR",
+    "section": "2.4 Examples",
+    "text": "2.4 Examples\n\nLondonMeas &lt;- twentymeas[[\"London\"]]\nhead(LondonMeas)\n\n      time cases   births     pop\n1 1944.016   180 1725.038 2462500\n2 1944.055   271 1726.429 2467578\n3 1944.093   423 1727.820 2472655\n4 1944.131   465 1729.211 2477733\n5 1944.170   523 1730.602 2482810\n6 1944.208   649 1731.992 2487888\n\n\n\nplotdata(LondonMeas)\n\n\n\n\n\n\n\n\n\nLondonRes &lt;- runtsir(data = LondonMeas, IP = 2, xreg = \"cumcases\", regtype = \"gaussian\", alpha = NULL, sbar = NULL, method = \"negbin\", nsim = 100, family = \"gaussian\", link = \"identity\")\n\n           alpha        mean beta         mean rho         mean sus \n        9.60e-01         1.19e-05         4.57e-01         1.14e+05 \nprop. init. sus. prop. init. inf. \n        3.01e-02         6.12e-05 \n\n\n\\[log I_{t + 1} = log \\beta_{t + 1} + log(Z_t + \\bar{S}) + \\alpha log I_t\\]\n\nalpha: describes the epidemic saturation, a correction factor for switching from continuous to discrete time.\nmean beta: mean of the contact rate across the time-series.\nmean rho: mean of the report rate across the time-series.\nmean sus: mean of the number of susceptible across the time-series.\nprop. init. sus.: proportion of the initial susceptible individuals.\nprop. init. inf.: proportion of the initial infectious individuals.\n\n\n\n\n\n1. Becker, A. D. & Grenfell, B. T. tsiR: An R package for time-series Susceptible-Infected-Recovered models of epidemics. PLOS ONE 12, e0185528 (2017).\n\n\n2. Du, Z., Zhang, W., Zhang, D., Yu, S. & Hao, Y. Estimating the basic reproduction rate of HFMD using the time series SIR model in Guangdong, China. PLOS ONE 12, e0179623 (2017).",
+    "crumbs": [
+      "Deterministic models",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>tsiR</span>"
     ]
   },
   {

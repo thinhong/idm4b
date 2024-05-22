@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Modelling - References</title>
+<title>Modelling - 1&nbsp; SIR</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,26 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -49,7 +30,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./sir-sto.html" rel="prev">
+<link href="./tsir.html" rel="next">
+<link href="./det.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -87,6 +69,35 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -99,7 +110,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./references.html">References</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./det.html">Deterministic models</a></li><li class="breadcrumb-item"><a href="./sir-det.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">SIR</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -141,7 +152,7 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./sir-det.html" class="sidebar-item-text sidebar-link">
+  <a href="./sir-det.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">SIR</span></span></a>
   </div>
 </li>
@@ -172,7 +183,7 @@ div.csl-indent {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link active">
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
@@ -187,9 +198,9 @@ div.csl-indent {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./det.html">Deterministic models</a></li><li class="breadcrumb-item"><a href="./sir-det.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">SIR</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">References</h1>
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">SIR</span></h1>
 </div>
 
 
@@ -206,19 +217,16 @@ div.csl-indent {
 </header>
 
 
-<div id="refs" class="references csl-bib-body" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-becker2017" class="csl-entry" role="listitem">
-<div class="csl-left-margin">1. </div><div class="csl-right-inline">Becker, A. D. &amp; Grenfell, B. T. <a href="https://doi.org/10.1371/journal.pone.0185528">tsiR: An R package
-for time-series Susceptible-Infected-Recovered models of epidemics</a>.
-<em>PLOS ONE</em> <strong>12</strong>, e0185528 (2017).</div>
-</div>
-<div id="ref-du2017" class="csl-entry" role="listitem">
-<div class="csl-left-margin">2. </div><div class="csl-right-inline">Du,
-Z., Zhang, W., Zhang, D., Yu, S. &amp; Hao, Y. <a href="https://doi.org/10.1371/journal.pone.0179623">Estimating the basic
-reproduction rate of HFMD using the time series SIR model in Guangdong,
-China</a>. <em>PLOS ONE</em> <strong>12</strong>, e0179623 (2017).</div>
-</div>
-</div>
+<p>Assumptions:</p>
+<ul>
+<li>Well-mixed population (a single contact rate <span class="math inline">\(\beta\)</span>).</li>
+<li>The most basic form balances demographic processes (births B and deaths <span class="math inline">\(\mu\)</span>).</li>
+<li>Infectious disease properties is for a single pathogen.</li>
+</ul>
+<p>Force of infection <span class="math inline">\(\lambda = \frac{\beta I}{N}\)</span></p>
+<p><span class="math display">\[\frac{dS}{dt} = B - \lambda S - \mu S\]</span></p>
+<p><span class="math display">\[\frac{dI}{dt} = \lambda S - \gamma I - \mu I\]</span></p>
+<p><span class="math display">\[\frac{dR}{dt} = \gamma I - \mu R\]</span></p>
 
 
 
@@ -634,11 +642,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./sir-sto.html" class="pagination-link" aria-label="SIR">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SIR</span></span>
+      <a href="./det.html" class="pagination-link" aria-label="Deterministic models">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Deterministic models</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./tsir.html" class="pagination-link" aria-label="tsiR">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">tsiR</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
