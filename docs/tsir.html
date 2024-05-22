@@ -259,7 +259,11 @@ window.Quarto = {
   <li><a href="#estimate-parameters" id="toc-estimate-parameters" class="nav-link" data-scroll-target="#estimate-parameters"><span class="header-section-number">2.3.2</span> Estimate parameters</a></li>
   </ul></li>
   <li><a href="#basic-reproduction-number" id="toc-basic-reproduction-number" class="nav-link" data-scroll-target="#basic-reproduction-number"><span class="header-section-number">2.4</span> Basic reproduction number</a></li>
-  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">2.5</span> Examples</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">2.5</span> Examples</a>
+  <ul class="collapse">
+  <li><a href="#reconstruct-susceptible-dynamics-1" id="toc-reconstruct-susceptible-dynamics-1" class="nav-link" data-scroll-target="#reconstruct-susceptible-dynamics-1"><span class="header-section-number">2.5.1</span> Reconstruct susceptible dynamics</a></li>
+  <li><a href="#estimate-parameters-1" id="toc-estimate-parameters-1" class="nav-link" data-scroll-target="#estimate-parameters-1"><span class="header-section-number">2.5.2</span> Estimate parameters</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -421,6 +425,7 @@ Explain
 6 1944.208   649 1731.992 2487888</code></pre>
 </div>
 </div>
+<p>The data frame containing cases and interpolated births and populations.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotdata</span>(LondonMeas)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -440,7 +445,6 @@ prop. init. sus. prop. init. inf.
         3.01e-02         6.12e-05 </code></pre>
 </div>
 </div>
-<p><span class="math display">\[log I_{t + 1} = log \beta_{t + 1} + log(Z_t + \bar{S}) + \alpha log I_t\]</span></p>
 <ul>
 <li><code>alpha</code>: describes the epidemic saturation, a correction factor for switching from continuous to discrete time.</li>
 <li><code>mean beta</code>: mean of the contact rate across the time-series.</li>
@@ -449,6 +453,49 @@ prop. init. sus. prop. init. inf.
 <li><code>prop. init. sus.</code>: proportion of the initial susceptible individuals.</li>
 <li><code>prop. init. inf.</code>: proportion of the initial infectious individuals.</li>
 </ul>
+<section id="reconstruct-susceptible-dynamics-1" class="level3" data-number="2.5.1">
+<h3 data-number="2.5.1" class="anchored" data-anchor-id="reconstruct-susceptible-dynamics-1"><span class="header-section-number">2.5.1</span> Reconstruct susceptible dynamics</h3>
+<p>In this step we compute the reported rate using cumulative births and cumulative reported cases.</p>
+<p><span class="math display">\[Y_\text{cumBirths} = \rho X_\text{cumCases} + Z_t - Z_0\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotregression</span>(LondonRes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tsir_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotrho</span>(LondonRes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tsir_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="estimate-parameters-1" class="level3" data-number="2.5.2">
+<h3 data-number="2.5.2" class="anchored" data-anchor-id="estimate-parameters-1"><span class="header-section-number">2.5.2</span> Estimate parameters</h3>
+<p>Having <span class="math inline">\(\rho\)</span>, we adjust the <span class="math inline">\(I_t\)</span> to estimate other parameters.</p>
+<p><span class="math display">\[I_t = \rho_t C_t\]</span> <span class="math display">\[log I_{t + 1} = log \beta_{t + 1} + log(Z_t + \bar{S}) + \alpha log I_t\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotres</span>(LondonRes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in geom_line(data = dat$res, aes_string(x = "time", y = "cases", :
+Ignoring unknown aesthetics: fill</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tsir_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
@@ -462,6 +509,7 @@ prop. init. sus. prop. init. inf.
 <div class="csl-left-margin">3. </div><div class="csl-right-inline">Du, Z., Zhang, W., Zhang, D., Yu, S. &amp; Hao, Y. <a href="https://doi.org/10.1371/journal.pone.0179623">Estimating the basic reproduction rate of HFMD using the time series SIR model in Guangdong, China</a>. <em>PLOS ONE</em> <strong>12</strong>, e0179623 (2017).</div>
 </div>
 </div>
+</section>
 </section>
 
 </main> <!-- /main -->

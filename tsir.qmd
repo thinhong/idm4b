@@ -112,6 +112,8 @@ LondonMeas <- twentymeas[["London"]]
 head(LondonMeas)
 ```
 
+The data frame containing cases and interpolated births and populations.
+
 ```{r}
 plotdata(LondonMeas)
 ```
@@ -120,11 +122,35 @@ plotdata(LondonMeas)
 LondonRes <- runtsir(data = LondonMeas, IP = 2, xreg = "cumcases", regtype = "gaussian", alpha = NULL, sbar = NULL, method = "negbin", nsim = 100, family = "gaussian", link = "identity")
 ```
 
-$$log I_{t + 1} = log \beta_{t + 1} + log(Z_t + \bar{S}) + \alpha log I_t$$
-
 -   `alpha`: describes the epidemic saturation, a correction factor for switching from continuous to discrete time.
 -   `mean beta`: mean of the contact rate across the time-series.
 -   `mean rho`: mean of the report rate across the time-series.
 -   `mean sus`: mean of the number of susceptible across the time-series.
 -   `prop. init. sus.`: proportion of the initial susceptible individuals.
 -   `prop. init. inf.`: proportion of the initial infectious individuals.
+
+### Reconstruct susceptible dynamics
+
+In this step we compute the reported rate using cumulative births and cumulative reported cases.
+
+$$Y_\text{cumBirths} = \rho X_\text{cumCases} + Z_t - Z_0$$
+
+```{r}
+plotregression(LondonRes)
+```
+
+```{r}
+plotrho(LondonRes)
+```
+
+### Estimate parameters
+
+Having $\rho$, we adjust the $I_t$ to estimate other parameters.
+
+$$I_t = \rho_t C_t$$
+$$log I_{t + 1} = log \beta_{t + 1} + log(Z_t + \bar{S}) + \alpha log I_t$$
+
+```{r}
+plotres(LondonRes)
+```
+
