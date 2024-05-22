@@ -252,7 +252,11 @@ window.Quarto = {
    
   <ul>
   <li><a href="#methods" id="toc-methods" class="nav-link active" data-scroll-target="#methods"><span class="header-section-number">2.1</span> Methods</a></li>
-  <li><a href="#tsir-framework" id="toc-tsir-framework" class="nav-link" data-scroll-target="#tsir-framework"><span class="header-section-number">2.2</span> <code>tsiR</code> framework</a></li>
+  <li><a href="#tsir-framework" id="toc-tsir-framework" class="nav-link" data-scroll-target="#tsir-framework"><span class="header-section-number">2.2</span> <code>tsiR</code> framework</a>
+  <ul class="collapse">
+  <li><a href="#reconstruct-susceptible-dynamics" id="toc-reconstruct-susceptible-dynamics" class="nav-link" data-scroll-target="#reconstruct-susceptible-dynamics"><span class="header-section-number">2.2.1</span> Reconstruct susceptible dynamics</a></li>
+  <li><a href="#estimate-parameters" id="toc-estimate-parameters" class="nav-link" data-scroll-target="#estimate-parameters"><span class="header-section-number">2.2.2</span> Estimate parameters</a></li>
+  </ul></li>
   <li><a href="#basic-reproduction-number" id="toc-basic-reproduction-number" class="nav-link" data-scroll-target="#basic-reproduction-number"><span class="header-section-number">2.3</span> Basic reproduction number</a></li>
   <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">2.4</span> Examples</a></li>
   </ul>
@@ -280,11 +284,7 @@ window.Quarto = {
 </header>
 
 
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsiR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<section id="methods" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="methods"><span class="header-section-number">2.1</span> Methods</h2>
+<p>TSIR stands for <strong>Time series Susceptible-Infected-Recovered</strong> model.</p>
 <p>Fitting SIR-type models is challenging due to<span class="citation" data-cites="becker2017"><sup><a href="references.html#ref-becker2017" role="doc-biblioref">1</a></sup></span>:</p>
 <ol type="1">
 <li>Only one state variable (the number of cases over time) is observed.</li>
@@ -292,23 +292,99 @@ window.Quarto = {
 <li>The model is a continuous-time process, whereas the data are discretely collected weekly or monthly.</li>
 </ol>
 <p>The TSIR handle (2) by reconstructing the susceptible dynamics, and (3) by switching continuous to discrete time with an assumption such that the infectious period is equal to data collecting interval.</p>
-<p><span class="math display">\[\mathbb{E}(I_{t + 1}) = \beta_{t + 1} S_t I_t^{\alpha}\]</span></p>
-<p><span class="math display">\[S_{t + 1} = B_{t + 1} - S_t - I_{t + 1}\]</span></p>
 <p>The TSIR model relies on two main assumptions<span class="citation" data-cites="becker2017"><sup><a href="references.html#ref-becker2017" role="doc-biblioref">1</a></sup></span>:</p>
 <ul>
-<li>Infectious period (<span class="math inline">\(\frac{1}{\gamma}\)</span>) is fixed at the sampling interval of the data (e.g., bi-weekly for measles). The time step of the model is equal to the infectious period.</li>
+<li>Infectious period is fixed at the sampling interval of the data (e.g., bi-weekly for measles). The time step of the model is equal to the infectious period.</li>
 <li>Over a long enough time (e.g., 10-20 years), the sum of births and cases should be approximately equal due to the high infectivity of pathogens such as measles and other childhood infections, in the pre-vaccine era.</li>
 </ul>
+<section id="methods" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="methods"><span class="header-section-number">2.1</span> Methods</h2>
+<p><span class="math display">\[\mathbb{E}(I_{t + 1}) = \beta_{t + 1} S_t I_t^{\alpha}\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Explain
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>This equation describes the transmission through the multiplicative interaction between susceptible and infected individuals<span class="citation" data-cites="finkenstädt2000"><sup><a href="references.html#ref-finkenstädt2000" role="doc-biblioref">2</a></sup></span>.</p>
+<p><span class="math display">\[I_{t + 1} = \beta_{t + 1} S_t^{\alpha_1} I_t^{\alpha_2} \epsilon_t\]</span></p>
+<ul>
+<li>Susceptible (<span class="math inline">\(S_t\)</span>) meet infectious individuals (<span class="math inline">\(I_t\)</span>) with contact rate <span class="math inline">\(\beta_{t + 1}\)</span>.</li>
+<li><span class="math inline">\(\alpha_1\)</span> and <span class="math inline">\(\alpha_2\)</span> are mixing parameters of the contact process, such that <span class="math inline">\(\alpha_1 = \alpha_2 = 1\)</span> is the homogeneous mixing.</li>
+<li><span class="math inline">\(\epsilon_t\)</span> is the noise, <span class="math inline">\(\mathbb{E}\{ log(\epsilon_t) \} = 0\)</span> and <span class="math inline">\(\mathbb{V}\{ log(\epsilon_t) \} = 0\)</span>.</li>
+</ul>
+</div>
+</div>
+</div>
+<p><span class="math display">\[S_{t + 1} = B_{t + 1} + S_t - I_{t + 1}\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Explain
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Susceptible class in the next time step recruited by births (<span class="math inline">\(B_{t + 1}\)</span>) and depleted by the infected individuals leaving the class (<span class="math inline">\(I_{t + 1}\)</span>)<span class="citation" data-cites="finkenstädt2000"><sup><a href="references.html#ref-finkenstädt2000" role="doc-biblioref">2</a></sup></span>.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="tsir-framework" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="tsir-framework"><span class="header-section-number">2.2</span> <code>tsiR</code> framework</h2>
-<ol type="1">
-<li><strong>Reconstruct susceptible dynamics</strong>: fit a regression between cumulative cases and cumulative births. The slope is assumed to be the report rate <span class="math inline">\(\rho_t\)</span> (rho)<span class="citation" data-cites="du2017"><sup><a href="references.html#ref-du2017" role="doc-biblioref">2</a></sup></span>, the residuals is assumed to be the shape of the susceptible dynamics (<span class="math inline">\(Z_t\)</span>).</li>
-</ol>
-<p><span class="math display">\[\rho = \frac{d \hat{Y}_\text{cumBirths}}{dX_\text{cumCases}}\]</span></p>
-<ol start="2" type="1">
-<li><strong>Estimate parameters</strong>: set the expectation to the mean, then take log of both sides:</li>
-</ol>
+<section id="reconstruct-susceptible-dynamics" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="reconstruct-susceptible-dynamics"><span class="header-section-number">2.2.1</span> Reconstruct susceptible dynamics</h3>
+<p>Fit a regression between cumulative cases and cumulative births. The slope is assumed to be the report rate <span class="math inline">\(\rho_t\)</span> (rho)<span class="citation" data-cites="du2017"><sup><a href="references.html#ref-du2017" role="doc-biblioref">3</a></sup></span>, the residuals is assumed to be the shape of the susceptible dynamics (<span class="math inline">\(Z_t\)</span>).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Explain
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Let <span class="math inline">\(\rho_t\)</span> be the reporting rate and assume <span class="math inline">\(\rho_t\)</span> has a probability function with expected value <span class="math inline">\(\mathbb{E}(\rho_t) = \rho\)</span>.</p>
+<p><span class="math display">\[I_t = \rho_t C_t\]</span></p>
+<ul>
+<li><span class="math inline">\(I_t\)</span>: the number of true cases.</li>
+<li><span class="math inline">\(C_t\)</span>: the number of reported cases.</li>
+</ul>
+<p>The number of true cases is under-reported if <span class="math inline">\(\rho_t &gt; 1\)</span> and is fully reported if <span class="math inline">\(\rho_t = 1\)</span>.</p>
+<p>Replace <span class="math inline">\(I_t\)</span> here:</p>
+<p><span class="math display">\[S_t = B_t + S_{t - 1} - I_t\]</span></p>
+<p><span class="math display">\[S_t = B_t + S_{t - 1} - \rho_t C_t\]</span></p>
+<p>Let <span class="math inline">\(\mathbb{E}(S_t) = \bar{S}\)</span> so that <span class="math inline">\(S_t = \bar{S} + Z_t\)</span>, with <span class="math inline">\(\mathbb{E}(Z_t) = 0\)</span>. The deviations <span class="math inline">\(Z_t\)</span> from their mean follow the same recursive relationship as <span class="math inline">\(S_t\)</span>.</p>
+<p><span class="math display">\[Z_t = B_t + Z_{t - 1} - \rho_t C_t\]</span></p>
+<p>A successive iteration to compute <span class="math inline">\(Z_t\)</span> from <span class="math inline">\(Z_0\)</span> gives:</p>
+<p><span class="math display">\[Z_t = \sum_{i = 1}^{t} B_i + Z_0 - \sum_{i = 1}^{t} \rho_i C_i\]</span></p>
+<ul>
+<li><span class="math inline">\(\sum_{i = 1}^{t} B_i\)</span>: cumulative births.</li>
+<li><span class="math inline">\(\sum_{i = 1}^{t} C_i\)</span>: cumulative reported cases.</li>
+</ul>
+<p>For ease of notation, let <span class="math inline">\(Y_\text{cumBirths} = \sum_{i = 1}^{t} B_i\)</span>, <span class="math inline">\(X_\text{cumCases} = \sum_{i = 1}^{t} C_i\)</span>, rearrange that equation so that we have:</p>
+<p><span class="math display">\[Y_\text{cumBirths} = \rho X_\text{cumCases} + Z_t - Z_0\]</span></p>
+<p>If we assume a constant reporting rate, this equation is a simple linear regression relationship between cumulative births <span class="math inline">\(Y\)</span> and cumulative cases <span class="math inline">\(X\)</span>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="estimate-parameters" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="estimate-parameters"><span class="header-section-number">2.2.2</span> Estimate parameters</h3>
+<p>Set the expectation to the mean, then take log of both sides:</p>
 <p><span class="math display">\[\mathbb{E}(I_{t + 1}) = \beta_{t + 1} S_t I_t^{\alpha}\]</span></p>
 <p><span class="math display">\[log I_{t + 1} = log \beta_{t + 1} + log(Z_t + \bar{S}) + \alpha log I_t\]</span></p>
 <ul>
@@ -317,12 +393,17 @@ window.Quarto = {
 <li><span class="math inline">\(\alpha\)</span>: describes the epidemic saturation, a correction factor for switching from continuous to discrete time.</li>
 </ul>
 </section>
+</section>
 <section id="basic-reproduction-number" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="basic-reproduction-number"><span class="header-section-number">2.3</span> Basic reproduction number</h2>
 <p><span class="math display">\[R_0 = \beta \times \bar{S}\]</span></p>
 </section>
 <section id="examples" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="examples"><span class="header-section-number">2.4</span> Examples</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsiR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The London measles data is available in the <code>tsiR</code> package.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>LondonMeas <span class="ot">&lt;-</span> twentymeas[[<span class="st">"London"</span>]]</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(LondonMeas)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -370,8 +451,11 @@ prop. init. sus. prop. init. inf.
 <div id="ref-becker2017" class="csl-entry" role="listitem">
 <div class="csl-left-margin">1. </div><div class="csl-right-inline">Becker, A. D. &amp; Grenfell, B. T. <a href="https://doi.org/10.1371/journal.pone.0185528">tsiR: An R package for time-series Susceptible-Infected-Recovered models of epidemics</a>. <em>PLOS ONE</em> <strong>12</strong>, e0185528 (2017).</div>
 </div>
+<div id="ref-finkenstädt2000" class="csl-entry" role="listitem">
+<div class="csl-left-margin">2. </div><div class="csl-right-inline">Finkenstädt, B. F. &amp; Grenfell, B. T. <a href="https://doi.org/10.1111/1467-9876.00187">Time series modelling of childhood diseases: A dynamical systems approach</a>. <em>Journal of the Royal Statistical Society Series C: Applied Statistics</em> <strong>49</strong>, 187–205 (2000).</div>
+</div>
 <div id="ref-du2017" class="csl-entry" role="listitem">
-<div class="csl-left-margin">2. </div><div class="csl-right-inline">Du, Z., Zhang, W., Zhang, D., Yu, S. &amp; Hao, Y. <a href="https://doi.org/10.1371/journal.pone.0179623">Estimating the basic reproduction rate of HFMD using the time series SIR model in Guangdong, China</a>. <em>PLOS ONE</em> <strong>12</strong>, e0179623 (2017).</div>
+<div class="csl-left-margin">3. </div><div class="csl-right-inline">Du, Z., Zhang, W., Zhang, D., Yu, S. &amp; Hao, Y. <a href="https://doi.org/10.1371/journal.pone.0179623">Estimating the basic reproduction rate of HFMD using the time series SIR model in Guangdong, China</a>. <em>PLOS ONE</em> <strong>12</strong>, e0179623 (2017).</div>
 </div>
 </div>
 </section>

@@ -1,10 +1,6 @@
 # tsiR
 
-```{r, message=F}
-library(tsiR)
-```
-
-## Methods
+TSIR stands for **Time series Susceptible-Infected-Recovered** model.
 
 Fitting SIR-type models is challenging due to[@becker2017]:
 
@@ -14,22 +10,80 @@ Fitting SIR-type models is challenging due to[@becker2017]:
 
 The TSIR handle (2) by reconstructing the susceptible dynamics, and (3) by switching continuous to discrete time with an assumption such that the infectious period is equal to data collecting interval.
 
-$$\mathbb{E}(I_{t + 1}) = \beta_{t + 1} S_t I_t^{\alpha}$$
-
-$$S_{t + 1} = B_{t + 1} - S_t - I_{t + 1}$$
-
 The TSIR model relies on two main assumptions[@becker2017]:
 
--   Infectious period ($\frac{1}{\gamma}$) is fixed at the sampling interval of the data (e.g., bi-weekly for measles). The time step of the model is equal to the infectious period.
+-   Infectious period is fixed at the sampling interval of the data (e.g., bi-weekly for measles). The time step of the model is equal to the infectious period.
 -   Over a long enough time (e.g., 10-20 years), the sum of births and cases should be approximately equal due to the high infectivity of pathogens such as measles and other childhood infections, in the pre-vaccine era.
+
+## Methods
+
+$$\mathbb{E}(I_{t + 1}) = \beta_{t + 1} S_t I_t^{\alpha}$$
+
+::: {.callout-note collapse="true"}
+## Explain
+
+This equation describes the transmission through the multiplicative interaction between susceptible and infected individuals[@finkenstädt2000].
+
+$$I_{t + 1} = \beta_{t + 1} S_t^{\alpha_1} I_t^{\alpha_2} \epsilon_t$$
+
+- Susceptible ($S_t$) meet infectious individuals ($I_t$) with contact rate $\beta_{t + 1}$.
+- $\alpha_1$ and $\alpha_2$ are mixing parameters of the contact process, such that $\alpha_1 = \alpha_2 = 1$ is the homogeneous mixing.
+- $\epsilon_t$ is the noise, $\mathbb{E}\{ log(\epsilon_t) \} = 0$ and $\mathbb{V}\{ log(\epsilon_t) \} = 0$.
+:::
+
+$$S_{t + 1} = B_{t + 1} + S_t - I_{t + 1}$$
+
+::: {.callout-note collapse="true"}
+## Explain
+
+Susceptible class in the next time step recruited by births ($B_{t + 1}$) and depleted by the infected individuals leaving the class ($I_{t + 1}$)[@finkenstädt2000].
+:::
 
 ## `tsiR` framework
 
-1.  **Reconstruct susceptible dynamics**: fit a regression between cumulative cases and cumulative births. The slope is assumed to be the report rate $\rho_t$ (rho)[@du2017], the residuals is assumed to be the shape of the susceptible dynamics ($Z_t$).
+### Reconstruct susceptible dynamics
 
-$$\rho = \frac{d \hat{Y}_\text{cumBirths}}{dX_\text{cumCases}}$$
+Fit a regression between cumulative cases and cumulative births. The slope is assumed to be the report rate $\rho_t$ (rho)[@du2017], the residuals is assumed to be the shape of the susceptible dynamics ($Z_t$).
 
-2.  **Estimate parameters**: set the expectation to the mean, then take log of both sides:
+::: {.callout-note collapse="true"}
+## Explain
+
+Let $\rho_t$ be the reporting rate and assume $\rho_t$ has a probability function with expected value $\mathbb{E}(\rho_t) = \rho$.
+
+$$I_t = \rho_t C_t$$
+
+-   $I_t$: the number of true cases.
+-   $C_t$: the number of reported cases.
+
+The number of true cases is under-reported if $\rho_t > 1$ and is fully reported if $\rho_t = 1$.
+
+Replace $I_t$ here:
+
+$$S_t = B_t + S_{t - 1} - I_t$$
+
+$$S_t = B_t + S_{t - 1} - \rho_t C_t$$
+
+Let $\mathbb{E}(S_t) = \bar{S}$ so that $S_t = \bar{S} + Z_t$, with $\mathbb{E}(Z_t) = 0$. The deviations $Z_t$ from their mean follow the same recursive relationship as $S_t$.
+
+$$Z_t = B_t + Z_{t - 1} - \rho_t C_t$$
+
+A successive iteration to compute $Z_t$ from $Z_0$ gives:
+
+$$Z_t = \sum_{i = 1}^{t} B_i + Z_0 - \sum_{i = 1}^{t} \rho_i C_i$$
+
+- $\sum_{i = 1}^{t} B_i$: cumulative births.
+- $\sum_{i = 1}^{t} C_i$: cumulative reported cases.
+
+For ease of notation, let $Y_\text{cumBirths} = \sum_{i = 1}^{t} B_i$, $X_\text{cumCases} = \sum_{i = 1}^{t} C_i$, rearrange that equation so that we have:
+
+$$Y_\text{cumBirths} = \rho X_\text{cumCases} + Z_t - Z_0$$
+
+If we assume a constant reporting rate, this equation is a simple linear regression relationship between cumulative births $Y$ and cumulative cases $X$.
+:::
+
+### Estimate parameters
+
+Set the expectation to the mean, then take log of both sides:
 
 $$\mathbb{E}(I_{t + 1}) = \beta_{t + 1} S_t I_t^{\alpha}$$
 
@@ -44,6 +98,12 @@ $$log I_{t + 1} = log \beta_{t + 1} + log(Z_t + \bar{S}) + \alpha log I_t$$
 $$R_0 = \beta \times \bar{S}$$
 
 ## Examples
+
+```{r, message=F}
+library(tsiR)
+```
+
+The London measles data is available in the `tsiR` package.
 
 ```{r}
 LondonMeas <- twentymeas[["London"]]
