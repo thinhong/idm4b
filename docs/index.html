@@ -22,7 +22,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -70,6 +90,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -192,7 +241,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
+  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a>
+  <ul class="collapse">
+  <li><a href="#modelling" id="toc-modelling" class="nav-link" data-scroll-target="#modelling">Modelling</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -232,8 +284,23 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="preface" class="level1 unnumbered">
 <h1 class="unnumbered">Preface</h1>
+<section id="modelling" class="level2">
+<h2 class="anchored" data-anchor-id="modelling">Modelling</h2>
+<p>A model is a simplified representation of a complex phenomenon<span class="citation" data-cites="vynnycky2010"><sup><a href="references.html#ref-vynnycky2010" role="doc-biblioref">1</a></sup></span>.</p>
+<p>We all use models in our daily lives, often without realizing it. Imagine a colleague asks, “How long will it take to get to the new restaurant?”. There are different ways you might answer this question, each reflecting a different “model” in your head:</p>
+<ul>
+<li><p>Experience-based model: You might think, “Last week it took me 20 minutes to get to this restaurant”. This model simplifies by assuming past experiences are a reliable predictor of future outcomes, ignoring daily variations like traffic or weather.</p></li>
+<li><p>Distance and speed model: You might think, “The restaurant is 15 kilometers away, and I drive at 45 km/h, so it should take about 20 minutes”. This model uses the formula <span class="math inline">\(\text{time} = \frac{\text{distance}}{\text{speed}}\)</span>. It simplifies by assuming a constant speed, and not accounting for real-world complexities like traffic lights or congestion.</p></li>
+</ul>
+<p>Models help us navigate and make decisions about complex situations by focusing on the most relevant factors and ignoring the less critical details.</p>
 
 
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-vynnycky2010" class="csl-entry" role="listitem">
+<div class="csl-left-margin">1. </div><div class="csl-right-inline">Vynnycky, E. &amp; White, R. <em>An Introduction to Infectious Disease Modelling</em>. (OUP Oxford, 2010).</div>
+</div>
+</div>
+</section>
 </section>
 
 </main> <!-- /main -->
