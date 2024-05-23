@@ -3,8 +3,12 @@ project:
   output-dir: docs
 
 book:
+  google-analytics: "G-X391ZN63GG"
   title: "Infectious disease modelling for babies"
-  author: "Thinh Ong"
+  author:
+    - name: Thinh Ong
+      url: https://drthinhong.com
+      orcid: 0000-0001-6772-9291
   date: "05/22/2024"
   chapters:
     - index.qmd
@@ -27,8 +31,11 @@ csl: nature.csl
 format:
   html:
     theme: cosmo
+    code-overflow: wrap
   pdf:
     documentclass: scrreprt
 
-
+comments:
+  giscus:
+    repo: thinhong/idm4b
 
