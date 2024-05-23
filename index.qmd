@@ -4,7 +4,7 @@
 
 A model is a simplified representation of a complex phenomenon[@vynnycky2010].
 
-We all use models in our daily lives, often without realizing it. Imagine a colleague asks, "How long will it take to get to the new restaurant?". There are different ways you might answer this question, each reflecting a different "model" in your head:
+We all use models in our daily lives, often without realizing it. Imagine a colleague asks, "How long will it take to get to the restaurant?". There are different ways you might answer this question, each reflecting a different "model" in your head:
 
 - Experience-based model: You might think, "Last week it took me 20 minutes to get to this restaurant". This model simplifies by assuming past experiences are a reliable predictor of future outcomes, ignoring daily variations like traffic or weather.
 
