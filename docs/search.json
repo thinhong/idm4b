@@ -151,8 +151,8 @@
     ]
   },
   {
-    "objectID": "risk-rp.html",
-    "href": "risk-rp.html",
+    "objectID": "rp-risk.html",
+    "href": "rp-risk.html",
     "title": "5  Risk assessment report",
     "section": "",
     "text": "5.1 Examples\nRapid risk assessment: Measles in Canada, public health implications in 2024",
@@ -162,8 +162,8 @@
     ]
   },
   {
-    "objectID": "risk-rp.html#data",
-    "href": "risk-rp.html#data",
+    "objectID": "rp-risk.html#data",
+    "href": "rp-risk.html#data",
     "title": "5  Risk assessment report",
     "section": "5.2 Data",
     "text": "5.2 Data\n\nhistorical case notification of past outbreaks 2014 and 2019 Date of onset + date of birth (or age)\ncurrent level of susceptibility in HCMC: Serology Vaccine registry Birth rates\nconnectivity between Phu Quoc and HCMC Flight data / boat data?\n\nP = 1 – (1 / (R0 * s))^m",

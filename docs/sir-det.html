@@ -232,7 +232,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./risk-rp.html" class="sidebar-item-text sidebar-link">
+  <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
@@ -288,7 +288,10 @@ window.Quarto = {
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: stats4</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>flu <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/flu.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>flu <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/flu.rds"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># This flu data is prevalence (a very special data)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Prevalence: fit with I</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Incidence: fit with reported cases</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="assumptions" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="assumptions"><span class="header-section-number">2.1</span> Assumptions</h2>
