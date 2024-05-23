@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Infectious disease modelling for babies - 4&nbsp; SIR</title>
+<title>Infectious disease modelling for babies - 5&nbsp; Risk assessment report</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./rp.html" rel="next">
-<link href="./sto.html" rel="prev">
+<link href="./references.html" rel="next">
+<link href="./rp.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -81,7 +81,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./sto.html">Stochastic models</a></li><li class="breadcrumb-item"><a href="./sir-sto.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SIR</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./rp.html">Reports</a></li><li class="breadcrumb-item"><a href="./risk-rp.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Risk assessment report</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -152,7 +152,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./sir-sto.html" class="sidebar-item-text sidebar-link active">
+  <a href="./sir-sto.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SIR</span></span></a>
   </div>
 </li>
@@ -169,7 +169,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./risk-rp.html" class="sidebar-item-text sidebar-link">
+  <a href="./risk-rp.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
@@ -187,14 +187,21 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#examples" id="toc-examples" class="nav-link active" data-scroll-target="#examples"><span class="header-section-number">5.1</span> Examples</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data"><span class="header-section-number">5.2</span> Data</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./sto.html">Stochastic models</a></li><li class="breadcrumb-item"><a href="./sir-sto.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SIR</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./rp.html">Reports</a></li><li class="breadcrumb-item"><a href="./risk-rp.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Risk assessment report</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SIR</span></h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Risk assessment report</span></h1>
 </div>
 
 
@@ -211,8 +218,21 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="examples" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="examples"><span class="header-section-number">5.1</span> Examples</h2>
+<p><a href="https://www.canada.ca/en/public-health/services/emergency-preparedness-response/rapid-risk-assessments-public-health-professionals/rapid-risk-assessment-measles-public-health-implications-2024.html">Rapid risk assessment: Measles in Canada, public health implications in 2024</a></p>
+</section>
+<section id="data" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="data"><span class="header-section-number">5.2</span> Data</h2>
+<ol type="1">
+<li>historical case notification of past outbreaks 2014 and 2019 Date of onset + date of birth (or age)</li>
+<li>current level of susceptibility in HCMC: Serology Vaccine registry Birth rates</li>
+<li>connectivity between Phu Quoc and HCMC Flight data / boat data?</li>
+</ol>
+<p>P = 1 – (1 / (R0 * s))^m</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -626,13 +646,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./sto.html" class="pagination-link" aria-label="Stochastic models">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Stochastic models</span>
+      <a href="./rp.html" class="pagination-link" aria-label="Reports">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Reports</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./rp.html" class="pagination-link" aria-label="Reports">
-        <span class="nav-page-text">Reports</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -5,6 +5,9 @@ library(deSolve)
 library(bbmle)
 
 flu <- readRDS("data/flu.rds")
+# This flu data is prevalence (a very special data)
+# Prevalence: fit with I
+# Incidence: fit with reported cases
 ```
 
 ## Assumptions

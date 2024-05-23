@@ -1,0 +1,19 @@
+# Risk assessment report
+
+## Examples
+
+[Rapid risk assessment: Measles in Canada, public health implications in 2024](https://www.canada.ca/en/public-health/services/emergency-preparedness-response/rapid-risk-assessments-public-health-professionals/rapid-risk-assessment-measles-public-health-implications-2024.html)
+
+## Data
+
+(1) historical case notification of past outbreaks 2014 and 2019
+Date of onset + date of birth (or age)
+(2) current level of susceptibility in HCMC:
+Serology 
+Vaccine registry
+Birth rates
+(3) connectivity between Phu Quoc and HCMC
+Flight data / boat data?
+
+P = 1 – (1 / (R0 * s))^m
+

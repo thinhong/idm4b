@@ -3,11 +3,12 @@ project:
   output-dir: docs
 
 book:
-  title: "Modelling"
+  title: "Infectious disease modelling for babies"
   author: "Thinh Ong"
-  date: "22/05/2024"
+  date: "05/22/2024"
   chapters:
     - index.qmd
+    - epith.qmd
     - part: det.qmd
       chapters: 
         - sir-det.qmd
@@ -15,6 +16,9 @@ book:
     - part: sto.qmd
       chapters: 
         - sir-sto.qmd
+    - part: rp.qmd
+      chapters: 
+        - risk-rp.qmd
     - references.qmd
 
 bibliography: references.bib
