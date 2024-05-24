@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Infectious disease modelling for babies - 1&nbsp; Epidemic theory</title>
+<title>Infectious disease modelling for babies - 5&nbsp; Particle filtering</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -50,8 +30,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./det.html" rel="next">
-<link href="./index.html" rel="prev">
+<link href="./rp.html" rel="next">
+<link href="./calib.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -98,35 +78,6 @@ gtag('js', new Date());
 gtag('config', 'G-X391ZN63GG', { 'anonymize_ip': true});
 </script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -139,7 +90,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./epith.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Epidemic theory</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./calib.html">Calibration</a></li><li class="breadcrumb-item"><a href="./pomp.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Particle filtering</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -172,7 +123,7 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./epith.html" class="sidebar-item-text sidebar-link active">
+  <a href="./epith.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Epidemic theory</span></span></a>
   </div>
 </li>
@@ -227,7 +178,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pomp.html" class="sidebar-item-text sidebar-link">
+  <a href="./pomp.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Particle filtering</span></span></a>
   </div>
 </li>
@@ -262,25 +213,14 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#growth-rate-r-and-reproduction-number-r" id="toc-growth-rate-r-and-reproduction-number-r" class="nav-link active" data-scroll-target="#growth-rate-r-and-reproduction-number-r"><span class="header-section-number">1.1</span> Growth rate <span class="math inline">\(r\)</span> and reproduction number <span class="math inline">\(R\)</span></a>
-  <ul class="collapse">
-  <li><a href="#growth-rate-r" id="toc-growth-rate-r" class="nav-link" data-scroll-target="#growth-rate-r"><span class="header-section-number">1.1.1</span> Growth rate <span class="math inline">\(r\)</span></a></li>
-  <li><a href="#reproduction-number-r" id="toc-reproduction-number-r" class="nav-link" data-scroll-target="#reproduction-number-r"><span class="header-section-number">1.1.2</span> Reproduction number <span class="math inline">\(R\)</span></a></li>
-  </ul></li>
-  <li><a href="#infectious-vs-clinical" id="toc-infectious-vs-clinical" class="nav-link" data-scroll-target="#infectious-vs-clinical"><span class="header-section-number">1.2</span> Infectious vs clinical</a></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./calib.html">Calibration</a></li><li class="breadcrumb-item"><a href="./pomp.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Particle filtering</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Epidemic theory</span></h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Particle filtering</span></h1>
 </div>
 
 
@@ -297,48 +237,8 @@ window.Quarto = {
 </header>
 
 
-<section id="growth-rate-r-and-reproduction-number-r" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="growth-rate-r-and-reproduction-number-r"><span class="header-section-number">1.1</span> Growth rate <span class="math inline">\(r\)</span> and reproduction number <span class="math inline">\(R\)</span></h2>
-<p>Growth rate <span class="math inline">\(r\)</span> and reproduction number <span class="math inline">\(R\)</span> are basically the same. <span class="math inline">\(r\)</span> is used in continuous time and <span class="math inline">\(R\)</span> is used in discrete time.</p>
-<section id="growth-rate-r" class="level3" data-number="1.1.1">
-<h3 data-number="1.1.1" class="anchored" data-anchor-id="growth-rate-r"><span class="header-section-number">1.1.1</span> Growth rate <span class="math inline">\(r\)</span></h3>
-<p>The rate at which new cases are arising <span class="citation" data-cites="anderson2020">(<a href="references.html#ref-anderson2020" role="doc-biblioref">Anderson et al., 2020</a>)</span>. It can be a positive number (new infections is increasing) or a negative number (new infections is decreasing).</p>
-<p>The number of new infections at an increasing or decreasing exponential rate. It is dependent on the reproduction number and timescale between infections.</p>
-<p><span class="math display">\[\frac{d_\text{newCases}}{dt}\]</span></p>
-</section>
-<section id="reproduction-number-r" class="level3" data-number="1.1.2">
-<h3 data-number="1.1.2" class="anchored" data-anchor-id="reproduction-number-r"><span class="header-section-number">1.1.2</span> Reproduction number <span class="math inline">\(R\)</span></h3>
-<section id="basic-reproduction-number-r_0" class="level4" data-number="1.1.2.1">
-<h4 data-number="1.1.2.1" class="anchored" data-anchor-id="basic-reproduction-number-r_0"><span class="header-section-number">1.1.2.1</span> Basic reproduction number <span class="math inline">\(R_0\)</span></h4>
-<p><span class="math inline">\(R_0\)</span> (pronounced /R naught/) is the <strong>average</strong> number of secondary cases generated by an <strong>average</strong> infected person throughout their <strong>infectious period</strong> in a <strong>wholly susceptible population</strong> <span class="citation" data-cites="anderson2020">(<a href="references.html#ref-anderson2020" role="doc-biblioref">Anderson et al., 2020</a>)</span>.</p>
-</section>
-<section id="effective-reproduction-number-r_e" class="level4" data-number="1.1.2.2">
-<h4 data-number="1.1.2.2" class="anchored" data-anchor-id="effective-reproduction-number-r_e"><span class="header-section-number">1.1.2.2</span> Effective reproduction number <span class="math inline">\(R_e\)</span></h4>
-<p><span class="math inline">\(R_e\)</span> is the <strong>average</strong> number of secondary cases generated by an <strong>average</strong> infected person throughout their <strong>infectious period</strong> in a population where <strong>not all individuals are susceptible</strong>.</p>
-<p>Let <span class="math inline">\(s\)</span> be the proportion of the population that is susceptible.</p>
-<p><span class="math display">\[R_e = s \times R_0\]</span></p>
-</section>
-<section id="effective-reproduction-number-at-time-t-r_t" class="level4" data-number="1.1.2.3">
-<h4 data-number="1.1.2.3" class="anchored" data-anchor-id="effective-reproduction-number-at-time-t-r_t"><span class="header-section-number">1.1.2.3</span> Effective reproduction number at time <span class="math inline">\(t\)</span> <span class="math inline">\(R_t\)</span></h4>
-<p><span class="math inline">\(R_e(t)\)</span> <span class="citation" data-cites="knight2020">(<a href="references.html#ref-knight2020" role="doc-biblioref">Knight &amp; Mishra, 2020</a>)</span> or <span class="math inline">\(R_t\)</span> is the <strong>average number</strong> of <strong>secondary cases</strong> generated by one infected person <strong>at time</strong> <span class="math inline">\(t\)</span> during the outbreak.</p>
-<p>A public health control strategy will end an outbreak if it can keep <span class="math inline">\(R_t\)</span> below 1.</p>
-</section>
-</section>
-</section>
-<section id="infectious-vs-clinical" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="infectious-vs-clinical"><span class="header-section-number">1.2</span> Infectious vs clinical</h2>
-<p>In infectious disease modelling, we are usually interested in infectiousness.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
-<div id="ref-anderson2020" class="csl-entry" role="listitem">
-Anderson, R., Donnelly, C., Hollingsworth, D., Keeling, M., Vegvari, C., Baggaley, R., &amp; Maddren, R. (2020). Reproduction number (R) and growth rate (r) of the COVID-19 epidemic in the UK. <em>The Royal Society</em>.
-</div>
-<div id="ref-knight2020" class="csl-entry" role="listitem">
-Knight, J., &amp; Mishra, S. (2020). Estimating effective reproduction number using generation time versus serial interval, with application to covid-19 in the greater toronto area, canada. <em>Infectious Disease Modelling</em>, <em>5</em>, 889–896. <a href="https://doi.org/10.1016/j.idm.2020.10.009">https://doi.org/10.1016/j.idm.2020.10.009</a>
-</div>
-</div>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -756,13 +656,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <input type="hidden" id="giscus-alt-theme" value="dark">
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link" aria-label="Preface">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      <a href="./calib.html" class="pagination-link" aria-label="Calibration">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Calibration</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./det.html" class="pagination-link" aria-label="Deterministic models">
-        <span class="nav-page-text">Deterministic models</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./rp.html" class="pagination-link" aria-label="Reports">
+        <span class="nav-page-text">Reports</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

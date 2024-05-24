@@ -252,8 +252,8 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./rp.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Reports</span></a>
+            <a href="./calib.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Calibration</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -261,8 +261,25 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./pomp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Particle filtering</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./rp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Reports</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
       </ul>
@@ -322,7 +339,7 @@ window.Quarto = {
 
 
 <p>TSIR stands for <strong>Time series Susceptible-Infected-Recovered</strong> model.</p>
-<p>Fitting SIR-type models is challenging due to<span class="citation" data-cites="becker2017"><sup><a href="references.html#ref-becker2017" role="doc-biblioref">1</a></sup></span>:</p>
+<p>Fitting SIR-type models is challenging due to <span class="citation" data-cites="becker2017">(<a href="references.html#ref-becker2017" role="doc-biblioref">Becker &amp; Grenfell, 2017</a>)</span>:</p>
 <ol type="1">
 <li>Only one state variable (the number of cases over time) is observed.</li>
 <li>Substantial under-reporting of disease incidence.</li>
@@ -331,7 +348,7 @@ window.Quarto = {
 <p>The TSIR handle (2) by reconstructing the susceptible dynamics, and (3) by switching continuous to discrete time with an assumption such that the infectious period is equal to data collecting interval.</p>
 <section id="assumptions" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="assumptions"><span class="header-section-number">3.1</span> Assumptions</h2>
-<p>The TSIR model relies on two main assumptions<span class="citation" data-cites="becker2017"><sup><a href="references.html#ref-becker2017" role="doc-biblioref">1</a></sup></span>:</p>
+<p>The TSIR model relies on two main assumptions <span class="citation" data-cites="becker2017">(<a href="references.html#ref-becker2017" role="doc-biblioref">Becker &amp; Grenfell, 2017</a>)</span>:</p>
 <ul>
 <li>Infectious period is fixed at the sampling interval of the data (e.g., bi-weekly for measles). The time step of the model is equal to the infectious period.</li>
 <li>Over a long enough time (e.g., 10-20 years), the sum of births and cases should be approximately equal due to the high infectivity of pathogens such as measles and other childhood infections, in the pre-vaccine era.</li>
@@ -352,7 +369,7 @@ Explain
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>This equation describes the transmission through the multiplicative interaction between susceptible and infected individuals<span class="citation" data-cites="finkenstädt2000"><sup><a href="references.html#ref-finkenstädt2000" role="doc-biblioref">2</a></sup></span>.</p>
+<p>This equation describes the transmission through the multiplicative interaction between susceptible and infected individuals <span class="citation" data-cites="finkenstädt2000">(<a href="references.html#ref-finkenstädt2000" role="doc-biblioref">Finkenstädt &amp; Grenfell, 2000</a>)</span>.</p>
 <p><span class="math display">\[I_{t + 1} = \beta_{t + 1} S_t^{\alpha_1} I_t^{\alpha_2} \epsilon_t\]</span></p>
 <ul>
 <li>Susceptible (<span class="math inline">\(S_t\)</span>) meet infectious individuals (<span class="math inline">\(I_t\)</span>) with contact rate <span class="math inline">\(\beta_{t + 1}\)</span>.</li>
@@ -375,7 +392,7 @@ Explain
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Susceptible class in the next time step recruited by births (<span class="math inline">\(B_{t + 1}\)</span>) and depleted by the infected individuals leaving the class (<span class="math inline">\(I_{t + 1}\)</span>)<span class="citation" data-cites="finkenstädt2000"><sup><a href="references.html#ref-finkenstädt2000" role="doc-biblioref">2</a></sup></span>.</p>
+<p>Susceptible class in the next time step recruited by births (<span class="math inline">\(B_{t + 1}\)</span>) and depleted by the infected individuals leaving the class (<span class="math inline">\(I_{t + 1}\)</span>) <span class="citation" data-cites="finkenstädt2000">(<a href="references.html#ref-finkenstädt2000" role="doc-biblioref">Finkenstädt &amp; Grenfell, 2000</a>)</span>.</p>
 </div>
 </div>
 </div>
@@ -384,7 +401,7 @@ Explain
 <h2 data-number="3.3" class="anchored" data-anchor-id="tsir-framework"><span class="header-section-number">3.3</span> <code>tsiR</code> framework</h2>
 <section id="reconstruct-susceptible-dynamics" class="level3" data-number="3.3.1">
 <h3 data-number="3.3.1" class="anchored" data-anchor-id="reconstruct-susceptible-dynamics"><span class="header-section-number">3.3.1</span> Reconstruct susceptible dynamics</h3>
-<p>Fit a regression between cumulative cases and cumulative births. The slope is assumed to be the report rate <span class="math inline">\(\rho_t\)</span> (rho)<span class="citation" data-cites="du2017"><sup><a href="references.html#ref-du2017" role="doc-biblioref">3</a></sup></span>, the residuals is assumed to be the shape of the susceptible dynamics (<span class="math inline">\(Z_t\)</span>).</p>
+<p>Fit a regression between cumulative cases and cumulative births. The slope is assumed to be the report rate <span class="math inline">\(\rho_t\)</span> (rho) <span class="citation" data-cites="du2017">(<a href="references.html#ref-du2017" role="doc-biblioref">Du et al., 2017</a>)</span>, the residuals is assumed to be the shape of the susceptible dynamics (<span class="math inline">\(Z_t\)</span>).</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -530,15 +547,15 @@ Ignoring unknown aesthetics: fill</code></pre>
 </div>
 
 
-<div id="refs" class="references csl-bib-body" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
 <div id="ref-becker2017" class="csl-entry" role="listitem">
-<div class="csl-left-margin">1. </div><div class="csl-right-inline">Becker, A. D. &amp; Grenfell, B. T. <a href="https://doi.org/10.1371/journal.pone.0185528">tsiR: An R package for time-series Susceptible-Infected-Recovered models of epidemics</a>. <em>PLOS ONE</em> <strong>12</strong>, e0185528 (2017).</div>
-</div>
-<div id="ref-finkenstädt2000" class="csl-entry" role="listitem">
-<div class="csl-left-margin">2. </div><div class="csl-right-inline">Finkenstädt, B. F. &amp; Grenfell, B. T. <a href="https://doi.org/10.1111/1467-9876.00187">Time series modelling of childhood diseases: A dynamical systems approach</a>. <em>Journal of the Royal Statistical Society Series C: Applied Statistics</em> <strong>49</strong>, 187–205 (2000).</div>
+Becker, A. D., &amp; Grenfell, B. T. (2017). tsiR: An R package for time-series Susceptible-Infected-Recovered models of epidemics. <em>PLOS ONE</em>, <em>12</em>(9), e0185528. <a href="https://doi.org/10.1371/journal.pone.0185528">https://doi.org/10.1371/journal.pone.0185528</a>
 </div>
 <div id="ref-du2017" class="csl-entry" role="listitem">
-<div class="csl-left-margin">3. </div><div class="csl-right-inline">Du, Z., Zhang, W., Zhang, D., Yu, S. &amp; Hao, Y. <a href="https://doi.org/10.1371/journal.pone.0179623">Estimating the basic reproduction rate of HFMD using the time series SIR model in Guangdong, China</a>. <em>PLOS ONE</em> <strong>12</strong>, e0179623 (2017).</div>
+Du, Z., Zhang, W., Zhang, D., Yu, S., &amp; Hao, Y. (2017). Estimating the basic reproduction rate of HFMD using the time series SIR model in Guangdong, China. <em>PLOS ONE</em>, <em>12</em>(7), e0179623. <a href="https://doi.org/10.1371/journal.pone.0179623">https://doi.org/10.1371/journal.pone.0179623</a>
+</div>
+<div id="ref-finkenstädt2000" class="csl-entry" role="listitem">
+Finkenstädt, B. F., &amp; Grenfell, B. T. (2000). Time series modelling of childhood diseases: A dynamical systems approach. <em>Journal of the Royal Statistical Society Series C: Applied Statistics</em>, <em>49</em>(2), 187–205. <a href="https://doi.org/10.1111/1467-9876.00187">https://doi.org/10.1111/1467-9876.00187</a>
 </div>
 </div>
 </section>

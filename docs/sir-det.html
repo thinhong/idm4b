@@ -232,8 +232,8 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./rp.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Reports</span></a>
+            <a href="./calib.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Calibration</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -241,8 +241,25 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./pomp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Particle filtering</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./rp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Reports</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
       </ul>
@@ -345,37 +362,6 @@ window.Quarto = {
 <h2 data-number="2.3" class="anchored" data-anchor-id="poisson-distribution"><span class="header-section-number">2.3</span> Poisson distribution</h2>
 <p>Poisson distribution is a <strong>discrete probability distribution</strong> that expresses probability of a given <strong>number of events</strong> occurring <strong>in a fixed interval of time</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <p>Suitable to use because here we are fitting a number of cases occurring in this period.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Why use log-likelihood?
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The likelihood is the probability of observing data <span class="math inline">\(x\)</span> given that our model is true<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, <span class="math inline">\(\mathbb{P}(x|M)\)</span>.</p>
-<p>We have a lot of data points, and they are independent. The probability of observing all these data points at the same time is the production of these likelihood <span class="math inline">\(\mathbb{P}(x_1|M) \times \mathbb{P}(x_2|M) \times \mathbb{P}(x_3|M)... = \prod\mathbb{P}(x|M)\)</span>.</p>
-<p>Multiplying things together, you will end up losing precision if the numbers are too low. Here you are dealing with probability (a value &lt; 1), multiplying 100 probabilities you will end up with 1e-100.</p>
-<p>But remember that <span class="math inline">\(log(a \times b) = log(a) + log(b)\)</span>, and very convenient that <span class="math inline">\(log(1^{-100} = -230.2585)\)</span>.</p>
-<p>So <span class="math inline">\(log(\mathbb{P}(x_1|M) \times \mathbb{P}(x_2|M) \times \mathbb{P}(x_3|M)...)\)</span> <span class="math inline">\(=\)</span> <span class="math inline">\(log(\mathbb{P}(x_1|M)) + log(\mathbb{P}(x_2|M)) + log(\mathbb{P}(x_3|M))...\)</span> and it is so much easier to handle.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Why use negative log-likelihood?
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Because statistical packages optimizers work by minimizing a function. Minimizing means <strong>decrease the distance of two distributions</strong> to its lowest, this is fairly easy because we get this when the distance close to 0 (just like the trick we do in hypothesis testing).</p>
-<p>Minimizing negative log-likelihood (meaning that <span class="math inline">\(-1 \times \text{log-likelihood}\)</span>) is equivalent to maximizing the log-likelihood, which is what we want to do (MLE: maximum likelihood estimation).</p>
-</div>
-</div>
 
 
 </section>
@@ -383,7 +369,6 @@ Why use negative log-likelihood?
 <hr>
 <ol>
 <li id="fn1"><p>Wikipedia <a href="https://en.wikipedia.org/wiki/Poisson_distribution" class="uri">https://en.wikipedia.org/wiki/Poisson_distribution</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p><a href="https://en.wikipedia.org/wiki/Bayesian_inference" class="uri">https://en.wikipedia.org/wiki/Bayesian_inference</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

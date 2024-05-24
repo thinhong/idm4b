@@ -7,7 +7,7 @@ book:
   title: "Infectious disease modelling for babies"
   author:
     - name: Thinh Ong
-      url: https://drthinhong.com
+      url: https://drthinhong.com/
       orcid: 0000-0001-6772-9291
   date: "05/22/2024"
   chapters:
@@ -20,20 +20,21 @@ book:
     - part: sto.qmd
       chapters: 
         - sir-sto.qmd
+    - part: calib.qmd
+      chapters: 
+        - pomp.qmd
     - part: rp.qmd
       chapters: 
         - rp-risk.qmd
     - references.qmd
 
 bibliography: references.bib
-csl: nature.csl
+csl: apa.csl
 
 format:
   html:
     theme: cosmo
     code-overflow: wrap
-  pdf:
-    documentclass: scrreprt
 
 comments:
   giscus:

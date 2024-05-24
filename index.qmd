@@ -2,7 +2,7 @@
 
 ## Modelling
 
-A model is a simplified representation of a complex phenomenon[@vynnycky2010].
+A model is a simplified representation of a complex phenomenon [@vynnycky2010].
 
 We all use models in our daily lives, often without realizing it. Imagine a colleague asks, "How long will it take to get to the restaurant?". There are different ways you might answer this question, each reflecting a different "model" in your head:
 

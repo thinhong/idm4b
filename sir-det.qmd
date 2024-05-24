@@ -59,26 +59,3 @@ Poisson distribution is a **discrete probability distribution** that expresses p
 
 Suitable to use because here we are fitting a number of cases occurring in this period.
 
-::: callout-note
-## Why use log-likelihood?
-
-The likelihood is the probability of observing data $x$ given that our model is true[^2], $\mathbb{P}(x|M)$.
-
-We have a lot of data points, and they are independent. The probability of observing all these data points at the same time is the production of these likelihood $\mathbb{P}(x_1|M) \times \mathbb{P}(x_2|M) \times \mathbb{P}(x_3|M)... = \prod\mathbb{P}(x|M)$.
-
-Multiplying things together, you will end up losing precision if the numbers are too low. Here you are dealing with probability (a value \< 1), multiplying 100 probabilities you will end up with 1e-100.
-
-But remember that $log(a \times b) = log(a) + log(b)$, and very convenient that $log(1^{-100} = -230.2585)$.
-
-So $log(\mathbb{P}(x_1|M) \times \mathbb{P}(x_2|M) \times \mathbb{P}(x_3|M)...)$ $=$ $log(\mathbb{P}(x_1|M)) + log(\mathbb{P}(x_2|M)) + log(\mathbb{P}(x_3|M))...$ and it is so much easier to handle.
-:::
-
-[^2]: <https://en.wikipedia.org/wiki/Bayesian_inference>
-
-::: callout-note
-## Why use negative log-likelihood?
-
-Because statistical packages optimizers work by minimizing a function. Minimizing means **decrease the distance of two distributions** to its lowest, this is fairly easy because we get this when the distance close to 0 (just like the trick we do in hypothesis testing).
-
-Minimizing negative log-likelihood (meaning that $-1 \times \text{log-likelihood}$) is equivalent to maximizing the log-likelihood, which is what we want to do (MLE: maximum likelihood estimation).
-:::
