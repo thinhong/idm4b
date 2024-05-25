@@ -39,7 +39,9 @@ format:
   html:
     theme: cosmo
     code-overflow: wrap
+    code-copy: true
     fig-format: svg
+    df-print: kable
 
 comments:
   giscus:

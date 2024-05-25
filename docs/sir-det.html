@@ -304,8 +304,13 @@ window.Quarto = {
    
   <ul>
   <li><a href="#assumptions" id="toc-assumptions" class="nav-link active" data-scroll-target="#assumptions"><span class="header-section-number">4.1</span> Assumptions</a></li>
-  <li><a href="#structure" id="toc-structure" class="nav-link" data-scroll-target="#structure"><span class="header-section-number">4.2</span> Structure</a></li>
-  <li><a href="#poisson-distribution" id="toc-poisson-distribution" class="nav-link" data-scroll-target="#poisson-distribution"><span class="header-section-number">4.3</span> Poisson distribution</a></li>
+  <li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model"><span class="header-section-number">4.2</span> Model</a></li>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">4.3</span> Code</a>
+  <ul class="collapse">
+  <li><a href="#model-1" id="toc-model-1" class="nav-link" data-scroll-target="#model-1"><span class="header-section-number">4.3.1</span> Model</a></li>
+  <li><a href="#parameter-sensitivity" id="toc-parameter-sensitivity" class="nav-link" data-scroll-target="#parameter-sensitivity"><span class="header-section-number">4.3.2</span> Parameter sensitivity</a></li>
+  </ul></li>
+  <li><a href="#poisson-distribution" id="toc-poisson-distribution" class="nav-link" data-scroll-target="#poisson-distribution"><span class="header-section-number">4.4</span> Poisson distribution</a></li>
   </ul>
 </nav>
     </div>
@@ -332,77 +337,215 @@ window.Quarto = {
 
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(deSolve)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bbmle)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: stats4</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>flu <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/flu.rds"</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># This flu data is prevalence (a very special data)</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Prevalence: fit with I</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Incidence: fit with reported cases</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(deSolve)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bbmle)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="assumptions" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="assumptions"><span class="header-section-number">4.1</span> Assumptions</h2>
 <ul>
-<li>Well-mixed population (a single contact rate <span class="math inline">\(\beta\)</span>).</li>
-<li>The most basic form balances demographic processes (births B and deaths <span class="math inline">\(\mu\)</span>).</li>
-<li>Infectious disease properties is for a single pathogen.</li>
+<li>Well-mixed population, or homogeneous mixing (a single contact rate <span class="math inline">\(\beta\)</span>).</li>
+<li>The most basic form balances demographic processes (births <span class="math inline">\(B\)</span> and deaths <span class="math inline">\(\mu\)</span>).</li>
+<li>Infectious disease properties are for a single pathogen.</li>
 </ul>
 </section>
-<section id="structure" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="structure"><span class="header-section-number">4.2</span> Structure</h2>
+<section id="model" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="model"><span class="header-section-number">4.2</span> Model</h2>
 <p>Force of infection <span class="math inline">\(\lambda = \frac{\beta I}{N}\)</span></p>
-<p><span class="math display">\[\frac{dS}{dt} = B - \lambda S - \mu S\]</span></p>
-<p><span class="math display">\[\frac{dI}{dt} = \lambda S - \gamma I - \mu I\]</span></p>
-<p><span class="math display">\[\frac{dR}{dt} = \gamma I - \mu R\]</span></p>
+<p><span class="math display">\[\frac{dS}{dt} = -\lambda S\]</span></p>
+<p><span class="math display">\[\frac{dI}{dt} = \lambda S - \gamma I\]</span></p>
+<p><span class="math display">\[\frac{dR}{dt} = \gamma I\]</span></p>
+</section>
+<section id="code" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="code"><span class="header-section-number">4.3</span> Code</h2>
+<section id="model-1" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="model-1"><span class="header-section-number">4.3.1</span> Model</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sir_1() returns a data frame consists S, I, R values by time</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sir_1 <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, gamma, S0, I0, R0, times) {</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  sir_equations <span class="ot">&lt;-</span> <span class="cf">function</span>(time, variables, parameters) {</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">with</span>(<span class="fu">as.list</span>(<span class="fu">c</span>(variables, parameters)), {</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>      dS <span class="ot">&lt;-</span> <span class="sc">-</span>beta <span class="sc">*</span> I <span class="sc">*</span> S</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>      dI <span class="ot">&lt;-</span>  beta <span class="sc">*</span> I <span class="sc">*</span> S <span class="sc">-</span> gamma <span class="sc">*</span> I</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>      dR <span class="ot">&lt;-</span>  gamma <span class="sc">*</span> I</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="fu">list</span>(<span class="fu">c</span>(dS, dI, dR)))</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  parameters_values <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">beta =</span> beta, <span class="at">gamma =</span> gamma)</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  initial_values <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">S =</span> S0, <span class="at">I =</span> I0, <span class="at">R =</span> R0)</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">ode</span>(initial_values, times, sir_equations, parameters_values)</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(out)</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sir_1() returns a data frame consists S, I, R values by time</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sir_1 <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, gamma, S0, I0, R0, times) {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  sir_equations <span class="ot">&lt;-</span> <span class="cf">function</span>(time, variables, parameters) {</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">with</span>(<span class="fu">as.list</span>(<span class="fu">c</span>(variables, parameters)), {</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      dS <span class="ot">&lt;-</span> <span class="sc">-</span>beta <span class="sc">*</span> I <span class="sc">*</span> S</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      dI <span class="ot">&lt;-</span>  beta <span class="sc">*</span> I <span class="sc">*</span> S <span class="sc">-</span> gamma <span class="sc">*</span> I</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>      dR <span class="ot">&lt;-</span>  gamma <span class="sc">*</span> I</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="fu">list</span>(<span class="fu">c</span>(dS, dI, dR)))</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  parameters_values <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">beta =</span> beta, <span class="at">gamma =</span> gamma)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  initial_values <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">S =</span> S0, <span class="at">I =</span> I0, <span class="at">R =</span> R0)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">ode</span>(initial_values, times, sir_equations, parameters_values)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(out)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Load the flu data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>flu <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/flu.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let have a look at this flu data. This is a very special data as it reports the flu <strong>prevalence</strong>. Usually, case notification data reports <strong>incidence</strong>.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Remember to fit the correct thing in SIR model to case notification data:</p>
+<ul>
+<li>Prevalence: fit to the <strong>I compartment</strong>.</li>
+<li>Incidence: fit <strong>only</strong> to the <span class="math inline">\(\lambda S\)</span>.</li>
+</ul>
+</div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">sir_1</span>(<span class="at">beta =</span> <span class="fl">0.004</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>, <span class="at">S0 =</span> <span class="dv">999</span>, <span class="at">I0 =</span> <span class="dv">1</span>, <span class="at">R0 =</span> <span class="dv">0</span>, <span class="at">times =</span> flu<span class="sc">$</span>day)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(flu)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">time</th>
+<th style="text-align: right;">prev</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">26</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">73</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">222</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">293</td>
+</tr>
+</tbody>
+</table>
 </div>
-<p>We want to compare these model’s predictions with real prevalence data.</p>
+</div>
+</div>
+<p>Now we run the SIR model, and compare predictions with the observed flu prevalence data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df_plot <span class="ot">&lt;-</span> <span class="fu">merge</span>(<span class="at">x =</span> pred, <span class="at">y =</span> flu, <span class="at">by.x =</span> <span class="st">"time"</span>, <span class="at">by.y =</span> <span class="st">"day"</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_plot, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> cases)) <span class="sc">+</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> I)) <span class="sc">+</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">sir_1</span>(<span class="at">beta =</span> <span class="fl">0.004</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>, <span class="at">S0 =</span> <span class="dv">999</span>, <span class="at">I0 =</span> <span class="dv">1</span>, <span class="at">R0 =</span> <span class="dv">0</span>, <span class="at">times =</span> flu<span class="sc">$</span>time)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">merge</span>(<span class="at">x =</span> pred, <span class="at">y =</span> flu, <span class="at">by =</span> <span class="st">"time"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df[,<span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"I"</span>, <span class="st">"prev"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Better off seeing the comparison on a plot.</p>
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="sir-det_files/figure-html/unnamed-chunk-4-1.svg" class="img-fluid figure-img"></p>
+<p><img src="sir-det_files/figure-html/unnamed-chunk-6-1.svg" class="img-fluid figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="poisson-distribution" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="poisson-distribution"><span class="header-section-number">4.3</span> Poisson distribution</h2>
+<section id="parameter-sensitivity" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="parameter-sensitivity"><span class="header-section-number">4.3.2</span> Parameter sensitivity</h3>
+<section id="effective-contact-rate-beta" class="level4" data-number="4.3.2.1">
+<h4 data-number="4.3.2.1" class="anchored" data-anchor-id="effective-contact-rate-beta"><span class="header-section-number">4.3.2.1</span> Effective contact rate <span class="math inline">\(\beta\)</span></h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Try different gamma values</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>bvals <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.001</span>, <span class="fl">0.005</span>, <span class="fl">0.001</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(bvals)){</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> <span class="fu">sir_1</span>(<span class="at">beta =</span> bvals[i], <span class="at">gamma =</span> <span class="fl">0.5</span>, <span class="at">S0 =</span> <span class="dv">999</span>, <span class="at">I0 =</span> <span class="dv">1</span>, <span class="at">R0 =</span> <span class="dv">0</span>, <span class="at">times =</span> flu<span class="sc">$</span>time)[,<span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"I"</span>)]</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(pred) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"time"</span>, <span class="fu">paste0</span>(<span class="st">"I"</span>, i))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  l[[i]] <span class="ot">&lt;-</span> pred</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>l[[<span class="fu">length</span>(l) <span class="sc">+</span> <span class="dv">1</span>]] <span class="ot">&lt;-</span> flu</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge all with flu data</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">Reduce</span>(<span class="cf">function</span>(x, y) <span class="fu">merge</span>(x, y, <span class="at">by =</span> <span class="st">"time"</span>, <span class="at">all =</span> <span class="cn">TRUE</span>), l)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>df_plot <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(df, <span class="at">cols =</span> I1<span class="sc">:</span>prev, <span class="at">names_to =</span> <span class="st">"comp"</span>, <span class="at">values_to =</span> <span class="st">"n"</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>df_plot<span class="sc">$</span>comp <span class="ot">&lt;-</span> <span class="fu">factor</span>(df_plot<span class="sc">$</span>comp, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"prev"</span>, <span class="fu">paste0</span>(<span class="st">"I"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(bvals))))</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_plot, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> n, <span class="at">color =</span> comp)) <span class="sc">+</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_hue</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Prevalence"</span>, <span class="fu">paste0</span>(<span class="st">"\u03b2 = "</span>, bvals))) <span class="sc">+</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>() <span class="sc">+</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sir-det_files/figure-html/unnamed-chunk-7-1.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="recovery-rate-gamma" class="level4" data-number="4.3.2.2">
+<h4 data-number="4.3.2.2" class="anchored" data-anchor-id="recovery-rate-gamma"><span class="header-section-number">4.3.2.2</span> Recovery rate <span class="math inline">\(\gamma\)</span></h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Try different gamma values</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>gvals <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.3</span>, <span class="fl">0.7</span>, <span class="fl">0.1</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(gvals)){</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> <span class="fu">sir_1</span>(<span class="at">beta =</span> <span class="fl">0.004</span>, <span class="at">gamma =</span> gvals[i], <span class="at">S0 =</span> <span class="dv">999</span>, <span class="at">I0 =</span> <span class="dv">1</span>, <span class="at">R0 =</span> <span class="dv">0</span>, <span class="at">times =</span> flu<span class="sc">$</span>time)[,<span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"I"</span>)]</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(pred) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"time"</span>, <span class="fu">paste0</span>(<span class="st">"I"</span>, i))</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  l[[i]] <span class="ot">&lt;-</span> pred</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>l[[<span class="fu">length</span>(l) <span class="sc">+</span> <span class="dv">1</span>]] <span class="ot">&lt;-</span> flu</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge all with flu data</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">Reduce</span>(<span class="cf">function</span>(x, y) <span class="fu">merge</span>(x, y, <span class="at">by =</span> <span class="st">"time"</span>, <span class="at">all =</span> <span class="cn">TRUE</span>), l)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>df_plot <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(df, <span class="at">cols =</span> I1<span class="sc">:</span>prev, <span class="at">names_to =</span> <span class="st">"comp"</span>, <span class="at">values_to =</span> <span class="st">"n"</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>df_plot<span class="sc">$</span>comp <span class="ot">&lt;-</span> <span class="fu">factor</span>(df_plot<span class="sc">$</span>comp, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"prev"</span>, <span class="fu">paste0</span>(<span class="st">"I"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(gvals))))</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_plot, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> n, <span class="at">color =</span> comp)) <span class="sc">+</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_hue</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Prevalence"</span>, <span class="fu">paste0</span>(<span class="st">"\u03b3 = "</span>, gvals))) <span class="sc">+</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>() <span class="sc">+</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sir-det_files/figure-html/unnamed-chunk-8-1.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>When <span class="math inline">\(\gamma\)</span> increase, the shape and peak time of the outbreak stay the same, the outbreak size is reduced. This is because <strong><span class="math inline">\(\gamma\)</span> increase</strong> means patients recover faster, they have <strong>less time to infect</strong> susceptible individuals, leading to a decrease in outbreak size.</p>
+</section>
+</section>
+</section>
+<section id="poisson-distribution" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="poisson-distribution"><span class="header-section-number">4.4</span> Poisson distribution</h2>
 <p>Poisson distribution is a <strong>discrete probability distribution</strong> that expresses probability of a given <strong>number of events</strong> occurring <strong>in a fixed interval of time</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
-<p>Suitable to use because here we are fitting a number of cases occurring in this period.</p>
+<p>Suitable to use because here we are fitting a number of prev occurring in this period.</p>
 
 
 </section>

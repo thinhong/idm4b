@@ -324,14 +324,14 @@ window.Quarto = {
    
   <ul>
   <li><a href="#assumptions" id="toc-assumptions" class="nav-link active" data-scroll-target="#assumptions"><span class="header-section-number">5.1</span> Assumptions</a></li>
-  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods"><span class="header-section-number">5.2</span> Methods</a></li>
+  <li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model"><span class="header-section-number">5.2</span> Model</a></li>
   <li><a href="#tsir-framework" id="toc-tsir-framework" class="nav-link" data-scroll-target="#tsir-framework"><span class="header-section-number">5.3</span> <code>tsiR</code> framework</a>
   <ul class="collapse">
   <li><a href="#reconstruct-susceptible-dynamics" id="toc-reconstruct-susceptible-dynamics" class="nav-link" data-scroll-target="#reconstruct-susceptible-dynamics"><span class="header-section-number">5.3.1</span> Reconstruct susceptible dynamics</a></li>
   <li><a href="#estimate-parameters" id="toc-estimate-parameters" class="nav-link" data-scroll-target="#estimate-parameters"><span class="header-section-number">5.3.2</span> Estimate parameters</a></li>
   </ul></li>
   <li><a href="#basic-reproduction-number" id="toc-basic-reproduction-number" class="nav-link" data-scroll-target="#basic-reproduction-number"><span class="header-section-number">5.4</span> Basic reproduction number</a></li>
-  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">5.5</span> Examples</a>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">5.5</span> Code</a>
   <ul class="collapse">
   <li><a href="#reconstruct-susceptible-dynamics-1" id="toc-reconstruct-susceptible-dynamics-1" class="nav-link" data-scroll-target="#reconstruct-susceptible-dynamics-1"><span class="header-section-number">5.5.1</span> Reconstruct susceptible dynamics</a></li>
   <li><a href="#estimate-parameters-1" id="toc-estimate-parameters-1" class="nav-link" data-scroll-target="#estimate-parameters-1"><span class="header-section-number">5.5.2</span> Estimate parameters</a></li>
@@ -377,8 +377,8 @@ window.Quarto = {
 <li>Over a long enough time (e.g., 10-20 years), the sum of births and cases should be approximately equal due to the high infectivity of pathogens such as measles and other childhood infections, in the pre-vaccine era.</li>
 </ul>
 </section>
-<section id="methods" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="methods"><span class="header-section-number">5.2</span> Methods</h2>
+<section id="model" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="model"><span class="header-section-number">5.2</span> Model</h2>
 <p><span class="math display">\[\mathbb{E}(I_{t + 1}) = \beta_{t + 1} S_t I_t^{\alpha}\]</span></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -478,8 +478,8 @@ Explain
 <h2 data-number="5.4" class="anchored" data-anchor-id="basic-reproduction-number"><span class="header-section-number">5.4</span> Basic reproduction number</h2>
 <p><span class="math display">\[R_0 = \beta \times \bar{S}\]</span></p>
 </section>
-<section id="examples" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="examples"><span class="header-section-number">5.5</span> Examples</h2>
+<section id="code" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="code"><span class="header-section-number">5.5</span> Code</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsiR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -487,19 +487,62 @@ Explain
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>LondonMeas <span class="ot">&lt;-</span> twentymeas[[<span class="st">"London"</span>]]</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(LondonMeas)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>      time cases   births     pop
-1 1944.016   180 1725.038 2462500
-2 1944.055   271 1726.429 2467578
-3 1944.093   423 1727.820 2472655
-4 1944.131   465 1729.211 2477733
-5 1944.170   523 1730.602 2482810
-6 1944.208   649 1731.992 2487888</code></pre>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">time</th>
+<th style="text-align: right;">cases</th>
+<th style="text-align: right;">births</th>
+<th style="text-align: right;">pop</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1944.016</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: right;">1725.038</td>
+<td style="text-align: right;">2462500</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1944.055</td>
+<td style="text-align: right;">271</td>
+<td style="text-align: right;">1726.429</td>
+<td style="text-align: right;">2467578</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1944.093</td>
+<td style="text-align: right;">423</td>
+<td style="text-align: right;">1727.820</td>
+<td style="text-align: right;">2472655</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1944.131</td>
+<td style="text-align: right;">465</td>
+<td style="text-align: right;">1729.211</td>
+<td style="text-align: right;">2477733</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1944.170</td>
+<td style="text-align: right;">523</td>
+<td style="text-align: right;">1730.602</td>
+<td style="text-align: right;">2482810</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1944.208</td>
+<td style="text-align: right;">649</td>
+<td style="text-align: right;">1731.992</td>
+<td style="text-align: right;">2487888</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 <p>The data frame containing cases and interpolated births and populations.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotdata</span>(LondonMeas)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotdata</span>(LondonMeas)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -509,7 +552,7 @@ Explain
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>LondonRes <span class="ot">&lt;-</span> <span class="fu">runtsir</span>(<span class="at">data =</span> LondonMeas, <span class="at">IP =</span> <span class="dv">2</span>, <span class="at">xreg =</span> <span class="st">"cumcases"</span>, <span class="at">regtype =</span> <span class="st">"gaussian"</span>, <span class="at">alpha =</span> <span class="cn">NULL</span>, <span class="at">sbar =</span> <span class="cn">NULL</span>, <span class="at">method =</span> <span class="st">"negbin"</span>, <span class="at">nsim =</span> <span class="dv">100</span>, <span class="at">family =</span> <span class="st">"gaussian"</span>, <span class="at">link =</span> <span class="st">"identity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>LondonRes <span class="ot">&lt;-</span> <span class="fu">runtsir</span>(<span class="at">data =</span> LondonMeas, <span class="at">IP =</span> <span class="dv">2</span>, <span class="at">xreg =</span> <span class="st">"cumcases"</span>, <span class="at">regtype =</span> <span class="st">"gaussian"</span>, <span class="at">alpha =</span> <span class="cn">NULL</span>, <span class="at">sbar =</span> <span class="cn">NULL</span>, <span class="at">method =</span> <span class="st">"negbin"</span>, <span class="at">nsim =</span> <span class="dv">100</span>, <span class="at">family =</span> <span class="st">"gaussian"</span>, <span class="at">link =</span> <span class="st">"identity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           alpha        mean beta         mean rho         mean sus 
         9.60e-01         1.19e-05         4.57e-01         1.14e+05 
@@ -530,7 +573,7 @@ prop. init. sus. prop. init. inf.
 <p>In this step we compute the reported rate using cumulative births and cumulative reported cases.</p>
 <p><span class="math display">\[Y_\text{cumBirths} = \rho X_\text{cumCases} + Z_t - Z_0\]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotregression</span>(LondonRes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotregression</span>(LondonRes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -540,7 +583,7 @@ prop. init. sus. prop. init. inf.
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotrho</span>(LondonRes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotrho</span>(LondonRes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -555,7 +598,7 @@ prop. init. sus. prop. init. inf.
 <p>Having <span class="math inline">\(\rho\)</span>, we adjust the <span class="math inline">\(I_t\)</span> to estimate other parameters.</p>
 <p><span class="math display">\[I_t = \rho_t C_t\]</span> <span class="math display">\[log I_{t + 1} = log \beta_{t + 1} + log(Z_t + \bar{S}) + \alpha log I_t\]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotres</span>(LondonRes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotres</span>(LondonRes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in geom_line(data = dat$res, aes_string(x = "time", y = "cases", :
 Ignoring unknown aesthetics: fill</code></pre>

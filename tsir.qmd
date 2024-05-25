@@ -17,7 +17,7 @@ The TSIR model relies on two main assumptions [@becker2017]:
 -   Infectious period is fixed at the sampling interval of the data (e.g., bi-weekly for measles). The time step of the model is equal to the infectious period.
 -   Over a long enough time (e.g., 10-20 years), the sum of births and cases should be approximately equal due to the high infectivity of pathogens such as measles and other childhood infections, in the pre-vaccine era.
 
-## Methods
+## Model
 
 $$\mathbb{E}(I_{t + 1}) = \beta_{t + 1} S_t I_t^{\alpha}$$
 
@@ -99,7 +99,7 @@ $$log I_{t + 1} = log \beta_{t + 1} + log(Z_t + \bar{S}) + \alpha log I_t$$
 
 $$R_0 = \beta \times \bar{S}$$
 
-## Examples
+## Code
 
 ```{r, message=F}
 library(tsiR)

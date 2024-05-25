@@ -1,31 +1,31 @@
 # SIR
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
+library(tidyr)
 library(deSolve)
 library(bbmle)
 library(ggplot2)
-
-flu <- readRDS("data/flu.rds")
-# This flu data is prevalence (a very special data)
-# Prevalence: fit with I
-# Incidence: fit with reported cases
 ```
 
 ## Assumptions
 
--   Well-mixed population (a single contact rate $\beta$).
--   The most basic form balances demographic processes (births B and deaths $\mu$).
--   Infectious disease properties is for a single pathogen.
+-   Well-mixed population, or homogeneous mixing (a single contact rate $\beta$).
+-   The most basic form balances demographic processes (births $B$ and deaths $\mu$).
+-   Infectious disease properties are for a single pathogen.
 
-## Structure
+## Model
 
 Force of infection $\lambda = \frac{\beta I}{N}$
 
-$$\frac{dS}{dt} = B - \lambda S - \mu S$$
+$$\frac{dS}{dt} = -\lambda S$$
 
-$$\frac{dI}{dt} = \lambda S - \gamma I - \mu I$$
+$$\frac{dI}{dt} = \lambda S - \gamma I$$
 
-$$\frac{dR}{dt} = \gamma I - \mu R$$
+$$\frac{dR}{dt} = \gamma I$$
+
+## Code
+
+### Model
 
 ```{r}
 # sir_1() returns a data frame consists S, I, R values by time
@@ -49,21 +49,119 @@ sir_1 <- function(beta, gamma, S0, I0, R0, times) {
 }
 ```
 
-```{r}
-pred <- sir_1(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = flu$day)
-```
-
-We want to compare these model’s predictions with real prevalence data.
+Load the flu data.
 
 ```{r}
-df_plot <- merge(x = pred, y = flu, by.x = "time", by.y = "day")
-
-ggplot(df_plot, aes(x = time, y = cases)) +
-  geom_point() +
-  geom_line(aes(y = I)) +
-  theme_minimal()
+flu <- readRDS("data/flu.rds")
 ```
 
+Let have a look at this flu data. This is a very special data as it reports the flu **prevalence**. Usually, case notification data reports **incidence**.
+
+::: {.callout-important}
+Remember to fit the correct thing in SIR model to case notification data:
+
+- Prevalence: fit to the **I compartment**.
+- Incidence: fit **only** to the $\lambda S$.
+:::
+
+```{r}
+head(flu)
+```
+
+Now we run the SIR model, and compare predictions with the observed flu prevalence data.
+
+```{r}
+pred <- sir_1(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = flu$time)
+
+df <- merge(x = pred, y = flu, by = "time")
+df <- df[,c("time", "I", "prev")]
+```
+
+Better off seeing the comparison on a plot.
+
+```{r, echo=FALSE}
+#| fig-width: 4
+#| fig-height: 3
+#| out-width: "100%"
+
+df_plot <- pivot_longer(df, cols = all_of(c("I", "prev")), names_to = "comp", values_to = "n")
+df_plot$comp <- factor(df_plot$comp, levels = c("prev", "I"))
+
+ggplot(df_plot, aes(x = time, y = n, color = comp)) +
+  geom_point() + geom_line() +
+  scale_color_hue(labels = c("Prevalence", "Prediction")) +
+  labs(color = NULL) +
+  theme_light() +
+  theme(legend.position = "bottom")
+```
+
+### Parameter sensitivity
+
+#### Effective contact rate $\beta$
+
+```{r}
+#| code-fold: true
+#| fig-width: 4
+#| fig-height: 3
+#| out-width: "100%"
+
+# Try different gamma values
+bvals <- seq(0.001, 0.005, 0.001)
+l <- list()
+for(i in 1:length(bvals)){
+  pred <- sir_1(beta = bvals[i], gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = flu$time)[,c("time", "I")]
+  colnames(pred) <- c("time", paste0("I", i))
+  l[[i]] <- pred
+}
+l[[length(l) + 1]] <- flu
+
+# Merge all with flu data
+df <- Reduce(function(x, y) merge(x, y, by = "time", all = TRUE), l)
+
+df_plot <- pivot_longer(df, cols = I1:prev, names_to = "comp", values_to = "n")
+df_plot$comp <- factor(df_plot$comp, levels = c("prev", paste0("I", 1:length(bvals))))
+
+ggplot(df_plot, aes(x = time, y = n, color = comp)) +
+  geom_point() + geom_line() +
+  scale_color_hue(labels = c("Prevalence", paste0("\u03b2 = ", bvals))) +
+  labs(color = NULL) +
+  theme_light() +
+  theme(legend.position = "bottom")
+```
+
+#### Recovery rate $\gamma$
+
+```{r}
+#| code-fold: true
+#| fig-width: 4
+#| fig-height: 3
+#| out-width: "100%"
+
+# Try different gamma values
+gvals <- seq(0.3, 0.7, 0.1)
+l <- list()
+for(i in 1:length(gvals)){
+  pred <- sir_1(beta = 0.004, gamma = gvals[i], S0 = 999, I0 = 1, R0 = 0, times = flu$time)[,c("time", "I")]
+  colnames(pred) <- c("time", paste0("I", i))
+  l[[i]] <- pred
+}
+l[[length(l) + 1]] <- flu
+
+# Merge all with flu data
+df <- Reduce(function(x, y) merge(x, y, by = "time", all = TRUE), l)
+
+df_plot <- pivot_longer(df, cols = I1:prev, names_to = "comp", values_to = "n")
+df_plot$comp <- factor(df_plot$comp, levels = c("prev", paste0("I", 1:length(gvals))))
+
+ggplot(df_plot, aes(x = time, y = n, color = comp)) +
+  geom_point() + geom_line() +
+  scale_color_hue(labels = c("Prevalence", paste0("\u03b3 = ", gvals))) +
+  labs(color = NULL) +
+  theme_light() +
+  theme(legend.position = "bottom")
+```
+
+When $\gamma$ increase, the shape and peak time of the outbreak stay the same, the outbreak size is reduced. This is because **$\gamma$ increase** means patients recover faster, they have **less time to infect** susceptible individuals, leading to a decrease in outbreak size.
 
 ## Poisson distribution
 
@@ -71,5 +169,5 @@ Poisson distribution is a **discrete probability distribution** that expresses p
 
 [^1]: Wikipedia <https://en.wikipedia.org/wiki/Poisson_distribution>
 
-Suitable to use because here we are fitting a number of cases occurring in this period.
+Suitable to use because here we are fitting a number of prev occurring in this period.
 
