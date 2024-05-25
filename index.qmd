@@ -8,7 +8,7 @@ This book brings together everything I have learned about infectious disease mod
 >
 > Dr. James Hay's inspiring talk at the MIDSEA Early Career April Meeting.
 
-These words encourage me to read and learn more, and to ensure every detail was carefully documented. In this book, you (and my future self) will find:
+These words encouraged me to read and learn more, and to ensure every detail was carefully documented. In this book, you (and my future self) will find:
 
 - A dictionary of jargon with cited definitions.
 - Methodologies for mathematical models of infectious diseases.
