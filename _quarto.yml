@@ -12,7 +12,11 @@ book:
   date: "05/22/2024"
   chapters:
     - index.qmd
-    - epith.qmd
+    - mod.qmd
+    - part: rnum.qmd
+      chapters:
+        - r0.qmd
+        - rt.qmd
     - part: det.qmd
       chapters: 
         - sir-det.qmd
@@ -35,6 +39,7 @@ format:
   html:
     theme: cosmo
     code-overflow: wrap
+    fig-format: svg
 
 comments:
   giscus:

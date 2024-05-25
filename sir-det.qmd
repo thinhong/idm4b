@@ -3,6 +3,7 @@
 ```{r}
 library(deSolve)
 library(bbmle)
+library(ggplot2)
 
 flu <- readRDS("data/flu.rds")
 # This flu data is prevalence (a very special data)
@@ -27,29 +28,42 @@ $$\frac{dI}{dt} = \lambda S - \gamma I - \mu I$$
 $$\frac{dR}{dt} = \gamma I - \mu R$$
 
 ```{r}
-# sir_1() returns a data frame consists S, I, R, In values by time
+# sir_1() returns a data frame consists S, I, R values by time
 sir_1 <- function(beta, gamma, S0, I0, R0, times) {
   
   sir_equations <- function(time, variables, parameters) {
     with(as.list(c(variables, parameters)), {
       dS <- -beta * I * S
-      # In to store the number of new cases, we fit the data with In not I
-      # I is the number of people remaining infectious, the number we get from public health surveillance is new cases (In)
-      dIn <- beta * I * S
-      dI <-  dIn - gamma * I
+      dI <-  beta * I * S - gamma * I
       dR <-  gamma * I
-      return(list(c(dS, dI, dR, dIn)))
+      return(list(c(dS, dI, dR)))
     })
   }
   
   parameters_values <- c(beta = beta, gamma = gamma)
-  initial_values <- c(S = S0, I = I0, R = R0, In = 0)
+  initial_values <- c(S = S0, I = I0, R = R0)
   
   out <- ode(initial_values, times, sir_equations, parameters_values)
 
   as.data.frame(out)
 }
 ```
+
+```{r}
+pred <- sir_1(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = flu$day)
+```
+
+We want to compare these model’s predictions with real prevalence data.
+
+```{r}
+df_plot <- merge(x = pred, y = flu, by.x = "time", by.y = "day")
+
+ggplot(df_plot, aes(x = time, y = cases)) +
+  geom_point() +
+  geom_line(aes(y = I)) +
+  theme_minimal()
+```
+
 
 ## Poisson distribution
 

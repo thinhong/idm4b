@@ -1,0 +1,17 @@
+# Infectious disease modelling
+
+## Modelling
+
+![](img/mod/the-bull.jpg)
+
+> The Bull, by Pablo Picasso.
+
+A model is a simplified representation of a complex phenomenon [@vynnycky2010].
+
+We all use models in our daily lives, often without realizing it. Imagine a colleague asks, "How long will it take to get to the restaurant?". There are different ways you might answer this question, each reflecting a different "model" in your head:
+
+- Experience-based model: You might think, "Last week it took me 20 minutes to get to this restaurant". This model simplifies by assuming past experiences are a reliable predictor of future outcomes, ignoring daily variations like traffic or weather.
+
+- Distance and speed model: You might think, "The restaurant is 15 kilometers away, and I drive at 45 km/h, so it should take about 20 minutes". This model uses the formula $\text{time} = \frac{\text{distance}}{\text{speed}}$. It simplifies by assuming a constant speed, and not accounting for real-world complexities like traffic lights or congestion.
+
+Models help us navigate and make decisions about complex situations by focusing on the most relevant factors and ignoring the less critical details.
