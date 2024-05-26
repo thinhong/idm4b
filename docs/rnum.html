@@ -294,7 +294,7 @@ window.Quarto = {
   <li><a href="#effective-reproduction-number-at-time-t-r_t" id="toc-effective-reproduction-number-at-time-t-r_t" class="nav-link" data-scroll-target="#effective-reproduction-number-at-time-t-r_t">Effective reproduction number at time <span class="math inline">\(t\)</span> <span class="math inline">\(R_t\)</span></a>
   <ul class="collapse">
   <li><a href="#sec-rt-inst" id="toc-sec-rt-inst" class="nav-link" data-scroll-target="#sec-rt-inst">Instantaneous reproduction number <span class="math inline">\(R_t^i\)</span></a></li>
-  <li><a href="#sec-rt-case" id="toc-sec-rt-case" class="nav-link" data-scroll-target="#sec-rt-case">Case reproduction number <span class="math inline">\(R_T^c\)</span></a></li>
+  <li><a href="#sec-rt-case" id="toc-sec-rt-case" class="nav-link" data-scroll-target="#sec-rt-case">Case reproduction number <span class="math inline">\(R_t^c\)</span></a></li>
   <li><a href="#compare-r_ti-and-r_tc" id="toc-compare-r_ti-and-r_tc" class="nav-link" data-scroll-target="#compare-r_ti-and-r_tc">Compare <span class="math inline">\(R_t^i\)</span> and <span class="math inline">\(R_t^c\)</span></a></li>
   </ul></li>
   <li><a href="#growth-rate-r-and-reproduction-number-r" id="toc-growth-rate-r-and-reproduction-number-r" class="nav-link" data-scroll-target="#growth-rate-r-and-reproduction-number-r">Growth rate <span class="math inline">\(r\)</span> and reproduction number <span class="math inline">\(R\)</span></a>
@@ -360,16 +360,16 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="sec-rt-inst">Instantaneous reproduction number <span class="math inline">\(R_t^i\)</span></h3>
 <p><img src="img/rnum/rt-inst.png" class="img-fluid"></p>
 <blockquote class="blockquote">
-<p>Figure illustrates the Cori method <span class="citation" data-cites="cori2013">(<a href="references.html#ref-cori2013" role="doc-biblioref">Cori et al., 2013</a>)</span>.</p>
+<p>Figure illustrates the Cori method <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 </blockquote>
 <p>Measures transmission at a specific point in time <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>. The instantaneous reproduction number quantifies the number of new infections at a single point in time <span class="math inline">\(t_i\)</span> (blue arrow), using the number of infections in the previous generation (green arrows) and their current infectiousness (green curve) <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>. The analyses can be done <strong>near real-time</strong>.</p>
 <p>Methods to estimate instantaneous reproduction number includes Cori and colleagues <span class="citation" data-cites="cori2013">(<a href="references.html#ref-cori2013" role="doc-biblioref">Cori et al., 2013</a>)</span> (the best for near real-time estimation <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>), and Bettencourt and Ribeiro <span class="citation" data-cites="bettencourt2008">(<a href="references.html#ref-bettencourt2008" role="doc-biblioref">Bettencourt &amp; Ribeiro, 2008</a>)</span> (use with caution because they implicitly assume the generation interval follows an exponential distribution, as in SIR model, which does not include alatent period).</p>
 </section>
 <section id="sec-rt-case" class="level3">
-<h3 class="anchored" data-anchor-id="sec-rt-case">Case reproduction number <span class="math inline">\(R_T^c\)</span></h3>
+<h3 class="anchored" data-anchor-id="sec-rt-case">Case reproduction number <span class="math inline">\(R_t^c\)</span></h3>
 <p><img src="img/rnum/rt-case.png" class="img-fluid"></p>
 <blockquote class="blockquote">
-<p>Figure illustrates the Wallinga and Teunis method <span class="citation" data-cites="wallinga2004">(<a href="references.html#ref-wallinga2004" role="doc-biblioref">Wallinga &amp; Teunis, 2004</a>)</span>.</p>
+<p>Figure illustrates the Wallinga and Teunis method <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 </blockquote>
 <p>Measures transmission by a specific cohort of individuals <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>. A cohort is a group of individuals with the <strong>same date of infection</strong> or the <strong>same date of symptom onset</strong>. The case reproduction number is the average number of new infections that an individual who becomes infected on day <span class="math inline">\(t_i\)</span> (green arrows in B) or symptomatic on day <span class="math inline">\(t_s\)</span> (yellow arrows in C) will eventually go on to cause (blue downward arrows in B and C). It is a more natural choice for analyses that consider heterogeneity among individuals <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 <p>Methods to estimate instantaneous reproduction number includes Wallinga and Teunis method <span class="citation" data-cites="wallinga2004">(<a href="references.html#ref-wallinga2004" role="doc-biblioref">Wallinga &amp; Teunis, 2004</a>)</span>.</p>
@@ -382,7 +382,7 @@ window.Quarto = {
 </ol>
 <ul>
 <li><p><strong>Instantaneous <span class="math inline">\(R_t^i\)</span> overestimates <span class="math inline">\(R_t\)</span> early</strong> in the time series, because any infections that occurred before the first observed date are missing terms in the denominator (data is left-truncated at the beginning).</p></li>
-<li><p><strong>Case <span class="math inline">\(R_t^c\)</span> underestimate <span class="math inline">\(R_t\)</span> at the end</strong> of the time series, because it relies on time points not yet observed which become missing terms in the production (data is right-truncated at the end).</p></li>
+<li><p><strong>Case <span class="math inline">\(R_t^c\)</span> underestimates <span class="math inline">\(R_t\)</span> at the end</strong> of the time series, because it relies on time points not yet observed which become missing terms in the production (data is right-truncated at the end).</p></li>
 </ul>
 <ol start="2" type="1">
 <li>Case <span class="math inline">\(R_t^c\)</span> is shifted forward in time relative to instantaneous <span class="math inline">\(R_t^i\)</span>, produces leading estimates of <span class="math inline">\(R_t\)</span> because it uses data from time points <strong>after <span class="math inline">\(t\)</span></strong>, whereas the <span class="math inline">\(R_t^i\)</span> uses data from time points <strong>before <span class="math inline">\(t\)</span></strong>.</li>

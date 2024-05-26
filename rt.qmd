@@ -22,7 +22,7 @@ The instantaneous reproduction number is the expected number of secondary infect
 
 #### Exact calculation
 
-For a compartmental model (SIR or SEIR), $R_t^i$ can be calculated exactly as:
+For a compartmental model (SIR or SEIR), $R_t^i$ can be calculated exactly as [@gostic2020]:
 
 $$R_t^i = \beta(t) S(t) D$$
 
@@ -60,13 +60,15 @@ $$R_t^c = \int_{u = t}^{\infty} R_u^i w_{u-t} du$$
 
 #### Wallinga and Teunis method
 
+There are 3 steps [@gostic2020]:
+
 **Step 1**. Estimate the likelihood that case $j$ (infected at time $t_j$) infected case $i$ (at time $t_i$).
 
 $$p_{ij} = \frac{w_{t_i - t_j}}{\sum_{i \neq k} w_{t_i - t_k}}$$
 
 - $\sum_{i \neq k} w_{t_i - t_k}$: sum of the infectiousness of all cases (other than $i$) infects case $i$.
 
-**Step 2**. Compute the individual reproduction number of case j.
+**Step 2**. Compute the individual reproduction number of case $j$.
 
 $$R_j = \sum_i p_{ij}$$
 

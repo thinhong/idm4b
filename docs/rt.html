@@ -343,7 +343,7 @@ window.Quarto = {
 </div>
 <section id="exact-calculation" class="level4" data-number="3.2.1.1">
 <h4 data-number="3.2.1.1" class="anchored" data-anchor-id="exact-calculation"><span class="header-section-number">3.2.1.1</span> Exact calculation</h4>
-<p>For a compartmental model (SIR or SEIR), <span class="math inline">\(R_t^i\)</span> can be calculated exactly as:</p>
+<p>For a compartmental model (SIR or SEIR), <span class="math inline">\(R_t^i\)</span> can be calculated exactly as <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>:</p>
 <p><span class="math display">\[R_t^i = \beta(t) S(t) D\]</span></p>
 <ul>
 <li><span class="math inline">\(\beta(t)\)</span>: the time-varying transmission rate.</li>
@@ -380,12 +380,13 @@ window.Quarto = {
 </section>
 <section id="wallinga-and-teunis-method" class="level4" data-number="3.2.2.2">
 <h4 data-number="3.2.2.2" class="anchored" data-anchor-id="wallinga-and-teunis-method"><span class="header-section-number">3.2.2.2</span> Wallinga and Teunis method</h4>
+<p>There are 3 steps <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>:</p>
 <p><strong>Step 1</strong>. Estimate the likelihood that case <span class="math inline">\(j\)</span> (infected at time <span class="math inline">\(t_j\)</span>) infected case <span class="math inline">\(i\)</span> (at time <span class="math inline">\(t_i\)</span>).</p>
 <p><span class="math display">\[p_{ij} = \frac{w_{t_i - t_j}}{\sum_{i \neq k} w_{t_i - t_k}}\]</span></p>
 <ul>
 <li><span class="math inline">\(\sum_{i \neq k} w_{t_i - t_k}\)</span>: sum of the infectiousness of all cases (other than <span class="math inline">\(i\)</span>) infects case <span class="math inline">\(i\)</span>.</li>
 </ul>
-<p><strong>Step 2</strong>. Compute the individual reproduction number of case j.</p>
+<p><strong>Step 2</strong>. Compute the individual reproduction number of case <span class="math inline">\(j\)</span>.</p>
 <p><span class="math display">\[R_j = \sum_i p_{ij}\]</span></p>
 <p><strong>Step 3</strong>. Compute the case reproduction number at time <span class="math inline">\(t\)</span>, it is the expected value of <span class="math inline">\(R_j\)</span> for all individuals infected at time <span class="math inline">\(t\)</span>.</p>
 <p><span class="math display">\[R_t^c = \mathbb{E}(R_j)\]</span></p>
