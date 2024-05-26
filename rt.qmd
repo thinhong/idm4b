@@ -37,17 +37,17 @@ The only parametric assumption required by this method is **the form of the gene
 
 Cori et al. suggest starting estimating $R_t^i$ once those three criteria are fulfilled [@cori2013]:
 
-- At least after the sliding window size.
-- At least after one mean serial interval.
-- At least 12 cases have been observed since the beginning of the epidemic: because to get a posterior credible interval of 0.3, the time window considered must comprise at least 11 incident cases.
+-   At least after the sliding window size.
+-   At least after one mean serial interval.
+-   At least 12 cases have been observed since the beginning of the epidemic: because to get a posterior credible interval of 0.3, the time window considered must comprise at least 11 incident cases.
 
 #### Key considerations
 
 Source: Dr. Anne Cori's [webinar](https://www.youtube.com/watch?v=wv3BecZD5DU).
 
-- Temporal resolution: we can't apply the $R_t^i$ method when the time steps of observation is too large (> mean generation interval).
-- Spatial resolution: ideally use a spatial scale that you can distinguish locally infected cases from imported cases.
-- $R_t^i$ is very sensitive to the size of the sliding window: small windows can lead to highly variable estimates with wide credible intervals, whereas longer windows lead to smoothed estimates with narrower credible intervals.
+-   Temporal resolution: we can't apply the $R_t^i$ method when the time steps of observation is too large (\> mean generation interval).
+-   Spatial resolution: ideally use a spatial scale that you can distinguish locally infected cases from imported cases.
+-   $R_t^i$ is very sensitive to the size of the sliding window: small windows can lead to highly variable estimates with wide credible intervals, whereas longer windows lead to smoothed estimates with narrower credible intervals.
 
 ![](img/rnum/rt-window.png)
 
@@ -105,6 +105,22 @@ Now we transform the equation a bit, and we got something very similar to the Co
 
 $$R_t = \frac{I(t)}{\int_{s = 0}^{\infty} I(t - s) w_s ds}$$
 
+## Compare $R_t^i$ and $R_t^c$
+
+There are several important differences [@gostic2020]:
+
+1.  Instantaneous $R_t^i$ is real-time estimation and only use data from before time $t$, while case $R_t^c$ is inherently forward-looking.
+
+-   **Instantaneous** $R_t^i$ overestimates $R_t$ early in the time series, because any infections that occurred before the first observed date are missing terms in the denominator (the $I_{t - s}$ in @sec-cori, data is left-truncated at the beginning).
+
+-   **Case** $R_t^c$ underestimates $R_t$ at the end of the time series, because it relies on time points not yet observed which become missing terms in the production (data is right-truncated at the end).
+
+2.  Case $R_t^c$ is shifted forward in time relative to instantaneous $R_t^i$, produces leading estimates of $R_t$ because it uses data from time points **after** $t$, whereas the $R_t^i$ uses data from time points **before** $t$.
+
+::: callout-important
+Overall, **for real-time analyses** aiming to **infer the impact of changes in policy**, behavior, or other extrinsic factors on transmission, the **instantaneous reproductive number** will provide more temporally accurate estimates and is **most appropriate**.
+:::
+
 ## Potential biases
 
 $R_t$ is a **value** in specific **time**, therefore there are 2 potential forms of bias in $R_t$ estimates [@gostic2020]:
@@ -114,6 +130,8 @@ $R_t$ is a **value** in specific **time**, therefore there are 2 potential forms
 -   **Timeliness** (the time): Temporal inaccuracy that $R_t$ estimates may be leading or lagging the true date, has several possible causes and can be difficult to avoid.
 
 ![](img/rnum/gen-ser-int.png)
+
+> Figure from Sender et al. [@sender2022].
 
 ### Generation interval
 

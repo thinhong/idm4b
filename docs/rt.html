@@ -285,24 +285,35 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="3">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#methods" id="toc-methods" class="nav-link active" data-scroll-target="#methods"><span class="header-section-number">3.1</span> Methods</a>
-  <ul class="collapse">
-  <li><a href="#instantaneous-reproduction-number-r_ti" id="toc-instantaneous-reproduction-number-r_ti" class="nav-link" data-scroll-target="#instantaneous-reproduction-number-r_ti"><span class="header-section-number">3.1.1</span> Instantaneous reproduction number <span class="math inline">\(R_t^i\)</span></a></li>
-  <li><a href="#case-reproduction-number-r_tc" id="toc-case-reproduction-number-r_tc" class="nav-link" data-scroll-target="#case-reproduction-number-r_tc"><span class="header-section-number">3.1.2</span> Case reproduction number <span class="math inline">\(R_t^c\)</span></a></li>
+  <ul>
+  <li><a href="#instantaneous-reproduction-number-r_ti" id="toc-instantaneous-reproduction-number-r_ti" class="nav-link" data-scroll-target="#instantaneous-reproduction-number-r_ti"><span class="header-section-number">3.1.1</span> Instantaneous reproduction number <span class="math inline">\(R_t^i\)</span></a>
+  <ul>
+  <li><a href="#exact-calculation" id="toc-exact-calculation" class="nav-link" data-scroll-target="#exact-calculation"><span class="header-section-number">3.1.1.1</span> Exact calculation</a></li>
+  <li><a href="#sec-cori" id="toc-sec-cori" class="nav-link" data-scroll-target="#sec-cori"><span class="header-section-number">3.1.1.2</span> Cori method</a></li>
+  <li><a href="#when-can-we-start-estimating-r_ti" id="toc-when-can-we-start-estimating-r_ti" class="nav-link" data-scroll-target="#when-can-we-start-estimating-r_ti"><span class="header-section-number">3.1.1.3</span> When can we start estimating <span class="math inline">\(R_t^i\)</span>?</a></li>
+  <li><a href="#key-considerations" id="toc-key-considerations" class="nav-link" data-scroll-target="#key-considerations"><span class="header-section-number">3.1.1.4</span> Key considerations</a></li>
+  </ul></li>
+  <li><a href="#case-reproduction-number-r_tc" id="toc-case-reproduction-number-r_tc" class="nav-link" data-scroll-target="#case-reproduction-number-r_tc"><span class="header-section-number">3.1.2</span> Case reproduction number <span class="math inline">\(R_t^c\)</span></a>
+  <ul>
+  <li><a href="#exact-calculation-1" id="toc-exact-calculation-1" class="nav-link" data-scroll-target="#exact-calculation-1"><span class="header-section-number">3.1.2.1</span> Exact calculation</a></li>
+  <li><a href="#wallinga-and-teunis-method" id="toc-wallinga-and-teunis-method" class="nav-link" data-scroll-target="#wallinga-and-teunis-method"><span class="header-section-number">3.1.2.2</span> Wallinga and Teunis method</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#proofs" id="toc-proofs" class="nav-link" data-scroll-target="#proofs"><span class="header-section-number">3.2</span> Proofs</a></li>
-  <li><a href="#potential-biases" id="toc-potential-biases" class="nav-link" data-scroll-target="#potential-biases"><span class="header-section-number">3.3</span> Potential biases</a>
-  <ul class="collapse">
-  <li><a href="#generation-interval" id="toc-generation-interval" class="nav-link" data-scroll-target="#generation-interval"><span class="header-section-number">3.3.1</span> Generation interval</a></li>
-  <li><a href="#serial-interval" id="toc-serial-interval" class="nav-link" data-scroll-target="#serial-interval"><span class="header-section-number">3.3.2</span> Serial interval</a></li>
+  <li><a href="#compare-r_ti-and-r_tc" id="toc-compare-r_ti-and-r_tc" class="nav-link" data-scroll-target="#compare-r_ti-and-r_tc"><span class="header-section-number">3.3</span> Compare <span class="math inline">\(R_t^i\)</span> and <span class="math inline">\(R_t^c\)</span></a></li>
+  <li><a href="#potential-biases" id="toc-potential-biases" class="nav-link" data-scroll-target="#potential-biases"><span class="header-section-number">3.4</span> Potential biases</a>
+  <ul>
+  <li><a href="#generation-interval" id="toc-generation-interval" class="nav-link" data-scroll-target="#generation-interval"><span class="header-section-number">3.4.1</span> Generation interval</a></li>
+  <li><a href="#serial-interval" id="toc-serial-interval" class="nav-link" data-scroll-target="#serial-interval"><span class="header-section-number">3.4.2</span> Serial interval</a></li>
   </ul></li>
-  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">3.4</span> Code</a>
-  <ul class="collapse">
-  <li><a href="#epinow2" id="toc-epinow2" class="nav-link" data-scroll-target="#epinow2"><span class="header-section-number">3.4.1</span> EpiNow2</a></li>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">3.5</span> Code</a>
+  <ul>
+  <li><a href="#epinow2" id="toc-epinow2" class="nav-link" data-scroll-target="#epinow2"><span class="header-section-number">3.5.1</span> EpiNow2</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -427,24 +438,54 @@ window.Quarto = {
 <p>Now we transform the equation a bit, and we got something very similar to the Cori method (see <a href="#sec-cori" class="quarto-xref"><span>Section 3.1.1.2</span></a>).</p>
 <p><span class="math display">\[R_t = \frac{I(t)}{\int_{s = 0}^{\infty} I(t - s) w_s ds}\]</span></p>
 </section>
-<section id="potential-biases" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="potential-biases"><span class="header-section-number">3.3</span> Potential biases</h2>
+<section id="compare-r_ti-and-r_tc" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="compare-r_ti-and-r_tc"><span class="header-section-number">3.3</span> Compare <span class="math inline">\(R_t^i\)</span> and <span class="math inline">\(R_t^c\)</span></h2>
+<p>There are several important differences <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>:</p>
+<ol type="1">
+<li>Instantaneous <span class="math inline">\(R_t^i\)</span> is real-time estimation and only use data from before time <span class="math inline">\(t\)</span>, while case <span class="math inline">\(R_t^c\)</span> is inherently forward-looking.</li>
+</ol>
+<ul>
+<li><p><strong>Instantaneous</strong> <span class="math inline">\(R_t^i\)</span> overestimates <span class="math inline">\(R_t\)</span> early in the time series, because any infections that occurred before the first observed date are missing terms in the denominator (the <span class="math inline">\(I_{t - s}\)</span> in <a href="#sec-cori" class="quarto-xref"><span>Section 3.1.1.2</span></a>, data is left-truncated at the beginning).</p></li>
+<li><p><strong>Case</strong> <span class="math inline">\(R_t^c\)</span> underestimates <span class="math inline">\(R_t\)</span> at the end of the time series, because it relies on time points not yet observed which become missing terms in the production (data is right-truncated at the end).</p></li>
+</ul>
+<ol start="2" type="1">
+<li>Case <span class="math inline">\(R_t^c\)</span> is shifted forward in time relative to instantaneous <span class="math inline">\(R_t^i\)</span>, produces leading estimates of <span class="math inline">\(R_t\)</span> because it uses data from time points <strong>after</strong> <span class="math inline">\(t\)</span>, whereas the <span class="math inline">\(R_t^i\)</span> uses data from time points <strong>before</strong> <span class="math inline">\(t\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Overall, <strong>for real-time analyses</strong> aiming to <strong>infer the impact of changes in policy</strong>, behavior, or other extrinsic factors on transmission, the <strong>instantaneous reproductive number</strong> will provide more temporally accurate estimates and is <strong>most appropriate</strong>.</p>
+</div>
+</div>
+</section>
+<section id="potential-biases" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="potential-biases"><span class="header-section-number">3.4</span> Potential biases</h2>
 <p><span class="math inline">\(R_t\)</span> is a <strong>value</strong> in specific <strong>time</strong>, therefore there are 2 potential forms of bias in <span class="math inline">\(R_t\)</span> estimates <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>:</p>
 <ul>
 <li><p><strong>Accuracy</strong> (the value): Systematic over- or underestimation caused by misspecification of the generation interval. Mostly impact when <span class="math inline">\(R_t\)</span> is substantially &gt; 1 (e.g., the beginning of COVID-19 when <span class="math inline">\(R_t\)</span> is relatively high) or &lt; 1 (e.g., after a very effective intervention then <span class="math inline">\(R_t\)</span> might be low).</p></li>
 <li><p><strong>Timeliness</strong> (the time): Temporal inaccuracy that <span class="math inline">\(R_t\)</span> estimates may be leading or lagging the true date, has several possible causes and can be difficult to avoid.</p></li>
 </ul>
 <p><img src="img/rnum/gen-ser-int.png" class="img-fluid"></p>
-<section id="generation-interval" class="level3" data-number="3.3.1">
-<h3 data-number="3.3.1" class="anchored" data-anchor-id="generation-interval"><span class="header-section-number">3.3.1</span> Generation interval</h3>
+<blockquote class="blockquote">
+<p>Figure from Sender et al. <span class="citation" data-cites="sender2022">(<a href="references.html#ref-sender2022" role="doc-biblioref">Sender et al., 2022</a>)</span>.</p>
+</blockquote>
+<section id="generation-interval" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="generation-interval"><span class="header-section-number">3.4.1</span> Generation interval</h3>
 <div id="def-gen-int" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 3.3</strong></span> Generation interval is the time from the infection of a primary case to infection of the cases he/she generates <span class="citation" data-cites="cori2013">(<a href="references.html#ref-cori2013" role="doc-biblioref">Cori et al., 2013</a>)</span>.</p>
 </div>
 <p>If we match this to an SEIR model, the generation interval starts when the infector enters the E compartment (meaning they got infected). The latest time they can infect an infectee is at the end of their residence in the I compartment (they are infectious). Therefore, generation interval is the sum of residence times in compartments E and I <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 <p>The mean generation interval <strong>decreases</strong> when susceptible persons are at risk of infectious contact from <strong>multiple sources</strong>. Because when a susceptible person has multiple potential infectors, there is a “race” to infect him/her in which only the first infectious contact leads to infection <span class="citation" data-cites="kenah2008">(<a href="references.html#ref-kenah2008" role="doc-biblioref">Kenah et al., 2008</a>)</span>.</p>
 </section>
-<section id="serial-interval" class="level3" data-number="3.3.2">
-<h3 data-number="3.3.2" class="anchored" data-anchor-id="serial-interval"><span class="header-section-number">3.3.2</span> Serial interval</h3>
+<section id="serial-interval" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="serial-interval"><span class="header-section-number">3.4.2</span> Serial interval</h3>
 <div id="def-ser-int" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 3.4</strong></span> Serial interval is the time between symptom onset in an infector–infectee pair <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 </div>
@@ -455,10 +496,10 @@ window.Quarto = {
 </ul>
 </section>
 </section>
-<section id="code" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="code"><span class="header-section-number">3.4</span> Code</h2>
-<section id="epinow2" class="level3" data-number="3.4.1">
-<h3 data-number="3.4.1" class="anchored" data-anchor-id="epinow2"><span class="header-section-number">3.4.1</span> EpiNow2</h3>
+<section id="code" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="code"><span class="header-section-number">3.5</span> Code</h2>
+<section id="epinow2" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="epinow2"><span class="header-section-number">3.5.1</span> EpiNow2</h3>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
@@ -470,6 +511,9 @@ Gostic, K. M., McGough, L., Baskerville, E. B., Abbott, S., Joshi, K., Tedijanto
 </div>
 <div id="ref-kenah2008" class="csl-entry" role="listitem">
 Kenah, E., Lipsitch, M., &amp; Robins, J. M. (2008). Generation interval contraction and epidemic data analysis. <em>Mathematical Biosciences</em>, <em>213</em>(1), 71–79. <a href="https://doi.org/10.1016/j.mbs.2008.02.007">https://doi.org/10.1016/j.mbs.2008.02.007</a>
+</div>
+<div id="ref-sender2022" class="csl-entry" role="listitem">
+Sender, R., Bar-On, Y., Park, S. W., Noor, E., Dushoff, J., &amp; Milo, R. (2022). The unmitigated profile of COVID-19 infectiousness. <em>eLife</em>, <em>11</em>, e79134. <a href="https://doi.org/10.7554/eLife.79134">https://doi.org/10.7554/eLife.79134</a>
 </div>
 </div>
 </section>

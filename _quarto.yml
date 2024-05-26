@@ -42,6 +42,8 @@ format:
     code-copy: true
     fig-format: svg
     df-print: kable
+    toc-depth: 5
+    toc-expand: 3
 
 comments:
   giscus:
