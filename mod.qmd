@@ -4,7 +4,7 @@
 
 ![](img/mod/the-bull.jpg)
 
-> The Bull, by Pablo Picasso.
+> The Bull, by Pablo Picasso ([source](https://fineartamerica.com/featured/the-bull-picasso.html)).
 
 A model is a simplified representation of a complex phenomenon [@vynnycky2010].
 

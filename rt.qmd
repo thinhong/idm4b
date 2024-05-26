@@ -45,7 +45,7 @@ Cori et al. suggest starting estimating $R_t^i$ once those three criteria are fu
 
 Source: Dr. Anne Cori's [webinar](https://www.youtube.com/watch?v=wv3BecZD5DU).
 
--   Temporal resolution: we can't apply the $R_t^i$ method when the time steps of observation is too large (\> mean generation interval).
+-   Temporal resolution: we can't apply the $R_t^i$ method when the time step of observation is too large (\> mean generation interval).
 -   Spatial resolution: ideally use a spatial scale that you can distinguish locally infected cases from imported cases.
 -   $R_t^i$ is very sensitive to the size of the sliding window: small windows can lead to highly variable estimates with wide credible intervals, whereas longer windows lead to smoothed estimates with narrower credible intervals.
 
