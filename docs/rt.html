@@ -385,7 +385,7 @@ window.Quarto = {
 <ul>
 <li>Temporal resolution: we can’t apply the <span class="math inline">\(R_t^i\)</span> method when the time step of observation is too large (&gt; mean generation interval).</li>
 <li>Spatial resolution: ideally use a spatial scale that you can distinguish locally infected cases from imported cases.</li>
-<li><span class="math inline">\(R_t^i\)</span> is very sensitive to the size of the sliding window: small windows can lead to highly variable estimates with wide credible intervals, whereas longer windows lead to smoothed estimates with narrower credible intervals.</li>
+<li><span class="math inline">\(R_t^i\)</span> is very sensitive to the size of the sliding window: small windows can lead to highly variable estimates with wide credible intervals, whereas longer windows lead to smoothed estimates with narrower credible intervals. Perhaps also consider at least 11 incident cases in a sliding window to get a posterior credible interval of 0.3 <span class="citation" data-cites="cori2013">(<a href="references.html#ref-cori2013" role="doc-biblioref">Cori et al., 2013</a>)</span>.</li>
 </ul>
 <p><img src="img/rnum/rt-window.png" class="img-fluid"></p>
 </section>
