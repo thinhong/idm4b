@@ -33,6 +33,24 @@ Looking back at @def-rt-inst, $R_t^i$ is the expected number of secondary infect
 
 The only parametric assumption required by this method is **the form of the generation interval**. The standard assumption is that $w_s$ follows a **discretized gamma distribution**, but any parametric or empirical discrete distribution also work [@gostic2020].
 
+#### When can we start estimating $R_t^i$?
+
+Cori et al. suggest starting estimating $R_t^i$ once those three criteria are fulfilled [@cori2013]:
+
+- At least after the sliding window size.
+- At least after one mean serial interval.
+- At least 12 cases have been observed since the beginning of the epidemic: because to get a posterior credible interval of 0.3, the time window considered must comprise at least 11 incident cases.
+
+#### Key considerations
+
+Source: Dr. Anne Cori's [webinar](https://www.youtube.com/watch?v=wv3BecZD5DU).
+
+- Temporal resolution: we can't apply the $R_t^i$ method when the time steps of observation is too large (> mean generation interval).
+- Spatial resolution: ideally use a spatial scale that you can distinguish locally infected cases from imported cases.
+- $R_t^i$ is very sensitive to the size of the sliding window: small windows can lead to highly variable estimates with wide credible intervals, whereas longer windows lead to smoothed estimates with narrower credible intervals.
+
+![](img/rnum/rt-window.png)
+
 ### Case reproduction number $R_t^c$
 
 ::: {#def-rt-case}

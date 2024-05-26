@@ -359,6 +359,25 @@ window.Quarto = {
 <p>Looking back at <a href="#def-rt-inst" class="quarto-xref">Definition&nbsp;<span>3.1</span></a>, <span class="math inline">\(R_t^i\)</span> is the expected number of secondary infections occurring at time <span class="math inline">\(t\)</span> (<span class="math inline">\(I_t\)</span>), divided by the number of infected individuals (<span class="math inline">\(\sum_{s = 1}^{t} I_{t - s}\)</span>), each scaled by their relative infectiousness at time <span class="math inline">\(t\)</span> (<span class="math inline">\(w_s\)</span>).</p>
 <p>The only parametric assumption required by this method is <strong>the form of the generation interval</strong>. The standard assumption is that <span class="math inline">\(w_s\)</span> follows a <strong>discretized gamma distribution</strong>, but any parametric or empirical discrete distribution also work <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 </section>
+<section id="when-can-we-start-estimating-r_ti" class="level4" data-number="3.1.1.3">
+<h4 data-number="3.1.1.3" class="anchored" data-anchor-id="when-can-we-start-estimating-r_ti"><span class="header-section-number">3.1.1.3</span> When can we start estimating <span class="math inline">\(R_t^i\)</span>?</h4>
+<p>Cori et al.&nbsp;suggest starting estimating <span class="math inline">\(R_t^i\)</span> once those three criteria are fulfilled <span class="citation" data-cites="cori2013">(<a href="references.html#ref-cori2013" role="doc-biblioref">Cori et al., 2013</a>)</span>:</p>
+<ul>
+<li>At least after the sliding window size.</li>
+<li>At least after one mean serial interval.</li>
+<li>At least 12 cases have been observed since the beginning of the epidemic: because to get a posterior credible interval of 0.3, the time window considered must comprise at least 11 incident cases.</li>
+</ul>
+</section>
+<section id="key-considerations" class="level4" data-number="3.1.1.4">
+<h4 data-number="3.1.1.4" class="anchored" data-anchor-id="key-considerations"><span class="header-section-number">3.1.1.4</span> Key considerations</h4>
+<p>Source: Dr.&nbsp;Anne Cori’s <a href="https://www.youtube.com/watch?v=wv3BecZD5DU">webinar</a>.</p>
+<ul>
+<li>Temporal resolution: we can’t apply the <span class="math inline">\(R_t^i\)</span> method when the time steps of observation is too large (&gt; mean generation interval).</li>
+<li>Spatial resolution: ideally use a spatial scale that you can distinguish locally infected cases from imported cases.</li>
+<li><span class="math inline">\(R_t^i\)</span> is very sensitive to the size of the sliding window: small windows can lead to highly variable estimates with wide credible intervals, whereas longer windows lead to smoothed estimates with narrower credible intervals.</li>
+</ul>
+<p><img src="img/rnum/rt-window.png" class="img-fluid"></p>
+</section>
 </section>
 <section id="case-reproduction-number-r_tc" class="level3" data-number="3.1.2">
 <h3 data-number="3.1.2" class="anchored" data-anchor-id="case-reproduction-number-r_tc"><span class="header-section-number">3.1.2</span> Case reproduction number <span class="math inline">\(R_t^c\)</span></h3>
