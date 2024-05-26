@@ -12,6 +12,6 @@ These words encouraged me to read and learn more, and to ensure every detail was
 
 - A dictionary of jargon with cited definitions.
 - Methodologies for mathematical models of infectious diseases.
-- Step-by-step guides to writing infectious disease reports, following the Center for Disease Control and Prevention report format: data, workflow, analyses, and inference.
+- Step-by-step guides for writing infectious disease reports, following the Center for Disease Control and Prevention report format: data, workflow, analyses, and inference.
 
 If you enjoyed this book or found any mistakes, please leave a comment below. Your feedback means a lot!
