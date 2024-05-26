@@ -291,7 +291,12 @@ window.Quarto = {
   <ul>
   <li><a href="#basic-reproduction-number-r_0" id="toc-basic-reproduction-number-r_0" class="nav-link active" data-scroll-target="#basic-reproduction-number-r_0">Basic reproduction number <span class="math inline">\(R_0\)</span></a></li>
   <li><a href="#effective-reproduction-number-r_e" id="toc-effective-reproduction-number-r_e" class="nav-link" data-scroll-target="#effective-reproduction-number-r_e">Effective reproduction number <span class="math inline">\(R_e\)</span></a></li>
-  <li><a href="#effective-reproduction-number-at-time-t-r_t" id="toc-effective-reproduction-number-at-time-t-r_t" class="nav-link" data-scroll-target="#effective-reproduction-number-at-time-t-r_t">Effective reproduction number at time <span class="math inline">\(t\)</span> <span class="math inline">\(R_t\)</span></a></li>
+  <li><a href="#effective-reproduction-number-at-time-t-r_t" id="toc-effective-reproduction-number-at-time-t-r_t" class="nav-link" data-scroll-target="#effective-reproduction-number-at-time-t-r_t">Effective reproduction number at time <span class="math inline">\(t\)</span> <span class="math inline">\(R_t\)</span></a>
+  <ul class="collapse">
+  <li><a href="#sec-rt-inst" id="toc-sec-rt-inst" class="nav-link" data-scroll-target="#sec-rt-inst">Instantaneous reproduction number <span class="math inline">\(R_t^i\)</span></a></li>
+  <li><a href="#sec-rt-case" id="toc-sec-rt-case" class="nav-link" data-scroll-target="#sec-rt-case">Case reproduction number <span class="math inline">\(R_T^c\)</span></a></li>
+  <li><a href="#compare-r_ti-and-r_tc" id="toc-compare-r_ti-and-r_tc" class="nav-link" data-scroll-target="#compare-r_ti-and-r_tc">Compare <span class="math inline">\(R_t^i\)</span> and <span class="math inline">\(R_t^c\)</span></a></li>
+  </ul></li>
   <li><a href="#growth-rate-r-and-reproduction-number-r" id="toc-growth-rate-r-and-reproduction-number-r" class="nav-link" data-scroll-target="#growth-rate-r-and-reproduction-number-r">Growth rate <span class="math inline">\(r\)</span> and reproduction number <span class="math inline">\(R\)</span></a>
   <ul class="collapse">
   <li><a href="#growth-rate-r" id="toc-growth-rate-r" class="nav-link" data-scroll-target="#growth-rate-r">Growth rate <span class="math inline">\(r\)</span></a></li>
@@ -350,6 +355,52 @@ window.Quarto = {
 </div>
 </div>
 <p>At the beginning of an outbreak, we can estimate <span class="math inline">\(R_0\)</span> when the whole population is fully susceptible. As the outbreak progresses, the number of susceptible individuals decreases, leading to a decline in <span class="math inline">\(R_0\)</span>. This adjusted value is referred to as <span class="math inline">\(R_t\)</span> (if we want to measure at each time <span class="math inline">\(t\)</span>). At the peak of the epidemic curve, <span class="math inline">\(R_t = 1\)</span>. After this peak, <span class="math inline">\(R_t\)</span> continues to decrease, resulting in a decline in the number of new cases and the epidemic curve going down.</p>
+<p><span class="math inline">\(R_t\)</span> can be defined in 2 ways: as the <strong>instantaneous reproduction number</strong> or as the <strong>case reproduction number</strong> <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
+<section id="sec-rt-inst" class="level3">
+<h3 class="anchored" data-anchor-id="sec-rt-inst">Instantaneous reproduction number <span class="math inline">\(R_t^i\)</span></h3>
+<p><img src="img/rnum/rt-inst.png" class="img-fluid"></p>
+<blockquote class="blockquote">
+<p>Figure illustrates the Cori method <span class="citation" data-cites="cori2013">(<a href="references.html#ref-cori2013" role="doc-biblioref">Cori et al., 2013</a>)</span>.</p>
+</blockquote>
+<p>Measures transmission at a specific point in time <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>. The instantaneous reproduction number quantifies the number of new infections at a single point in time <span class="math inline">\(t_i\)</span> (blue arrow), using the number of infections in the previous generation (green arrows) and their current infectiousness (green curve) <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>. The analyses can be done <strong>near real-time</strong>.</p>
+<p>Methods to estimate instantaneous reproduction number includes Cori and colleagues <span class="citation" data-cites="cori2013">(<a href="references.html#ref-cori2013" role="doc-biblioref">Cori et al., 2013</a>)</span> (the best for near real-time estimation <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>), and Bettencourt and Ribeiro <span class="citation" data-cites="bettencourt2008">(<a href="references.html#ref-bettencourt2008" role="doc-biblioref">Bettencourt &amp; Ribeiro, 2008</a>)</span> (use with caution because they implicitly assume the generation interval follows an exponential distribution, as in SIR model, which does not include alatent period).</p>
+</section>
+<section id="sec-rt-case" class="level3">
+<h3 class="anchored" data-anchor-id="sec-rt-case">Case reproduction number <span class="math inline">\(R_T^c\)</span></h3>
+<p><img src="img/rnum/rt-case.png" class="img-fluid"></p>
+<blockquote class="blockquote">
+<p>Figure illustrates the Wallinga and Teunis method <span class="citation" data-cites="wallinga2004">(<a href="references.html#ref-wallinga2004" role="doc-biblioref">Wallinga &amp; Teunis, 2004</a>)</span>.</p>
+</blockquote>
+<p>Measures transmission by a specific cohort of individuals <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>. A cohort is a group of individuals with the <strong>same date of infection</strong> or the <strong>same date of symptom onset</strong>. The case reproduction number is the average number of new infections that an individual who becomes infected on day <span class="math inline">\(t_i\)</span> (green arrows in B) or symptomatic on day <span class="math inline">\(t_s\)</span> (yellow arrows in C) will eventually go on to cause (blue downward arrows in B and C). It is a more natural choice for analyses that consider heterogeneity among individuals <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
+<p>Methods to estimate instantaneous reproduction number includes Wallinga and Teunis method <span class="citation" data-cites="wallinga2004">(<a href="references.html#ref-wallinga2004" role="doc-biblioref">Wallinga &amp; Teunis, 2004</a>)</span>.</p>
+</section>
+<section id="compare-r_ti-and-r_tc" class="level3">
+<h3 class="anchored" data-anchor-id="compare-r_ti-and-r_tc">Compare <span class="math inline">\(R_t^i\)</span> and <span class="math inline">\(R_t^c\)</span></h3>
+<p>There are several important differences <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>:</p>
+<ol type="1">
+<li>Instantaneous <span class="math inline">\(R_t^i\)</span> is real-time estimation and only use data from before time <span class="math inline">\(t\)</span>, while case <span class="math inline">\(R_t^c\)</span> is inherently forward-looking.</li>
+</ol>
+<ul>
+<li><p><strong>Instantaneous <span class="math inline">\(R_t^i\)</span> overestimates <span class="math inline">\(R_t\)</span> early</strong> in the time series, because any infections that occurred before the first observed date are missing terms in the denominator (data is left-truncated at the beginning).</p></li>
+<li><p><strong>Case <span class="math inline">\(R_t^c\)</span> underestimate <span class="math inline">\(R_t\)</span> at the end</strong> of the time series, because it relies on time points not yet observed which become missing terms in the production (data is right-truncated at the end).</p></li>
+</ul>
+<ol start="2" type="1">
+<li>Case <span class="math inline">\(R_t^c\)</span> is shifted forward in time relative to instantaneous <span class="math inline">\(R_t^i\)</span>, produces leading estimates of <span class="math inline">\(R_t\)</span> because it uses data from time points <strong>after <span class="math inline">\(t\)</span></strong>, whereas the <span class="math inline">\(R_t^i\)</span> uses data from time points <strong>before <span class="math inline">\(t\)</span></strong>.</li>
+</ol>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Overall, <strong>for real-time analyses</strong> aiming to <strong>infer the impact of changes in policy</strong>, behavior, or other extrinsic factors on transmission, the <strong>instantaneous reproductive number</strong> will provide more temporally accurate estimates and is <strong>most appropriate</strong>.</p>
+</div>
+</div>
+</section>
 </section>
 <section id="growth-rate-r-and-reproduction-number-r" class="level2">
 <h2 class="anchored" data-anchor-id="growth-rate-r-and-reproduction-number-r">Growth rate <span class="math inline">\(r\)</span> and reproduction number <span class="math inline">\(R\)</span></h2>
@@ -365,11 +416,23 @@ window.Quarto = {
 <div id="ref-anderson2020" class="csl-entry" role="listitem">
 Anderson, R., Donnelly, C., Hollingsworth, D., Keeling, M., Vegvari, C., Baggaley, R., &amp; Maddren, R. (2020). Reproduction number (R) and growth rate (r) of the COVID-19 epidemic in the UK. <em>The Royal Society</em>.
 </div>
+<div id="ref-bettencourt2008" class="csl-entry" role="listitem">
+Bettencourt, L. M. A., &amp; Ribeiro, R. M. (2008). Real Time Bayesian Estimation of the Epidemic Potential of Emerging Infectious Diseases. <em>PLOS ONE</em>, <em>3</em>(5), e2185. <a href="https://doi.org/10.1371/journal.pone.0002185">https://doi.org/10.1371/journal.pone.0002185</a>
+</div>
+<div id="ref-cori2013" class="csl-entry" role="listitem">
+Cori, A., Ferguson, N. M., Fraser, C., &amp; Cauchemez, S. (2013). A new framework and software to estimate time-varying reproduction numbers during epidemics. <em>American Journal of Epidemiology</em>, <em>178</em>(9), 1505–1512. <a href="https://doi.org/10.1093/aje/kwt133">https://doi.org/10.1093/aje/kwt133</a>
+</div>
+<div id="ref-gostic2020" class="csl-entry" role="listitem">
+Gostic, K. M., McGough, L., Baskerville, E. B., Abbott, S., Joshi, K., Tedijanto, C., Kahn, R., Niehus, R., Hay, J. A., Salazar, P. M. D., Hellewell, J., Meakin, S., Munday, J. D., Bosse, N. I., Sherrat, K., Thompson, R. N., White, L. F., Huisman, J. S., Scire, J., … Cobey, S. (2020). Practical considerations for measuring the effective reproductive number, Rt. <em>PLOS Computational Biology</em>, <em>16</em>(12), e1008409. <a href="https://doi.org/10.1371/journal.pcbi.1008409">https://doi.org/10.1371/journal.pcbi.1008409</a>
+</div>
 <div id="ref-knight2020" class="csl-entry" role="listitem">
 Knight, J., &amp; Mishra, S. (2020). Estimating effective reproduction number using generation time versus serial interval, with application to covid-19 in the greater toronto area, canada. <em>Infectious Disease Modelling</em>, <em>5</em>, 889–896. <a href="https://doi.org/10.1016/j.idm.2020.10.009">https://doi.org/10.1016/j.idm.2020.10.009</a>
 </div>
 <div id="ref-vegvari2022" class="csl-entry" role="listitem">
 Vegvari, C., Abbott, S., Ball, F., Brooks-Pollock, E., Challen, R., Collyer, B. S., Dangerfield, C., Gog, J. R., Gostic, K. M., Heffernan, J. M., Hollingsworth, T. D., Isham, V., Kenah, E., Mollison, D., Panovska-Griffiths, J., Pellis, L., Roberts, M. G., Scalia Tomba, G., Thompson, R. N., &amp; Trapman, P. (2022). Commentary on the use of the reproduction number R during the COVID-19 pandemic. <em>Statistical Methods in Medical Research</em>, <em>31</em>(9), 1675–1685. <a href="https://doi.org/10.1177/09622802211037079">https://doi.org/10.1177/09622802211037079</a>
+</div>
+<div id="ref-wallinga2004" class="csl-entry" role="listitem">
+Wallinga, J., &amp; Teunis, P. (2004). Different epidemic curves for severe acute respiratory syndrome reveal similar impacts of control measures. <em>American Journal of Epidemiology</em>, <em>160</em>(6), 509–516. <a href="https://doi.org/10.1093/aje/kwh255">https://doi.org/10.1093/aje/kwh255</a>
 </div>
 </div>
 </section>

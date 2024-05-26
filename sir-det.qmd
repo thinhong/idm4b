@@ -79,7 +79,8 @@ df <- df[,c("time", "I", "prev")]
 
 Better off seeing the comparison on a plot.
 
-```{r, echo=FALSE}
+```{r}
+#| code-fold: true
 #| fig-width: 4
 #| fig-height: 3
 #| out-width: "100%"
@@ -161,7 +162,7 @@ ggplot(df_plot, aes(x = time, y = n, color = comp)) +
   theme(legend.position = "bottom")
 ```
 
-When $\gamma$ increase, the shape and peak time of the outbreak stay the same, the outbreak size is reduced. This is because **$\gamma$ increase** means patients recover faster, they have **less time to infect** susceptible individuals, leading to a decrease in outbreak size.
+When $\gamma$ increase, the shape and time to reach the peak of the outbreak stay the same, the outbreak size is reduced. This is because **$\gamma$ increase** means patients recover faster, they have **less time to infect** susceptible individuals, leading to a decrease in outbreak size.
 
 ## Poisson distribution
 

@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -269,8 +289,16 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#epinow2" id="toc-epinow2" class="nav-link active" data-scroll-target="#epinow2"><span class="header-section-number">3.1</span> EpiNow2</a></li>
-  <li><a href="#epiestim" id="toc-epiestim" class="nav-link" data-scroll-target="#epiestim"><span class="header-section-number">3.2</span> EpiEstim</a></li>
+  <li><a href="#potential-biases" id="toc-potential-biases" class="nav-link active" data-scroll-target="#potential-biases"><span class="header-section-number">3.1</span> Potential biases</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods"><span class="header-section-number">3.2</span> Methods</a>
+  <ul class="collapse">
+  <li><a href="#instantaneous-reproduction-number-r_ti" id="toc-instantaneous-reproduction-number-r_ti" class="nav-link" data-scroll-target="#instantaneous-reproduction-number-r_ti"><span class="header-section-number">3.2.1</span> Instantaneous reproduction number <span class="math inline">\(R_t^i\)</span></a></li>
+  <li><a href="#case-reproduction-number-r_tc" id="toc-case-reproduction-number-r_tc" class="nav-link" data-scroll-target="#case-reproduction-number-r_tc"><span class="header-section-number">3.2.2</span> Case reproduction number <span class="math inline">\(R_t^c\)</span></a></li>
+  </ul></li>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">3.3</span> Code</a>
+  <ul class="collapse">
+  <li><a href="#epinow2" id="toc-epinow2" class="nav-link" data-scroll-target="#epinow2"><span class="header-section-number">3.3.1</span> EpiNow2</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -296,13 +324,86 @@ window.Quarto = {
 </header>
 
 
-<section id="epinow2" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="epinow2"><span class="header-section-number">3.1</span> EpiNow2</h2>
+<section id="potential-biases" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="potential-biases"><span class="header-section-number">3.1</span> Potential biases</h2>
+<p><span class="math inline">\(R_t\)</span> is a <strong>value</strong> in specific <strong>time</strong>, therefore there are 2 potential forms of bias in <span class="math inline">\(R_t\)</span> estimates <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>:</p>
+<ul>
+<li><p><strong>Accuracy</strong> (the value): Systematic over- or underestimation caused by misspecification of the generation interval. Mostly impact when <span class="math inline">\(R_t\)</span> is substantially &gt; 1 (e.g., the beginning of COVID-19 when <span class="math inline">\(R_t\)</span> is relatively high) or &lt; 1 (e.g., after a very effective intervention then <span class="math inline">\(R_t\)</span> might be low).</p></li>
+<li><p><strong>Timeliness</strong> (the time): Temporal inaccuracy that <span class="math inline">\(R_t\)</span> estimates may be leading or lagging the true date, has several possible causes and can be difficult to avoid.</p></li>
+</ul>
+<p>Generation interval: sum of residence times in compartments E and I <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 </section>
-<section id="epiestim" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="epiestim"><span class="header-section-number">3.2</span> EpiEstim</h2>
+<section id="methods" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="methods"><span class="header-section-number">3.2</span> Methods</h2>
+<p><span class="math inline">\(R_t\)</span> can be defined in 2 ways: as the <strong>instantaneous reproduction number</strong> (see <a href="rnum.html#sec-rt-inst" class="quarto-xref"><span>Section 3.1</span></a>) or as the <strong>case reproduction number</strong> (see <a href="rnum.html#sec-rt-case" class="quarto-xref"><span>Section 3.2</span></a>).</p>
+<section id="instantaneous-reproduction-number-r_ti" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="instantaneous-reproduction-number-r_ti"><span class="header-section-number">3.2.1</span> Instantaneous reproduction number <span class="math inline">\(R_t^i\)</span></h3>
+<div id="def-rt-inst" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.1</strong></span> The instantaneous reproduction number is the expected number of secondary infections occurring at time <span class="math inline">\(t\)</span>, divided by the number of infected individuals, each scaled by their relative infectiousness at time <span class="math inline">\(t\)</span> (an individual’s relative infectiousness is based on the generation interval and time since infection) <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
+</div>
+<section id="exact-calculation" class="level4" data-number="3.2.1.1">
+<h4 data-number="3.2.1.1" class="anchored" data-anchor-id="exact-calculation"><span class="header-section-number">3.2.1.1</span> Exact calculation</h4>
+<p>For a compartmental model (SIR or SEIR), <span class="math inline">\(R_t^i\)</span> can be calculated exactly as:</p>
+<p><span class="math display">\[R_t^i = \beta(t) S(t) D\]</span></p>
+<ul>
+<li><span class="math inline">\(\beta(t)\)</span>: the time-varying transmission rate.</li>
+<li><span class="math inline">\(S(t)\)</span>: the fraction of the population that is susceptible.</li>
+<li><span class="math inline">\(D\)</span>: the mean duration of infectiousness.</li>
+</ul>
+</section>
+<section id="cori-method" class="level4" data-number="3.2.1.2">
+<h4 data-number="3.2.1.2" class="anchored" data-anchor-id="cori-method"><span class="header-section-number">3.2.1.2</span> Cori method</h4>
+<p>Cori and colleagues estimates <span class="math inline">\(R_t^i\)</span> as <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>:</p>
+<p><span class="math display">\[R_t^i = \frac{I_t}{\sum_{s = 1}^{t} I_{t - s} w_s}\]</span></p>
+<ul>
+<li><span class="math inline">\(I_t\)</span>: the number of infection on day <span class="math inline">\(t\)</span>.</li>
+<li><span class="math inline">\(I_{t - s}\)</span>: the number of individuals who became infected <span class="math inline">\(s\)</span> days in the past.</li>
+<li><span class="math inline">\(w_s\)</span>: the generation interval, or the probability that <span class="math inline">\(s\)</span> days separate the moment of infection in an index case and a daughter case.</li>
+<li><span class="math inline">\(I_{t - s} w_s\)</span>: we scale the number of individuals who became infected <span class="math inline">\(s\)</span> days in the past by how infectiousness are they still on day <span class="math inline">\(t\)</span> (which is <span class="math inline">\(s\)</span> days after the date they got infected, <span class="math inline">\(w_s\)</span>).</li>
+</ul>
+<p>Looking back at <a href="#def-rt-inst" class="quarto-xref">Definition&nbsp;<span>3.1</span></a>, <span class="math inline">\(R_t^i\)</span> is the expected number of secondary infections occurring at time <span class="math inline">\(t\)</span> (<span class="math inline">\(I_t\)</span>), divided by the number of infected individuals (<span class="math inline">\(\sum_{s = 1}^{t} I_{t - s}\)</span>), each scaled by their relative infectiousness at time <span class="math inline">\(t\)</span> (<span class="math inline">\(w_s\)</span>).</p>
+<p>The only parametric assumption required by this method is <strong>the form of the generation interval</strong>. The standard assumption is that <span class="math inline">\(w_s\)</span> follows a <strong>discretized gamma distribution</strong>, but any parametric or empirical discrete distribution also work <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
+</section>
+</section>
+<section id="case-reproduction-number-r_tc" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="case-reproduction-number-r_tc"><span class="header-section-number">3.2.2</span> Case reproduction number <span class="math inline">\(R_t^c\)</span></h3>
+<div id="def-rt-case" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.2</strong></span> The case or cohort reproduction number is the expected number of secondary infections that an individual who becomes infected at time <span class="math inline">\(t\)</span> will eventually cause as they progress through their infection.</p>
+</div>
+<section id="exact-calculation-1" class="level4" data-number="3.2.2.1">
+<h4 data-number="3.2.2.1" class="anchored" data-anchor-id="exact-calculation-1"><span class="header-section-number">3.2.2.1</span> Exact calculation</h4>
+<p><span class="math display">\[R_t^c = \int_{u = t}^{\infty} R_u^i w_{u-t} du\]</span></p>
+<ul>
+<li><span class="math inline">\(R_u^i\)</span>: the instantaneous reproduction number of current infected cases at time <span class="math inline">\(u\)</span>, starting from <span class="math inline">\(t\)</span> to the end of their infectious period <span class="math inline">\(\infty\)</span>.</li>
+<li><span class="math inline">\(w_{u-t}\)</span>: the infectiousness of them at that time.</li>
+</ul>
+</section>
+<section id="wallinga-and-teunis-method" class="level4" data-number="3.2.2.2">
+<h4 data-number="3.2.2.2" class="anchored" data-anchor-id="wallinga-and-teunis-method"><span class="header-section-number">3.2.2.2</span> Wallinga and Teunis method</h4>
+<p><strong>Step 1</strong>. Estimate the likelihood that case <span class="math inline">\(j\)</span> (infected at time <span class="math inline">\(t_j\)</span>) infected case <span class="math inline">\(i\)</span> (at time <span class="math inline">\(t_i\)</span>).</p>
+<p><span class="math display">\[p_{ij} = \frac{w_{t_i - t_j}}{\sum_{i \neq k} w_{t_i - t_k}}\]</span></p>
+<ul>
+<li><span class="math inline">\(\sum_{i \neq k} w_{t_i - t_k}\)</span>: sum of the infectiousness of all cases (other than <span class="math inline">\(i\)</span>) infects case <span class="math inline">\(i\)</span>.</li>
+</ul>
+<p><strong>Step 2</strong>. Compute the individual reproduction number of case j.</p>
+<p><span class="math display">\[R_j = \sum_i p_{ij}\]</span></p>
+<p><strong>Step 3</strong>. Compute the case reproduction number at time <span class="math inline">\(t\)</span>, it is the expected value of <span class="math inline">\(R_j\)</span> for all individuals infected at time <span class="math inline">\(t\)</span>.</p>
+<p><span class="math display">\[R_t^c = \mathbb{E}(R_j)\]</span></p>
+</section>
+</section>
+</section>
+<section id="code" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="code"><span class="header-section-number">3.3</span> Code</h2>
+<section id="epinow2" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="epinow2"><span class="header-section-number">3.3.1</span> EpiNow2</h3>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-gostic2020" class="csl-entry" role="listitem">
+Gostic, K. M., McGough, L., Baskerville, E. B., Abbott, S., Joshi, K., Tedijanto, C., Kahn, R., Niehus, R., Hay, J. A., Salazar, P. M. D., Hellewell, J., Meakin, S., Munday, J. D., Bosse, N. I., Sherrat, K., Thompson, R. N., White, L. F., Huisman, J. S., Scire, J., … Cobey, S. (2020). Practical considerations for measuring the effective reproductive number, Rt. <em>PLOS Computational Biology</em>, <em>16</em>(12), e1008409. <a href="https://doi.org/10.1371/journal.pcbi.1008409">https://doi.org/10.1371/journal.pcbi.1008409</a>
+</div>
+</div>
+</section>
 </section>
 
 </main> <!-- /main -->

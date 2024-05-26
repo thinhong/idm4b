@@ -42,6 +42,44 @@ p1 / p2
 
 At the beginning of an outbreak, we can estimate $R_0$ when the whole population is fully susceptible. As the outbreak progresses, the number of susceptible individuals decreases, leading to a decline in $R_0$. This adjusted value is referred to as $R_t$ (if we want to measure at each time $t$). At the peak of the epidemic curve, $R_t = 1$. After this peak, $R_t$ continues to decrease, resulting in a decline in the number of new cases and the epidemic curve going down.
 
+$R_t$ can be defined in 2 ways: as the **instantaneous reproduction number** or as the **case reproduction number** [@gostic2020].
+
+### Instantaneous reproduction number $R_t^i$ {#sec-rt-inst}
+
+![](img/rnum/rt-inst.png)
+
+> Figure illustrates the Cori method [@cori2013].
+
+Measures transmission at a specific point in time [@gostic2020]. The instantaneous reproduction number quantifies the number of new infections at a single point in time $t_i$ (blue arrow), using the number of infections in the previous generation (green arrows) and their current infectiousness (green curve) [@gostic2020]. The analyses can be done **near real-time**.
+
+Methods to estimate instantaneous reproduction number includes Cori and colleagues [@cori2013] (the best for near real-time estimation [@gostic2020]), and Bettencourt and Ribeiro [@bettencourt2008] (use with caution because they implicitly assume the generation interval follows an exponential distribution, as in SIR model, which does not include alatent period).
+
+### Case reproduction number $R_T^c$ {#sec-rt-case}
+
+![](img/rnum/rt-case.png)
+
+> Figure illustrates the Wallinga and Teunis method [@wallinga2004].
+
+Measures transmission by a specific cohort of individuals [@gostic2020]. A cohort is a group of individuals with the **same date of infection** or the **same date of symptom onset**. The case reproduction number is the average number of new infections that an individual who becomes infected on day $t_i$ (green arrows in B) or symptomatic on day $t_s$ (yellow arrows in C) will eventually go on to cause (blue downward arrows in B and C). It is a more natural choice for analyses that consider heterogeneity among individuals [@gostic2020].
+
+Methods to estimate instantaneous reproduction number includes Wallinga and Teunis method [@wallinga2004].
+
+### Compare $R_t^i$ and $R_t^c$
+
+There are several important differences [@gostic2020]:
+
+1. Instantaneous $R_t^i$ is real-time estimation and only use data from before time $t$, while case $R_t^c$ is inherently forward-looking.
+
+- **Instantaneous $R_t^i$ overestimates $R_t$ early** in the time series, because any infections that occurred before the first observed date are missing terms in the denominator (data is left-truncated at the beginning).
+
+- **Case $R_t^c$ underestimate $R_t$ at the end** of the time series, because it relies on time points not yet observed which become missing terms in the production (data is right-truncated at the end).
+
+2. Case $R_t^c$ is shifted forward in time relative to instantaneous $R_t^i$, produces leading estimates of $R_t$ because it uses data from time points **after $t$**, whereas the $R_t^i$ uses data from time points **before $t$**.
+
+::: {.callout-important}
+Overall, **for real-time analyses** aiming to **infer the impact of changes in policy**, behavior, or other extrinsic factors on transmission, the **instantaneous reproductive number** will provide more temporally accurate estimates and is **most appropriate**.
+:::
+
 ## Growth rate $r$ and reproduction number $R$
 
 Growth rate $r$ and reproduction number $R$ are basically the same. $r$ is used in continuous time and $R$ is used in discrete time.
