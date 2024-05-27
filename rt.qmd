@@ -147,8 +147,8 @@ The mean generation interval **decreases** when susceptible persons are at risk 
 
 > Biases from misspecification of the generation interval mean (A) or variance (B) [@gostic2020].
 
--   If **mean** generation interval is set **too high**, $R_t$ will be more extreme (too high when true $R_t > 1$ and too low when true $R_t < 1$).
--   If **mean** generation interval is set **too low**, $R_t$ will be closer to 1 than the true value.
+-   If **mean** generation interval is set **too high**, $R_t$ will be **more extreme** (too high when true $R_t > 1$ and too low when true $R_t < 1$).
+-   If **mean** generation interval is set **too low**, $R_t$ will be **closer to 1** than the true value.
 -   The effect of the mean generation interval is large when true $R_t$ further from 1. Therefore, **this bias may be greatest at the early epidemic**, when true $R_t$ is high, together with highly uncertain generation interval and limited data.
 
 Tools like `EpiEstim` and `EpiNow2` allow users to specify the prior variance of the mean and standard deviation. However, bear in mind that uncertainty around an incorrect generation interval only widen the 95% credible interval, but will not shift the estimates toward the truth and will not correct this bias.
@@ -177,7 +177,7 @@ The distributions of the serial interval and the generation interval are identic
 
 If $d$ is the delay from infection to observation, then observations at time $t$ inform $R_{t − d}$, not $R_t$.
 
-If the **distribution of delays** can be estimated, then $R_t$ can be estimated in 2 steps:
+If the distribution of delays can be estimated, then $R_t$ can be estimated in 2 steps:
 
 1. Infer the underlying time series of infections.
 2. Input the adjusted time series into an $R_t$ estimation method.

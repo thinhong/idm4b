@@ -489,8 +489,8 @@ Important
 <p>Biases from misspecification of the generation interval mean (A) or variance (B) <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 </blockquote>
 <ul>
-<li>If <strong>mean</strong> generation interval is set <strong>too high</strong>, <span class="math inline">\(R_t\)</span> will be more extreme (too high when true <span class="math inline">\(R_t &gt; 1\)</span> and too low when true <span class="math inline">\(R_t &lt; 1\)</span>).</li>
-<li>If <strong>mean</strong> generation interval is set <strong>too low</strong>, <span class="math inline">\(R_t\)</span> will be closer to 1 than the true value.</li>
+<li>If <strong>mean</strong> generation interval is set <strong>too high</strong>, <span class="math inline">\(R_t\)</span> will be <strong>more extreme</strong> (too high when true <span class="math inline">\(R_t &gt; 1\)</span> and too low when true <span class="math inline">\(R_t &lt; 1\)</span>).</li>
+<li>If <strong>mean</strong> generation interval is set <strong>too low</strong>, <span class="math inline">\(R_t\)</span> will be <strong>closer to 1</strong> than the true value.</li>
 <li>The effect of the mean generation interval is large when true <span class="math inline">\(R_t\)</span> further from 1. Therefore, <strong>this bias may be greatest at the early epidemic</strong>, when true <span class="math inline">\(R_t\)</span> is high, together with highly uncertain generation interval and limited data.</li>
 </ul>
 <p>Tools like <code>EpiEstim</code> and <code>EpiNow2</code> allow users to specify the prior variance of the mean and standard deviation. However, bear in mind that uncertainty around an incorrect generation interval only widen the 95% credible interval, but will not shift the estimates toward the truth and will not correct this bias.</p>
@@ -518,7 +518,7 @@ Important
 <p>Adjusting for delays <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 </blockquote>
 <p>If <span class="math inline">\(d\)</span> is the delay from infection to observation, then observations at time <span class="math inline">\(t\)</span> inform <span class="math inline">\(R_{t − d}\)</span>, not <span class="math inline">\(R_t\)</span>.</p>
-<p>If the <strong>distribution of delays</strong> can be estimated, then <span class="math inline">\(R_t\)</span> can be estimated in 2 steps:</p>
+<p>If the distribution of delays can be estimated, then <span class="math inline">\(R_t\)</span> can be estimated in 2 steps:</p>
 <ol type="1">
 <li>Infer the underlying time series of infections.</li>
 <li>Input the adjusted time series into an <span class="math inline">\(R_t\)</span> estimation method.</li>
