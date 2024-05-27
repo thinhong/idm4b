@@ -39,7 +39,7 @@ Cori et al. suggest starting estimating $R_t^i$ once those three criteria are fu
 
 -   At least after the sliding window size.
 -   At least after one mean serial interval.
--   At least 12 cases have been observed since the beginning of the epidemic: because to get a posterior credible interval of 0.3, the time window considered must comprise at least 11 incident cases.
+-   At least 12 cases (the initial case + 11) have been observed since the beginning of the epidemic (in a time window): to get a posterior credible interval of 0.3, the time window must comprise at least 11 incident cases.
 
 #### Key considerations
 
@@ -54,10 +54,10 @@ Source: Dr. Anne Cori's [webinar](https://www.youtube.com/watch?v=wv3BecZD5DU).
 ### Case reproduction number $R_t^c$
 
 ::: {#def-rt-case}
-The case or cohort reproduction number is the expected number of secondary infections that an individual who becomes infected at time $t$ will eventually cause as they progress through their infection.
+The case or cohort reproduction number is the expected number of secondary infections that an individual who becomes infected at time $t$ will eventually cause as they progress through their infection [@gostic2020].
 :::
 
-#### Exact calculation
+#### Exact calculation {#sec-rt-case-exact}
 
 $$R_t^c = \int_{u = t}^{\infty} R_u^i w_{u-t} du$$
 
@@ -98,7 +98,7 @@ $$I(t) = R_0 S(t) \int_{s = 0}^{\infty} I(t - s) w_s ds$$
 
 -   $R_0 S(t) = R_t$: see @def-rt.
 -   $I(t - s)$: the number of individuals who became infected $s$ time points ago in the past.
--   $w_s$: the infectivity profile, or the probability of how infectiousness are they still at time $t$ (which is $s$ time points after the date they got infected),
+-   $w_s$: the infectivity profile, or the probability of how infectiousness are they still at time $t$ (which is $s$ time points after the date they got infected).
 -   $I(t - s) w_s$: we scale the number of individuals who in the past by how infectiousness are they still at time $t$.
 
 Now we transform the equation a bit, and we got something very similar to the Cori method (see @sec-cori).
@@ -111,9 +111,9 @@ There are several important differences [@gostic2020]:
 
 1.  Instantaneous $R_t^i$ is real-time estimation and only use data from before time $t$, while case $R_t^c$ is inherently forward-looking.
 
--   **Instantaneous** $R_t^i$ overestimates $R_t$ early in the time series, because any infections that occurred before the first observed date are missing terms in the denominator (the $I_{t - s}$ in @sec-cori, data is left-truncated at the beginning).
+-   **Instantaneous** $R_t^i$ **overestimates** $R_t$ early in the time series, because any infections that occurred before the first observed date are missing terms in the denominator (the $I_{t - s}$ in @sec-cori, data is left-truncated at the beginning).
 
--   **Case** $R_t^c$ underestimates $R_t$ at the end of the time series, because it relies on time points not yet observed which become missing terms in the production (data is right-truncated at the end).
+-   **Case** $R_t^c$ **underestimates** $R_t$ at the end of the time series, because it relies on time points not yet observed which become missing terms in the integral (the $R_u^i$ in @sec-rt-case-exact, data is right-truncated at the end).
 
 2.  Case $R_t^c$ is shifted forward in time relative to instantaneous $R_t^i$, produces leading estimates of $R_t$ because it uses data from time points **after** $t$, whereas the $R_t^i$ uses data from time points **before** $t$.
 
@@ -143,16 +143,46 @@ If we match this to an SEIR model, the generation interval starts when the infec
 
 The mean generation interval **decreases** when susceptible persons are at risk of infectious contact from **multiple sources**. Because when a susceptible person has multiple potential infectors, there is a "race" to infect him/her in which only the first infectious contact leads to infection [@kenah2008].
 
+![](img/rnum/mean-gen-int-bias.png)
+
+> Biases from misspecification of the generation interval mean (A) or variance (B) [@gostic2020].
+
+-   If **mean** generation interval is set **too high**, $R_t$ will be more extreme (too high when true $R_t > 1$ and too low when true $R_t < 1$).
+-   If **mean** generation interval is set **too low**, $R_t$ will be closer to 1 than the true value.
+-   The effect of the mean generation interval is large when true $R_t$ further from 1. Therefore, **this bias may be greatest at the early epidemic**, when true $R_t$ is high, together with highly uncertain generation interval and limited data.
+
+Tools like `EpiEstim` and `EpiNow2` allow users to specify the prior variance of the mean and standard deviation. However, bear in mind that uncertainty around an incorrect generation interval only widen the 95% credible interval, but will not shift the estimates toward the truth and will not correct this bias.
+
 ### Serial interval
 
 ::: {#def-ser-int}
 Serial interval is the time between symptom onset in an infector–infectee pair [@gostic2020].
 :::
 
+Serial interval is more easily observed than generation interval and often used in its place. Although the serial and generation intervals are often conflated, there are important differences [@gostic2020]:
+
+-   Serial interval and generation interval usually have the same mean, but different variances.
+-   Serial interval can be negative (when the symptom onset of infector is later than infectee, such as in COVID-19), generation interval is always positive.
+
 The distributions of the serial interval and the generation interval are identical in these scenarios [@cori2013]:
 
 -   For diseases such as influenza, SARS, measles, and smallpox, it is expected that infectiousness starts only around the time of symptom onset.
 -   When the infectiousness profile after symptoms is independent of the incubation period.
+
+### Delays
+
+![](img/rnum/delays.png)
+
+> Adjusting for delays [@gostic2020].
+
+If $d$ is the delay from infection to observation, then observations at time $t$ inform $R_{t − d}$, not $R_t$.
+
+If the **distribution of delays** can be estimated, then $R_t$ can be estimated in 2 steps:
+
+1. Infer the underlying time series of infections.
+2. Input the adjusted time series into an $R_t$ estimation method.
+
+
 
 ## Code
 

@@ -300,7 +300,7 @@ window.Quarto = {
   </ul></li>
   <li><a href="#case-reproduction-number-r_tc" id="toc-case-reproduction-number-r_tc" class="nav-link" data-scroll-target="#case-reproduction-number-r_tc"><span class="header-section-number">3.1.2</span> Case reproduction number <span class="math inline">\(R_t^c\)</span></a>
   <ul>
-  <li><a href="#exact-calculation-1" id="toc-exact-calculation-1" class="nav-link" data-scroll-target="#exact-calculation-1"><span class="header-section-number">3.1.2.1</span> Exact calculation</a></li>
+  <li><a href="#sec-rt-case-exact" id="toc-sec-rt-case-exact" class="nav-link" data-scroll-target="#sec-rt-case-exact"><span class="header-section-number">3.1.2.1</span> Exact calculation</a></li>
   <li><a href="#wallinga-and-teunis-method" id="toc-wallinga-and-teunis-method" class="nav-link" data-scroll-target="#wallinga-and-teunis-method"><span class="header-section-number">3.1.2.2</span> Wallinga and Teunis method</a></li>
   </ul></li>
   </ul></li>
@@ -310,6 +310,7 @@ window.Quarto = {
   <ul>
   <li><a href="#generation-interval" id="toc-generation-interval" class="nav-link" data-scroll-target="#generation-interval"><span class="header-section-number">3.4.1</span> Generation interval</a></li>
   <li><a href="#serial-interval" id="toc-serial-interval" class="nav-link" data-scroll-target="#serial-interval"><span class="header-section-number">3.4.2</span> Serial interval</a></li>
+  <li><a href="#delays" id="toc-delays" class="nav-link" data-scroll-target="#delays"><span class="header-section-number">3.4.3</span> Delays</a></li>
   </ul></li>
   <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">3.5</span> Code</a>
   <ul>
@@ -376,7 +377,7 @@ window.Quarto = {
 <ul>
 <li>At least after the sliding window size.</li>
 <li>At least after one mean serial interval.</li>
-<li>At least 12 cases have been observed since the beginning of the epidemic: because to get a posterior credible interval of 0.3, the time window considered must comprise at least 11 incident cases.</li>
+<li>At least 12 cases (the initial case + 11) have been observed since the beginning of the epidemic (in a time window): to get a posterior credible interval of 0.3, the time window must comprise at least 11 incident cases.</li>
 </ul>
 </section>
 <section id="key-considerations" class="level4" data-number="3.1.1.4">
@@ -393,10 +394,10 @@ window.Quarto = {
 <section id="case-reproduction-number-r_tc" class="level3" data-number="3.1.2">
 <h3 data-number="3.1.2" class="anchored" data-anchor-id="case-reproduction-number-r_tc"><span class="header-section-number">3.1.2</span> Case reproduction number <span class="math inline">\(R_t^c\)</span></h3>
 <div id="def-rt-case" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 3.2</strong></span> The case or cohort reproduction number is the expected number of secondary infections that an individual who becomes infected at time <span class="math inline">\(t\)</span> will eventually cause as they progress through their infection.</p>
+<p><span class="theorem-title"><strong>Definition 3.2</strong></span> The case or cohort reproduction number is the expected number of secondary infections that an individual who becomes infected at time <span class="math inline">\(t\)</span> will eventually cause as they progress through their infection <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 </div>
-<section id="exact-calculation-1" class="level4" data-number="3.1.2.1">
-<h4 data-number="3.1.2.1" class="anchored" data-anchor-id="exact-calculation-1"><span class="header-section-number">3.1.2.1</span> Exact calculation</h4>
+<section id="sec-rt-case-exact" class="level4" data-number="3.1.2.1">
+<h4 data-number="3.1.2.1" class="anchored" data-anchor-id="sec-rt-case-exact"><span class="header-section-number">3.1.2.1</span> Exact calculation</h4>
 <p><span class="math display">\[R_t^c = \int_{u = t}^{\infty} R_u^i w_{u-t} du\]</span></p>
 <ul>
 <li><span class="math inline">\(R_u^i\)</span>: the instantaneous reproduction number of current infected cases at time <span class="math inline">\(u\)</span>, starting from <span class="math inline">\(t\)</span> to the end of their infectious period <span class="math inline">\(\infty\)</span>.</li>
@@ -432,7 +433,7 @@ window.Quarto = {
 <ul>
 <li><span class="math inline">\(R_0 S(t) = R_t\)</span>: see <a href="rnum.html#def-rt" class="quarto-xref">Definition&nbsp;<span>3</span></a>.</li>
 <li><span class="math inline">\(I(t - s)\)</span>: the number of individuals who became infected <span class="math inline">\(s\)</span> time points ago in the past.</li>
-<li><span class="math inline">\(w_s\)</span>: the infectivity profile, or the probability of how infectiousness are they still at time <span class="math inline">\(t\)</span> (which is <span class="math inline">\(s\)</span> time points after the date they got infected),</li>
+<li><span class="math inline">\(w_s\)</span>: the infectivity profile, or the probability of how infectiousness are they still at time <span class="math inline">\(t\)</span> (which is <span class="math inline">\(s\)</span> time points after the date they got infected).</li>
 <li><span class="math inline">\(I(t - s) w_s\)</span>: we scale the number of individuals who in the past by how infectiousness are they still at time <span class="math inline">\(t\)</span>.</li>
 </ul>
 <p>Now we transform the equation a bit, and we got something very similar to the Cori method (see <a href="#sec-cori" class="quarto-xref"><span>Section 3.1.1.2</span></a>).</p>
@@ -445,8 +446,8 @@ window.Quarto = {
 <li>Instantaneous <span class="math inline">\(R_t^i\)</span> is real-time estimation and only use data from before time <span class="math inline">\(t\)</span>, while case <span class="math inline">\(R_t^c\)</span> is inherently forward-looking.</li>
 </ol>
 <ul>
-<li><p><strong>Instantaneous</strong> <span class="math inline">\(R_t^i\)</span> overestimates <span class="math inline">\(R_t\)</span> early in the time series, because any infections that occurred before the first observed date are missing terms in the denominator (the <span class="math inline">\(I_{t - s}\)</span> in <a href="#sec-cori" class="quarto-xref"><span>Section 3.1.1.2</span></a>, data is left-truncated at the beginning).</p></li>
-<li><p><strong>Case</strong> <span class="math inline">\(R_t^c\)</span> underestimates <span class="math inline">\(R_t\)</span> at the end of the time series, because it relies on time points not yet observed which become missing terms in the production (data is right-truncated at the end).</p></li>
+<li><p><strong>Instantaneous</strong> <span class="math inline">\(R_t^i\)</span> <strong>overestimates</strong> <span class="math inline">\(R_t\)</span> early in the time series, because any infections that occurred before the first observed date are missing terms in the denominator (the <span class="math inline">\(I_{t - s}\)</span> in <a href="#sec-cori" class="quarto-xref"><span>Section 3.1.1.2</span></a>, data is left-truncated at the beginning).</p></li>
+<li><p><strong>Case</strong> <span class="math inline">\(R_t^c\)</span> <strong>underestimates</strong> <span class="math inline">\(R_t\)</span> at the end of the time series, because it relies on time points not yet observed which become missing terms in the integral (the <span class="math inline">\(R_u^i\)</span> in <a href="#sec-rt-case-exact" class="quarto-xref"><span>Section 3.1.2.1</span></a>, data is right-truncated at the end).</p></li>
 </ul>
 <ol start="2" type="1">
 <li>Case <span class="math inline">\(R_t^c\)</span> is shifted forward in time relative to instantaneous <span class="math inline">\(R_t^i\)</span>, produces leading estimates of <span class="math inline">\(R_t\)</span> because it uses data from time points <strong>after</strong> <span class="math inline">\(t\)</span>, whereas the <span class="math inline">\(R_t^i\)</span> uses data from time points <strong>before</strong> <span class="math inline">\(t\)</span>.</li>
@@ -483,17 +484,45 @@ Important
 </div>
 <p>If we match this to an SEIR model, the generation interval starts when the infector enters the E compartment (meaning they got infected). The latest time they can infect an infectee is at the end of their residence in the I compartment (they are infectious). Therefore, generation interval is the sum of residence times in compartments E and I <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 <p>The mean generation interval <strong>decreases</strong> when susceptible persons are at risk of infectious contact from <strong>multiple sources</strong>. Because when a susceptible person has multiple potential infectors, there is a “race” to infect him/her in which only the first infectious contact leads to infection <span class="citation" data-cites="kenah2008">(<a href="references.html#ref-kenah2008" role="doc-biblioref">Kenah et al., 2008</a>)</span>.</p>
+<p><img src="img/rnum/mean-gen-int-bias.png" class="img-fluid"></p>
+<blockquote class="blockquote">
+<p>Biases from misspecification of the generation interval mean (A) or variance (B) <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
+</blockquote>
+<ul>
+<li>If <strong>mean</strong> generation interval is set <strong>too high</strong>, <span class="math inline">\(R_t\)</span> will be more extreme (too high when true <span class="math inline">\(R_t &gt; 1\)</span> and too low when true <span class="math inline">\(R_t &lt; 1\)</span>).</li>
+<li>If <strong>mean</strong> generation interval is set <strong>too low</strong>, <span class="math inline">\(R_t\)</span> will be closer to 1 than the true value.</li>
+<li>The effect of the mean generation interval is large when true <span class="math inline">\(R_t\)</span> further from 1. Therefore, <strong>this bias may be greatest at the early epidemic</strong>, when true <span class="math inline">\(R_t\)</span> is high, together with highly uncertain generation interval and limited data.</li>
+</ul>
+<p>Tools like <code>EpiEstim</code> and <code>EpiNow2</code> allow users to specify the prior variance of the mean and standard deviation. However, bear in mind that uncertainty around an incorrect generation interval only widen the 95% credible interval, but will not shift the estimates toward the truth and will not correct this bias.</p>
 </section>
 <section id="serial-interval" class="level3" data-number="3.4.2">
 <h3 data-number="3.4.2" class="anchored" data-anchor-id="serial-interval"><span class="header-section-number">3.4.2</span> Serial interval</h3>
 <div id="def-ser-int" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 3.4</strong></span> Serial interval is the time between symptom onset in an infector–infectee pair <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 </div>
+<p>Serial interval is more easily observed than generation interval and often used in its place. Although the serial and generation intervals are often conflated, there are important differences <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>:</p>
+<ul>
+<li>Serial interval and generation interval usually have the same mean, but different variances.</li>
+<li>Serial interval can be negative (when the symptom onset of infector is later than infectee, such as in COVID-19), generation interval is always positive.</li>
+</ul>
 <p>The distributions of the serial interval and the generation interval are identical in these scenarios <span class="citation" data-cites="cori2013">(<a href="references.html#ref-cori2013" role="doc-biblioref">Cori et al., 2013</a>)</span>:</p>
 <ul>
 <li>For diseases such as influenza, SARS, measles, and smallpox, it is expected that infectiousness starts only around the time of symptom onset.</li>
 <li>When the infectiousness profile after symptoms is independent of the incubation period.</li>
 </ul>
+</section>
+<section id="delays" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="delays"><span class="header-section-number">3.4.3</span> Delays</h3>
+<p><img src="img/rnum/delays.png" class="img-fluid"></p>
+<blockquote class="blockquote">
+<p>Adjusting for delays <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
+</blockquote>
+<p>If <span class="math inline">\(d\)</span> is the delay from infection to observation, then observations at time <span class="math inline">\(t\)</span> inform <span class="math inline">\(R_{t − d}\)</span>, not <span class="math inline">\(R_t\)</span>.</p>
+<p>If the <strong>distribution of delays</strong> can be estimated, then <span class="math inline">\(R_t\)</span> can be estimated in 2 steps:</p>
+<ol type="1">
+<li>Infer the underlying time series of infections.</li>
+<li>Input the adjusted time series into an <span class="math inline">\(R_t\)</span> estimation method.</li>
+</ol>
 </section>
 </section>
 <section id="code" class="level2" data-number="3.5">
