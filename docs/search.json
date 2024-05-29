@@ -298,25 +298,45 @@
     ]
   },
   {
+    "objectID": "surv.html",
+    "href": "surv.html",
+    "title": "8  Survival analysis",
+    "section": "",
+    "text": "8.1 Definitions",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Survival analysis</span>"
+    ]
+  },
+  {
+    "objectID": "surv.html#definitions",
+    "href": "surv.html#definitions",
+    "title": "8  Survival analysis",
+    "section": "",
+    "text": "8.1.1 Hazard, rate, incidence\nThey are the same word, using in different fields, hazard = rate = incidence:\n\nRate: number of new events that occur during specified time period.\nIncidence: when the event is a disease, it is called incidence.\nHazard: in survival analysis, it is called hazard.\n\nLet consider a discrete\n\n\n8.1.2 Hazard function\nHazard function \\(f(t)\\) gives the probability that someone die at time \\(t\\), given that they have survived up to that time \\(t\\) (survived during the period \\([0;t]\\)).\n\\[h(t) = \\frac{f(t)}{\\mathbb{P}(T &gt; t)} = \\frac{f(t)}{S(t)}\\]\nWhere \\(f(t)\\) is the time to first\n\n\n8.1.3 Cumulative hazard function\nCumulative hazard function \\(F(t)\\) gives the probability that someone die by time \\(t\\) (die anytime during \\([0;t]\\)).\n\\[F(t) = \\mathbb{P}(T \\leq t) = \\sum_{t = 0}^t h(t)\\]\n\n\n8.1.4 Survival function\nThe survival function \\(S(t)\\) gives the probability that someone will survive beyond time \\(t\\) (they have survived \\([0;t]\\) and will continue to survive).\n\\[S(t) = \\mathbb{P}(T &gt; t) = 1 - \\mathbb{P}(T \\leq t) = 1 - F(t)\\]\n\n\n\n\nHay, J., Routledge, I., & Takahashi, S. (n.d.). Serodynamics: a review of methods for epidemiological inference using serological data. https://doi.org/10.31219/osf.io/kqdsn",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Survival analysis</span>"
+    ]
+  },
+  {
     "objectID": "rp-risk.html",
     "href": "rp-risk.html",
-    "title": "8  Risk assessment report",
+    "title": "9  Risk assessment report",
     "section": "",
-    "text": "8.1 Examples\nRisk assessment for measles resurgence in the UK\nRapid risk assessment: Measles in Canada, public health implications in 2024",
+    "text": "9.1 Examples\nRisk assessment for measles resurgence in the UK\nRapid risk assessment: Measles in Canada, public health implications in 2024",
     "crumbs": [
       "Reports",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Risk assessment report</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Risk assessment report</span>"
     ]
   },
   {
     "objectID": "rp-risk.html#data",
     "href": "rp-risk.html#data",
-    "title": "8  Risk assessment report",
-    "section": "8.2 Data",
-    "text": "8.2 Data\n\nHistorical case notification of past outbreaks 2014 and 2019 Date of onset + date of birth (or age)\nCurrent level of susceptibility in HCMC:\n\n\nSerology\nVaccine registry\nBirth rates\n\n\nConnectivity between Phu Quoc and HCMC: Flight data / boat data?\n\nP = 1 – (1 / (R0 * s))^m",
+    "title": "9  Risk assessment report",
+    "section": "9.2 Data",
+    "text": "9.2 Data\n\nHistorical case notification of past outbreaks 2014 and 2019 Date of onset + date of birth (or age)\nCurrent level of susceptibility in HCMC:\n\n\nSerology\nVaccine registry\nBirth rates\n\n\nConnectivity between Phu Quoc and HCMC: Flight data / boat data?\n\nP = 1 – (1 / (R0 * s))^m",
     "crumbs": [
       "Reports",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Risk assessment report</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Risk assessment report</span>"
     ]
   },
   {
@@ -324,7 +344,7 @@
     "href": "references.html",
     "title": "References",
     "section": "",
-    "text": "Anderson, R., Donnelly, C., Hollingsworth, D., Keeling, M., Vegvari, C.,\nBaggaley, R., & Maddren, R. (2020). Reproduction number (R) and\ngrowth rate (r) of the COVID-19 epidemic in the UK. The Royal\nSociety.\n\n\nBecker, A. D., & Grenfell, B. T. (2017). tsiR: An R package for\ntime-series Susceptible-Infected-Recovered models of epidemics. PLOS\nONE, 12(9), e0185528. https://doi.org/10.1371/journal.pone.0185528\n\n\nBettencourt, L. M. A., & Ribeiro, R. M. (2008). Real Time Bayesian\nEstimation of the Epidemic Potential of Emerging Infectious Diseases.\nPLOS ONE, 3(5), e2185. https://doi.org/10.1371/journal.pone.0002185\n\n\nCori, A., Ferguson, N. M., Fraser, C., & Cauchemez, S. (2013). A new\nframework and software to estimate time-varying reproduction numbers\nduring epidemics. American Journal of Epidemiology,\n178(9), 1505–1512. https://doi.org/10.1093/aje/kwt133\n\n\nDu, Z., Zhang, W., Zhang, D., Yu, S., & Hao, Y. (2017). Estimating\nthe basic reproduction rate of HFMD using the time series SIR model in\nGuangdong, China. PLOS ONE, 12(7), e0179623. https://doi.org/10.1371/journal.pone.0179623\n\n\nFinkenstädt, B. F., & Grenfell, B. T. (2000). Time series modelling\nof childhood diseases: A dynamical systems approach. Journal of the\nRoyal Statistical Society Series C: Applied Statistics,\n49(2), 187–205. https://doi.org/10.1111/1467-9876.00187\n\n\nGostic, K. M., McGough, L., Baskerville, E. B., Abbott, S., Joshi, K.,\nTedijanto, C., Kahn, R., Niehus, R., Hay, J. A., Salazar, P. M. D.,\nHellewell, J., Meakin, S., Munday, J. D., Bosse, N. I., Sherrat, K.,\nThompson, R. N., White, L. F., Huisman, J. S., Scire, J., … Cobey, S.\n(2020). Practical considerations for measuring the effective\nreproductive number, Rt. PLOS Computational Biology,\n16(12), e1008409. https://doi.org/10.1371/journal.pcbi.1008409\n\n\nKenah, E., Lipsitch, M., & Robins, J. M. (2008). Generation interval\ncontraction and epidemic data analysis. Mathematical\nBiosciences, 213(1), 71–79. https://doi.org/10.1016/j.mbs.2008.02.007\n\n\nKnight, J., & Mishra, S. (2020). Estimating effective reproduction\nnumber using generation time versus serial interval, with application to\ncovid-19 in the greater toronto area, canada. Infectious Disease\nModelling, 5, 889–896. https://doi.org/10.1016/j.idm.2020.10.009\n\n\nSender, R., Bar-On, Y., Park, S. W., Noor, E., Dushoff, J., & Milo,\nR. (2022). The unmitigated profile of COVID-19 infectiousness.\neLife, 11, e79134. https://doi.org/10.7554/eLife.79134\n\n\nVegvari, C., Abbott, S., Ball, F., Brooks-Pollock, E., Challen, R.,\nCollyer, B. S., Dangerfield, C., Gog, J. R., Gostic, K. M., Heffernan,\nJ. M., Hollingsworth, T. D., Isham, V., Kenah, E., Mollison, D.,\nPanovska-Griffiths, J., Pellis, L., Roberts, M. G., Scalia Tomba, G.,\nThompson, R. N., & Trapman, P. (2022). Commentary on the use of the\nreproduction number R during the COVID-19 pandemic. Statistical\nMethods in Medical Research, 31(9), 1675–1685. https://doi.org/10.1177/09622802211037079\n\n\nVynnycky, E., & White, R. (2010). An Introduction to Infectious\nDisease Modelling. OUP Oxford.\n\n\nWallinga, J., & Teunis, P. (2004). Different epidemic curves for\nsevere acute respiratory syndrome reveal similar impacts of control\nmeasures. American Journal of Epidemiology, 160(6),\n509–516. https://doi.org/10.1093/aje/kwh255",
+    "text": "Anderson, R., Donnelly, C., Hollingsworth, D., Keeling, M., Vegvari, C.,\nBaggaley, R., & Maddren, R. (2020). Reproduction number (R) and\ngrowth rate (r) of the COVID-19 epidemic in the UK. The Royal\nSociety.\n\n\nBecker, A. D., & Grenfell, B. T. (2017). tsiR: An R package for\ntime-series Susceptible-Infected-Recovered models of epidemics. PLOS\nONE, 12(9), e0185528. https://doi.org/10.1371/journal.pone.0185528\n\n\nBettencourt, L. M. A., & Ribeiro, R. M. (2008). Real Time Bayesian\nEstimation of the Epidemic Potential of Emerging Infectious Diseases.\nPLOS ONE, 3(5), e2185. https://doi.org/10.1371/journal.pone.0002185\n\n\nCori, A., Ferguson, N. M., Fraser, C., & Cauchemez, S. (2013). A new\nframework and software to estimate time-varying reproduction numbers\nduring epidemics. American Journal of Epidemiology,\n178(9), 1505–1512. https://doi.org/10.1093/aje/kwt133\n\n\nDu, Z., Zhang, W., Zhang, D., Yu, S., & Hao, Y. (2017). Estimating\nthe basic reproduction rate of HFMD using the time series SIR model in\nGuangdong, China. PLOS ONE, 12(7), e0179623. https://doi.org/10.1371/journal.pone.0179623\n\n\nFinkenstädt, B. F., & Grenfell, B. T. (2000). Time series modelling\nof childhood diseases: A dynamical systems approach. Journal of the\nRoyal Statistical Society Series C: Applied Statistics,\n49(2), 187–205. https://doi.org/10.1111/1467-9876.00187\n\n\nGostic, K. M., McGough, L., Baskerville, E. B., Abbott, S., Joshi, K.,\nTedijanto, C., Kahn, R., Niehus, R., Hay, J. A., Salazar, P. M. D.,\nHellewell, J., Meakin, S., Munday, J. D., Bosse, N. I., Sherrat, K.,\nThompson, R. N., White, L. F., Huisman, J. S., Scire, J., … Cobey, S.\n(2020). Practical considerations for measuring the effective\nreproductive number, Rt. PLOS Computational Biology,\n16(12), e1008409. https://doi.org/10.1371/journal.pcbi.1008409\n\n\nHay, J., Routledge, I., & Takahashi, S. (n.d.). Serodynamics: a\nreview of methods for epidemiological inference using serological\ndata. https://doi.org/10.31219/osf.io/kqdsn\n\n\nKenah, E., Lipsitch, M., & Robins, J. M. (2008). Generation interval\ncontraction and epidemic data analysis. Mathematical\nBiosciences, 213(1), 71–79. https://doi.org/10.1016/j.mbs.2008.02.007\n\n\nKnight, J., & Mishra, S. (2020). Estimating effective reproduction\nnumber using generation time versus serial interval, with application to\ncovid-19 in the greater toronto area, canada. Infectious Disease\nModelling, 5, 889–896. https://doi.org/10.1016/j.idm.2020.10.009\n\n\nSender, R., Bar-On, Y., Park, S. W., Noor, E., Dushoff, J., & Milo,\nR. (2022). The unmitigated profile of COVID-19 infectiousness.\neLife, 11, e79134. https://doi.org/10.7554/eLife.79134\n\n\nVegvari, C., Abbott, S., Ball, F., Brooks-Pollock, E., Challen, R.,\nCollyer, B. S., Dangerfield, C., Gog, J. R., Gostic, K. M., Heffernan,\nJ. M., Hollingsworth, T. D., Isham, V., Kenah, E., Mollison, D.,\nPanovska-Griffiths, J., Pellis, L., Roberts, M. G., Scalia Tomba, G.,\nThompson, R. N., & Trapman, P. (2022). Commentary on the use of the\nreproduction number R during the COVID-19 pandemic. Statistical\nMethods in Medical Research, 31(9), 1675–1685. https://doi.org/10.1177/09622802211037079\n\n\nVynnycky, E., & White, R. (2010). An Introduction to Infectious\nDisease Modelling. OUP Oxford.\n\n\nWallinga, J., & Teunis, P. (2004). Different epidemic curves for\nsevere acute respiratory syndrome reveal similar impacts of control\nmeasures. American Journal of Epidemiology, 160(6),\n509–516. https://doi.org/10.1093/aje/kwh255",
     "crumbs": [
       "References"
     ]

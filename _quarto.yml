@@ -1,6 +1,9 @@
 project:
   type: book
   output-dir: docs
+  
+execute:
+  freeze: auto
 
 book:
   google-analytics: "G-X391ZN63GG"
@@ -27,6 +30,7 @@ book:
     - part: calib.qmd
       chapters: 
         - pomp.qmd
+    - surv.qmd
     - part: rp.qmd
       chapters: 
         - rp-risk.qmd
@@ -37,7 +41,7 @@ csl: apa.csl
 
 format:
   html:
-    theme: cosmo
+    theme: [cosmo, theme.scss]
     code-overflow: wrap
     code-copy: true
     fig-format: svg
