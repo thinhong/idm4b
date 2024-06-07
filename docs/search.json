@@ -161,7 +161,7 @@
     "href": "sir-det.html#assumptions",
     "title": "4  SIR",
     "section": "",
-    "text": "Well-mixed population, or homogeneous mixing (a single contact rate \\(\\beta\\)).\nThe most basic form balances demographic processes (births \\(B\\) and deaths \\(\\mu\\)).\nInfectious disease properties are for a single pathogen.",
+    "text": "Well-mixed population, or homogeneous mixing (a single contact rate \\(\\beta\\)) (Becker & Grenfell, 2017).\nIn the most basic form it considers a “closed population” without demographics (no births, deaths, or migration) (Keeling & Rohani, 2011).\nInfectious disease properties are for a single pathogen (Becker & Grenfell, 2017).",
     "crumbs": [
       "Deterministic models",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>SIR</span>"
@@ -172,7 +172,7 @@
     "href": "sir-det.html#model",
     "title": "4  SIR",
     "section": "4.2 Model",
-    "text": "4.2 Model\nForce of infection \\(\\lambda = \\frac{\\beta I}{N}\\)\n\\[\\frac{dS}{dt} = -\\lambda S\\]\n\\[\\frac{dI}{dt} = \\lambda S - \\gamma I\\]\n\\[\\frac{dR}{dt} = \\gamma I\\]",
+    "text": "4.2 Model\n\\[\\frac{dS}{dt} = -\\beta SI = -\\lambda S \\tag{4.1}\\]\n\\[\\frac{dI}{dt} = \\beta SI - \\gamma I = \\lambda S - \\gamma I \\tag{4.2}\\]\n\\[\\frac{dR}{dt} = \\gamma I \\tag{4.3}\\]\n\n\\(\\beta\\): effective contact rate.\n\\(\\gamma\\): removal rate.\n\\(\\beta I = \\lambda\\): the rate from S to I is called force of infection.",
     "crumbs": [
       "Deterministic models",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>SIR</span>"
@@ -183,7 +183,29 @@
     "href": "sir-det.html#code",
     "title": "4  SIR",
     "section": "4.3 Code",
-    "text": "4.3 Code\n\n4.3.1 Model\n\n# sir_1() returns a data frame consists S, I, R values by time\nsir_1 &lt;- function(beta, gamma, S0, I0, R0, times) {\n  \n  sir_equations &lt;- function(time, variables, parameters) {\n    with(as.list(c(variables, parameters)), {\n      dS &lt;- -beta * I * S\n      dI &lt;-  beta * I * S - gamma * I\n      dR &lt;-  gamma * I\n      return(list(c(dS, dI, dR)))\n    })\n  }\n  \n  parameters_values &lt;- c(beta = beta, gamma = gamma)\n  initial_values &lt;- c(S = S0, I = I0, R = R0)\n  \n  out &lt;- ode(initial_values, times, sir_equations, parameters_values)\n\n  as.data.frame(out)\n}\n\nLoad the flu data.\n\nflu &lt;- readRDS(\"data/flu.rds\")\n\nLet have a look at this flu data. This is a very special data as it reports the flu prevalence. Usually, case notification data reports incidence.\n\n\n\n\n\n\nImportant\n\n\n\nRemember to fit the correct thing in SIR model to case notification data:\n\nPrevalence: fit to the I compartment.\nIncidence: fit only to the \\(\\lambda S\\).\n\n\n\n\nhead(flu)\n\n\n\n\n\ntime\nprev\n\n\n\n\n0\n1\n\n\n1\n6\n\n\n2\n26\n\n\n3\n73\n\n\n4\n222\n\n\n5\n293\n\n\n\n\n\n\nNow we run the SIR model, and compare predictions with the observed flu prevalence data.\n\npred &lt;- sir_1(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = flu$time)\n\ndf &lt;- merge(x = pred, y = flu, by = \"time\")\ndf &lt;- df[,c(\"time\", \"I\", \"prev\")]\n\nBetter off seeing the comparison on a plot.\n\n\nCode\ndf_plot &lt;- pivot_longer(df, cols = all_of(c(\"I\", \"prev\")), names_to = \"comp\", values_to = \"n\")\ndf_plot$comp &lt;- factor(df_plot$comp, levels = c(\"prev\", \"I\"))\n\nggplot(df_plot, aes(x = time, y = n, color = comp)) +\n  geom_point() + geom_line() +\n  scale_color_hue(labels = c(\"Prevalence\", \"Prediction\")) +\n  labs(color = NULL) +\n  theme_light() +\n  theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\n\n\n4.3.2 Parameter sensitivity\n\n4.3.2.1 Effective contact rate \\(\\beta\\)\n\n\nCode\n# Try different gamma values\nbvals &lt;- seq(0.001, 0.005, 0.001)\nl &lt;- list()\nfor(i in 1:length(bvals)){\n  pred &lt;- sir_1(beta = bvals[i], gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = flu$time)[,c(\"time\", \"I\")]\n  colnames(pred) &lt;- c(\"time\", paste0(\"I\", i))\n  l[[i]] &lt;- pred\n}\nl[[length(l) + 1]] &lt;- flu\n\n# Merge all with flu data\ndf &lt;- Reduce(function(x, y) merge(x, y, by = \"time\", all = TRUE), l)\n\ndf_plot &lt;- pivot_longer(df, cols = I1:prev, names_to = \"comp\", values_to = \"n\")\ndf_plot$comp &lt;- factor(df_plot$comp, levels = c(\"prev\", paste0(\"I\", 1:length(bvals))))\n\nggplot(df_plot, aes(x = time, y = n, color = comp)) +\n  geom_point() + geom_line() +\n  scale_color_hue(labels = c(\"Prevalence\", paste0(\"\\u03b2 = \", bvals))) +\n  labs(color = NULL) +\n  theme_light() +\n  theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\n\n\n4.3.2.2 Recovery rate \\(\\gamma\\)\n\n\nCode\n# Try different gamma values\ngvals &lt;- seq(0.3, 0.7, 0.1)\nl &lt;- list()\nfor(i in 1:length(gvals)){\n  pred &lt;- sir_1(beta = 0.004, gamma = gvals[i], S0 = 999, I0 = 1, R0 = 0, times = flu$time)[,c(\"time\", \"I\")]\n  colnames(pred) &lt;- c(\"time\", paste0(\"I\", i))\n  l[[i]] &lt;- pred\n}\nl[[length(l) + 1]] &lt;- flu\n\n# Merge all with flu data\ndf &lt;- Reduce(function(x, y) merge(x, y, by = \"time\", all = TRUE), l)\n\ndf_plot &lt;- pivot_longer(df, cols = I1:prev, names_to = \"comp\", values_to = \"n\")\ndf_plot$comp &lt;- factor(df_plot$comp, levels = c(\"prev\", paste0(\"I\", 1:length(gvals))))\n\nggplot(df_plot, aes(x = time, y = n, color = comp)) +\n  geom_point() + geom_line() +\n  scale_color_hue(labels = c(\"Prevalence\", paste0(\"\\u03b3 = \", gvals))) +\n  labs(color = NULL) +\n  theme_light() +\n  theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\nWhen \\(\\gamma\\) increase, the shape and time to reach the peak of the outbreak stay the same, the outbreak size is reduced. This is because \\(\\gamma\\) increase means patients recover faster, they have less time to infect susceptible individuals, leading to a decrease in outbreak size.",
+    "text": "4.3 Code\n\n4.3.1 Model\n\nlibrary(deSolve)\nlibrary(tidyr)\nlibrary(bbmle)\nlibrary(ggplot2)\nlibrary(RColorBrewer)\nlibrary(patchwork)\n\n\n# sir_1() returns a data frame consists S, I, R, Inc values by time\nsir_1 &lt;- function(beta, gamma, S0, I0, R0, times) {\n  \n  sir_equations &lt;- function(time, variables, parameters) {\n    with(as.list(c(variables, parameters)), {\n      dS &lt;- -beta * I * S\n      dI &lt;-  beta * I * S - gamma * I\n      dR &lt;-  gamma * I\n      return(list(c(dS, dI, dR)))\n    })\n  }\n  \n  parameters_values &lt;- c(beta = beta, gamma = gamma)\n  initial_values &lt;- c(S = S0, I = I0, R = R0)\n  \n  out &lt;- ode(initial_values, times, sir_equations, parameters_values)\n\n  out &lt;- as.data.frame(out)\n  # Compute incidence\n  out$Inc &lt;- c(0, -diff(out$S))\n  out\n}\n\n\n\n\n\n\n\nImportant\n\n\n\nWhen fitting real data:\n\nPrevalence: use the I compartment.\nIncidence: new cases are individuals moving out of S.\n\n\n\n\n\nCode\npred &lt;- sir_1(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = 0:13)\n\ndf_plot &lt;- pivot_longer(pred, cols = S:Inc, names_to = \"comp\", values_to = \"n\")\n\nggplot(df_plot, aes(x = time, y = n, color = comp)) +\n  geom_point() + geom_line() +\n  scale_color_brewer(palette = \"PuOr\", breaks = c(\"S\", \"Inc\", \"I\", \"R\")) +\n  labs(color = NULL) +\n  theme_minimal() +\n  theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\n\nNormally, the time to peak of incidence is earlier than prevalence.",
+    "crumbs": [
+      "Deterministic models",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>SIR</span>"
+    ]
+  },
+  {
+    "objectID": "sir-det.html#sensitivity-analysis",
+    "href": "sir-det.html#sensitivity-analysis",
+    "title": "4  SIR",
+    "section": "4.4 Sensitivity analysis",
+    "text": "4.4 Sensitivity analysis\n\n\nCode\nsir_sa &lt;- function(vals, parm, outcome, times, init_beta = 0.004, init_gamma = 0.5) {\n  pick_comp &lt;- ifelse(outcome == \"prev\", \"I\", \"Inc\")\n  plot_lab &lt;- ifelse(outcome == \"prev\", \"prevalence\", \"incidence\")\n  symb &lt;- ifelse(parm == \"beta\", \"\\u03b2\", \"\\u03b3\")\n  l &lt;- list()\n  for(i in 1:length(vals)) {\n    if (parm == \"beta\") {\n      pred &lt;- sir_1(beta = vals[i], gamma = init_gamma, S0 = 999, I0 = 1, R0 = 0, times = times)[, c(\"time\", pick_comp)]\n    } else {\n      pred &lt;- sir_1(beta = init_beta, gamma = vals[i], S0 = 999, I0 = 1, R0 = 0, times = times)[, c(\"time\", pick_comp)]\n    }\n    pred$comp &lt;- paste0(pick_comp, i)\n    colnames(pred) &lt;- c(\"time\", \"n\", \"comp\")\n    l[[i]] &lt;- pred\n  }\n  # Bind this list into a data frame\n  df_plot &lt;- Reduce(rbind, l)\n  # Set level I1 &lt; I2 &lt; I3 &lt; I4 &lt; I5 according to the increase of beta values\n  df_plot$comp &lt;- factor(df_plot$comp, levels = c(paste0(pick_comp, 1:length(vals))))\n  my_palette &lt;- brewer.pal(9, \"Blues\")[(9-length(vals)+1):9]\n  ggplot() + \n  # Results of different values\n    geom_point(data = df_plot, aes(x = time, y = n, color = comp)) + \n    geom_line(data = df_plot, aes(x = time, y = n, color = comp)) +\n    scale_color_manual(values = my_palette, labels = c(paste0(symb, \" = \", vals))) +\n    labs(color = NULL, y = plot_lab) +\n    theme_minimal()\n}\n\n\n\n4.4.1 Effective contact rate \\(\\beta\\)\n\n\nCode\nvals &lt;- seq(0.001, 0.006, 0.001)\n\np1 &lt;- sir_sa(vals = vals, parm = \"beta\", outcome = \"prev\", times = 0:13) + labs(x = NULL)\np2 &lt;- sir_sa(vals = vals, parm = \"beta\", outcome = \"inc\", times = 0:13)\n\np1 / p2 + plot_layout(guides = \"collect\") & theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\n\n\n4.4.2 Recovery rate \\(\\gamma\\)\n\n\nCode\nvals &lt;- seq(0.3, 0.8, 0.1)\n\np1 &lt;- sir_sa(vals = vals, parm = \"gamma\", outcome = \"prev\", times = 0:13) + labs(x = NULL)\np2 &lt;- sir_sa(vals = vals, parm = \"gamma\", outcome = \"inc\", times = 0:13)\n\np1 / p2 + plot_layout(guides = \"collect\") & theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\nWhen \\(\\gamma\\) increase, patients recover faster:\n\nOutbreak size decrease: since patients recover faster, they have less time to infect susceptible individuals.\nTime until peak remain the same.\n\nLoad the flu data.\n\nflu &lt;- readRDS(\"data/flu.rds\")\n\n\nhead(flu)\n\n\n\n\n\ntime\nprev\n\n\n\n\n0\n1\n\n\n1\n6\n\n\n2\n26\n\n\n3\n73\n\n\n4\n222\n\n\n5\n293\n\n\n\n\n\n\nNow we run the SIR model, and compare predictions with the observed flu prevalence data.\n\npred &lt;- sir_1(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = flu$time)\n\ndf &lt;- merge(x = pred, y = flu, by = \"time\")\ndf &lt;- df[,c(\"time\", \"I\", \"prev\")]\n\nBetter off seeing the comparison on a plot.\n\n\nCode\n# df_plot &lt;- pivot_longer(df, cols = all_of(c(\"I\", \"prev\")), names_to = \"comp\", values_to = \"n\")\n# df_plot$comp &lt;- factor(df_plot$comp, levels = c(\"prev\", \"I\"))\n# \n# ggplot(df_plot, aes(x = time, y = n, color = comp)) +\n#   geom_point() + geom_line() +\n#   scale_color_hue(labels = c(\"Prevalence\", \"Prediction\")) +\n#   labs(color = NULL) +\n#   theme_light() +\n#   theme(legend.position = \"bottom\")\n\n\nLet have a look at this flu data. This is a very special data as it reports the flu prevalence. Usually, case notification data reports incidence.",
+    "crumbs": [
+      "Deterministic models",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>SIR</span>"
+    ]
+  },
+  {
+    "objectID": "sir-det.html#corollaries",
+    "href": "sir-det.html#corollaries",
+    "title": "4  SIR",
+    "section": "4.5 Corollaries",
+    "text": "4.5 Corollaries\n\n4.5.1 The threshold phenomenon\nFrom Equation 4.2:\n\\[\\frac{dI}{dt} = \\beta SI - \\gamma I = I(\\beta S - \\gamma)\\]\nThe infection “dies out” when:\n\\[\\frac{dI}{dt} &lt; 0 \\Leftrightarrow \\beta S - \\gamma &lt; 0 \\Leftrightarrow S &lt; \\frac{\\gamma}{\\beta}\\]\n\n\n4.5.2 Epidemic burnout\nDivide Equation 4.1 by Equation 4.3:\n\\[\\frac{dS}{dR} = \\frac{-\\beta S I}{\\gamma I} = -\\frac{\\beta}{\\gamma} S\\]\nUpon integrating with respect to R, we obtain:\n\\[S(t) = S(0)e^{-\\frac{\\beta}{\\gamma} R(t)}\\]\nGiven that \\(e^x &gt; 0 \\quad \\forall x\\), therefore \\(S(t) &gt; 0\\) there will always be some susceptibles in the population who escape infection, leading to an important counter-intuitive conclusion from this model:\n\nThe chain of transmission eventually breaks due to the decline in infectives, not due to a complete lack of susceptibles.",
     "crumbs": [
       "Deterministic models",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>SIR</span>"
@@ -193,8 +215,8 @@
     "objectID": "sir-det.html#poisson-distribution",
     "href": "sir-det.html#poisson-distribution",
     "title": "4  SIR",
-    "section": "4.4 Poisson distribution",
-    "text": "4.4 Poisson distribution\nPoisson distribution is a discrete probability distribution that expresses probability of a given number of events occurring in a fixed interval of time1.\nSuitable to use because here we are fitting a number of prev occurring in this period.",
+    "section": "4.6 Poisson distribution",
+    "text": "4.6 Poisson distribution\nPoisson distribution is a discrete probability distribution that expresses probability of a given number of events occurring in a fixed interval of time1.\nSuitable to use because here we are fitting a number of prev occurring in this period.\n\n\n\n\nBecker, A. D., & Grenfell, B. T. (2017). tsiR: An R package for time-series Susceptible-Infected-Recovered models of epidemics. PLOS ONE, 12(9), e0185528. https://doi.org/10.1371/journal.pone.0185528\n\n\nKeeling, M. J., & Rohani, P. (2011). Modeling Infectious Diseases in Humans and Animals. Princeton University Press. https://doi.org/10.1515/9781400841035",
     "crumbs": [
       "Deterministic models",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>SIR</span>"
@@ -212,69 +234,80 @@
     ]
   },
   {
-    "objectID": "tsir.html",
-    "href": "tsir.html",
-    "title": "5  tsiR",
+    "objectID": "seir-det.html",
+    "href": "seir-det.html",
+    "title": "5  SEIR",
     "section": "",
-    "text": "5.1 Assumptions\nThe TSIR model relies on two main assumptions (Becker & Grenfell, 2017):",
+    "text": "library(deSolve)\n\n\nsir_1 &lt;- function(beta, gamma, S0, I0, R0, times) {\n  \n  sir_equations &lt;- function(time, variables, parameters) {\n    with(as.list(c(variables, parameters)), {\n      dS &lt;- -beta * I * S\n      dI &lt;-  beta * I * S - gamma * I\n      dR &lt;-  gamma * I\n      return(list(c(dS, dI, dR)))\n    })\n  }\n  \n  parameters_values &lt;- c(beta = beta, gamma = gamma)\n  initial_values &lt;- c(S = S0, I = I0, R = R0)\n  \n  out &lt;- ode(initial_values, times, sir_equations, parameters_values)\n\n  as.data.frame(out)\n}\n\n\nseir_1 &lt;- function(beta, sigma, gamma, S0, E0, I0, R0, times) {\n  \n  sir_equations &lt;- function(time, variables, parameters) {\n    with(as.list(c(variables, parameters)), {\n      dS &lt;- -beta * I * S\n      dE &lt;-  beta * I * S - sigma * E\n      dI &lt;-  sigma * E - gamma * I\n      dR &lt;-  gamma * I\n      return(list(c(dS, dE, dI, dR)))\n    })\n  }\n  \n  parameters_values &lt;- c(beta = beta, sigma = sigma, gamma = gamma)\n  initial_values &lt;- c(S = S0, E = E0, I = I0, R = R0)\n  \n  out &lt;- ode(initial_values, times, sir_equations, parameters_values)\n\n  as.data.frame(out)\n}\n\n\npred1 &lt;- sir_1(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = 1:20)\npred2 &lt;- seir_1(beta = 0.004, sigma = 0.5, gamma = 0.5, S0 = 999, E0 = 0, I0 = 1, R0 = 0, times = 1:20)",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>tsiR</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>SEIR</span>"
+    ]
+  },
+  {
+    "objectID": "tsir.html",
+    "href": "tsir.html",
+    "title": "6  tsiR",
+    "section": "",
+    "text": "6.1 Assumptions\nThe TSIR model relies on two main assumptions (Becker & Grenfell, 2017):",
+    "crumbs": [
+      "Deterministic models",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>tsiR</span>"
     ]
   },
   {
     "objectID": "tsir.html#assumptions",
     "href": "tsir.html#assumptions",
-    "title": "5  tsiR",
+    "title": "6  tsiR",
     "section": "",
     "text": "Infectious period is fixed at the sampling interval of the data (e.g., bi-weekly for measles). The time step of the model is equal to the infectious period.\nOver a long enough time (e.g., 10-20 years), the sum of births and cases should be approximately equal due to the high infectivity of pathogens such as measles and other childhood infections, in the pre-vaccine era.",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>tsiR</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>tsiR</span>"
     ]
   },
   {
     "objectID": "tsir.html#model",
     "href": "tsir.html#model",
-    "title": "5  tsiR",
-    "section": "5.2 Model",
-    "text": "5.2 Model\n\\[\\mathbb{E}(I_{t + 1}) = \\beta_{t + 1} S_t I_t^{\\alpha}\\]\n\n\n\n\n\n\nExplain\n\n\n\n\n\nThis equation describes the transmission through the multiplicative interaction between susceptible and infected individuals (Finkenstädt & Grenfell, 2000).\n\\[I_{t + 1} = \\beta_{t + 1} S_t^{\\alpha_1} I_t^{\\alpha_2} \\epsilon_t\\]\n\nSusceptible (\\(S_t\\)) meet infectious individuals (\\(I_t\\)) with contact rate \\(\\beta_{t + 1}\\).\n\\(\\alpha_1\\) and \\(\\alpha_2\\) are mixing parameters of the contact process, such that \\(\\alpha_1 = \\alpha_2 = 1\\) is the homogeneous mixing.\n\\(\\epsilon_t\\) is the noise, \\(\\mathbb{E}\\{ log(\\epsilon_t) \\} = 0\\) and \\(\\mathbb{V}\\{ log(\\epsilon_t) \\} = 0\\).\n\n\n\n\n\\[S_{t + 1} = B_{t + 1} + S_t - I_{t + 1}\\]\n\n\n\n\n\n\nExplain\n\n\n\n\n\nSusceptible class in the next time step recruited by births (\\(B_{t + 1}\\)) and depleted by the infected individuals leaving the class (\\(I_{t + 1}\\)) (Finkenstädt & Grenfell, 2000).",
+    "title": "6  tsiR",
+    "section": "6.2 Model",
+    "text": "6.2 Model\n\\[\\mathbb{E}(I_{t + 1}) = \\beta_{t + 1} S_t I_t^{\\alpha}\\]\n\n\n\n\n\n\nExplain\n\n\n\n\n\nThis equation describes the transmission through the multiplicative interaction between susceptible and infected individuals (Finkenstädt & Grenfell, 2000).\n\\[I_{t + 1} = \\beta_{t + 1} S_t^{\\alpha_1} I_t^{\\alpha_2} \\epsilon_t\\]\n\nSusceptible (\\(S_t\\)) meet infectious individuals (\\(I_t\\)) with contact rate \\(\\beta_{t + 1}\\).\n\\(\\alpha_1\\) and \\(\\alpha_2\\) are mixing parameters of the contact process, such that \\(\\alpha_1 = \\alpha_2 = 1\\) is the homogeneous mixing.\n\\(\\epsilon_t\\) is the noise, \\(\\mathbb{E}\\{ log(\\epsilon_t) \\} = 0\\) and \\(\\mathbb{V}\\{ log(\\epsilon_t) \\} = 0\\).\n\n\n\n\n\\[S_{t + 1} = B_{t + 1} + S_t - I_{t + 1}\\]\n\n\n\n\n\n\nExplain\n\n\n\n\n\nSusceptible class in the next time step recruited by births (\\(B_{t + 1}\\)) and depleted by the infected individuals leaving the class (\\(I_{t + 1}\\)) (Finkenstädt & Grenfell, 2000).",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>tsiR</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>tsiR</span>"
     ]
   },
   {
     "objectID": "tsir.html#tsir-framework",
     "href": "tsir.html#tsir-framework",
-    "title": "5  tsiR",
-    "section": "5.3 tsiR framework",
-    "text": "5.3 tsiR framework\n\n5.3.1 Reconstruct susceptible dynamics\nFit a regression between cumulative cases and cumulative births. The slope is assumed to be the report rate \\(\\rho_t\\) (rho) (Du et al., 2017), the residuals is assumed to be the shape of the susceptible dynamics (\\(Z_t\\)).\n\n\n\n\n\n\nExplain\n\n\n\n\n\nLet \\(\\rho_t\\) be the reporting rate and assume \\(\\rho_t\\) has a probability function with expected value \\(\\mathbb{E}(\\rho_t) = \\rho\\).\n\\[I_t = \\rho_t C_t\\]\n\n\\(I_t\\): the number of true cases.\n\\(C_t\\): the number of reported cases.\n\nThe number of true cases is under-reported if \\(\\rho_t &gt; 1\\) and is fully reported if \\(\\rho_t = 1\\).\nReplace \\(I_t\\) here:\n\\[S_t = B_t + S_{t - 1} - I_t\\]\n\\[S_t = B_t + S_{t - 1} - \\rho_t C_t\\]\nLet \\(\\mathbb{E}(S_t) = \\bar{S}\\) so that \\(S_t = \\bar{S} + Z_t\\), with \\(\\mathbb{E}(Z_t) = 0\\). The deviations \\(Z_t\\) from their mean follow the same recursive relationship as \\(S_t\\).\n\\[Z_t = B_t + Z_{t - 1} - \\rho_t C_t\\]\nA successive iteration to compute \\(Z_t\\) from \\(Z_0\\) gives:\n\\[Z_t = \\sum_{i = 1}^{t} B_i + Z_0 - \\sum_{i = 1}^{t} \\rho_i C_i\\]\n\n\\(\\sum_{i = 1}^{t} B_i\\): cumulative births.\n\\(\\sum_{i = 1}^{t} C_i\\): cumulative reported cases.\n\nFor ease of notation, let \\(Y_\\text{cumBirths} = \\sum_{i = 1}^{t} B_i\\), \\(X_\\text{cumCases} = \\sum_{i = 1}^{t} C_i\\), rearrange that equation so that we have:\n\\[Y_\\text{cumBirths} = \\rho X_\\text{cumCases} + Z_t - Z_0\\]\nIf we assume a constant reporting rate, this equation is a simple linear regression relationship between cumulative births \\(Y\\) and cumulative cases \\(X\\).\n\n\n\n\n\n5.3.2 Estimate parameters\nSet the expectation to the mean, then take log of both sides:\n\\[\\mathbb{E}(I_{t + 1}) = \\beta_{t + 1} S_t I_t^{\\alpha}\\]\n\\[log I_{t + 1} = log \\beta_{t + 1} + log(Z_t + \\bar{S}) + \\alpha log I_t\\]\n\n\\(\\bar{S}\\): mean susceptible individuals across the time-series. \\(Z_t\\) is the residuals or the shape of the susceptible dynamics, so \\(Z_t + \\bar{S} = S_t\\)\n\\(\\beta_t\\): contact rate at time t.\n\\(\\alpha\\): describes the epidemic saturation, a correction factor for switching from continuous to discrete time.",
+    "title": "6  tsiR",
+    "section": "6.3 tsiR framework",
+    "text": "6.3 tsiR framework\n\n6.3.1 Reconstruct susceptible dynamics\nFit a regression between cumulative cases and cumulative births. The slope is assumed to be the report rate \\(\\rho_t\\) (rho) (Du et al., 2017), the residuals is assumed to be the shape of the susceptible dynamics (\\(Z_t\\)).\n\n\n\n\n\n\nExplain\n\n\n\n\n\nLet \\(\\rho_t\\) be the reporting rate and assume \\(\\rho_t\\) has a probability function with expected value \\(\\mathbb{E}(\\rho_t) = \\rho\\).\n\\[I_t = \\rho_t C_t\\]\n\n\\(I_t\\): the number of true cases.\n\\(C_t\\): the number of reported cases.\n\nThe number of true cases is under-reported if \\(\\rho_t &gt; 1\\) and is fully reported if \\(\\rho_t = 1\\).\nReplace \\(I_t\\) here:\n\\[S_t = B_t + S_{t - 1} - I_t\\]\n\\[S_t = B_t + S_{t - 1} - \\rho_t C_t\\]\nLet \\(\\mathbb{E}(S_t) = \\bar{S}\\) so that \\(S_t = \\bar{S} + Z_t\\), with \\(\\mathbb{E}(Z_t) = 0\\). The deviations \\(Z_t\\) from their mean follow the same recursive relationship as \\(S_t\\).\n\\[Z_t = B_t + Z_{t - 1} - \\rho_t C_t\\]\nA successive iteration to compute \\(Z_t\\) from \\(Z_0\\) gives:\n\\[Z_t = \\sum_{i = 1}^{t} B_i + Z_0 - \\sum_{i = 1}^{t} \\rho_i C_i\\]\n\n\\(\\sum_{i = 1}^{t} B_i\\): cumulative births.\n\\(\\sum_{i = 1}^{t} C_i\\): cumulative reported cases.\n\nFor ease of notation, let \\(Y_\\text{cumBirths} = \\sum_{i = 1}^{t} B_i\\), \\(X_\\text{cumCases} = \\sum_{i = 1}^{t} C_i\\), rearrange that equation so that we have:\n\\[Y_\\text{cumBirths} = \\rho X_\\text{cumCases} + Z_t - Z_0\\]\nIf we assume a constant reporting rate, this equation is a simple linear regression relationship between cumulative births \\(Y\\) and cumulative cases \\(X\\).\n\n\n\n\n\n6.3.2 Estimate parameters\nSet the expectation to the mean, then take log of both sides:\n\\[\\mathbb{E}(I_{t + 1}) = \\beta_{t + 1} S_t I_t^{\\alpha}\\]\n\\[log I_{t + 1} = log \\beta_{t + 1} + log(Z_t + \\bar{S}) + \\alpha log I_t\\]\n\n\\(\\bar{S}\\): mean susceptible individuals across the time-series. \\(Z_t\\) is the residuals or the shape of the susceptible dynamics, so \\(Z_t + \\bar{S} = S_t\\)\n\\(\\beta_t\\): contact rate at time t.\n\\(\\alpha\\): describes the epidemic saturation, a correction factor for switching from continuous to discrete time.",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>tsiR</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>tsiR</span>"
     ]
   },
   {
     "objectID": "tsir.html#basic-reproduction-number",
     "href": "tsir.html#basic-reproduction-number",
-    "title": "5  tsiR",
-    "section": "5.4 Basic reproduction number",
-    "text": "5.4 Basic reproduction number\n\\[R_0 = \\beta \\times \\bar{S}\\]",
+    "title": "6  tsiR",
+    "section": "6.4 Basic reproduction number",
+    "text": "6.4 Basic reproduction number\n\\[R_0 = \\beta \\times \\bar{S}\\]",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>tsiR</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>tsiR</span>"
     ]
   },
   {
     "objectID": "tsir.html#code",
     "href": "tsir.html#code",
-    "title": "5  tsiR",
-    "section": "5.5 Code",
-    "text": "5.5 Code\n\nlibrary(tsiR)\n\nThe London measles data is available in the tsiR package.\n\nLondonMeas &lt;- twentymeas[[\"London\"]]\nhead(LondonMeas)\n\n\n\n\n\ntime\ncases\nbirths\npop\n\n\n\n\n1944.016\n180\n1725.038\n2462500\n\n\n1944.055\n271\n1726.429\n2467578\n\n\n1944.093\n423\n1727.820\n2472655\n\n\n1944.131\n465\n1729.211\n2477733\n\n\n1944.170\n523\n1730.602\n2482810\n\n\n1944.208\n649\n1731.992\n2487888\n\n\n\n\n\n\nThe data frame containing cases and interpolated births and populations.\n\nplotdata(LondonMeas)\n\n\n\n\n\n\n\n\n\nLondonRes &lt;- runtsir(data = LondonMeas, IP = 2, xreg = \"cumcases\", regtype = \"gaussian\", alpha = NULL, sbar = NULL, method = \"negbin\", nsim = 100, family = \"gaussian\", link = \"identity\")\n\n           alpha        mean beta         mean rho         mean sus \n        9.60e-01         1.19e-05         4.57e-01         1.14e+05 \nprop. init. sus. prop. init. inf. \n        3.01e-02         6.12e-05 \n\n\n\nalpha: describes the epidemic saturation, a correction factor for switching from continuous to discrete time.\nmean beta: mean of the contact rate across the time-series.\nmean rho: mean of the report rate across the time-series.\nmean sus: mean of the number of susceptible across the time-series.\nprop. init. sus.: proportion of the initial susceptible individuals.\nprop. init. inf.: proportion of the initial infectious individuals.\n\n\n5.5.1 Reconstruct susceptible dynamics\nIn this step we compute the reported rate using cumulative births and cumulative reported cases.\n\\[Y_\\text{cumBirths} = \\rho X_\\text{cumCases} + Z_t - Z_0\\]\n\nplotregression(LondonRes)\n\n\n\n\n\n\n\n\n\nplotrho(LondonRes)\n\n\n\n\n\n\n\n\n\n\n5.5.2 Estimate parameters\nHaving \\(\\rho\\), we adjust the \\(I_t\\) to estimate other parameters.\n\\[I_t = \\rho_t C_t\\] \\[log I_{t + 1} = log \\beta_{t + 1} + log(Z_t + \\bar{S}) + \\alpha log I_t\\]\n\nplotres(LondonRes)\n\nWarning in geom_line(data = dat$res, aes_string(x = \"time\", y = \"cases\", :\nIgnoring unknown aesthetics: fill\n\n\n\n\n\n\n\n\n\n\n\n\n\nBecker, A. D., & Grenfell, B. T. (2017). tsiR: An R package for time-series Susceptible-Infected-Recovered models of epidemics. PLOS ONE, 12(9), e0185528. https://doi.org/10.1371/journal.pone.0185528\n\n\nDu, Z., Zhang, W., Zhang, D., Yu, S., & Hao, Y. (2017). Estimating the basic reproduction rate of HFMD using the time series SIR model in Guangdong, China. PLOS ONE, 12(7), e0179623. https://doi.org/10.1371/journal.pone.0179623\n\n\nFinkenstädt, B. F., & Grenfell, B. T. (2000). Time series modelling of childhood diseases: A dynamical systems approach. Journal of the Royal Statistical Society Series C: Applied Statistics, 49(2), 187–205. https://doi.org/10.1111/1467-9876.00187",
+    "title": "6  tsiR",
+    "section": "6.5 Code",
+    "text": "6.5 Code\n\nlibrary(tsiR)\n\nThe London measles data is available in the tsiR package.\n\nLondonMeas &lt;- twentymeas[[\"London\"]]\nhead(LondonMeas)\n\n\n\n\n\ntime\ncases\nbirths\npop\n\n\n\n\n1944.016\n180\n1725.038\n2462500\n\n\n1944.055\n271\n1726.429\n2467578\n\n\n1944.093\n423\n1727.820\n2472655\n\n\n1944.131\n465\n1729.211\n2477733\n\n\n1944.170\n523\n1730.602\n2482810\n\n\n1944.208\n649\n1731.992\n2487888\n\n\n\n\n\n\nThe data frame containing cases and interpolated births and populations.\n\nplotdata(LondonMeas)\n\n\n\n\n\n\n\n\n\nLondonRes &lt;- runtsir(data = LondonMeas, IP = 2, xreg = \"cumcases\", regtype = \"gaussian\", alpha = NULL, sbar = NULL, method = \"negbin\", nsim = 100, family = \"gaussian\", link = \"identity\")\n\n           alpha        mean beta         mean rho         mean sus \n        9.60e-01         1.19e-05         4.57e-01         1.14e+05 \nprop. init. sus. prop. init. inf. \n        3.01e-02         6.12e-05 \n\n\n\nalpha: describes the epidemic saturation, a correction factor for switching from continuous to discrete time.\nmean beta: mean of the contact rate across the time-series.\nmean rho: mean of the report rate across the time-series.\nmean sus: mean of the number of susceptible across the time-series.\nprop. init. sus.: proportion of the initial susceptible individuals.\nprop. init. inf.: proportion of the initial infectious individuals.\n\n\n6.5.1 Reconstruct susceptible dynamics\nIn this step we compute the reported rate using cumulative births and cumulative reported cases.\n\\[Y_\\text{cumBirths} = \\rho X_\\text{cumCases} + Z_t - Z_0\\]\n\nplotregression(LondonRes)\n\n\n\n\n\n\n\n\n\nplotrho(LondonRes)\n\n\n\n\n\n\n\n\n\n\n6.5.2 Estimate parameters\nHaving \\(\\rho\\), we adjust the \\(I_t\\) to estimate other parameters.\n\\[I_t = \\rho_t C_t\\] \\[log I_{t + 1} = log \\beta_{t + 1} + log(Z_t + \\bar{S}) + \\alpha log I_t\\]\n\nplotres(LondonRes)\n\nWarning in geom_line(data = dat$res, aes_string(x = \"time\", y = \"cases\", :\nIgnoring unknown aesthetics: fill\n\n\n\n\n\n\n\n\n\n\n\n\n\nBecker, A. D., & Grenfell, B. T. (2017). tsiR: An R package for time-series Susceptible-Infected-Recovered models of epidemics. PLOS ONE, 12(9), e0185528. https://doi.org/10.1371/journal.pone.0185528\n\n\nDu, Z., Zhang, W., Zhang, D., Yu, S., & Hao, Y. (2017). Estimating the basic reproduction rate of HFMD using the time series SIR model in Guangdong, China. PLOS ONE, 12(7), e0179623. https://doi.org/10.1371/journal.pone.0179623\n\n\nFinkenstädt, B. F., & Grenfell, B. T. (2000). Time series modelling of childhood diseases: A dynamical systems approach. Journal of the Royal Statistical Society Series C: Applied Statistics, 49(2), 187–205. https://doi.org/10.1111/1467-9876.00187",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>tsiR</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>tsiR</span>"
     ]
   },
   {
@@ -300,43 +333,43 @@
   {
     "objectID": "surv.html",
     "href": "surv.html",
-    "title": "8  Survival analysis",
+    "title": "9  Survival analysis",
     "section": "",
-    "text": "8.1 Definitions",
+    "text": "9.1 Definitions",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Survival analysis</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Survival analysis</span>"
     ]
   },
   {
     "objectID": "surv.html#definitions",
     "href": "surv.html#definitions",
-    "title": "8  Survival analysis",
+    "title": "9  Survival analysis",
     "section": "",
-    "text": "8.1.1 Hazard, rate, incidence\nThey are the same word, using in different fields, hazard = rate = incidence:\n\nRate: number of new events that occur during specified time period.\nIncidence: when the event is a disease, it is called incidence.\nHazard: in survival analysis, it is called hazard.\n\nLet consider a discrete\n\n\n8.1.2 Hazard function\nHazard function \\(f(t)\\) gives the probability that someone die at time \\(t\\), given that they have survived up to that time \\(t\\) (survived during the period \\([0;t]\\)).\n\\[h(t) = \\frac{f(t)}{\\mathbb{P}(T &gt; t)} = \\frac{f(t)}{S(t)}\\]\nWhere \\(f(t)\\) is the time to first\n\n\n8.1.3 Cumulative hazard function\nCumulative hazard function \\(F(t)\\) gives the probability that someone die by time \\(t\\) (die anytime during \\([0;t]\\)).\n\\[F(t) = \\mathbb{P}(T \\leq t) = \\sum_{t = 0}^t h(t)\\]\n\n\n8.1.4 Survival function\nThe survival function \\(S(t)\\) gives the probability that someone will survive beyond time \\(t\\) (they have survived \\([0;t]\\) and will continue to survive).\n\\[S(t) = \\mathbb{P}(T &gt; t) = 1 - \\mathbb{P}(T \\leq t) = 1 - F(t)\\]\n\n\n\n\nHay, J., Routledge, I., & Takahashi, S. (n.d.). Serodynamics: a review of methods for epidemiological inference using serological data. https://doi.org/10.31219/osf.io/kqdsn",
+    "text": "9.1.1 Hazard, rate, incidence\nThey are the same word, using in different fields, hazard = rate = incidence:\n\nRate: number of new events that occur during specified time period.\nIncidence: when the event is a disease, it is called incidence.\nHazard: in survival analysis, it is called hazard.\n\nLet consider a discrete\n\n\n9.1.2 Hazard function\nHazard function \\(h(t)\\) gives the probability that someone die at time \\(t\\), given that they have survived up to that time \\(t\\) (survived during the period \\([0;t]\\)).\n\\[h(t) = \\frac{f(t)}{\\mathbb{P}(T &gt; t)} = \\frac{f(t)}{S(t)}\\]\nWhere \\(f(t)\\) is the time to first\n\n\n9.1.3 Cumulative hazard function\nCumulative hazard function \\(F(t)\\) gives the probability that someone die by time \\(t\\) (die anytime during \\([0;t]\\)).\n\\[F(t) = \\mathbb{P}(T \\leq t) = \\sum_{t = 0}^t h(t)\\]\n\n\n9.1.4 Survival function\nThe survival function \\(S(t)\\) gives the probability that someone will survive beyond time \\(t\\) (they have survived \\([0;t]\\) and will continue to survive).\n\\[S(t) = \\mathbb{P}(T &gt; t) = 1 - \\mathbb{P}(T \\leq t) = 1 - F(t)\\]\n\n\n\n\nHay, J., Routledge, I., & Takahashi, S. (n.d.). Serodynamics: a review of methods for epidemiological inference using serological data. https://doi.org/10.31219/osf.io/kqdsn",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Survival analysis</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Survival analysis</span>"
     ]
   },
   {
     "objectID": "rp-risk.html",
     "href": "rp-risk.html",
-    "title": "9  Risk assessment report",
+    "title": "10  Risk assessment report",
     "section": "",
-    "text": "9.1 Examples\nRisk assessment for measles resurgence in the UK\nRapid risk assessment: Measles in Canada, public health implications in 2024",
+    "text": "10.1 Examples\nRisk assessment for measles resurgence in the UK\nRapid risk assessment: Measles in Canada, public health implications in 2024",
     "crumbs": [
       "Reports",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Risk assessment report</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Risk assessment report</span>"
     ]
   },
   {
     "objectID": "rp-risk.html#data",
     "href": "rp-risk.html#data",
-    "title": "9  Risk assessment report",
-    "section": "9.2 Data",
-    "text": "9.2 Data\n\nHistorical case notification of past outbreaks 2014 and 2019 Date of onset + date of birth (or age)\nCurrent level of susceptibility in HCMC:\n\n\nSerology\nVaccine registry\nBirth rates\n\n\nConnectivity between Phu Quoc and HCMC: Flight data / boat data?\n\nP = 1 – (1 / (R0 * s))^m",
+    "title": "10  Risk assessment report",
+    "section": "10.2 Data",
+    "text": "10.2 Data\n\nHistorical case notification of past outbreaks 2014 and 2019 Date of onset + date of birth (or age)\nCurrent level of susceptibility in HCMC:\n\n\nSerology\nVaccine registry\nBirth rates\n\n\nConnectivity between Phu Quoc and HCMC: Flight data / boat data?\n\nP = 1 – (1 / (R0 * s))^m",
     "crumbs": [
       "Reports",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Risk assessment report</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Risk assessment report</span>"
     ]
   },
   {
@@ -344,7 +377,7 @@
     "href": "references.html",
     "title": "References",
     "section": "",
-    "text": "Anderson, R., Donnelly, C., Hollingsworth, D., Keeling, M., Vegvari, C.,\nBaggaley, R., & Maddren, R. (2020). Reproduction number (R) and\ngrowth rate (r) of the COVID-19 epidemic in the UK. The Royal\nSociety.\n\n\nBecker, A. D., & Grenfell, B. T. (2017). tsiR: An R package for\ntime-series Susceptible-Infected-Recovered models of epidemics. PLOS\nONE, 12(9), e0185528. https://doi.org/10.1371/journal.pone.0185528\n\n\nBettencourt, L. M. A., & Ribeiro, R. M. (2008). Real Time Bayesian\nEstimation of the Epidemic Potential of Emerging Infectious Diseases.\nPLOS ONE, 3(5), e2185. https://doi.org/10.1371/journal.pone.0002185\n\n\nCori, A., Ferguson, N. M., Fraser, C., & Cauchemez, S. (2013). A new\nframework and software to estimate time-varying reproduction numbers\nduring epidemics. American Journal of Epidemiology,\n178(9), 1505–1512. https://doi.org/10.1093/aje/kwt133\n\n\nDu, Z., Zhang, W., Zhang, D., Yu, S., & Hao, Y. (2017). Estimating\nthe basic reproduction rate of HFMD using the time series SIR model in\nGuangdong, China. PLOS ONE, 12(7), e0179623. https://doi.org/10.1371/journal.pone.0179623\n\n\nFinkenstädt, B. F., & Grenfell, B. T. (2000). Time series modelling\nof childhood diseases: A dynamical systems approach. Journal of the\nRoyal Statistical Society Series C: Applied Statistics,\n49(2), 187–205. https://doi.org/10.1111/1467-9876.00187\n\n\nGostic, K. M., McGough, L., Baskerville, E. B., Abbott, S., Joshi, K.,\nTedijanto, C., Kahn, R., Niehus, R., Hay, J. A., Salazar, P. M. D.,\nHellewell, J., Meakin, S., Munday, J. D., Bosse, N. I., Sherrat, K.,\nThompson, R. N., White, L. F., Huisman, J. S., Scire, J., … Cobey, S.\n(2020). Practical considerations for measuring the effective\nreproductive number, Rt. PLOS Computational Biology,\n16(12), e1008409. https://doi.org/10.1371/journal.pcbi.1008409\n\n\nHay, J., Routledge, I., & Takahashi, S. (n.d.). Serodynamics: a\nreview of methods for epidemiological inference using serological\ndata. https://doi.org/10.31219/osf.io/kqdsn\n\n\nKenah, E., Lipsitch, M., & Robins, J. M. (2008). Generation interval\ncontraction and epidemic data analysis. Mathematical\nBiosciences, 213(1), 71–79. https://doi.org/10.1016/j.mbs.2008.02.007\n\n\nKnight, J., & Mishra, S. (2020). Estimating effective reproduction\nnumber using generation time versus serial interval, with application to\ncovid-19 in the greater toronto area, canada. Infectious Disease\nModelling, 5, 889–896. https://doi.org/10.1016/j.idm.2020.10.009\n\n\nSender, R., Bar-On, Y., Park, S. W., Noor, E., Dushoff, J., & Milo,\nR. (2022). The unmitigated profile of COVID-19 infectiousness.\neLife, 11, e79134. https://doi.org/10.7554/eLife.79134\n\n\nVegvari, C., Abbott, S., Ball, F., Brooks-Pollock, E., Challen, R.,\nCollyer, B. S., Dangerfield, C., Gog, J. R., Gostic, K. M., Heffernan,\nJ. M., Hollingsworth, T. D., Isham, V., Kenah, E., Mollison, D.,\nPanovska-Griffiths, J., Pellis, L., Roberts, M. G., Scalia Tomba, G.,\nThompson, R. N., & Trapman, P. (2022). Commentary on the use of the\nreproduction number R during the COVID-19 pandemic. Statistical\nMethods in Medical Research, 31(9), 1675–1685. https://doi.org/10.1177/09622802211037079\n\n\nVynnycky, E., & White, R. (2010). An Introduction to Infectious\nDisease Modelling. OUP Oxford.\n\n\nWallinga, J., & Teunis, P. (2004). Different epidemic curves for\nsevere acute respiratory syndrome reveal similar impacts of control\nmeasures. American Journal of Epidemiology, 160(6),\n509–516. https://doi.org/10.1093/aje/kwh255",
+    "text": "Anderson, R., Donnelly, C., Hollingsworth, D., Keeling, M., Vegvari, C.,\nBaggaley, R., & Maddren, R. (2020). Reproduction number (R) and\ngrowth rate (r) of the COVID-19 epidemic in the UK. The Royal\nSociety.\n\n\nBecker, A. D., & Grenfell, B. T. (2017). tsiR: An R package for\ntime-series Susceptible-Infected-Recovered models of epidemics. PLOS\nONE, 12(9), e0185528. https://doi.org/10.1371/journal.pone.0185528\n\n\nBettencourt, L. M. A., & Ribeiro, R. M. (2008). Real Time Bayesian\nEstimation of the Epidemic Potential of Emerging Infectious Diseases.\nPLOS ONE, 3(5), e2185. https://doi.org/10.1371/journal.pone.0002185\n\n\nCori, A., Ferguson, N. M., Fraser, C., & Cauchemez, S. (2013). A new\nframework and software to estimate time-varying reproduction numbers\nduring epidemics. American Journal of Epidemiology,\n178(9), 1505–1512. https://doi.org/10.1093/aje/kwt133\n\n\nDu, Z., Zhang, W., Zhang, D., Yu, S., & Hao, Y. (2017). Estimating\nthe basic reproduction rate of HFMD using the time series SIR model in\nGuangdong, China. PLOS ONE, 12(7), e0179623. https://doi.org/10.1371/journal.pone.0179623\n\n\nFinkenstädt, B. F., & Grenfell, B. T. (2000). Time series modelling\nof childhood diseases: A dynamical systems approach. Journal of the\nRoyal Statistical Society Series C: Applied Statistics,\n49(2), 187–205. https://doi.org/10.1111/1467-9876.00187\n\n\nGostic, K. M., McGough, L., Baskerville, E. B., Abbott, S., Joshi, K.,\nTedijanto, C., Kahn, R., Niehus, R., Hay, J. A., Salazar, P. M. D.,\nHellewell, J., Meakin, S., Munday, J. D., Bosse, N. I., Sherrat, K.,\nThompson, R. N., White, L. F., Huisman, J. S., Scire, J., … Cobey, S.\n(2020). Practical considerations for measuring the effective\nreproductive number, Rt. PLOS Computational Biology,\n16(12), e1008409. https://doi.org/10.1371/journal.pcbi.1008409\n\n\nHay, J., Routledge, I., & Takahashi, S. (n.d.). Serodynamics: a\nreview of methods for epidemiological inference using serological\ndata. https://doi.org/10.31219/osf.io/kqdsn\n\n\nKeeling, M. J., & Rohani, P. (2011). Modeling Infectious\nDiseases in Humans and Animals. Princeton University Press. https://doi.org/10.1515/9781400841035\n\n\nKenah, E., Lipsitch, M., & Robins, J. M. (2008). Generation interval\ncontraction and epidemic data analysis. Mathematical\nBiosciences, 213(1), 71–79. https://doi.org/10.1016/j.mbs.2008.02.007\n\n\nKnight, J., & Mishra, S. (2020). Estimating effective reproduction\nnumber using generation time versus serial interval, with application to\ncovid-19 in the greater toronto area, canada. Infectious Disease\nModelling, 5, 889–896. https://doi.org/10.1016/j.idm.2020.10.009\n\n\nSender, R., Bar-On, Y., Park, S. W., Noor, E., Dushoff, J., & Milo,\nR. (2022). The unmitigated profile of COVID-19 infectiousness.\neLife, 11, e79134. https://doi.org/10.7554/eLife.79134\n\n\nVegvari, C., Abbott, S., Ball, F., Brooks-Pollock, E., Challen, R.,\nCollyer, B. S., Dangerfield, C., Gog, J. R., Gostic, K. M., Heffernan,\nJ. M., Hollingsworth, T. D., Isham, V., Kenah, E., Mollison, D.,\nPanovska-Griffiths, J., Pellis, L., Roberts, M. G., Scalia Tomba, G.,\nThompson, R. N., & Trapman, P. (2022). Commentary on the use of the\nreproduction number R during the COVID-19 pandemic. Statistical\nMethods in Medical Research, 31(9), 1675–1685. https://doi.org/10.1177/09622802211037079\n\n\nVynnycky, E., & White, R. (2010). An Introduction to Infectious\nDisease Modelling. OUP Oxford.\n\n\nWallinga, J., & Teunis, P. (2004). Different epidemic curves for\nsevere acute respiratory syndrome reveal similar impacts of control\nmeasures. American Journal of Epidemiology, 160(6),\n509–516. https://doi.org/10.1093/aje/kwh255",
     "crumbs": [
       "References"
     ]

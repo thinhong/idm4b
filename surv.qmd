@@ -23,7 +23,7 @@ Let consider a discrete
 
 ### Hazard function
 
-Hazard function $f(t)$ gives the probability that someone die at time $t$, given that they have survived up to that time $t$ (survived during the period $[0;t]$).
+Hazard function $h(t)$ gives the probability that someone die at time $t$, given that they have survived up to that time $t$ (survived during the period $[0;t]$).
 
 $$h(t) = \frac{f(t)}{\mathbb{P}(T > t)} = \frac{f(t)}{S(t)}$$
 

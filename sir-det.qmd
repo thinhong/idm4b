@@ -1,34 +1,38 @@
 # SIR
 
-```{r, message=FALSE, warning=FALSE}
-library(tidyr)
-library(deSolve)
-library(bbmle)
-library(ggplot2)
-```
-
 ## Assumptions
 
--   Well-mixed population, or homogeneous mixing (a single contact rate $\beta$).
--   The most basic form balances demographic processes (births $B$ and deaths $\mu$).
--   Infectious disease properties are for a single pathogen.
+-   Well-mixed population, or homogeneous mixing (a single contact rate $\beta$) [@becker2017].
+-   In the most basic form it considers a "closed population" without demographics (no births, deaths, or migration) [@keeling2011].
+-   Infectious disease properties are for a single pathogen [@becker2017].
 
 ## Model
 
-Force of infection $\lambda = \frac{\beta I}{N}$
+$$\frac{dS}{dt} = -\beta SI = -\lambda S$$ {#eq-sir-ds}
 
-$$\frac{dS}{dt} = -\lambda S$$
+$$\frac{dI}{dt} = \beta SI - \gamma I = \lambda S - \gamma I$$ {#eq-sir-di}
 
-$$\frac{dI}{dt} = \lambda S - \gamma I$$
+$$\frac{dR}{dt} = \gamma I$$ {#eq-sir-dr}
 
-$$\frac{dR}{dt} = \gamma I$$
+-   $\beta$: effective contact rate.
+-   $\gamma$: removal rate.
+-   $\beta I = \lambda$: the rate from S to I is called **force of infection**.
 
 ## Code
 
 ### Model
 
+```{r, message=FALSE, warning=FALSE}
+library(deSolve)
+library(tidyr)
+library(bbmle)
+library(ggplot2)
+library(RColorBrewer)
+library(patchwork)
+```
+
 ```{r}
-# sir_1() returns a data frame consists S, I, R values by time
+# sir_1() returns a data frame consists S, I, R, Inc values by time
 sir_1 <- function(beta, gamma, S0, I0, R0, times) {
   
   sir_equations <- function(time, variables, parameters) {
@@ -45,24 +49,115 @@ sir_1 <- function(beta, gamma, S0, I0, R0, times) {
   
   out <- ode(initial_values, times, sir_equations, parameters_values)
 
-  as.data.frame(out)
+  out <- as.data.frame(out)
+  # Compute incidence
+  out$Inc <- c(0, -diff(out$S))
+  out
 }
 ```
+
+::: {.callout-important}
+When fitting real data:
+
+-   **Prevalence**: use the **I compartment**.
+-   **Incidence**: new cases are individuals moving out of S.
+:::
+
+```{r}
+#| code-fold: true
+#| fig-width: 4
+#| fig-height: 2.5
+#| out-width: "100%"
+pred <- sir_1(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = 0:13)
+
+df_plot <- pivot_longer(pred, cols = S:Inc, names_to = "comp", values_to = "n")
+
+ggplot(df_plot, aes(x = time, y = n, color = comp)) +
+  geom_point() + geom_line() +
+  scale_color_brewer(palette = "PuOr", breaks = c("S", "Inc", "I", "R")) +
+  labs(color = NULL) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+- Normally, the time to peak of incidence is earlier than prevalence. 
+
+## Sensitivity analysis
+
+```{r}
+#| code-fold: true
+sir_sa <- function(vals, parm, outcome, times, init_beta = 0.004, init_gamma = 0.5) {
+  pick_comp <- ifelse(outcome == "prev", "I", "Inc")
+  plot_lab <- ifelse(outcome == "prev", "prevalence", "incidence")
+  symb <- ifelse(parm == "beta", "\u03b2", "\u03b3")
+  l <- list()
+  for(i in 1:length(vals)) {
+    if (parm == "beta") {
+      pred <- sir_1(beta = vals[i], gamma = init_gamma, S0 = 999, I0 = 1, R0 = 0, times = times)[, c("time", pick_comp)]
+    } else {
+      pred <- sir_1(beta = init_beta, gamma = vals[i], S0 = 999, I0 = 1, R0 = 0, times = times)[, c("time", pick_comp)]
+    }
+    pred$comp <- paste0(pick_comp, i)
+    colnames(pred) <- c("time", "n", "comp")
+    l[[i]] <- pred
+  }
+  # Bind this list into a data frame
+  df_plot <- Reduce(rbind, l)
+  # Set level I1 < I2 < I3 < I4 < I5 according to the increase of beta values
+  df_plot$comp <- factor(df_plot$comp, levels = c(paste0(pick_comp, 1:length(vals))))
+  my_palette <- brewer.pal(9, "Blues")[(9-length(vals)+1):9]
+  ggplot() + 
+  # Results of different values
+    geom_point(data = df_plot, aes(x = time, y = n, color = comp)) + 
+    geom_line(data = df_plot, aes(x = time, y = n, color = comp)) +
+    scale_color_manual(values = my_palette, labels = c(paste0(symb, " = ", vals))) +
+    labs(color = NULL, y = plot_lab) +
+    theme_minimal()
+}
+```
+
+### Effective contact rate $\beta$
+
+```{r}
+#| code-fold: true
+#| fig-width: 4
+#| fig-height: 4
+#| out-width: "100%"
+
+vals <- seq(0.001, 0.006, 0.001)
+
+p1 <- sir_sa(vals = vals, parm = "beta", outcome = "prev", times = 0:13) + labs(x = NULL)
+p2 <- sir_sa(vals = vals, parm = "beta", outcome = "inc", times = 0:13)
+
+p1 / p2 + plot_layout(guides = "collect") & theme(legend.position = "bottom")
+```
+
+### Recovery rate $\gamma$
+
+```{r}
+#| code-fold: true
+#| fig-width: 4
+#| fig-height: 4
+#| out-width: "100%"
+
+vals <- seq(0.3, 0.8, 0.1)
+
+p1 <- sir_sa(vals = vals, parm = "gamma", outcome = "prev", times = 0:13) + labs(x = NULL)
+p2 <- sir_sa(vals = vals, parm = "gamma", outcome = "inc", times = 0:13)
+
+p1 / p2 + plot_layout(guides = "collect") & theme(legend.position = "bottom")
+```
+
+When $\gamma$ increase, patients recover faster:
+
+- Outbreak size decrease: since patients recover faster, they have **less time to infect** susceptible individuals.
+- Time until peak remain the same. 
 
 Load the flu data.
 
 ```{r}
 flu <- readRDS("data/flu.rds")
 ```
-
-Let have a look at this flu data. This is a very special data as it reports the flu **prevalence**. Usually, case notification data reports **incidence**.
-
-::: {.callout-important}
-Remember to fit the correct thing in SIR model to case notification data:
-
-- Prevalence: fit to the **I compartment**.
-- Incidence: fit **only** to the $\lambda S$.
-:::
 
 ```{r}
 head(flu)
@@ -85,90 +180,49 @@ Better off seeing the comparison on a plot.
 #| fig-height: 3
 #| out-width: "100%"
 
-df_plot <- pivot_longer(df, cols = all_of(c("I", "prev")), names_to = "comp", values_to = "n")
-df_plot$comp <- factor(df_plot$comp, levels = c("prev", "I"))
-
-ggplot(df_plot, aes(x = time, y = n, color = comp)) +
-  geom_point() + geom_line() +
-  scale_color_hue(labels = c("Prevalence", "Prediction")) +
-  labs(color = NULL) +
-  theme_light() +
-  theme(legend.position = "bottom")
+# df_plot <- pivot_longer(df, cols = all_of(c("I", "prev")), names_to = "comp", values_to = "n")
+# df_plot$comp <- factor(df_plot$comp, levels = c("prev", "I"))
+# 
+# ggplot(df_plot, aes(x = time, y = n, color = comp)) +
+#   geom_point() + geom_line() +
+#   scale_color_hue(labels = c("Prevalence", "Prediction")) +
+#   labs(color = NULL) +
+#   theme_light() +
+#   theme(legend.position = "bottom")
 ```
 
-### Parameter sensitivity
+Let have a look at this flu data. This is a very special data as it reports the flu **prevalence**. Usually, case notification data reports **incidence**.
 
-#### Effective contact rate $\beta$
+## Corollaries
 
-```{r}
-#| code-fold: true
-#| fig-width: 4
-#| fig-height: 3
-#| out-width: "100%"
+### The threshold phenomenon
 
-# Try different gamma values
-bvals <- seq(0.001, 0.005, 0.001)
-l <- list()
-for(i in 1:length(bvals)){
-  pred <- sir_1(beta = bvals[i], gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = flu$time)[,c("time", "I")]
-  colnames(pred) <- c("time", paste0("I", i))
-  l[[i]] <- pred
-}
-l[[length(l) + 1]] <- flu
+From @eq-sir-di:
 
-# Merge all with flu data
-df <- Reduce(function(x, y) merge(x, y, by = "time", all = TRUE), l)
+$$\frac{dI}{dt} = \beta SI - \gamma I = I(\beta S - \gamma)$$
 
-df_plot <- pivot_longer(df, cols = I1:prev, names_to = "comp", values_to = "n")
-df_plot$comp <- factor(df_plot$comp, levels = c("prev", paste0("I", 1:length(bvals))))
+The infection "dies out" when:
 
-ggplot(df_plot, aes(x = time, y = n, color = comp)) +
-  geom_point() + geom_line() +
-  scale_color_hue(labels = c("Prevalence", paste0("\u03b2 = ", bvals))) +
-  labs(color = NULL) +
-  theme_light() +
-  theme(legend.position = "bottom")
-```
+$$\frac{dI}{dt} < 0 \Leftrightarrow \beta S - \gamma < 0 \Leftrightarrow S < \frac{\gamma}{\beta}$$
 
-#### Recovery rate $\gamma$
+### Epidemic burnout
 
-```{r}
-#| code-fold: true
-#| fig-width: 4
-#| fig-height: 3
-#| out-width: "100%"
+Divide @eq-sir-ds by @eq-sir-dr:
 
-# Try different gamma values
-gvals <- seq(0.3, 0.7, 0.1)
-l <- list()
-for(i in 1:length(gvals)){
-  pred <- sir_1(beta = 0.004, gamma = gvals[i], S0 = 999, I0 = 1, R0 = 0, times = flu$time)[,c("time", "I")]
-  colnames(pred) <- c("time", paste0("I", i))
-  l[[i]] <- pred
-}
-l[[length(l) + 1]] <- flu
+$$\frac{dS}{dR} = \frac{-\beta S I}{\gamma I} = -\frac{\beta}{\gamma} S$$
 
-# Merge all with flu data
-df <- Reduce(function(x, y) merge(x, y, by = "time", all = TRUE), l)
+Upon integrating with respect to R, we obtain:
 
-df_plot <- pivot_longer(df, cols = I1:prev, names_to = "comp", values_to = "n")
-df_plot$comp <- factor(df_plot$comp, levels = c("prev", paste0("I", 1:length(gvals))))
+$$S(t) = S(0)e^{-\frac{\beta}{\gamma} R(t)}$$
 
-ggplot(df_plot, aes(x = time, y = n, color = comp)) +
-  geom_point() + geom_line() +
-  scale_color_hue(labels = c("Prevalence", paste0("\u03b3 = ", gvals))) +
-  labs(color = NULL) +
-  theme_light() +
-  theme(legend.position = "bottom")
-```
+Given that $e^x > 0 \quad \forall x$, therefore $S(t) > 0$ there will always be some susceptibles in the population who escape infection, leading to an important counter-intuitive conclusion from this model:
 
-When $\gamma$ increase, the shape and time to reach the peak of the outbreak stay the same, the outbreak size is reduced. This is because **$\gamma$ increase** means patients recover faster, they have **less time to infect** susceptible individuals, leading to a decrease in outbreak size.
+> The chain of transmission eventually breaks due to the decline in infectives, not due to a complete lack of susceptibles.
 
 ## Poisson distribution
 
-Poisson distribution is a **discrete probability distribution** that expresses probability of a given **number of events** occurring **in a fixed interval of time**[^1].
+Poisson distribution is a **discrete probability distribution** that expresses probability of a given **number of events** occurring **in a fixed interval of time**[^sir-det-1].
 
-[^1]: Wikipedia <https://en.wikipedia.org/wiki/Poisson_distribution>
+[^sir-det-1]: Wikipedia <https://en.wikipedia.org/wiki/Poisson_distribution>
 
 Suitable to use because here we are fitting a number of prev occurring in this period.
-

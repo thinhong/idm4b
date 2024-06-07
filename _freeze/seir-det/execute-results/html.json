@@ -1,0 +1,15 @@
+{
+  "hash": "93d8b4f1962592f58a00c7d074a83dac",
+  "result": {
+    "engine": "knitr",
+    "markdown": "# SEIR\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(deSolve)\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\nsir_1 <- function(beta, gamma, S0, I0, R0, times) {\n  \n  sir_equations <- function(time, variables, parameters) {\n    with(as.list(c(variables, parameters)), {\n      dS <- -beta * I * S\n      dI <-  beta * I * S - gamma * I\n      dR <-  gamma * I\n      return(list(c(dS, dI, dR)))\n    })\n  }\n  \n  parameters_values <- c(beta = beta, gamma = gamma)\n  initial_values <- c(S = S0, I = I0, R = R0)\n  \n  out <- ode(initial_values, times, sir_equations, parameters_values)\n\n  as.data.frame(out)\n}\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\nseir_1 <- function(beta, sigma, gamma, S0, E0, I0, R0, times) {\n  \n  sir_equations <- function(time, variables, parameters) {\n    with(as.list(c(variables, parameters)), {\n      dS <- -beta * I * S\n      dE <-  beta * I * S - sigma * E\n      dI <-  sigma * E - gamma * I\n      dR <-  gamma * I\n      return(list(c(dS, dE, dI, dR)))\n    })\n  }\n  \n  parameters_values <- c(beta = beta, sigma = sigma, gamma = gamma)\n  initial_values <- c(S = S0, E = E0, I = I0, R = R0)\n  \n  out <- ode(initial_values, times, sir_equations, parameters_values)\n\n  as.data.frame(out)\n}\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\npred1 <- sir_1(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = 1:20)\npred2 <- seir_1(beta = 0.004, sigma = 0.5, gamma = 0.5, S0 = 999, E0 = 0, I0 = 1, R0 = 0, times = 1:20)\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

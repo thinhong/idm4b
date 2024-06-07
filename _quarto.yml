@@ -23,6 +23,7 @@ book:
     - part: det.qmd
       chapters: 
         - sir-det.qmd
+        - seir-det.qmd
         - tsir.qmd
     - part: sto.qmd
       chapters: 
