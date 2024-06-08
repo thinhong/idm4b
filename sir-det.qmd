@@ -2,9 +2,11 @@
 
 ## Assumptions
 
+-   The disease spreads through direct contact between susceptible and infected individuals.
 -   Well-mixed population, or homogeneous mixing (a single contact rate $\beta$) [@becker2017].
 -   In the most basic form it considers a "closed population" without demographics (no births, deaths, or migration) [@keeling2011].
 -   Infectious disease properties are for a single pathogen [@becker2017].
+-   Recovered individuals gain lifelong immunity.
 
 ## Model
 
@@ -23,6 +25,7 @@ $$\frac{dR}{dt} = \gamma I$$ {#eq-sir-dr}
 ### Model
 
 ```{r, message=FALSE, warning=FALSE}
+#| code-fold: true
 library(deSolve)
 library(tidyr)
 library(bbmle)
@@ -31,14 +34,16 @@ library(RColorBrewer)
 library(patchwork)
 ```
 
+Write a function based on @eq-sir-ds, @eq-sir-di and @eq-sir-dr
+
 ```{r}
-# sir_1() returns a data frame consists S, I, R, Inc values by time
-sir_1 <- function(beta, gamma, S0, I0, R0, times) {
+# sir_mod() returns a data frame consists S, I, R, Inc values by time
+sir_mod <- function(beta, gamma, S0, I0, R0, times) {
   
   sir_equations <- function(time, variables, parameters) {
     with(as.list(c(variables, parameters)), {
-      dS <- -beta * I * S
-      dI <-  beta * I * S - gamma * I
+      dS <- -beta * S * I
+      dI <-  beta * S * I - gamma * I
       dR <-  gamma * I
       return(list(c(dS, dI, dR)))
     })
@@ -57,32 +62,43 @@ sir_1 <- function(beta, gamma, S0, I0, R0, times) {
 ```
 
 ::: {.callout-important}
-When fitting real data:
+Note that after running the SIR model, we need to compute incidence separately. When fitting real data:
 
--   **Prevalence**: use the **I compartment**.
 -   **Incidence**: new cases are individuals moving out of S.
+-   **Prevalence**: use the **I compartment**.
 :::
+
+$$\text{Incidence} = \frac{\text{Number of new cases during a period}}{\text{Population at risk during the same period}}$$
+
+$$\text{Prevalence} = \frac{\text{Number of existing cases at time t}}{\text{Total population at time t}}$$
 
 ```{r}
 #| code-fold: true
 #| fig-width: 4
 #| fig-height: 2.5
 #| out-width: "100%"
-pred <- sir_1(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = 0:13)
+pred <- sir_mod(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = 0:13)
 
 df_plot <- pivot_longer(pred, cols = S:Inc, names_to = "comp", values_to = "n")
 
 ggplot(df_plot, aes(x = time, y = n, color = comp)) +
   geom_point() + geom_line() +
   scale_color_brewer(palette = "PuOr", breaks = c("S", "Inc", "I", "R")) +
-  labs(color = NULL) +
+  labs(color = NULL, y = NULL) +
   theme_minimal() +
   theme(legend.position = "bottom")
 ```
 
-- Normally, the time to peak of incidence is earlier than prevalence. 
+The time to peak of incidence is earlier than prevalence:
+
+- Incidence reflects the immediate rate of new infections, the peak of incidence is reached when the transmission rate begins to decline.
+- Prevalence accumulates both new and existing cases. Even after the incidence starts to decline, the active cases who were infected before the incidence peak are still there waiting for recovering. Prevalence only starts to decline when the recovery rate surpasses the rate of new infections significantly.
 
 ## Sensitivity analysis
+
+The effective contact rate $\beta$ and the recovery rate $\gamma$ both affect whether or not there is an epidemic. The total number of people in the population and the initial number of infected people have no effect on whether there is an epidemic.
+
+Below is a function that take a range of values of parameters and compare the model outputs.
 
 ```{r}
 #| code-fold: true
@@ -93,9 +109,9 @@ sir_sa <- function(vals, parm, outcome, times, init_beta = 0.004, init_gamma = 0
   l <- list()
   for(i in 1:length(vals)) {
     if (parm == "beta") {
-      pred <- sir_1(beta = vals[i], gamma = init_gamma, S0 = 999, I0 = 1, R0 = 0, times = times)[, c("time", pick_comp)]
+      pred <- sir_mod(beta = vals[i], gamma = init_gamma, S0 = 999, I0 = 1, R0 = 0, times = times)[, c("time", pick_comp)]
     } else {
-      pred <- sir_1(beta = init_beta, gamma = vals[i], S0 = 999, I0 = 1, R0 = 0, times = times)[, c("time", pick_comp)]
+      pred <- sir_mod(beta = init_beta, gamma = vals[i], S0 = 999, I0 = 1, R0 = 0, times = times)[, c("time", pick_comp)]
     }
     pred$comp <- paste0(pick_comp, i)
     colnames(pred) <- c("time", "n", "comp")
@@ -103,13 +119,14 @@ sir_sa <- function(vals, parm, outcome, times, init_beta = 0.004, init_gamma = 0
   }
   # Bind this list into a data frame
   df_plot <- Reduce(rbind, l)
-  # Set level I1 < I2 < I3 < I4 < I5 according to the increase of beta values
+  # Set level I1 < I2 < I3... according to the increase of beta values
   df_plot$comp <- factor(df_plot$comp, levels = c(paste0(pick_comp, 1:length(vals))))
+  
+  # Plot results
   my_palette <- brewer.pal(9, "Blues")[(9-length(vals)+1):9]
-  ggplot() + 
-  # Results of different values
-    geom_point(data = df_plot, aes(x = time, y = n, color = comp)) + 
-    geom_line(data = df_plot, aes(x = time, y = n, color = comp)) +
+  
+  ggplot(df_plot, aes(x = time, y = n, color = comp)) + 
+    geom_point() + geom_line() +
     scale_color_manual(values = my_palette, labels = c(paste0(symb, " = ", vals))) +
     labs(color = NULL, y = plot_lab) +
     theme_minimal()
@@ -132,6 +149,13 @@ p2 <- sir_sa(vals = vals, parm = "beta", outcome = "inc", times = 0:13)
 p1 / p2 + plot_layout(guides = "collect") & theme(legend.position = "bottom")
 ```
 
+When $\beta$ **increases**, more susceptible individuals become infected per unit time:
+
+- Outbreak size **increases**: $R_0 = \frac{\beta}{\gamma}$, so if $\beta$ increases, $R_0$ **increases**, each infected individual infect more people on average.
+- **Larger** epidemic peak: the peak number at any given time will be higher, because more susceptible individuals are infected.
+- Time until peak ***decreases***: because the speed of susceptible individuals become infected is faster.
+- Epidemic duration ***decreases***: because the pool of susceptible individuals depletes quickly, the epidemic may conclude sooner when there are few susceptible individuals left.
+
 ### Recovery rate $\gamma$
 
 ```{r}
@@ -148,50 +172,12 @@ p2 <- sir_sa(vals = vals, parm = "gamma", outcome = "inc", times = 0:13)
 p1 / p2 + plot_layout(guides = "collect") & theme(legend.position = "bottom")
 ```
 
-When $\gamma$ increase, patients recover faster:
+When $\gamma$ **increases**, patients recover with a faster speed:
 
-- Outbreak size decrease: since patients recover faster, they have **less time to infect** susceptible individuals.
-- Time until peak remain the same. 
-
-Load the flu data.
-
-```{r}
-flu <- readRDS("data/flu.rds")
-```
-
-```{r}
-head(flu)
-```
-
-Now we run the SIR model, and compare predictions with the observed flu prevalence data.
-
-```{r}
-pred <- sir_1(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = flu$time)
-
-df <- merge(x = pred, y = flu, by = "time")
-df <- df[,c("time", "I", "prev")]
-```
-
-Better off seeing the comparison on a plot.
-
-```{r}
-#| code-fold: true
-#| fig-width: 4
-#| fig-height: 3
-#| out-width: "100%"
-
-# df_plot <- pivot_longer(df, cols = all_of(c("I", "prev")), names_to = "comp", values_to = "n")
-# df_plot$comp <- factor(df_plot$comp, levels = c("prev", "I"))
-# 
-# ggplot(df_plot, aes(x = time, y = n, color = comp)) +
-#   geom_point() + geom_line() +
-#   scale_color_hue(labels = c("Prevalence", "Prediction")) +
-#   labs(color = NULL) +
-#   theme_light() +
-#   theme(legend.position = "bottom")
-```
-
-Let have a look at this flu data. This is a very special data as it reports the flu **prevalence**. Usually, case notification data reports **incidence**.
+- Outbreak size ***decreases***: patients have ***less time to infect*** susceptible individuals; and also $R_0 = \frac{\beta}{\gamma}$, so if $\gamma$ increases, $R_0$ ***decreases***, each infected individual infect less people on average.
+- ***Smaller*** epidemic peak: the peak number of infected individuals will be lower because $R_0$ ***decreases***.
+- Time until peak ***slightly decreases***: because the infected population clears out faster, but this depends on the balance between the faster recovery and the rate of new infections.
+- Epidemic duration ***slightly decreases***: for same reason as the peak time.
 
 ## Corollaries
 
@@ -218,11 +204,3 @@ $$S(t) = S(0)e^{-\frac{\beta}{\gamma} R(t)}$$
 Given that $e^x > 0 \quad \forall x$, therefore $S(t) > 0$ there will always be some susceptibles in the population who escape infection, leading to an important counter-intuitive conclusion from this model:
 
 > The chain of transmission eventually breaks due to the decline in infectives, not due to a complete lack of susceptibles.
-
-## Poisson distribution
-
-Poisson distribution is a **discrete probability distribution** that expresses probability of a given **number of events** occurring **in a fixed interval of time**[^sir-det-1].
-
-[^sir-det-1]: Wikipedia <https://en.wikipedia.org/wiki/Poisson_distribution>
-
-Suitable to use because here we are fitting a number of prev occurring in this period.

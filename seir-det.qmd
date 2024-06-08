@@ -1,12 +1,19 @@
 # SEIR
 
-```{r}
+## Code
+
+```{r, message=FALSE, warning=FALSE}
+#| code-fold: true
 library(deSolve)
+library(tidyr)
+library(ggplot2)
+library(RColorBrewer)
+library(patchwork)
 ```
 
-
 ```{r}
-sir_1 <- function(beta, gamma, S0, I0, R0, times) {
+#| code-fold: true
+sir_mod <- function(beta, gamma, S0, I0, R0, times) {
   
   sir_equations <- function(time, variables, parameters) {
     with(as.list(c(variables, parameters)), {
@@ -22,13 +29,15 @@ sir_1 <- function(beta, gamma, S0, I0, R0, times) {
   
   out <- ode(initial_values, times, sir_equations, parameters_values)
 
-  as.data.frame(out)
+  out <- as.data.frame(out)
+  # Compute incidence
+  out$Inc <- c(0, -diff(out$S))
+  out
 }
 ```
 
-
 ```{r}
-seir_1 <- function(beta, sigma, gamma, S0, E0, I0, R0, times) {
+seir_mod <- function(beta, sigma, gamma, S0, E0, I0, R0, times) {
   
   sir_equations <- function(time, variables, parameters) {
     with(as.list(c(variables, parameters)), {
@@ -45,12 +54,43 @@ seir_1 <- function(beta, sigma, gamma, S0, E0, I0, R0, times) {
   
   out <- ode(initial_values, times, sir_equations, parameters_values)
 
-  as.data.frame(out)
+  out <- as.data.frame(out)
+  # Compute incidence
+  out$Inc <- c(0, -diff(out$S))
+  out
 }
 ```
 
 ```{r}
-pred1 <- sir_1(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = 1:20)
-pred2 <- seir_1(beta = 0.004, sigma = 0.5, gamma = 0.5, S0 = 999, E0 = 0, I0 = 1, R0 = 0, times = 1:20)
+#| code-fold: true
+#| fig-width: 4
+#| fig-height: 4
+#| out-width: "100%"
+pred1 <- sir_mod(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = 1:20)
+pred2 <- seir_mod(beta = 0.004, sigma = 0.5, gamma = 0.5, S0 = 999, E0 = 0, I0 = 1, R0 = 0, times = 1:20)
+
+df_plot <- pivot_longer(pred1, cols = S:Inc, names_to = "comp", values_to = "n")
+
+my_palette <- brewer.pal(11, "PuOr")[c(10, 4, 3, 8)]
+
+p1 <- ggplot(df_plot, aes(x = time, y = n, color = comp)) +
+  geom_point() + geom_line() +
+  scale_color_manual(values = my_palette, breaks = c("S", "Inc", "I", "R")) +
+  labs(color = NULL, y = NULL) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+df_plot <- pivot_longer(pred2, cols = S:Inc, names_to = "comp", values_to = "n")
+
+my_palette <- brewer.pal(11, "PuOr")[c(10, 1, 4, 3, 8)]
+
+p2 <- ggplot(df_plot, aes(x = time, y = n, color = comp)) +
+  geom_point() + geom_line() +
+  scale_color_manual(values = my_palette, breaks = c("S", "E", "Inc", "I", "R")) +
+  labs(color = NULL, y = NULL) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+p1 / p2
 ```
 
