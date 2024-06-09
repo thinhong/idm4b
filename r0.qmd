@@ -1,1 +1,55 @@
 # Estimating $R_0$
+
+
+
+## Compartmental models
+
+### SIR model
+
+Ordinary differential equations (ODEs) for SIR model are given by @eq-sir-ds, @eq-sir-di, @eq-sir-dr.
+
+Consider the $I$ equation:
+
+$$\frac{dI}{dt} = \beta SI - \gamma I = I(\beta S - \gamma)$$
+
+### SEIR model
+
+
+
+## Next generation matrix
+
+$R_0$ is the maximum absolute eigenvalue (also called the spectral radius) of the next generation matrix [@vandendriessche2017].
+
+::: {.callout-note collapse="true"}
+
+## A simple example
+
+Source: quantpie's [video](https://www.youtube.com/watch?v=xJ5mizenTII).
+
+A population consists of two groups: young and old.
+
+- A young person on average infects 3 young and 2 old: $\begin{bmatrix} 3 \\ 2 \end{bmatrix}$.
+- An old person on average infects 1 young and 2 old: $\begin{bmatrix} 1 \\ 2 \end{bmatrix}$.
+
+Each group becomes a column in the next generation matrix (NGM):
+
+$$\text{NGM} = \begin{bmatrix} 3 & 1 \\ 2 & 2 \end{bmatrix}$$
+
+$R_0$ is the root of equation:
+
+$$\begin{bmatrix} 3 - \lambda & 1 \\ 2 & 2 - \lambda \end{bmatrix} = 0$$
+
+$$\Leftrightarrow (3 - \lambda) \times (2 - \lambda) - 2 \times 1 = 0$$
+
+$$\Leftrightarrow \lambda^2 - 5 \lambda + 6 - 2 = 0$$
+
+$$\Leftrightarrow \lambda^2 - 5 \lambda + 4 = 0$$
+
+There are two root $\lambda = 4$ and $\lambda = 1$, for an outbreak to occur $R_0 > 1$, so here $R_0 = 4$.
+
+
+
+:::
+
+For more complex compartmental models, especially those with more infected compartments [@vandendriessche2017]
+

@@ -2,9 +2,10 @@
 
 ## Assumptions
 
+-   Each member of a population is either susceptible, infectious, or recovered [@vandendriessche2017].
 -   The disease spreads through direct contact between susceptible and infected individuals.
--   Well-mixed population, or homogeneous mixing (a single contact rate $\beta$) [@becker2017].
--   In the most basic form it considers a "closed population" without demographics (no births, deaths, or migration) [@keeling2011].
+-   Well-mixed population, or homogeneous mixing (represented by a single contact rate $\beta$) [@becker2017].
+-   In the most basic form it considers a "closed population" without demographics (no births, deaths, or migration) [@keeling2011], make sense when the disease is short lived compared with the population lifetime [@vandendriessche2017].
 -   Infectious disease properties are for a single pathogen [@becker2017].
 -   Recovered individuals gain lifelong immunity.
 
@@ -22,10 +23,7 @@ $$\frac{dR}{dt} = \gamma I$$ {#eq-sir-dr}
 
 ## Code
 
-### Model
-
 ```{r, message=FALSE, warning=FALSE}
-#| code-fold: true
 library(deSolve)
 library(tidyr)
 library(bbmle)
@@ -34,7 +32,9 @@ library(RColorBrewer)
 library(patchwork)
 ```
 
-Write a function based on @eq-sir-ds, @eq-sir-di and @eq-sir-dr
+Below is how we solve the differential equations @eq-sir-ds, @eq-sir-di and @eq-sir-dr in R with the `deSolve` package.
+
+::: {#lst-sir-det}
 
 ```{r}
 # sir_mod() returns a data frame consists S, I, R, Inc values by time
@@ -42,49 +42,79 @@ sir_mod <- function(beta, gamma, S0, I0, R0, times) {
   
   sir_equations <- function(time, variables, parameters) {
     with(as.list(c(variables, parameters)), {
-      dS <- -beta * S * I
-      dI <-  beta * S * I - gamma * I
-      dR <-  gamma * I
-      return(list(c(dS, dI, dR)))
+      dS <-   -beta * S * I
+      dI <-    beta * S * I - gamma * I
+      dR <-    gamma * I
+      dCInc <- beta * S * I
+      return(list(c(dS, dI, dR, dCInc)))
     })
   }
   
   parameters_values <- c(beta = beta, gamma = gamma)
-  initial_values <- c(S = S0, I = I0, R = R0)
+  initial_values <- c(S = S0, I = I0, R = R0, CInc = 0)
   
   out <- ode(initial_values, times, sir_equations, parameters_values)
 
   out <- as.data.frame(out)
-  # Compute incidence
-  out$Inc <- c(0, -diff(out$S))
+  # Compute incidence from cumulative incidence
+  out$Inc <- c(I0, diff(out$CInc))
+  out$CInc <- NULL
   out
 }
 ```
 
+Deterministic SIR model
+
+:::
+
 ::: {.callout-important}
 Note that after running the SIR model, we need to compute incidence separately. When fitting real data:
 
--   **Incidence**: new cases are individuals moving out of S.
--   **Prevalence**: use the **I compartment**.
-:::
+-   **Incidence**: use the $\beta SI$ part.
 
 $$\text{Incidence} = \frac{\text{Number of new cases during a period}}{\text{Population at risk during the same period}}$$
 
+-   **Prevalence**: use the **I compartment**.
+
 $$\text{Prevalence} = \frac{\text{Number of existing cases at time t}}{\text{Total population at time t}}$$
+:::
+
+There are two ways to compute incidence.
+
+1. While writing the differential equations, we tell `deSolve` to compute the cumulative incidence, then compute the incidence by using `diff()` on the cumulative incidence.
+
+```{r, eval=F}
+dS <-   -beta * S * I
+dI <-    beta * S * I - gamma * I
+dR <-    gamma * I
+dCInc <- beta * S * I
+
+out$Inc <- c(I0, diff(out$CInc))
+```
+
+2. In this "closed population", the incidence is the number of individuals moving out of $S$ in each time step. So we can compute it from the $S$ column. Let compare it with the previous method.
+
+```{r}
+pred <- sir_mod(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = 0:13)
+
+pred$Inc2 <- c(1, -diff(pred$S))
+pred[,"Inc-Inc2"] <- round(pred$Inc - pred$Inc2)
+pred[,c("Inc", "Inc2", "Inc-Inc2")]
+```
+
+Now let have a look at the output.
 
 ```{r}
 #| code-fold: true
 #| fig-width: 4
 #| fig-height: 2.5
 #| out-width: "100%"
-pred <- sir_mod(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = 0:13)
-
 df_plot <- pivot_longer(pred, cols = S:Inc, names_to = "comp", values_to = "n")
 
 ggplot(df_plot, aes(x = time, y = n, color = comp)) +
   geom_point() + geom_line() +
   scale_color_brewer(palette = "PuOr", breaks = c("S", "Inc", "I", "R")) +
-  labs(color = NULL, y = NULL) +
+  labs(color = NULL, y = NULL, x = "Time") +
   theme_minimal() +
   theme(legend.position = "bottom")
 ```
@@ -104,7 +134,7 @@ Below is a function that take a range of values of parameters and compare the mo
 #| code-fold: true
 sir_sa <- function(vals, parm, outcome, times, init_beta = 0.004, init_gamma = 0.5) {
   pick_comp <- ifelse(outcome == "prev", "I", "Inc")
-  plot_lab <- ifelse(outcome == "prev", "prevalence", "incidence")
+  plot_lab <- ifelse(outcome == "prev", "Prevalence", "Incidence")
   symb <- ifelse(parm == "beta", "\u03b2", "\u03b3")
   l <- list()
   for(i in 1:length(vals)) {
@@ -128,7 +158,7 @@ sir_sa <- function(vals, parm, outcome, times, init_beta = 0.004, init_gamma = 0
   ggplot(df_plot, aes(x = time, y = n, color = comp)) + 
     geom_point() + geom_line() +
     scale_color_manual(values = my_palette, labels = c(paste0(symb, " = ", vals))) +
-    labs(color = NULL, y = plot_lab) +
+    labs(color = NULL, y = plot_lab, x = "Time") +
     theme_minimal()
 }
 ```

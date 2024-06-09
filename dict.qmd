@@ -1,0 +1,28 @@
+# Dictionary
+
+```{r, echo=F, warning=F, message=F}
+library(matlib)
+```
+
+::: {#def-residual}
+- **Residual**: is the difference between the observed value and the **estimated** value.
+:::
+
+::: {#def-error}
+- **Error**: is the deviation of the observed value from the **true** value.
+:::
+
+- Matrix and linear transformation:
+  - Linear transformation is a function (transformation = function) that take in a vector and spit out a vector.
+  - Lines remain lines, and origin remains fixed.
+
+::: {.callout-note collapse="true"}
+## Visualisation of linear transformation
+![](img/dict/litrans.webp)
+:::
+
+- Eigenvector ($\vec{v}$):
+
+
+
+- Eigenvalue ($\lambda$):

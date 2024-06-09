@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -236,8 +256,14 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./rss.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Residual sum of squares</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./pomp.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Particle filter</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Particle filter</span></span></a>
   </div>
 </li>
       </ul>
@@ -245,7 +271,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./surv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Survival analysis</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Survival analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -260,11 +286,17 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
       </ul>
   </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dict.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Dictionary</span></span></a>
+  </div>
+</li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
@@ -277,7 +309,18 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="3">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#compartmental-models" id="toc-compartmental-models" class="nav-link active" data-scroll-target="#compartmental-models"><span class="header-section-number">2.1</span> Compartmental models</a>
+  <ul>
+  <li><a href="#sir-model" id="toc-sir-model" class="nav-link" data-scroll-target="#sir-model"><span class="header-section-number">2.1.1</span> SIR model</a></li>
+  <li><a href="#seir-model" id="toc-seir-model" class="nav-link" data-scroll-target="#seir-model"><span class="header-section-number">2.1.2</span> SEIR model</a></li>
+  </ul></li>
+  <li><a href="#next-generation-matrix" id="toc-next-generation-matrix" class="nav-link" data-scroll-target="#next-generation-matrix"><span class="header-section-number">2.2</span> Next generation matrix</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -301,8 +344,59 @@ window.Quarto = {
 </header>
 
 
+<section id="compartmental-models" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="compartmental-models"><span class="header-section-number">2.1</span> Compartmental models</h2>
+<section id="sir-model" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="sir-model"><span class="header-section-number">2.1.1</span> SIR model</h3>
+<p>Ordinary differential equations (ODEs) for SIR model are given by <a href="sir-det.html#eq-sir-ds" class="quarto-xref">Equation&nbsp;<span>4.1</span></a>, <a href="sir-det.html#eq-sir-di" class="quarto-xref">Equation&nbsp;<span>4.2</span></a>, <a href="sir-det.html#eq-sir-dr" class="quarto-xref">Equation&nbsp;<span>4.3</span></a>.</p>
+<p>Consider the <span class="math inline">\(I\)</span> equation:</p>
+<p><span class="math display">\[\frac{dI}{dt} = \beta SI - \gamma I = I(\beta S - \gamma)\]</span></p>
+</section>
+<section id="seir-model" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="seir-model"><span class="header-section-number">2.1.2</span> SEIR model</h3>
+</section>
+</section>
+<section id="next-generation-matrix" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="next-generation-matrix"><span class="header-section-number">2.2</span> Next generation matrix</h2>
+<p><span class="math inline">\(R_0\)</span> is the maximum absolute eigenvalue (also called the spectral radius) of the next generation matrix <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+A simple example
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Source: quantpie’s <a href="https://www.youtube.com/watch?v=xJ5mizenTII">video</a>.</p>
+<p>A population consists of two groups: young and old.</p>
+<ul>
+<li>A young person on average infects 3 young and 2 old: <span class="math inline">\(\begin{bmatrix} 3 \\ 2 \end{bmatrix}\)</span>.</li>
+<li>An old person on average infects 1 young and 2 old: <span class="math inline">\(\begin{bmatrix} 1 \\ 2 \end{bmatrix}\)</span>.</li>
+</ul>
+<p>Each group becomes a column in the next generation matrix (NGM):</p>
+<p><span class="math display">\[\text{NGM} = \begin{bmatrix} 3 &amp; 1 \\ 2 &amp; 2 \end{bmatrix}\]</span></p>
+<p><span class="math inline">\(R_0\)</span> is the root of equation:</p>
+<p><span class="math display">\[\begin{bmatrix} 3 - \lambda &amp; 1 \\ 2 &amp; 2 - \lambda \end{bmatrix} = 0\]</span></p>
+<p><span class="math display">\[\Leftrightarrow (3 - \lambda) \times (2 - \lambda) - 2 \times 1 = 0\]</span></p>
+<p><span class="math display">\[\Leftrightarrow \lambda^2 - 5 \lambda + 6 - 2 = 0\]</span></p>
+<p><span class="math display">\[\Leftrightarrow \lambda^2 - 5 \lambda + 4 = 0\]</span></p>
+<p>There are two root <span class="math inline">\(\lambda = 4\)</span> and <span class="math inline">\(\lambda = 1\)</span>, for an outbreak to occur <span class="math inline">\(R_0 &gt; 1\)</span>, so here <span class="math inline">\(R_0 = 4\)</span>.</p>
+</div>
+</div>
+</div>
+<p>For more complex compartmental models, especially those with more infected compartments <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span></p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-vandendriessche2017" class="csl-entry" role="listitem">
+Driessche, P. van den. (2017). Reproduction numbers of infectious disease models. <em>Infectious Disease Modelling</em>, <em>2</em>(3), 288–303. <a href="https://doi.org/10.1016/j.idm.2017.06.002">https://doi.org/10.1016/j.idm.2017.06.002</a>
+</div>
+</div>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

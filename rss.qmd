@@ -1,0 +1,139 @@
+# Residual sum of squares
+
+Refer to @def-residual, the residual sum of squares (RSS) is the sum of the squares of residuals.
+
+$$RSS = \sum_{i = 1}^{n}[y_i - f(x_i)]^2$$
+
+-   $y_i$: the observed value.
+-   $f(x_i)$: the predicted value.
+
+## Code
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyr)
+library(deSolve)
+library(ggplot2)
+library(RColorBrewer)
+```
+
+We will use data collected during a H1N1 influenza outbreak in an elementary school in Pennsylvania [@cauchemez2011]. Let load the data and have a look.
+
+```{r}
+#| fig-width: 4
+#| fig-height: 2.5
+#| out-width: "100%"
+df <- readRDS("data/flu_inc.rds")
+
+ggplot(df, aes(x = day, y = inc)) +
+  geom_point() +
+  labs(x = "Day", y = "Incidence") +
+  theme_minimal()
+```
+
+For simplicity, we are going to make the following assumptions:
+
+- A closed population in the school.
+- Homogeneous mixing.
+- We ignore issues of missing data and censoring in the data (see [@cauchemez2011] for an analysis dealing with these problems).
+- The reported cases is the daily number of new symptomatic cases.
+
+Let reuse the deterministic SEIR model from @lst-seir-det:
+
+```{r}
+#| code-fold: true
+seir_mod <- function(beta, sigma, gamma, S0, E0, I0, R0, times) {
+  
+  sir_equations <- function(time, variables, parameters) {
+    with(as.list(c(variables, parameters)), {
+      dS <-   -beta * I * S
+      dE <-    beta * I * S - sigma * E
+      dI <-    sigma * E - gamma * I
+      dR <-    gamma * I
+      dCInc <- sigma * E
+      return(list(c(dS, dE, dI, dR, dCInc)))
+    })
+  }
+  
+  parameters_values <- c(beta = beta, sigma = sigma, gamma = gamma)
+  initial_values <- c(S = S0, E = E0, I = I0, R = R0, CInc = 0)
+  
+  out <- ode(initial_values, times, sir_equations, parameters_values)
+
+  out <- as.data.frame(out)
+  # Compute incidence from cumulative incidence
+  out$Inc <- c(I0, diff(out$CInc))
+  out$CInc <- NULL
+  out
+}
+```
+
+Let plug some initial values for the parameters and run the model.
+
+```{r}
+#| code-fold: true
+#| fig-width: 4
+#| fig-height: 2.5
+#| out-width: "100%"
+pred <- seir_mod(beta = 0.004, sigma = 0.5, gamma = 0.5, S0 = 369, E0 = 0, I0 = 1, R0 = 0, times = df$day)
+
+df_plot <- pivot_longer(pred, cols = S:Inc, names_to = "comp", values_to = "n")
+
+my_palette <- brewer.pal(11, "PuOr")[c(10, 1, 4, 3, 8)]
+
+ggplot(df_plot, aes(x = time, y = n, color = comp)) +
+  geom_point() + geom_line() +
+  scale_color_manual(values = my_palette, breaks = c("S", "E", "Inc", "I", "R")) +
+  labs(color = NULL, y = NULL, x = "Day") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+Now just plot the incidence to compare with our data.
+
+```{r}
+#| code-fold: true
+#| fig-width: 4
+#| fig-height: 2.5
+#| out-width: "100%"
+df_plot <- pred[,c("time", "Inc")]
+ggplot(df_plot, aes(x = time, y = Inc)) +
+  geom_line(color = my_palette[3], linewidth = 1.1) +
+  geom_point(data = df, aes(x = day, y = inc)) +
+  labs(x = "Day", y = "Incidence") +
+  theme_minimal()
+```
+
+Calculate the residual sum of squares.
+
+```{r}
+rss <- function(data, par) {
+  pred <- seir_mod(par[1], par[2], par[3], S0 = 369, E0 = 0, I0 = 1, R0 = 0, times = 1:length(data))
+  sum((data - pred$Inc)^2)
+}
+```
+
+The `optim()` function needs 2 inputs:
+
+- `par`: a vector of initial values for the parameters to be optimized over.
+- `fn`: a function to be minimized.
+
+```{r}
+seir_optim <- optim(par = c(0.004, 0.5, 0.5), fn = rss, data = df$inc)
+seir_optim
+```
+
+Let plug these values into the model and compare with our data.
+
+```{r}
+#| code-fold: true
+#| fig-width: 4
+#| fig-height: 2.5
+#| out-width: "100%"
+pred <- seir_mod(beta = seir_optim$par[1], sigma = seir_optim$par[2], gamma = seir_optim$par[3], S0 = 369, E0 = 0, I0 = 1, R0 = 0, times = df$day)
+df_plot <- pred[,c("time", "Inc")]
+ggplot(df_plot, aes(x = time, y = Inc)) +
+  geom_line(color = my_palette[3], linewidth = 1.1) +
+  geom_point(data = df, aes(x = day, y = inc)) +
+  labs(x = "Day", y = "Incidence") +
+  theme_minimal()
+```

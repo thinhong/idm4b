@@ -30,11 +30,13 @@ book:
         - sir-sto.qmd
     - part: calib.qmd
       chapters: 
+        - rss.qmd
         - pomp.qmd
     - surv.qmd
     - part: rp.qmd
       chapters: 
         - rp-risk.qmd
+    - dict.qmd
     - references.qmd
 
 bibliography: references.bib
@@ -46,7 +48,7 @@ format:
     code-overflow: wrap
     code-copy: true
     fig-format: svg
-    df-print: kable
+    df-print: paged
     toc-depth: 5
     toc-expand: 3
 

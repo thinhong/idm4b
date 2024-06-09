@@ -3,7 +3,6 @@
 ## Code
 
 ```{r, message=FALSE, warning=FALSE}
-#| code-fold: true
 library(deSolve)
 library(tidyr)
 library(ggplot2)
@@ -11,55 +10,66 @@ library(RColorBrewer)
 library(patchwork)
 ```
 
-```{r}
-#| code-fold: true
+Let reuse the deterministic SIR model code from @lst-sir-det and write code for the deterministic SEIR model.
+
+```{r, echo=FALSE}
 sir_mod <- function(beta, gamma, S0, I0, R0, times) {
   
   sir_equations <- function(time, variables, parameters) {
     with(as.list(c(variables, parameters)), {
-      dS <- -beta * I * S
-      dI <-  beta * I * S - gamma * I
-      dR <-  gamma * I
-      return(list(c(dS, dI, dR)))
+      dS <-   -beta * S * I
+      dI <-    beta * S * I - gamma * I
+      dR <-    gamma * I
+      dCInc <- beta * S * I
+      return(list(c(dS, dI, dR, dCInc)))
     })
   }
   
   parameters_values <- c(beta = beta, gamma = gamma)
-  initial_values <- c(S = S0, I = I0, R = R0)
+  initial_values <- c(S = S0, I = I0, R = R0, CInc = 0)
   
   out <- ode(initial_values, times, sir_equations, parameters_values)
 
   out <- as.data.frame(out)
-  # Compute incidence
-  out$Inc <- c(0, -diff(out$S))
+  # Compute incidence from cumulative incidence
+  out$Inc <- c(I0, diff(out$CInc))
+  out$CInc <- NULL
   out
 }
 ```
+
+::: {#lst-seir-det}
 
 ```{r}
 seir_mod <- function(beta, sigma, gamma, S0, E0, I0, R0, times) {
   
   sir_equations <- function(time, variables, parameters) {
     with(as.list(c(variables, parameters)), {
-      dS <- -beta * I * S
-      dE <-  beta * I * S - sigma * E
-      dI <-  sigma * E - gamma * I
-      dR <-  gamma * I
-      return(list(c(dS, dE, dI, dR)))
+      dS <-   -beta * I * S
+      dE <-    beta * I * S - sigma * E
+      dI <-    sigma * E - gamma * I
+      dR <-    gamma * I
+      dCInc <- sigma * E
+      return(list(c(dS, dE, dI, dR, dCInc)))
     })
   }
   
   parameters_values <- c(beta = beta, sigma = sigma, gamma = gamma)
-  initial_values <- c(S = S0, E = E0, I = I0, R = R0)
+  initial_values <- c(S = S0, E = E0, I = I0, R = R0, CInc = 0)
   
   out <- ode(initial_values, times, sir_equations, parameters_values)
 
   out <- as.data.frame(out)
-  # Compute incidence
-  out$Inc <- c(0, -diff(out$S))
+  # Compute incidence from cumulative incidence
+  out$Inc <- c(I0, diff(out$CInc))
+  out$CInc <- NULL
   out
 }
 ```
+
+Deterministic SEIR model
+
+:::
 
 ```{r}
 #| code-fold: true

@@ -131,6 +131,10 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-X391ZN63GG', { 'anonymize_ip': true});
 </script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -290,8 +294,14 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./rss.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Residual sum of squares</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./pomp.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Particle filter</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Particle filter</span></span></a>
   </div>
 </li>
       </ul>
@@ -299,7 +309,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./surv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Survival analysis</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Survival analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -314,11 +324,17 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
       </ul>
   </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dict.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Dictionary</span></span></a>
+  </div>
+</li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
@@ -337,10 +353,7 @@ window.Quarto = {
   <ul>
   <li><a href="#assumptions" id="toc-assumptions" class="nav-link active" data-scroll-target="#assumptions"><span class="header-section-number">4.1</span> Assumptions</a></li>
   <li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model"><span class="header-section-number">4.2</span> Model</a></li>
-  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">4.3</span> Code</a>
-  <ul>
-  <li><a href="#model-1" id="toc-model-1" class="nav-link" data-scroll-target="#model-1"><span class="header-section-number">4.3.1</span> Model</a></li>
-  </ul></li>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">4.3</span> Code</a></li>
   <li><a href="#sensitivity-analysis" id="toc-sensitivity-analysis" class="nav-link" data-scroll-target="#sensitivity-analysis"><span class="header-section-number">4.4</span> Sensitivity analysis</a>
   <ul>
   <li><a href="#effective-contact-rate-beta" id="toc-effective-contact-rate-beta" class="nav-link" data-scroll-target="#effective-contact-rate-beta"><span class="header-section-number">4.4.1</span> Effective contact rate <span class="math inline">\(\beta\)</span></a></li>
@@ -379,9 +392,10 @@ window.Quarto = {
 <section id="assumptions" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="assumptions"><span class="header-section-number">4.1</span> Assumptions</h2>
 <ul>
+<li>Each member of a population is either susceptible, infectious, or recovered <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span>.</li>
 <li>The disease spreads through direct contact between susceptible and infected individuals.</li>
-<li>Well-mixed population, or homogeneous mixing (a single contact rate <span class="math inline">\(\beta\)</span>) <span class="citation" data-cites="becker2017">(<a href="references.html#ref-becker2017" role="doc-biblioref">Becker &amp; Grenfell, 2017</a>)</span>.</li>
-<li>In the most basic form it considers a “closed population” without demographics (no births, deaths, or migration) <span class="citation" data-cites="keeling2011">(<a href="references.html#ref-keeling2011" role="doc-biblioref">Keeling &amp; Rohani, 2011</a>)</span>.</li>
+<li>Well-mixed population, or homogeneous mixing (represented by a single contact rate <span class="math inline">\(\beta\)</span>) <span class="citation" data-cites="becker2017">(<a href="references.html#ref-becker2017" role="doc-biblioref">Becker &amp; Grenfell, 2017</a>)</span>.</li>
+<li>In the most basic form it considers a “closed population” without demographics (no births, deaths, or migration) <span class="citation" data-cites="keeling2011">(<a href="references.html#ref-keeling2011" role="doc-biblioref">Keeling &amp; Rohani, 2011</a>)</span>, make sense when the disease is short lived compared with the population lifetime <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span>.</li>
 <li>Infectious disease properties are for a single pathogen <span class="citation" data-cites="becker2017">(<a href="references.html#ref-becker2017" role="doc-biblioref">Becker &amp; Grenfell, 2017</a>)</span>.</li>
 <li>Recovered individuals gain lifelong immunity.</li>
 </ul>
@@ -399,43 +413,49 @@ window.Quarto = {
 </section>
 <section id="code" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="code"><span class="header-section-number">4.3</span> Code</h2>
-<section id="model-1" class="level3" data-number="4.3.1">
-<h3 data-number="4.3.1" class="anchored" data-anchor-id="model-1"><span class="header-section-number">4.3.1</span> Model</h3>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(deSolve)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bbmle)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
-<p>Write a function based on <a href="#eq-sir-ds" class="quarto-xref">Equation&nbsp;<span>4.1</span></a>, <a href="#eq-sir-di" class="quarto-xref">Equation&nbsp;<span>4.2</span></a> and <a href="#eq-sir-dr" class="quarto-xref">Equation&nbsp;<span>4.3</span></a></p>
+<p>Below is how we solve the differential equations <a href="#eq-sir-ds" class="quarto-xref">Equation&nbsp;<span>4.1</span></a>, <a href="#eq-sir-di" class="quarto-xref">Equation&nbsp;<span>4.2</span></a> and <a href="#eq-sir-dr" class="quarto-xref">Equation&nbsp;<span>4.3</span></a> in R with the <code>deSolve</code> package.</p>
+<div id="lst-sir-det" class="listing quarto-float">
+<figure class="quarto-float quarto-float-lst figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-sir-det-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;4.1: Deterministic SIR model
+</figcaption>
+<div aria-describedby="lst-sir-det-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sir_mod() returns a data frame consists S, I, R, Inc values by time</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sir_mod <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, gamma, S0, I0, R0, times) {</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  sir_equations <span class="ot">&lt;-</span> <span class="cf">function</span>(time, variables, parameters) {</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">with</span>(<span class="fu">as.list</span>(<span class="fu">c</span>(variables, parameters)), {</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      dS <span class="ot">&lt;-</span> <span class="sc">-</span>beta <span class="sc">*</span> S <span class="sc">*</span> I</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      dI <span class="ot">&lt;-</span>  beta <span class="sc">*</span> S <span class="sc">*</span> I <span class="sc">-</span> gamma <span class="sc">*</span> I</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>      dR <span class="ot">&lt;-</span>  gamma <span class="sc">*</span> I</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="fu">list</span>(<span class="fu">c</span>(dS, dI, dR)))</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  parameters_values <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">beta =</span> beta, <span class="at">gamma =</span> gamma)</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  initial_values <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">S =</span> S0, <span class="at">I =</span> I0, <span class="at">R =</span> R0)</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">ode</span>(initial_values, times, sir_equations, parameters_values)</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(out)</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute incidence</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  out<span class="sc">$</span>Inc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="sc">-</span><span class="fu">diff</span>(out<span class="sc">$</span>S))</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  out</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      dS <span class="ot">&lt;-</span>   <span class="sc">-</span>beta <span class="sc">*</span> S <span class="sc">*</span> I</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      dI <span class="ot">&lt;-</span>    beta <span class="sc">*</span> S <span class="sc">*</span> I <span class="sc">-</span> gamma <span class="sc">*</span> I</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>      dR <span class="ot">&lt;-</span>    gamma <span class="sc">*</span> I</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>      dCInc <span class="ot">&lt;-</span> beta <span class="sc">*</span> S <span class="sc">*</span> I</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="fu">list</span>(<span class="fu">c</span>(dS, dI, dR, dCInc)))</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  parameters_values <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">beta =</span> beta, <span class="at">gamma =</span> gamma)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  initial_values <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">S =</span> S0, <span class="at">I =</span> I0, <span class="at">R =</span> R0, <span class="at">CInc =</span> <span class="dv">0</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">ode</span>(initial_values, times, sir_equations, parameters_values)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(out)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute incidence from cumulative incidence</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  out<span class="sc">$</span>Inc <span class="ot">&lt;-</span> <span class="fu">c</span>(I0, <span class="fu">diff</span>(out<span class="sc">$</span>CInc))</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  out<span class="sc">$</span>CInc <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  out</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</figure>
 </div>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -449,31 +469,61 @@ Important
 <div class="callout-body-container callout-body">
 <p>Note that after running the SIR model, we need to compute incidence separately. When fitting real data:</p>
 <ul>
-<li><strong>Incidence</strong>: new cases are individuals moving out of S.</li>
+<li><strong>Incidence</strong>: use the <span class="math inline">\(\beta SI\)</span> part.</li>
+</ul>
+<p><span class="math display">\[\text{Incidence} = \frac{\text{Number of new cases during a period}}{\text{Population at risk during the same period}}\]</span></p>
+<ul>
 <li><strong>Prevalence</strong>: use the <strong>I compartment</strong>.</li>
 </ul>
-</div>
-</div>
-<p><span class="math display">\[\text{Incidence} = \frac{\text{Number of new cases during a period}}{\text{Population at risk during the same period}}\]</span></p>
 <p><span class="math display">\[\text{Prevalence} = \frac{\text{Number of existing cases at time t}}{\text{Total population at time t}}\]</span></p>
+</div>
+</div>
+<p>There are two ways to compute incidence.</p>
+<ol type="1">
+<li>While writing the differential equations, we tell <code>deSolve</code> to compute the cumulative incidence, then compute the incidence by using <code>diff()</code> on the cumulative incidence.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dS <span class="ot">&lt;-</span>   <span class="sc">-</span>beta <span class="sc">*</span> S <span class="sc">*</span> I</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>dI <span class="ot">&lt;-</span>    beta <span class="sc">*</span> S <span class="sc">*</span> I <span class="sc">-</span> gamma <span class="sc">*</span> I</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>dR <span class="ot">&lt;-</span>    gamma <span class="sc">*</span> I</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>dCInc <span class="ot">&lt;-</span> beta <span class="sc">*</span> S <span class="sc">*</span> I</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>Inc <span class="ot">&lt;-</span> <span class="fu">c</span>(I0, <span class="fu">diff</span>(out<span class="sc">$</span>CInc))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li>In this “closed population”, the incidence is the number of individuals moving out of <span class="math inline">\(S\)</span> in each time step. So we can compute it from the <span class="math inline">\(S\)</span> column. Let compare it with the previous method.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">sir_mod</span>(<span class="at">beta =</span> <span class="fl">0.004</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>, <span class="at">S0 =</span> <span class="dv">999</span>, <span class="at">I0 =</span> <span class="dv">1</span>, <span class="at">R0 =</span> <span class="dv">0</span>, <span class="at">times =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">13</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>pred<span class="sc">$</span>Inc2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="sc">-</span><span class="fu">diff</span>(pred<span class="sc">$</span>S))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>pred[,<span class="st">"Inc-Inc2"</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(pred<span class="sc">$</span>Inc <span class="sc">-</span> pred<span class="sc">$</span>Inc2)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>pred[,<span class="fu">c</span>(<span class="st">"Inc"</span>, <span class="st">"Inc2"</span>, <span class="st">"Inc-Inc2"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["Inc"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Inc2"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Inc-Inc2"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"1.000000e+00","2":"1.000000e+00","3":"0"},{"1":"3.529431e+01","2":"3.529431e+01","3":"0"},{"1":"5.021367e+02","2":"5.021367e+02","3":"0"},{"1":"4.154123e+02","2":"4.154123e+02","3":"0"},{"1":"3.912073e+01","2":"3.912073e+01","3":"0"},{"1":"4.887000e+00","2":"4.887000e+00","3":"0"},{"1":"1.109860e+00","2":"1.109860e+00","3":"0"},{"1":"3.716889e-01","2":"3.716889e-01","3":"0"},{"1":"1.575463e-01","2":"1.575463e-01","3":"0"},{"1":"7.697212e-02","2":"7.697212e-02","3":"0"},{"1":"4.097450e-02","2":"4.097450e-02","3":"0"},{"1":"2.297365e-02","2":"2.297365e-02","3":"0"},{"1":"1.329223e-02","2":"1.329223e-02","3":"0"},{"1":"7.838806e-03","2":"7.838806e-03","3":"0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>Now let have a look at the output.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">sir_mod</span>(<span class="at">beta =</span> <span class="fl">0.004</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>, <span class="at">S0 =</span> <span class="dv">999</span>, <span class="at">I0 =</span> <span class="dv">1</span>, <span class="at">R0 =</span> <span class="dv">0</span>, <span class="at">times =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">13</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df_plot <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(pred, <span class="at">cols =</span> S<span class="sc">:</span>Inc, <span class="at">names_to =</span> <span class="st">"comp"</span>, <span class="at">values_to =</span> <span class="st">"n"</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_plot, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> n, <span class="at">color =</span> comp)) <span class="sc">+</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"PuOr"</span>, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"S"</span>, <span class="st">"Inc"</span>, <span class="st">"I"</span>, <span class="st">"R"</span>)) <span class="sc">+</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df_plot <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(pred, <span class="at">cols =</span> S<span class="sc">:</span>Inc, <span class="at">names_to =</span> <span class="st">"comp"</span>, <span class="at">values_to =</span> <span class="st">"n"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_plot, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> n, <span class="at">color =</span> comp)) <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"PuOr"</span>, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"S"</span>, <span class="st">"Inc"</span>, <span class="st">"I"</span>, <span class="st">"R"</span>)) <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">x =</span> <span class="st">"Time"</span>) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="sir-det_files/figure-html/unnamed-chunk-3-1.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="sir-det_files/figure-html/unnamed-chunk-5-1.svg" class="img-fluid figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 </div>
@@ -484,7 +534,6 @@ Important
 <li>Prevalence accumulates both new and existing cases. Even after the incidence starts to decline, the active cases who were infected before the incidence peak are still there waiting for recovering. Prevalence only starts to decline when the recovery rate surpasses the rate of new infections significantly.</li>
 </ul>
 </section>
-</section>
 <section id="sensitivity-analysis" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="sensitivity-analysis"><span class="header-section-number">4.4</span> Sensitivity analysis</h2>
 <p>The effective contact rate <span class="math inline">\(\beta\)</span> and the recovery rate <span class="math inline">\(\gamma\)</span> both affect whether or not there is an epidemic. The total number of people in the population and the initial number of infected people have no effect on whether there is an epidemic.</p>
@@ -492,35 +541,35 @@ Important
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sir_sa <span class="ot">&lt;-</span> <span class="cf">function</span>(vals, parm, outcome, times, <span class="at">init_beta =</span> <span class="fl">0.004</span>, <span class="at">init_gamma =</span> <span class="fl">0.5</span>) {</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  pick_comp <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(outcome <span class="sc">==</span> <span class="st">"prev"</span>, <span class="st">"I"</span>, <span class="st">"Inc"</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  plot_lab <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(outcome <span class="sc">==</span> <span class="st">"prev"</span>, <span class="st">"prevalence"</span>, <span class="st">"incidence"</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  symb <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(parm <span class="sc">==</span> <span class="st">"beta"</span>, <span class="st">"\u03b2"</span>, <span class="st">"\u03b3"</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  l <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vals)) {</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (parm <span class="sc">==</span> <span class="st">"beta"</span>) {</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>      pred <span class="ot">&lt;-</span> <span class="fu">sir_mod</span>(<span class="at">beta =</span> vals[i], <span class="at">gamma =</span> init_gamma, <span class="at">S0 =</span> <span class="dv">999</span>, <span class="at">I0 =</span> <span class="dv">1</span>, <span class="at">R0 =</span> <span class="dv">0</span>, <span class="at">times =</span> times)[, <span class="fu">c</span>(<span class="st">"time"</span>, pick_comp)]</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>      pred <span class="ot">&lt;-</span> <span class="fu">sir_mod</span>(<span class="at">beta =</span> init_beta, <span class="at">gamma =</span> vals[i], <span class="at">S0 =</span> <span class="dv">999</span>, <span class="at">I0 =</span> <span class="dv">1</span>, <span class="at">R0 =</span> <span class="dv">0</span>, <span class="at">times =</span> times)[, <span class="fu">c</span>(<span class="st">"time"</span>, pick_comp)]</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    pred<span class="sc">$</span>comp <span class="ot">&lt;-</span> <span class="fu">paste0</span>(pick_comp, i)</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colnames</span>(pred) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"n"</span>, <span class="st">"comp"</span>)</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    l[[i]] <span class="ot">&lt;-</span> pred</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Bind this list into a data frame</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  df_plot <span class="ot">&lt;-</span> <span class="fu">Reduce</span>(rbind, l)</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set level I1 &lt; I2 &lt; I3... according to the increase of beta values</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  df_plot<span class="sc">$</span>comp <span class="ot">&lt;-</span> <span class="fu">factor</span>(df_plot<span class="sc">$</span>comp, <span class="at">levels =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(pick_comp, <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vals))))</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot results</span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  my_palette <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">"Blues"</span>)[(<span class="dv">9</span><span class="sc">-</span><span class="fu">length</span>(vals)<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span><span class="dv">9</span>]</span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(df_plot, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> n, <span class="at">color =</span> comp)) <span class="sc">+</span> </span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> my_palette, <span class="at">labels =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(symb, <span class="st">" = "</span>, vals))) <span class="sc">+</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">color =</span> <span class="cn">NULL</span>, <span class="at">y =</span> plot_lab) <span class="sc">+</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sir_sa <span class="ot">&lt;-</span> <span class="cf">function</span>(vals, parm, outcome, times, <span class="at">init_beta =</span> <span class="fl">0.004</span>, <span class="at">init_gamma =</span> <span class="fl">0.5</span>) {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  pick_comp <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(outcome <span class="sc">==</span> <span class="st">"prev"</span>, <span class="st">"I"</span>, <span class="st">"Inc"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  plot_lab <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(outcome <span class="sc">==</span> <span class="st">"prev"</span>, <span class="st">"Prevalence"</span>, <span class="st">"Incidence"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  symb <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(parm <span class="sc">==</span> <span class="st">"beta"</span>, <span class="st">"\u03b2"</span>, <span class="st">"\u03b3"</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  l <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vals)) {</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (parm <span class="sc">==</span> <span class="st">"beta"</span>) {</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>      pred <span class="ot">&lt;-</span> <span class="fu">sir_mod</span>(<span class="at">beta =</span> vals[i], <span class="at">gamma =</span> init_gamma, <span class="at">S0 =</span> <span class="dv">999</span>, <span class="at">I0 =</span> <span class="dv">1</span>, <span class="at">R0 =</span> <span class="dv">0</span>, <span class="at">times =</span> times)[, <span class="fu">c</span>(<span class="st">"time"</span>, pick_comp)]</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>      pred <span class="ot">&lt;-</span> <span class="fu">sir_mod</span>(<span class="at">beta =</span> init_beta, <span class="at">gamma =</span> vals[i], <span class="at">S0 =</span> <span class="dv">999</span>, <span class="at">I0 =</span> <span class="dv">1</span>, <span class="at">R0 =</span> <span class="dv">0</span>, <span class="at">times =</span> times)[, <span class="fu">c</span>(<span class="st">"time"</span>, pick_comp)]</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    pred<span class="sc">$</span>comp <span class="ot">&lt;-</span> <span class="fu">paste0</span>(pick_comp, i)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colnames</span>(pred) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"n"</span>, <span class="st">"comp"</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    l[[i]] <span class="ot">&lt;-</span> pred</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Bind this list into a data frame</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  df_plot <span class="ot">&lt;-</span> <span class="fu">Reduce</span>(rbind, l)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set level I1 &lt; I2 &lt; I3... according to the increase of beta values</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  df_plot<span class="sc">$</span>comp <span class="ot">&lt;-</span> <span class="fu">factor</span>(df_plot<span class="sc">$</span>comp, <span class="at">levels =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(pick_comp, <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vals))))</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot results</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  my_palette <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">"Blues"</span>)[(<span class="dv">9</span><span class="sc">-</span><span class="fu">length</span>(vals)<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span><span class="dv">9</span>]</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(df_plot, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> n, <span class="at">color =</span> comp)) <span class="sc">+</span> </span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> my_palette, <span class="at">labels =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(symb, <span class="st">" = "</span>, vals))) <span class="sc">+</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">color =</span> <span class="cn">NULL</span>, <span class="at">y =</span> plot_lab, <span class="at">x =</span> <span class="st">"Time"</span>) <span class="sc">+</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <section id="effective-contact-rate-beta" class="level3" data-number="4.4.1">
@@ -528,17 +577,17 @@ Important
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>vals <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.001</span>, <span class="fl">0.006</span>, <span class="fl">0.001</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">sir_sa</span>(<span class="at">vals =</span> vals, <span class="at">parm =</span> <span class="st">"beta"</span>, <span class="at">outcome =</span> <span class="st">"prev"</span>, <span class="at">times =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">13</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">sir_sa</span>(<span class="at">vals =</span> vals, <span class="at">parm =</span> <span class="st">"beta"</span>, <span class="at">outcome =</span> <span class="st">"inc"</span>, <span class="at">times =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">13</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">/</span> p2 <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>vals <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.001</span>, <span class="fl">0.006</span>, <span class="fl">0.001</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">sir_sa</span>(<span class="at">vals =</span> vals, <span class="at">parm =</span> <span class="st">"beta"</span>, <span class="at">outcome =</span> <span class="st">"prev"</span>, <span class="at">times =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">13</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">sir_sa</span>(<span class="at">vals =</span> vals, <span class="at">parm =</span> <span class="st">"beta"</span>, <span class="at">outcome =</span> <span class="st">"inc"</span>, <span class="at">times =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">13</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">/</span> p2 <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="sir-det_files/figure-html/unnamed-chunk-5-1.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="sir-det_files/figure-html/unnamed-chunk-7-1.svg" class="img-fluid figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 </div>
@@ -556,17 +605,17 @@ Important
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>vals <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.3</span>, <span class="fl">0.8</span>, <span class="fl">0.1</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">sir_sa</span>(<span class="at">vals =</span> vals, <span class="at">parm =</span> <span class="st">"gamma"</span>, <span class="at">outcome =</span> <span class="st">"prev"</span>, <span class="at">times =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">13</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">sir_sa</span>(<span class="at">vals =</span> vals, <span class="at">parm =</span> <span class="st">"gamma"</span>, <span class="at">outcome =</span> <span class="st">"inc"</span>, <span class="at">times =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">13</span>)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">/</span> p2 <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>vals <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.3</span>, <span class="fl">0.8</span>, <span class="fl">0.1</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">sir_sa</span>(<span class="at">vals =</span> vals, <span class="at">parm =</span> <span class="st">"gamma"</span>, <span class="at">outcome =</span> <span class="st">"prev"</span>, <span class="at">times =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">13</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">sir_sa</span>(<span class="at">vals =</span> vals, <span class="at">parm =</span> <span class="st">"gamma"</span>, <span class="at">outcome =</span> <span class="st">"inc"</span>, <span class="at">times =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">13</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">/</span> p2 <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="sir-det_files/figure-html/unnamed-chunk-6-1.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="sir-det_files/figure-html/unnamed-chunk-8-1.svg" class="img-fluid figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 </div>
@@ -604,6 +653,9 @@ Important
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
 <div id="ref-becker2017" class="csl-entry" role="listitem">
 Becker, A. D., &amp; Grenfell, B. T. (2017). tsiR: An R package for time-series Susceptible-Infected-Recovered models of epidemics. <em>PLOS ONE</em>, <em>12</em>(9), e0185528. <a href="https://doi.org/10.1371/journal.pone.0185528">https://doi.org/10.1371/journal.pone.0185528</a>
+</div>
+<div id="ref-vandendriessche2017" class="csl-entry" role="listitem">
+Driessche, P. van den. (2017). Reproduction numbers of infectious disease models. <em>Infectious Disease Modelling</em>, <em>2</em>(3), 288–303. <a href="https://doi.org/10.1016/j.idm.2017.06.002">https://doi.org/10.1016/j.idm.2017.06.002</a>
 </div>
 <div id="ref-keeling2011" class="csl-entry" role="listitem">
 Keeling, M. J., &amp; Rohani, P. (2011). <em>Modeling Infectious Diseases in Humans and Animals</em>. Princeton University Press. <a href="https://doi.org/10.1515/9781400841035">https://doi.org/10.1515/9781400841035</a>
