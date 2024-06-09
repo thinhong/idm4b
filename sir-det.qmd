@@ -37,7 +37,6 @@ Below is how we solve the differential equations @eq-sir-ds, @eq-sir-di and @eq-
 ::: {#lst-sir-det}
 
 ```{r}
-# sir_mod() returns a data frame consists S, I, R, Inc values by time
 sir_mod <- function(beta, gamma, S0, I0, R0, times) {
   
   sir_equations <- function(time, variables, parameters) {
@@ -68,7 +67,7 @@ Deterministic SIR model
 :::
 
 ::: {.callout-important}
-Note that after running the SIR model, we need to compute incidence separately. When fitting real data:
+Be careful of what kind of data we are using to fit the model:
 
 -   **Incidence**: use the $\beta SI$ part.
 
@@ -97,12 +96,17 @@ out$Inc <- c(I0, diff(out$CInc))
 ```{r}
 pred <- sir_mod(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = 0:13)
 
-pred$Inc2 <- c(1, -diff(pred$S))
-pred[,"Inc-Inc2"] <- round(pred$Inc - pred$Inc2)
-pred[,c("Inc", "Inc2", "Inc-Inc2")]
+tmp <- pred
+tmp$Inc2 <- c(1, -diff(tmp$S))
+tmp[,"Inc-Inc2"] <- round(tmp$Inc - tmp$Inc2)
+tmp[,c("Inc", "Inc2", "Inc-Inc2")]
 ```
 
 Now let have a look at the output.
+
+```{r}
+head(pred)
+```
 
 ```{r}
 #| code-fold: true

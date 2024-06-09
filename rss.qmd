@@ -39,8 +39,7 @@ For simplicity, we are going to make the following assumptions:
 
 Let reuse the deterministic SEIR model from @lst-seir-det:
 
-```{r}
-#| code-fold: true
+```{r, echo=FALSE}
 seir_mod <- function(beta, sigma, gamma, S0, E0, I0, R0, times) {
   
   sir_equations <- function(time, variables, parameters) {
