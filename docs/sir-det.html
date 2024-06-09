@@ -482,12 +482,10 @@ Important
 <li>While writing the differential equations, we tell <code>deSolve</code> to compute the cumulative incidence, then compute the incidence by using <code>diff()</code> on the cumulative incidence.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dS <span class="ot">&lt;-</span>   <span class="sc">-</span>beta <span class="sc">*</span> S <span class="sc">*</span> I</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>dI <span class="ot">&lt;-</span>    beta <span class="sc">*</span> S <span class="sc">*</span> I <span class="sc">-</span> gamma <span class="sc">*</span> I</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>dR <span class="ot">&lt;-</span>    gamma <span class="sc">*</span> I</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>dCInc <span class="ot">&lt;-</span> beta <span class="sc">*</span> S <span class="sc">*</span> I</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>Inc <span class="ot">&lt;-</span> <span class="fu">c</span>(I0, <span class="fu">diff</span>(out<span class="sc">$</span>CInc))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cumulative incidence</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>dCInc <span class="ot">&lt;-</span> beta <span class="sc">*</span> S <span class="sc">*</span> I</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute incidence from cumulative incidence</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>Inc <span class="ot">&lt;-</span> <span class="fu">c</span>(I0, <span class="fu">diff</span>(out<span class="sc">$</span>CInc))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="2" type="1">
 <li>In this “closed population”, the incidence is the number of individuals moving out of <span class="math inline">\(S\)</span> in each time step. So we can compute it from the <span class="math inline">\(S\)</span> column. Let compare it with the previous method.</li>

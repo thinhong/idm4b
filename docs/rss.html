@@ -462,7 +462,7 @@ window.Quarto = {
 <p>Calculate the residual sum of squares.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rss <span class="ot">&lt;-</span> <span class="cf">function</span>(data, par) {</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> <span class="fu">seir_mod</span>(par[<span class="dv">1</span>], par[<span class="dv">2</span>], par[<span class="dv">3</span>], <span class="at">S0 =</span> <span class="dv">369</span>, <span class="at">E0 =</span> <span class="dv">0</span>, <span class="at">I0 =</span> <span class="dv">1</span>, <span class="at">R0 =</span> <span class="dv">0</span>, <span class="at">times =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(data))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> <span class="fu">seir_mod</span>(par[<span class="dv">1</span>], par[<span class="dv">2</span>], par[<span class="dv">3</span>], <span class="at">S0 =</span> <span class="dv">369</span>, <span class="at">E0 =</span> <span class="dv">0</span>, <span class="at">I0 =</span> <span class="dv">1</span>, <span class="at">R0 =</span> <span class="dv">0</span>, <span class="at">times =</span> <span class="dv">0</span><span class="sc">:</span>(<span class="fu">length</span>(data) <span class="sc">-</span> <span class="dv">1</span>))</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>((data <span class="sc">-</span> pred<span class="sc">$</span>Inc)<span class="sc">^</span><span class="dv">2</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -476,7 +476,7 @@ window.Quarto = {
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>seir_optim</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$par
-[1] 0.007666567 1.697472570 2.209581709
+[1] 0.007665126 1.697323120 2.209129854
 
 $value
 [1] 147.9004

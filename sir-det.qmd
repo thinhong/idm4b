@@ -83,11 +83,9 @@ There are two ways to compute incidence.
 1. While writing the differential equations, we tell `deSolve` to compute the cumulative incidence, then compute the incidence by using `diff()` on the cumulative incidence.
 
 ```{r, eval=F}
-dS <-   -beta * S * I
-dI <-    beta * S * I - gamma * I
-dR <-    gamma * I
+# Cumulative incidence
 dCInc <- beta * S * I
-
+# Compute incidence from cumulative incidence
 out$Inc <- c(I0, diff(out$CInc))
 ```
 

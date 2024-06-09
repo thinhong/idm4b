@@ -106,7 +106,7 @@ Calculate the residual sum of squares.
 
 ```{r}
 rss <- function(data, par) {
-  pred <- seir_mod(par[1], par[2], par[3], S0 = 369, E0 = 0, I0 = 1, R0 = 0, times = 1:length(data))
+  pred <- seir_mod(par[1], par[2], par[3], S0 = 369, E0 = 0, I0 = 1, R0 = 0, times = 0:(length(data) - 1))
   sum((data - pred$Inc)^2)
 }
 ```
