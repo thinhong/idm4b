@@ -15,7 +15,7 @@ Let reuse the deterministic SIR model code from @lst-sir-det and write code for 
 ```{r, echo=FALSE}
 sir_mod <- function(beta, gamma, S0, I0, R0, times) {
   
-  sir_equations <- function(time, variables, parameters) {
+  equations <- function(time, variables, parameters) {
     with(as.list(c(variables, parameters)), {
       dS <-   -beta * S * I
       dI <-    beta * S * I - gamma * I
@@ -28,7 +28,7 @@ sir_mod <- function(beta, gamma, S0, I0, R0, times) {
   parameters_values <- c(beta = beta, gamma = gamma)
   initial_values <- c(S = S0, I = I0, R = R0, CInc = 0)
   
-  out <- ode(initial_values, times, sir_equations, parameters_values)
+  out <- ode(y = initial_values, times = times, func = equations, parms = parameters_values)
 
   out <- as.data.frame(out)
   # Compute incidence from cumulative incidence
@@ -43,7 +43,7 @@ sir_mod <- function(beta, gamma, S0, I0, R0, times) {
 ```{r}
 seir_mod <- function(beta, sigma, gamma, S0, E0, I0, R0, times) {
   
-  sir_equations <- function(time, variables, parameters) {
+  equations <- function(time, variables, parameters) {
     with(as.list(c(variables, parameters)), {
       dS <-   -beta * I * S
       dE <-    beta * I * S - sigma * E
@@ -57,7 +57,7 @@ seir_mod <- function(beta, sigma, gamma, S0, E0, I0, R0, times) {
   parameters_values <- c(beta = beta, sigma = sigma, gamma = gamma)
   initial_values <- c(S = S0, E = E0, I = I0, R = R0, CInc = 0)
   
-  out <- ode(initial_values, times, sir_equations, parameters_values)
+  out <- ode(y = initial_values, times = times, func = equations, parms = parameters_values)
 
   out <- as.data.frame(out)
   # Compute incidence from cumulative incidence

@@ -376,7 +376,7 @@ Listing&nbsp;5.1: Deterministic SEIR model
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>seir_mod <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, sigma, gamma, S0, E0, I0, R0, times) {</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  sir_equations <span class="ot">&lt;-</span> <span class="cf">function</span>(time, variables, parameters) {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  equations <span class="ot">&lt;-</span> <span class="cf">function</span>(time, variables, parameters) {</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">with</span>(<span class="fu">as.list</span>(<span class="fu">c</span>(variables, parameters)), {</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      dS <span class="ot">&lt;-</span>   <span class="sc">-</span>beta <span class="sc">*</span> I <span class="sc">*</span> S</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      dE <span class="ot">&lt;-</span>    beta <span class="sc">*</span> I <span class="sc">*</span> S <span class="sc">-</span> sigma <span class="sc">*</span> E</span>
@@ -390,7 +390,7 @@ Listing&nbsp;5.1: Deterministic SEIR model
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  parameters_values <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">beta =</span> beta, <span class="at">sigma =</span> sigma, <span class="at">gamma =</span> gamma)</span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  initial_values <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">S =</span> S0, <span class="at">E =</span> E0, <span class="at">I =</span> I0, <span class="at">R =</span> R0, <span class="at">CInc =</span> <span class="dv">0</span>)</span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">ode</span>(initial_values, times, sir_equations, parameters_values)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">ode</span>(<span class="at">y =</span> initial_values, <span class="at">times =</span> times, <span class="at">func =</span> equations, <span class="at">parms =</span> parameters_values)</span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(out)</span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute incidence from cumulative incidence</span></span>
