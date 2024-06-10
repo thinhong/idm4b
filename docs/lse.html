@@ -396,7 +396,7 @@ Preparation
 </div>
 <div class="callout-body-container callout-body">
 <p>Download influenza incidence data here:</p>
-<p><a href="#dnldts23524" onclick="fetch('data:application/x-gzip;base64,H4sIAAAAAAAABqXQ3U7CMBTA8dJ2w4GKCip+iwjK11S48Ql8Akm4bUATE4UETAh3vqCv5PwP2mRZDDc2+XXtWc/pzgY5IYQSWjN7LIXXf37qPLIrspHYQk+sRsbGFHR8GD6y2ECAuGAemzZ3GwXsYBd7iGuXsI8DHKKMIxzjBKc4wzkucIkKrlDFNWqo4wa3aKCJFtroIMQd7vGA7h89Zexa2p5Ugp+IBzbX9eb69BNUql56yDXv/jG0XN6rl9/ojc3Hy0ysfrq0QTUyC7d8Gw/TKcN3M3MpLpgbmU8Tvk6pljoeTCfz0N0S/wr5xRRF0TePn1/Of5jsVgIAAA==').then(res => res.blob()).then(blob => {
+<p><a href="#dnldts56510" onclick="fetch('data:application/x-gzip;base64,H4sIAAAAAAAABqXQ3U7CMBTA8dJ2w4GKCip+iwjK11S48Ql8Akm4bUATE4UETAh3vqCv5PwP2mRZDDc2+XXtWc/pzgY5IYQSWjN7LIXXf37qPLIrspHYQk+sRsbGFHR8GD6y2ECAuGAemzZ3GwXsYBd7iGuXsI8DHKKMIxzjBKc4wzkucIkKrlDFNWqo4wa3aKCJFtroIMQd7vGA7h89Zexa2p5Ugp+IBzbX9eb69BNUql56yDXv/jG0XN6rl9/ojc3Hy0ysfrq0QTUyC7d8Gw/TKcN3M3MpLpgbmU8Tvk6pljoeTCfz0N0S/wr5xRRF0TePn1/Of5jsVgIAAA==').then(res => res.blob()).then(blob => {
       const downloadURL = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -404,7 +404,7 @@ Preparation
       a.download = 'flu_inc.rds'; a.click();
       window.URL.revokeObjectURL(downloadURL);
       document.body.removeChild(a);
-        });"><button class="btn btn-light downloadthis  " id="dnldts23524"><i class="bi bi-download"></i> flu_inc.rds </button></a></p>
+        });"><button class="btn btn-light downloadthis  " id="dnldts56510"><i class="bi bi-download"></i> flu_inc.rds </button></a></p>
 </div>
 </div>
 <section id="methods" class="level2" data-number="8.1">
@@ -529,7 +529,6 @@ NULL</code></pre>
 </div>
 </div>
 <p>Let plug these values into the model and compare with our data.</p>
-<div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">seir_mod</span>(<span class="at">beta =</span> seir_optim<span class="sc">$</span>par[<span class="dv">1</span>], <span class="at">sigma =</span> seir_optim<span class="sc">$</span>par[<span class="dv">2</span>], <span class="at">gamma =</span> seir_optim<span class="sc">$</span>par[<span class="dv">3</span>], <span class="at">S0 =</span> S0, <span class="at">E0 =</span> E0, <span class="at">I0 =</span> I0, <span class="at">R0 =</span> R0, <span class="at">times =</span> df<span class="sc">$</span>day)</span>
@@ -541,6 +540,10 @@ NULL</code></pre>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Day"</span>, <span class="at">y =</span> <span class="st">"Incidence"</span>) <span class="sc">+</span></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div id="fig-lse-seir" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-lse-seir-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -549,13 +552,28 @@ NULL</code></pre>
 </div>
 </div>
 </div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lse-seir-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.1: Deterministic SEIR model fitted with least squares estimation.
+</figcaption>
+</figure>
+</div>
 <p>Since we are using a “closed population” SEIR model, <span class="math inline">\(R_0 = \frac{\beta}{\gamma} S_0\)</span>.</p>
+<div id="lst-lse-r0" class="listing quarto-float">
+<figure class="quarto-float quarto-float-lst figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-lse-r0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;8.1: <span class="math inline">\(R_0\)</span> from deterministic SEIR model fitted with least squares estimation.
+</figcaption>
+<div aria-describedby="lst-lse-r0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>rnum0 <span class="ot">&lt;-</span> seir_optim<span class="sc">$</span>par[<span class="dv">1</span>] <span class="sc">*</span> S0 <span class="sc">/</span> seir_optim<span class="sc">$</span>par[<span class="dv">3</span>]</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>rnum0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.280337</code></pre>
 </div>
+</div>
+</div>
+</figure>
 </div>
 <p>This is quite close to 1.4 (95% CI: 1.2, 1.5) as reported by <span class="citation" data-cites="cauchemez2011">(<a href="references.html#ref-cauchemez2011" role="doc-biblioref">Cauchemez et al., 2011</a>)</span>, considering that they used more complicated methods.</p>
 

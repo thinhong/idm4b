@@ -2,27 +2,9 @@
 
 ## Least squares estimation {#sec-calib-lse}
 
+$$RSS = \sum_{i = 1}^{n}[y_i - f(x_i)]^2$$ {#eq-calib-rss}
+
 Least squares estimation corresponds to maximum likelihood estimation when the noise is normally distributed with equal variances.
-
-We assume the incidence data is generated from a normal distribution with mean $\mu_{inc}$ is the predicted incidence and a standard deviation $\sigma_{inc}$.
-
-$$L(\theta) = \prod_{i = 1}^{n} \mathcal{N}(\mu_{inc}, \sigma_{inc}) = \prod_{i = 1}^{n} \frac{1}{\sigma_{inc}\sqrt{2 \pi}} \text{exp} \left[ \frac{-1}{2 \sigma_{inc}^2} (y_i - \mu_{inc})^2 \right]$$
-
-$$L(\theta) = \frac{1}{(\sigma_{inc} \sqrt{2 \pi})^n} \text{exp} \left[ \frac{-1}{2 \sigma_{inc}^2} \sum_{i = 1}^n (y_i - \mu_{inc})^2 \right]$$
-
-Since $\sigma_{inc}$ and $\sqrt{2 \pi})^n}$ are constant.
-
-$$L(\theta) \varpropto \text{exp} \left[ - \sum_{i = 1}^n (y_i - \mu_{inc})^2 \right]$$
-
-### Step 2
-
-Take the natural log of the likelihood.
-
-$$log L(\theta) = - \sum_{i = 1}^n (y_i - \mu_{inc})^2$$
-
-### Step 3
-
-Take the negative log likelihood.
 
 ## Maximum likelihood estimation {#sec-calib-mle}
 
@@ -55,3 +37,30 @@ Poisson distribution is a **discrete probability distribution** that expresses p
 [^sir-det-1]: Wikipedia <https://en.wikipedia.org/wiki/Poisson_distribution>
 
 Suitable to use because here we are fitting a number of prev occurring in this period.
+
+## When MLE is equal to LSE {#sec-calib-mle-lse}
+
+Assuming the data is generated from a normal distribution with mean $\mu$ and a standard deviation $\sigma$.
+
+- **Step 1**. Write down the likelihood function $L(\theta)$.
+
+$$L(\theta) = \prod_{i = 1}^{n} \mathcal{N}(\mu_i, \sigma) = \prod_{i = 1}^{n} \frac{1}{\sigma\sqrt{2 \pi}} \text{exp} \left[ \frac{-1}{2 \sigma^2} (y_i - \mu_i)^2 \right]$$
+
+$$L(\theta) = \frac{1}{(\sigma \sqrt{2 \pi})^n} \text{exp} \left[ \frac{-1}{2 \sigma^2} \sum_{i = 1}^n (y_i - \mu_i)^2 \right]$$
+
+Since $\sigma$ and $\sqrt{2 \pi}$ are constant.
+
+$$L(\theta) \varpropto \text{exp} \left[ - \sum_{i = 1}^n (y_i - \mu_i)^2 \right]$$
+
+- **Step 2**. Take the natural log of the likelihood $log L(\theta)$.
+
+$$log L(\theta) \varpropto - \sum_{i = 1}^n (y_i - \mu_i)^2$$
+
+- **Step 3**. Take the negative log likelihood $- log L(\theta)$.
+
+$$- log L(\theta) \varpropto \sum_{i = 1}^n (y_i - \mu_i)^2$$
+
+This looks exactly like the residual sum of squares at @eq-calib-rss.
+
+- **Step 4**. The optimizer **minimize negative log likelihood** $- log L(\theta)$. It does the same thing as the LSE finds the optimal parameters by **minimizing the RSS**.
+

@@ -140,6 +140,8 @@ seir_optim
 
 Let plug these values into the model and compare with our data.
 
+::: {#fig-lse-seir}
+
 ```{r}
 #| code-fold: true
 #| fig-width: 4
@@ -155,11 +157,21 @@ ggplot(df_plot, aes(x = time, y = Inc)) +
   theme_minimal()
 ```
 
+Deterministic SEIR model fitted with least squares estimation.
+
+:::
+
 Since we are using a "closed population" SEIR model, $R_0 = \frac{\beta}{\gamma} S_0$.
+
+::: {#lst-lse-r0}
 
 ```{r}
 rnum0 <- seir_optim$par[1] * S0 / seir_optim$par[3]
 rnum0
 ```
+
+$R_0$ from deterministic SEIR model fitted with least squares estimation.
+
+:::
 
 This is quite close to 1.4 (95% CI: 1.2, 1.5) as reported by [@cauchemez2011], considering that they used more complicated methods.

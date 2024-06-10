@@ -299,11 +299,7 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-calib-lse" id="toc-sec-calib-lse" class="nav-link active" data-scroll-target="#sec-calib-lse">Least squares estimation</a>
-  <ul>
-  <li><a href="#step-2" id="toc-step-2" class="nav-link" data-scroll-target="#step-2">Step 2</a></li>
-  <li><a href="#step-3" id="toc-step-3" class="nav-link" data-scroll-target="#step-3">Step 3</a></li>
-  </ul></li>
+  <li><a href="#sec-calib-lse" id="toc-sec-calib-lse" class="nav-link active" data-scroll-target="#sec-calib-lse">Least squares estimation</a></li>
   <li><a href="#sec-calib-mle" id="toc-sec-calib-mle" class="nav-link" data-scroll-target="#sec-calib-mle">Maximum likelihood estimation</a>
   <ul>
   <li><a href="#likelihood" id="toc-likelihood" class="nav-link" data-scroll-target="#likelihood">Likelihood</a></li>
@@ -311,6 +307,7 @@ window.Quarto = {
   <li><a href="#sec-calib-negloglik" id="toc-sec-calib-negloglik" class="nav-link" data-scroll-target="#sec-calib-negloglik">Negative log-likelihood</a></li>
   </ul></li>
   <li><a href="#poisson-distribution" id="toc-poisson-distribution" class="nav-link" data-scroll-target="#poisson-distribution">Poisson distribution</a></li>
+  <li><a href="#sec-calib-mle-lse" id="toc-sec-calib-mle-lse" class="nav-link" data-scroll-target="#sec-calib-mle-lse">When MLE is equal to LSE</a></li>
   </ul>
 </nav>
     </div>
@@ -338,21 +335,8 @@ window.Quarto = {
 
 <section id="sec-calib-lse" class="level2">
 <h2 class="anchored" data-anchor-id="sec-calib-lse">Least squares estimation</h2>
+<p><span id="eq-calib-rss"><span class="math display">\[RSS = \sum_{i = 1}^{n}[y_i - f(x_i)]^2 \tag{1}\]</span></span></p>
 <p>Least squares estimation corresponds to maximum likelihood estimation when the noise is normally distributed with equal variances.</p>
-<p>We assume the incidence data is generated from a normal distribution with mean <span class="math inline">\(\mu_{inc}\)</span> is the predicted incidence and a standard deviation <span class="math inline">\(\sigma_{inc}\)</span>.</p>
-<p><span class="math display">\[L(\theta) = \prod_{i = 1}^{n} \mathcal{N}(\mu_{inc}, \sigma_{inc}) = \prod_{i = 1}^{n} \frac{1}{\sigma_{inc}\sqrt{2 \pi}} \text{exp} \left[ \frac{-1}{2 \sigma_{inc}^2} (y_i - \mu_{inc})^2 \right]\]</span></p>
-<p><span class="math display">\[L(\theta) = \frac{1}{(\sigma_{inc} \sqrt{2 \pi})^n} \text{exp} \left[ \frac{-1}{2 \sigma_{inc}^2} \sum_{i = 1}^n (y_i - \mu_{inc})^2 \right]\]</span></p>
-<p>Since <span class="math inline">\(\sigma_{inc}\)</span> and <span class="math inline">\(\sqrt{2 \pi})^n}\)</span> are constant.</p>
-<p><span class="math display">\[L(\theta) \varpropto \text{exp} \left[ - \sum_{i = 1}^n (y_i - \mu_{inc})^2 \right]\]</span></p>
-<section id="step-2" class="level3">
-<h3 class="anchored" data-anchor-id="step-2">Step 2</h3>
-<p>Take the natural log of the likelihood.</p>
-<p><span class="math display">\[log L(\theta) = - \sum_{i = 1}^n (y_i - \mu_{inc})^2\]</span></p>
-</section>
-<section id="step-3" class="level3">
-<h3 class="anchored" data-anchor-id="step-3">Step 3</h3>
-<p>Take the negative log likelihood.</p>
-</section>
 </section>
 <section id="sec-calib-mle" class="level2">
 <h2 class="anchored" data-anchor-id="sec-calib-mle">Maximum likelihood estimation</h2>
@@ -378,6 +362,29 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="poisson-distribution">Poisson distribution</h2>
 <p>Poisson distribution is a <strong>discrete probability distribution</strong> that expresses probability of a given <strong>number of events</strong> occurring <strong>in a fixed interval of time</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <p>Suitable to use because here we are fitting a number of prev occurring in this period.</p>
+</section>
+<section id="sec-calib-mle-lse" class="level2">
+<h2 class="anchored" data-anchor-id="sec-calib-mle-lse">When MLE is equal to LSE</h2>
+<p>Assuming the data is generated from a normal distribution with mean <span class="math inline">\(\mu\)</span> and a standard deviation <span class="math inline">\(\sigma\)</span>.</p>
+<ul>
+<li><strong>Step 1</strong>. Write down the likelihood function <span class="math inline">\(L(\theta)\)</span>.</li>
+</ul>
+<p><span class="math display">\[L(\theta) = \prod_{i = 1}^{n} \mathcal{N}(\mu_i, \sigma) = \prod_{i = 1}^{n} \frac{1}{\sigma\sqrt{2 \pi}} \text{exp} \left[ \frac{-1}{2 \sigma^2} (y_i - \mu_i)^2 \right]\]</span></p>
+<p><span class="math display">\[L(\theta) = \frac{1}{(\sigma \sqrt{2 \pi})^n} \text{exp} \left[ \frac{-1}{2 \sigma^2} \sum_{i = 1}^n (y_i - \mu_i)^2 \right]\]</span></p>
+<p>Since <span class="math inline">\(\sigma\)</span> and <span class="math inline">\(\sqrt{2 \pi}\)</span> are constant.</p>
+<p><span class="math display">\[L(\theta) \varpropto \text{exp} \left[ - \sum_{i = 1}^n (y_i - \mu_i)^2 \right]\]</span></p>
+<ul>
+<li><strong>Step 2</strong>. Take the natural log of the likelihood <span class="math inline">\(log L(\theta)\)</span>.</li>
+</ul>
+<p><span class="math display">\[log L(\theta) \varpropto - \sum_{i = 1}^n (y_i - \mu_i)^2\]</span></p>
+<ul>
+<li><strong>Step 3</strong>. Take the negative log likelihood <span class="math inline">\(- log L(\theta)\)</span>.</li>
+</ul>
+<p><span class="math display">\[- log L(\theta) \varpropto \sum_{i = 1}^n (y_i - \mu_i)^2\]</span></p>
+<p>This looks exactly like the residual sum of squares at <a href="#eq-calib-rss" class="quarto-xref">Equation&nbsp;<span>1</span></a>.</p>
+<ul>
+<li><strong>Step 4</strong>. The optimizer <strong>minimize negative log likelihood</strong> <span class="math inline">\(- log L(\theta)\)</span>. It does the same thing as the LSE finds the optimal parameters by <strong>minimizing the RSS</strong>.</li>
+</ul>
 
 
 </section>

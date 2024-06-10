@@ -396,7 +396,7 @@ Preparation
 </div>
 <div class="callout-body-container callout-body">
 <p>Download influenza incidence data here:</p>
-<p><a href="#dnldts40384" onclick="fetch('data:application/x-gzip;base64,H4sIAAAAAAAABqXQ3U7CMBTA8dJ2w4GKCip+iwjK11S48Ql8Akm4bUATE4UETAh3vqCv5PwP2mRZDDc2+XXtWc/pzgY5IYQSWjN7LIXXf37qPLIrspHYQk+sRsbGFHR8GD6y2ECAuGAemzZ3GwXsYBd7iGuXsI8DHKKMIxzjBKc4wzkucIkKrlDFNWqo4wa3aKCJFtroIMQd7vGA7h89Zexa2p5Ugp+IBzbX9eb69BNUql56yDXv/jG0XN6rl9/ojc3Hy0ysfrq0QTUyC7d8Gw/TKcN3M3MpLpgbmU8Tvk6pljoeTCfz0N0S/wr5xRRF0TePn1/Of5jsVgIAAA==').then(res => res.blob()).then(blob => {
+<p><a href="#dnldts23170" onclick="fetch('data:application/x-gzip;base64,H4sIAAAAAAAABqXQ3U7CMBTA8dJ2w4GKCip+iwjK11S48Ql8Akm4bUATE4UETAh3vqCv5PwP2mRZDDc2+XXtWc/pzgY5IYQSWjN7LIXXf37qPLIrspHYQk+sRsbGFHR8GD6y2ECAuGAemzZ3GwXsYBd7iGuXsI8DHKKMIxzjBKc4wzkucIkKrlDFNWqo4wa3aKCJFtroIMQd7vGA7h89Zexa2p5Ugp+IBzbX9eb69BNUql56yDXv/jG0XN6rl9/ojc3Hy0ysfrq0QTUyC7d8Gw/TKcN3M3MpLpgbmU8Tvk6pljoeTCfz0N0S/wr5xRRF0TePn1/Of5jsVgIAAA==').then(res => res.blob()).then(blob => {
       const downloadURL = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -404,7 +404,7 @@ Preparation
       a.download = 'flu_inc.rds'; a.click();
       window.URL.revokeObjectURL(downloadURL);
       document.body.removeChild(a);
-        });"><button class="btn btn-light downloadthis  " id="dnldts40384"><i class="bi bi-download"></i> flu_inc.rds </button></a></p>
+        });"><button class="btn btn-light downloadthis  " id="dnldts23170"><i class="bi bi-download"></i> flu_inc.rds </button></a></p>
 </div>
 </div>
 <section id="methods" class="level2" data-number="9.1">
@@ -458,14 +458,14 @@ Preparation
 <ul>
 <li><strong>Step 2</strong>. Take the natural log of the likelihood <span class="math inline">\(log L(\theta)\)</span>, product becomes sum.</li>
 </ul>
-<p><span class="math display">\[log L(\theta) = \sum_{i = 1}^{n} \mathcal{N}(\mu_{inc}, \sigma_{inc})\]</span></p>
+<p><span class="math display">\[log L(\theta) = \sum_{i = 1}^{n} log \left[ \mathcal{N}(\mu_{inc}, \sigma_{inc}) \right]\]</span></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">dnorm</span>(<span class="at">x =</span> data, <span class="at">mean =</span> pred, <span class="at">sd =</span> sd_inc, <span class="at">log =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li><strong>Step 3</strong>. Take the negative log likelihood <span class="math inline">\(- log L(\theta)\)</span>.</li>
 </ul>
-<p><span class="math display">\[- log L(\theta) = - \sum_{i = 1}^{n} \mathcal{N}(\mu_{inc}, \sigma_{inc})\]</span></p>
+<p><span class="math display">\[- log L(\theta) = - \sum_{i = 1}^{n} log \left[ \mathcal{N}(\mu_{inc}, \sigma_{inc}) \right]\]</span></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="fu">sum</span>(<span class="fu">dnorm</span>(<span class="at">x =</span> data, <span class="at">mean =</span> pred, <span class="at">sd =</span> sd_inc, <span class="at">log =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -476,19 +476,21 @@ Preparation
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>mll <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, sigma, gamma, sd_inc) {</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Make sure that parameters are positive</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  beta <span class="ot">&lt;-</span> <span class="fu">exp</span>(beta) </span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  gamma <span class="ot">&lt;-</span> <span class="fu">exp</span>(gamma)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  sd_inc <span class="ot">&lt;-</span> <span class="fu">exp</span>(sd_inc)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> <span class="fu">seir_mod</span>(<span class="at">beta =</span> beta, <span class="at">sigma =</span> sigma, <span class="at">gamma =</span> gamma, <span class="at">S0 =</span> S0, <span class="at">E0 =</span> E0, <span class="at">I0 =</span> I0, <span class="at">R0 =</span> R0, <span class="at">times =</span> <span class="dv">0</span><span class="sc">:</span>(<span class="fu">length</span>(df<span class="sc">$</span>inc) <span class="sc">-</span> <span class="dv">1</span>))</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> pred<span class="sc">$</span>Inc</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return the negative log likelihood</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span> <span class="fu">sum</span>(<span class="fu">dnorm</span>(<span class="at">x =</span> df<span class="sc">$</span>inc, <span class="at">mean =</span> pred, <span class="at">sd =</span> sd_inc, <span class="at">log =</span> T))</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>starting_param_val <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">beta =</span> <span class="fl">0.004</span>, <span class="at">sigma =</span> <span class="fl">0.5</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>, <span class="at">sd_inc =</span> <span class="dv">1</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  sigma <span class="ot">&lt;-</span> <span class="fu">exp</span>(sigma)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  gamma <span class="ot">&lt;-</span> <span class="fu">exp</span>(gamma)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  sd_inc <span class="ot">&lt;-</span> <span class="fu">exp</span>(sd_inc)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> <span class="fu">seir_mod</span>(<span class="at">beta =</span> beta, <span class="at">sigma =</span> sigma, <span class="at">gamma =</span> gamma, <span class="at">S0 =</span> S0, <span class="at">E0 =</span> E0, <span class="at">I0 =</span> I0, <span class="at">R0 =</span> R0, <span class="at">times =</span> <span class="dv">0</span><span class="sc">:</span>(<span class="fu">length</span>(df<span class="sc">$</span>inc) <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> pred<span class="sc">$</span>Inc</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return the negative log likelihood</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span> <span class="fu">sum</span>(<span class="fu">dnorm</span>(<span class="at">x =</span> df<span class="sc">$</span>inc, <span class="at">mean =</span> pred, <span class="at">sd =</span> sd_inc, <span class="at">log =</span> T))</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>estimates <span class="ot">&lt;-</span> <span class="fu">mle2</span>(<span class="at">minuslogl =</span> mll, <span class="at">start =</span> <span class="fu">lapply</span>(starting_param_val, log), <span class="at">method =</span> <span class="st">"Nelder-Mead"</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>starting_param_val <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">beta =</span> <span class="fl">0.004</span>, <span class="at">sigma =</span> <span class="fl">0.5</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>, <span class="at">sd_inc =</span> <span class="dv">3</span>)</span>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(estimates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>estimates <span class="ot">&lt;-</span> <span class="fu">mle2</span>(<span class="at">minuslogl =</span> mll, <span class="at">start =</span> <span class="fu">lapply</span>(starting_param_val, log), <span class="at">method =</span> <span class="st">"Nelder-Mead"</span>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(estimates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Maximum likelihood estimation
 
@@ -498,38 +500,53 @@ mle2(minuslogl = mll, start = lapply(starting_param_val, log),
 
 Coefficients:
         Estimate Std. Error  z value     Pr(z)    
-beta   -5.088100   0.091028 -55.8960 &lt; 2.2e-16 ***
-sigma   2.089725   0.287055   7.2799 3.341e-13 ***
-gamma   0.575974   0.091507   6.2943 3.088e-10 ***
-sd_inc  0.530695   0.099593   5.3286 9.896e-08 ***
+beta   -5.063479   0.092641 -54.6567 &lt; 2.2e-16 ***
+sigma   0.708384   0.134498   5.2669 1.388e-07 ***
+gamma   0.600399   0.092968   6.4581 1.060e-10 ***
+sd_inc  0.530870   0.099628   5.3285 9.902e-08 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
--2 log L: 198.8645 </code></pre>
+-2 log L: 198.8602 </code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">coef</span>(estimates))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">coef</span>(estimates))</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>params</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       beta       sigma       gamma      sd_inc 
+0.006323524 2.030707475 1.822846603 1.700410622 </code></pre>
+</div>
 </div>
 <p>Compare the model with data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">seir_mod</span>(<span class="at">beta =</span> params[<span class="dv">1</span>], <span class="at">sigma =</span> params[<span class="dv">2</span>], <span class="at">gamma =</span> params[<span class="dv">3</span>], <span class="at">S0 =</span> S0, <span class="at">E0 =</span> E0, <span class="at">I0 =</span> I0, <span class="at">R0 =</span> R0, <span class="at">times =</span> df<span class="sc">$</span>day)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df_plot <span class="ot">&lt;-</span> pred[,<span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"Inc"</span>)]</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>my_palette <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="dv">11</span>, <span class="st">"PuOr"</span>)[<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">8</span>)]</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_plot, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> Inc)) <span class="sc">+</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> my_palette[<span class="dv">3</span>]) <span class="sc">+</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> my_palette[<span class="dv">3</span>]) <span class="sc">+</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> df, <span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> inc)) <span class="sc">+</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Day"</span>, <span class="at">y =</span> <span class="st">"Incidence"</span>) <span class="sc">+</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">seir_mod</span>(<span class="at">beta =</span> params[<span class="dv">1</span>], <span class="at">sigma =</span> params[<span class="dv">2</span>], <span class="at">gamma =</span> params[<span class="dv">3</span>], <span class="at">S0 =</span> S0, <span class="at">E0 =</span> E0, <span class="at">I0 =</span> I0, <span class="at">R0 =</span> R0, <span class="at">times =</span> df<span class="sc">$</span>day)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>df_plot <span class="ot">&lt;-</span> pred[,<span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"Inc"</span>)]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>my_palette <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="dv">11</span>, <span class="st">"PuOr"</span>)[<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">8</span>)]</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_plot, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> Inc)) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> my_palette[<span class="dv">3</span>]) <span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> my_palette[<span class="dv">3</span>]) <span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> df, <span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> inc)) <span class="sc">+</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Day"</span>, <span class="at">y =</span> <span class="st">"Incidence"</span>) <span class="sc">+</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="mle_files/figure-html/unnamed-chunk-10-1.svg" class="img-fluid figure-img"></p>
+<p><img src="mle_files/figure-html/unnamed-chunk-10-1.svg" class="img-fluid figure-img" style="width:100.0%"></p>
 </figure>
 </div>
+</div>
+</div>
+<p>It looks very similar to the model we fitted with LSE at <a href="lse.html#fig-lse-seir" class="quarto-xref">Figure&nbsp;<span>8.1</span></a>.</p>
+<p>Let compute <span class="math inline">\(R_0\)</span>. For a “closed population” SEIR model, <span class="math inline">\(R_0 = \frac{\beta}{\gamma} S_0\)</span>. Again, this is similar to the <span class="math inline">\(R_0\)</span> estimated from LSE at <a href="lse.html#lst-lse-r0" class="quarto-xref">Listing&nbsp;<span>8.1</span></a>. The reason is MLE is equal to LSE when we pick the normal distribution likelihood, see <a href="calib.html#sec-calib-mle-lse" class="quarto-xref"><span>Section 4</span></a> for more details.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>rnum0 <span class="ot">&lt;-</span> params[<span class="dv">1</span>] <span class="sc">*</span> S0 <span class="sc">/</span> params[<span class="dv">3</span>]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>rnum0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    beta 
+1.280075 </code></pre>
 </div>
 </div>
 

@@ -94,7 +94,7 @@ dnorm(x = data, mean = pred, sd = sd_inc)
 
 - **Step 2**. Take the natural log of the likelihood $log L(\theta)$, product becomes sum.
 
-$$log L(\theta) = \sum_{i = 1}^{n} \mathcal{N}(\mu_{inc}, \sigma_{inc})$$
+$$log L(\theta) = \sum_{i = 1}^{n} log \left[ \mathcal{N}(\mu_{inc}, \sigma_{inc}) \right]$$
 
 ```{r, eval=FALSE}
 sum(dnorm(x = data, mean = pred, sd = sd_inc, log = T))
@@ -102,7 +102,7 @@ sum(dnorm(x = data, mean = pred, sd = sd_inc, log = T))
 
 - **Step 3**. Take the negative log likelihood $- log L(\theta)$.
 
-$$- log L(\theta) = - \sum_{i = 1}^{n} \mathcal{N}(\mu_{inc}, \sigma_{inc})$$
+$$- log L(\theta) = - \sum_{i = 1}^{n} log \left[ \mathcal{N}(\mu_{inc}, \sigma_{inc}) \right]$$
 
 ```{r, eval=FALSE}
 - sum(dnorm(x = data, mean = pred, sd = sd_inc, log = T))
@@ -114,15 +114,17 @@ $$- log L(\theta) = - \sum_{i = 1}^{n} \mathcal{N}(\mu_{inc}, \sigma_{inc})$$
 mll <- function(beta, sigma, gamma, sd_inc) {
   # Make sure that parameters are positive
   beta <- exp(beta) 
+  sigma <- exp(sigma)
   gamma <- exp(gamma)
   sd_inc <- exp(sd_inc)
+  
   pred <- seir_mod(beta = beta, sigma = sigma, gamma = gamma, S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = 0:(length(df$inc) - 1))
   pred <- pred$Inc
   # Return the negative log likelihood
   - sum(dnorm(x = df$inc, mean = pred, sd = sd_inc, log = T))
 }
 
-starting_param_val <- list(beta = 0.004, sigma = 0.5, gamma = 0.5, sd_inc = 1)
+starting_param_val <- list(beta = 0.004, sigma = 0.5, gamma = 0.5, sd_inc = 3)
 
 estimates <- mle2(minuslogl = mll, start = lapply(starting_param_val, log), method = "Nelder-Mead")
 
@@ -131,11 +133,15 @@ summary(estimates)
 
 ```{r}
 params <- exp(coef(estimates))
+params
 ```
 
 Compare the model with data.
 
 ```{r}
+#| fig-width: 4
+#| fig-height: 2.5
+#| out-width: "100%"
 pred <- seir_mod(beta = params[1], sigma = params[2], gamma = params[3], S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = df$day)
 df_plot <- pred[,c("time", "Inc")]
 
@@ -148,4 +154,14 @@ ggplot(df_plot, aes(x = time, y = Inc)) +
   labs(x = "Day", y = "Incidence") +
   theme_minimal()
 ```
+
+It looks very similar to the model we fitted with LSE at @fig-lse-seir.
+
+Let compute $R_0$. For a "closed population" SEIR model, $R_0 = \frac{\beta}{\gamma} S_0$. Again, this is similar to the $R_0$ estimated from LSE at @lst-lse-r0. The reason is MLE is equal to LSE when we pick the normal distribution likelihood, see @sec-calib-mle-lse for more details.
+
+```{r}
+rnum0 <- params[1] * S0 / params[3]
+rnum0
+```
+
 
