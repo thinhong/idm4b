@@ -1,6 +1,8 @@
 # Estimating $R_0$
 
+[@jones2007; @chitnis2017]
 
+$$R_0 = \begin{pmatrix} \text{Number of} \\ \text{contacts} \\ \text{per unit time} \end{pmatrix} \times \begin{pmatrix} \text{Probability of} \\ \text{transmission} \\ \text{per contact} \end{pmatrix} \times \begin{pmatrix} \text{Duration} \\ \text{of} \\ \text{infection} \end{pmatrix}$$
 
 ## Compartmental models
 
@@ -14,22 +16,19 @@ $$\frac{dI}{dt} = \beta SI - \gamma I = I(\beta S - \gamma)$$
 
 ### SEIR model
 
-
-
 ## Next generation matrix
 
 $R_0$ is the maximum absolute eigenvalue (also called the spectral radius) of the next generation matrix [@vandendriessche2017].
 
 ::: {.callout-note collapse="true"}
-
 ## A simple example
 
 Source: quantpie's [video](https://www.youtube.com/watch?v=xJ5mizenTII).
 
 A population consists of two groups: young and old.
 
-- A young person on average infects 3 young and 2 old: $\begin{bmatrix} 3 \\ 2 \end{bmatrix}$.
-- An old person on average infects 1 young and 2 old: $\begin{bmatrix} 1 \\ 2 \end{bmatrix}$.
+-   A young person on average infects 3 young and 2 old: $\begin{bmatrix} 3 \\ 2 \end{bmatrix}$.
+-   An old person on average infects 1 young and 2 old: $\begin{bmatrix} 1 \\ 2 \end{bmatrix}$.
 
 Each group becomes a column in the next generation matrix (NGM):
 
@@ -46,10 +45,6 @@ $$\Leftrightarrow \lambda^2 - 5 \lambda + 6 - 2 = 0$$
 $$\Leftrightarrow \lambda^2 - 5 \lambda + 4 = 0$$
 
 There are two root $\lambda = 4$ and $\lambda = 1$, for an outbreak to occur $R_0 > 1$, so here $R_0 = 4$.
-
-
-
 :::
 
 For more complex compartmental models, especially those with more infected compartments [@vandendriessche2017]
-

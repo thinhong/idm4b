@@ -30,7 +30,8 @@ book:
         - sir-sto.qmd
     - part: calib.qmd
       chapters: 
-        - rss.qmd
+        - lse.qmd
+        - mle.qmd
         - pomp.qmd
     - surv.qmd
     - part: rp.qmd

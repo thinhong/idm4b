@@ -1,4 +1,16 @@
-# Residual sum of squares
+# Least squares estimation
+
+::: {.callout-note}
+
+## Preparation
+
+Download influenza incidence data here:
+
+{{< downloadthis data/flu_inc.rds dname="flu_inc" label="flu_inc.rds" type=light >}}
+
+:::
+
+## Methods
 
 Refer to @def-residual, the residual sum of squares (RSS) is the sum of the squares of residuals.
 
@@ -6,6 +18,9 @@ $$RSS = \sum_{i = 1}^{n}[y_i - f(x_i)]^2$$
 
 -   $y_i$: the observed value.
 -   $f(x_i)$: the predicted value.
+-   $y_i - f(x_i)$: the residual.
+
+The least squares method finds the optimal parameters by **minimizing the RSS**.
 
 ## Code
 
@@ -30,14 +45,7 @@ ggplot(df, aes(x = day, y = inc)) +
   theme_minimal()
 ```
 
-For simplicity, we are going to make the following assumptions:
-
-- A closed population in the school.
-- Homogeneous mixing.
-- We ignore issues of missing data and censoring in the data (see [@cauchemez2011] for an analysis dealing with these problems).
-- The reported cases is the daily number of new symptomatic cases.
-
-Let reuse the deterministic SEIR model from @lst-seir-det:
+We will fit a deterministic SEIR model and reuse the code from @lst-seir-det. Let plug some initial values for the parameters and run the model.
 
 ```{r, echo=FALSE}
 seir_mod <- function(beta, sigma, gamma, S0, E0, I0, R0, times) {
@@ -66,14 +74,21 @@ seir_mod <- function(beta, sigma, gamma, S0, E0, I0, R0, times) {
 }
 ```
 
-Let plug some initial values for the parameters and run the model.
+Looking at the original paper, the school has 370 students [@cauchemez2011]. So we set the initial values as below.
+
+```{r}
+S0 <- 369
+E0 <- 0
+I0 <- 1
+R0 <- 0
+```
 
 ```{r}
 #| code-fold: true
 #| fig-width: 4
 #| fig-height: 2.5
 #| out-width: "100%"
-pred <- seir_mod(beta = 0.004, sigma = 0.5, gamma = 0.5, S0 = 369, E0 = 0, I0 = 1, R0 = 0, times = df$day)
+pred <- seir_mod(beta = 0.004, sigma = 0.5, gamma = 0.5, S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = df$day)
 
 df_plot <- pivot_longer(pred, cols = S:Inc, names_to = "comp", values_to = "n")
 
@@ -96,25 +111,27 @@ Now just plot the incidence to compare with our data.
 #| out-width: "100%"
 df_plot <- pred[,c("time", "Inc")]
 ggplot(df_plot, aes(x = time, y = Inc)) +
-  geom_line(color = my_palette[3], linewidth = 1.1) +
+  geom_point(color = my_palette[3]) +
+  geom_line(color = my_palette[3]) +
   geom_point(data = df, aes(x = day, y = inc)) +
   labs(x = "Day", y = "Incidence") +
   theme_minimal()
 ```
 
-Calculate the residual sum of squares.
+We need to calculate the residual sum of squares. The `rss()` function must be defined this way with 2 arguments `data` and `par` so that it could be passed to the `optim()` function.
 
 ```{r}
 rss <- function(data, par) {
-  pred <- seir_mod(par[1], par[2], par[3], S0 = 369, E0 = 0, I0 = 1, R0 = 0, times = 0:(length(data) - 1))
+  pred <- seir_mod(beta = par[1], sigma = par[2], gamma = par[3], S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = 0:(length(data) - 1))
   sum((data - pred$Inc)^2)
 }
 ```
 
-The `optim()` function needs 2 inputs:
+The `optim()` function needs at least 2 inputs:
 
 - `par`: a vector of initial values for the parameters to be optimized over.
 - `fn`: a function to be minimized.
+- `...`: other arguments will be passed to `fn`, here our function `rss()` needs an additional argument `data`, so we pass `data = df$inc`.
 
 ```{r}
 seir_optim <- optim(par = c(0.004, 0.5, 0.5), fn = rss, data = df$inc)
@@ -128,11 +145,21 @@ Let plug these values into the model and compare with our data.
 #| fig-width: 4
 #| fig-height: 2.5
 #| out-width: "100%"
-pred <- seir_mod(beta = seir_optim$par[1], sigma = seir_optim$par[2], gamma = seir_optim$par[3], S0 = 369, E0 = 0, I0 = 1, R0 = 0, times = df$day)
+pred <- seir_mod(beta = seir_optim$par[1], sigma = seir_optim$par[2], gamma = seir_optim$par[3], S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = df$day)
 df_plot <- pred[,c("time", "Inc")]
 ggplot(df_plot, aes(x = time, y = Inc)) +
-  geom_line(color = my_palette[3], linewidth = 1.1) +
+  geom_point(color = my_palette[3]) +
+  geom_line(color = my_palette[3]) +
   geom_point(data = df, aes(x = day, y = inc)) +
   labs(x = "Day", y = "Incidence") +
   theme_minimal()
 ```
+
+Since we are using a "closed population" SEIR model, $R_0 = \frac{\beta}{\gamma} S_0$.
+
+```{r}
+rnum0 <- seir_optim$par[1] * S0 / seir_optim$par[3]
+rnum0
+```
+
+This is quite close to 1.4 (95% CI: 1.2, 1.5) as reported by [@cauchemez2011], considering that they used more complicated methods.

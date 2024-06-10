@@ -1,74 +1,14 @@
 # Calibration
 
-```{r, message=FALSE, warning=FALSE}
-#| code-fold: true
-library(deSolve)
-```
+## Least squares estimation {#sec-calib-lse}
 
-```{r}
-#| code-fold: true
-sir_mod <- function(beta, gamma, S0, I0, R0, times) {
-  
-  sir_equations <- function(time, variables, parameters) {
-    with(as.list(c(variables, parameters)), {
-      dS <- -beta * S * I
-      dI <-  beta * S * I - gamma * I
-      dR <-  gamma * I
-      return(list(c(dS, dI, dR)))
-    })
-  }
-  
-  parameters_values <- c(beta = beta, gamma = gamma)
-  initial_values <- c(S = S0, I = I0, R = R0)
-  
-  out <- ode(initial_values, times, sir_equations, parameters_values)
+Least squares estimation corresponds to maximum likelihood estimation when the noise is normally distributed with equal variances.
 
-  out <- as.data.frame(out)
-  # Compute incidence
-  out$Inc <- c(0, -diff(out$S))
-  out
-}
-```
+## Maximum likelihood estimation {#sec-calib-mle}
 
+A generalization of the least squares idea is the likelihood.
 
-Load the flu data.
-
-```{r}
-flu <- readRDS("data/flu.rds")
-head(flu)
-```
-
-Now we run the SIR model, and compare predictions with the observed flu prevalence data.
-
-```{r}
-pred <- sir_mod(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = flu$time)
-
-df <- merge(x = pred, y = flu, by = "time")
-df <- df[,c("time", "I", "prev")]
-```
-
-Better off seeing the comparison on a plot.
-
-```{r}
-#| code-fold: true
-#| fig-width: 4
-#| fig-height: 3
-#| out-width: "100%"
-
-# df_plot <- pivot_longer(df, cols = all_of(c("I", "prev")), names_to = "comp", values_to = "n")
-# df_plot$comp <- factor(df_plot$comp, levels = c("prev", "I"))
-# 
-# ggplot(df_plot, aes(x = time, y = n, color = comp)) +
-#   geom_point() + geom_line() +
-#   scale_color_hue(labels = c("Prevalence", "Prediction")) +
-#   labs(color = NULL) +
-#   theme_light() +
-#   theme(legend.position = "bottom")
-```
-
-Let have a look at this flu data. This is a very special data as it reports the flu **prevalence**. Usually, case notification data reports **incidence**.
-
-## Log-likelihood
+### Log-likelihood
 
 The likelihood is the probability of observing data $x$ given that our model is true[^2], $\mathbb{P}(x|M)$.
 
@@ -80,7 +20,7 @@ But remember that $log(a \times b) = log(a) + log(b)$, and very convenient that 
 
 So $log(\mathbb{P}(x_1|M) \times \mathbb{P}(x_2|M) \times \mathbb{P}(x_3|M)...)$ $=$ $log(\mathbb{P}(x_1|M)) + log(\mathbb{P}(x_2|M)) + log(\mathbb{P}(x_3|M))...$ and it is so much easier to handle.
 
-## Negative log-likelihood
+### Negative log-likelihood
 
 Because statistical packages optimizers work by minimizing a function. Minimizing means **decrease the distance of two distributions** to its lowest, this is fairly easy because we get this when the distance close to 0 (just like the trick we do in hypothesis testing).
 

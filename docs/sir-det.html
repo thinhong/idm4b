@@ -294,14 +294,20 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./rss.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Residual sum of squares</span></span></a>
+  <a href="./lse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Least squares estimation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mle.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Maximum likelihood estimation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./pomp.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Particle filter</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Particle filter</span></span></a>
   </div>
 </li>
       </ul>
@@ -309,7 +315,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./surv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Survival analysis</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Survival analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -324,7 +330,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
       </ul>
@@ -332,7 +338,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./dict.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Dictionary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Dictionary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -416,10 +422,9 @@ window.Quarto = {
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(deSolve)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bbmle)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Below is how we solve the differential equations <a href="#eq-sir-ds" class="quarto-xref">Equation&nbsp;<span>4.1</span></a>, <a href="#eq-sir-di" class="quarto-xref">Equation&nbsp;<span>4.2</span></a> and <a href="#eq-sir-dr" class="quarto-xref">Equation&nbsp;<span>4.3</span></a> in R with the <code>deSolve</code> package.</p>
 <div id="lst-sir-det" class="listing quarto-float">
@@ -645,6 +650,10 @@ Important
 <p><span class="math display">\[\frac{dI}{dt} = \beta SI - \gamma I = I(\beta S - \gamma)\]</span></p>
 <p>The infection “dies out” when:</p>
 <p><span class="math display">\[\frac{dI}{dt} &lt; 0 \Leftrightarrow \beta S - \gamma &lt; 0 \Leftrightarrow S &lt; \frac{\gamma}{\beta}\]</span></p>
+<blockquote class="blockquote">
+<p>The proportion of susceptibles in the population must exceed this critical threshold <span class="math inline">\(\frac{\gamma}{\beta}\)</span> for an infection to invade <span class="citation" data-cites="keeling2011">(<a href="references.html#ref-keeling2011" role="doc-biblioref">Keeling &amp; Rohani, 2011</a>)</span>.</p>
+</blockquote>
+<p>The inverse of the relative removal rate is called the basic reproductive ratio <span class="math inline">\(R_0 = \frac{\beta}{\gamma}\)</span> <span class="citation" data-cites="keeling2011">(<a href="references.html#ref-keeling2011" role="doc-biblioref">Keeling &amp; Rohani, 2011</a>)</span>. See <a href="rnum.html#def-r0" class="quarto-xref">Definition&nbsp;<span>1</span></a> for more details.</p>
 </section>
 <section id="epidemic-burnout" class="level3" data-number="4.5.2">
 <h3 data-number="4.5.2" class="anchored" data-anchor-id="epidemic-burnout"><span class="header-section-number">4.5.2</span> Epidemic burnout</h3>
@@ -654,7 +663,7 @@ Important
 <p><span class="math display">\[S(t) = S(0)e^{-\frac{\beta}{\gamma} R(t)}\]</span></p>
 <p>Given that <span class="math inline">\(e^x &gt; 0 \quad \forall x\)</span>, therefore <span class="math inline">\(S(t) &gt; 0\)</span> there will always be some susceptibles in the population who escape infection, leading to an important counter-intuitive conclusion from this model:</p>
 <blockquote class="blockquote">
-<p>The chain of transmission eventually breaks due to the decline in infectives, not due to a complete lack of susceptibles.</p>
+<p>The chain of transmission eventually breaks due to the decline in infectives, not due to a complete lack of susceptibles <span class="citation" data-cites="keeling2011">(<a href="references.html#ref-keeling2011" role="doc-biblioref">Keeling &amp; Rohani, 2011</a>)</span>.</p>
 </blockquote>
 
 

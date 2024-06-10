@@ -26,7 +26,6 @@ $$\frac{dR}{dt} = \gamma I$$ {#eq-sir-dr}
 ```{r, message=FALSE, warning=FALSE}
 library(deSolve)
 library(tidyr)
-library(bbmle)
 library(ggplot2)
 library(RColorBrewer)
 library(patchwork)
@@ -35,7 +34,6 @@ library(patchwork)
 Below is how we solve the differential equations @eq-sir-ds, @eq-sir-di and @eq-sir-dr in R with the `deSolve` package.
 
 ::: {#lst-sir-det}
-
 ```{r}
 sir_mod <- function(beta, gamma, S0, I0, R0, times) {
   
@@ -63,10 +61,9 @@ sir_mod <- function(beta, gamma, S0, I0, R0, times) {
 ```
 
 Deterministic SIR model
-
 :::
 
-::: {.callout-important}
+::: callout-important
 Be careful of what kind of data we are using to fit the model:
 
 -   **Incidence**: use the $\beta SI$ part.
@@ -80,7 +77,7 @@ $$\text{Prevalence} = \frac{\text{Number of existing cases at time t}}{\text{Tot
 
 There are two ways to compute incidence.
 
-1. While writing the differential equations, we tell `deSolve` to compute the cumulative incidence, then compute the incidence by using `diff()` on the cumulative incidence.
+1.  While writing the differential equations, we tell `deSolve` to compute the cumulative incidence, then compute the incidence by using `diff()` on the cumulative incidence.
 
 ```{r, eval=F}
 # Cumulative incidence
@@ -89,7 +86,7 @@ dCInc <- beta * S * I
 out$Inc <- c(I0, diff(out$CInc))
 ```
 
-2. In this "closed population", the incidence is the number of individuals moving out of $S$ in each time step. So we can compute it from the $S$ column. Let compare it with the previous method.
+2.  In this "closed population", the incidence is the number of individuals moving out of $S$ in each time step. So we can compute it from the $S$ column. Let compare it with the previous method.
 
 ```{r}
 pred <- sir_mod(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = 0:13)
@@ -123,8 +120,8 @@ ggplot(df_plot, aes(x = time, y = n, color = comp)) +
 
 The time to peak of incidence is earlier than prevalence:
 
-- Incidence reflects the immediate rate of new infections, the peak of incidence is reached when the transmission rate begins to decline.
-- Prevalence accumulates both new and existing cases. Even after the incidence starts to decline, the active cases who were infected before the incidence peak are still there waiting for recovering. Prevalence only starts to decline when the recovery rate surpasses the rate of new infections significantly.
+-   Incidence reflects the immediate rate of new infections, the peak of incidence is reached when the transmission rate begins to decline.
+-   Prevalence accumulates both new and existing cases. Even after the incidence starts to decline, the active cases who were infected before the incidence peak are still there waiting for recovering. Prevalence only starts to decline when the recovery rate surpasses the rate of new infections significantly.
 
 ## Sensitivity analysis
 
@@ -183,10 +180,10 @@ p1 / p2 + plot_layout(guides = "collect") & theme(legend.position = "bottom")
 
 When $\beta$ **increases**, more susceptible individuals become infected per unit time:
 
-- Outbreak size **increases**: $R_0 = \frac{\beta}{\gamma}$, so if $\beta$ increases, $R_0$ **increases**, each infected individual infect more people on average.
-- **Larger** epidemic peak: the peak number at any given time will be higher, because more susceptible individuals are infected.
-- Time until peak ***decreases***: because the speed of susceptible individuals become infected is faster.
-- Epidemic duration ***decreases***: because the pool of susceptible individuals depletes quickly, the epidemic may conclude sooner when there are few susceptible individuals left.
+-   Outbreak size **increases**: $R_0 = \frac{\beta}{\gamma}$, so if $\beta$ increases, $R_0$ **increases**, each infected individual infect more people on average.
+-   **Larger** epidemic peak: the peak number at any given time will be higher, because more susceptible individuals are infected.
+-   Time until peak ***decreases***: because the speed of susceptible individuals become infected is faster.
+-   Epidemic duration ***decreases***: because the pool of susceptible individuals depletes quickly, the epidemic may conclude sooner when there are few susceptible individuals left.
 
 ### Recovery rate $\gamma$
 
@@ -206,10 +203,10 @@ p1 / p2 + plot_layout(guides = "collect") & theme(legend.position = "bottom")
 
 When $\gamma$ **increases**, patients recover with a faster speed:
 
-- Outbreak size ***decreases***: patients have ***less time to infect*** susceptible individuals; and also $R_0 = \frac{\beta}{\gamma}$, so if $\gamma$ increases, $R_0$ ***decreases***, each infected individual infect less people on average.
-- ***Smaller*** epidemic peak: the peak number of infected individuals will be lower because $R_0$ ***decreases***.
-- Time until peak ***slightly decreases***: because the infected population clears out faster, but this depends on the balance between the faster recovery and the rate of new infections.
-- Epidemic duration ***slightly decreases***: for same reason as the peak time.
+-   Outbreak size ***decreases***: patients have ***less time to infect*** susceptible individuals; and also $R_0 = \frac{\beta}{\gamma}$, so if $\gamma$ increases, $R_0$ ***decreases***, each infected individual infect less people on average.
+-   ***Smaller*** epidemic peak: the peak number of infected individuals will be lower because $R_0$ ***decreases***.
+-   Time until peak ***slightly decreases***: because the infected population clears out faster, but this depends on the balance between the faster recovery and the rate of new infections.
+-   Epidemic duration ***slightly decreases***: for same reason as the peak time.
 
 ## Corollaries
 
@@ -223,6 +220,10 @@ The infection "dies out" when:
 
 $$\frac{dI}{dt} < 0 \Leftrightarrow \beta S - \gamma < 0 \Leftrightarrow S < \frac{\gamma}{\beta}$$
 
+> The proportion of susceptibles in the population must exceed this critical threshold $\frac{\gamma}{\beta}$ for an infection to invade [@keeling2011].
+
+The inverse of the relative removal rate is called the basic reproductive ratio $R_0 = \frac{\beta}{\gamma}$ [@keeling2011]. See @def-r0 for more details.
+
 ### Epidemic burnout
 
 Divide @eq-sir-ds by @eq-sir-dr:
@@ -235,4 +236,4 @@ $$S(t) = S(0)e^{-\frac{\beta}{\gamma} R(t)}$$
 
 Given that $e^x > 0 \quad \forall x$, therefore $S(t) > 0$ there will always be some susceptibles in the population who escape infection, leading to an important counter-intuitive conclusion from this model:
 
-> The chain of transmission eventually breaks due to the decline in infectives, not due to a complete lack of susceptibles.
+> The chain of transmission eventually breaks due to the decline in infectives, not due to a complete lack of susceptibles [@keeling2011].
