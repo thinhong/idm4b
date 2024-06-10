@@ -139,18 +139,25 @@ params
 Compare the model with data.
 
 ```{r}
+#| code-fold: true
 #| fig-width: 4
 #| fig-height: 2.5
 #| out-width: "100%"
 pred <- seir_mod(beta = params[1], sigma = params[2], gamma = params[3], S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = df$day)
 df_plot <- pred[,c("time", "Inc")]
 
+# Compute 95% confidence interval
+lwr <- qnorm(p = 0.025, mean = pred$Inc, sd = params[4])
+upr <- qnorm(p = 0.975, mean = pred$Inc, sd = params[4])
+
 my_palette <- brewer.pal(11, "PuOr")[c(10, 1, 4, 3, 8)]
 
 ggplot(df_plot, aes(x = time, y = Inc)) +
   geom_point(color = my_palette[3]) +
   geom_line(color = my_palette[3]) +
+  geom_ribbon(aes(ymin = lwr, ymax = upr), fill = my_palette[3], alpha = 0.15) +
   geom_point(data = df, aes(x = day, y = inc)) +
+  coord_cartesian(ylim = c(0, max(upr))) +
   labs(x = "Day", y = "Incidence") +
   theme_minimal()
 ```
