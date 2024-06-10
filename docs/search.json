@@ -441,7 +441,7 @@
     "href": "mle.html",
     "title": "9  Maximum likelihood estimation",
     "section": "",
-    "text": "9.1 Methods\nThe maximum likelihood estimation follows 4 steps:\n\\[L(\\theta) = \\prod_{i = 1}^{n} f_Y(y_i| \\theta)\\]\n\\[log L(\\theta) = \\sum_{i = 1}^{n} f_Y(y_i| \\theta)\\]\n\\[- log L(\\theta) = - \\sum_{i = 1}^{n} f_Y(y_i| \\theta)\\]",
+    "text": "9.1 Methods\nThe maximum likelihood estimation follows 4 steps:\n\\[L(\\theta) = \\prod_{i = 1}^{n} f_Y(y_i| \\theta)\\]\n\\[log L(\\theta) = \\sum_{i = 1}^{n} log \\left[ f_Y(y_i| \\theta) \\right]\\]\n\\[- log L(\\theta) = - \\sum_{i = 1}^{n} log \\left[ f_Y(y_i| \\theta) \\right]\\]",
     "crumbs": [
       "Calibration",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Maximum likelihood estimation</span>"

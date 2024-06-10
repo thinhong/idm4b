@@ -20,11 +20,11 @@ $$L(\theta) = \prod_{i = 1}^{n} f_Y(y_i| \theta)$$
 
 - **Step 2**. Take the natural log of the likelihood $log L(\theta)$, or log-likelihood. The production in log likelihood now becomes the sum. See @sec-calib-loglik for more details.
 
-$$log L(\theta) = \sum_{i = 1}^{n} f_Y(y_i| \theta)$$
+$$log L(\theta) = \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]$$
 
 - **Step 3**. Take the negative log likelihood $- log L(\theta)$. Because optimizers work by minimizing a function, we have to work on negative log likelihood. See @sec-calib-negloglik for more details.
 
-$$- log L(\theta) = - \sum_{i = 1}^{n} f_Y(y_i| \theta)$$
+$$- log L(\theta) = - \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]$$
 
 - **Step 4**. The optimizer try different values of $\theta$ in the paramater space $\Theta$ for which negative log likelihood $- log L(\theta)$ is minimized.
 

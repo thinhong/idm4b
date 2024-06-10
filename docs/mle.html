@@ -396,7 +396,7 @@ Preparation
 </div>
 <div class="callout-body-container callout-body">
 <p>Download influenza incidence data here:</p>
-<p><a href="#dnldts4026" onclick="fetch('data:application/x-gzip;base64,H4sIAAAAAAAABqXQ3U7CMBTA8dJ2w4GKCip+iwjK11S48Ql8Akm4bUATE4UETAh3vqCv5PwP2mRZDDc2+XXtWc/pzgY5IYQSWjN7LIXXf37qPLIrspHYQk+sRsbGFHR8GD6y2ECAuGAemzZ3GwXsYBd7iGuXsI8DHKKMIxzjBKc4wzkucIkKrlDFNWqo4wa3aKCJFtroIMQd7vGA7h89Zexa2p5Ugp+IBzbX9eb69BNUql56yDXv/jG0XN6rl9/ojc3Hy0ysfrq0QTUyC7d8Gw/TKcN3M3MpLpgbmU8Tvk6pljoeTCfz0N0S/wr5xRRF0TePn1/Of5jsVgIAAA==').then(res => res.blob()).then(blob => {
+<p><a href="#dnldts8455" onclick="fetch('data:application/x-gzip;base64,H4sIAAAAAAAABqXQ3U7CMBTA8dJ2w4GKCip+iwjK11S48Ql8Akm4bUATE4UETAh3vqCv5PwP2mRZDDc2+XXtWc/pzgY5IYQSWjN7LIXXf37qPLIrspHYQk+sRsbGFHR8GD6y2ECAuGAemzZ3GwXsYBd7iGuXsI8DHKKMIxzjBKc4wzkucIkKrlDFNWqo4wa3aKCJFtroIMQd7vGA7h89Zexa2p5Ugp+IBzbX9eb69BNUql56yDXv/jG0XN6rl9/ojc3Hy0ysfrq0QTUyC7d8Gw/TKcN3M3MpLpgbmU8Tvk6pljoeTCfz0N0S/wr5xRRF0TePn1/Of5jsVgIAAA==').then(res => res.blob()).then(blob => {
       const downloadURL = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -404,7 +404,7 @@ Preparation
       a.download = 'flu_inc.rds'; a.click();
       window.URL.revokeObjectURL(downloadURL);
       document.body.removeChild(a);
-        });"><button class="btn btn-light downloadthis  " id="dnldts4026"><i class="bi bi-download"></i> flu_inc.rds </button></a></p>
+        });"><button class="btn btn-light downloadthis  " id="dnldts8455"><i class="bi bi-download"></i> flu_inc.rds </button></a></p>
 </div>
 </div>
 <section id="methods" class="level2" data-number="9.1">
@@ -417,11 +417,11 @@ Preparation
 <ul>
 <li><strong>Step 2</strong>. Take the natural log of the likelihood <span class="math inline">\(log L(\theta)\)</span>, or log-likelihood. The production in log likelihood now becomes the sum. See <a href="calib.html#sec-calib-loglik" class="quarto-xref"><span>Section 2.2</span></a> for more details.</li>
 </ul>
-<p><span class="math display">\[log L(\theta) = \sum_{i = 1}^{n} f_Y(y_i| \theta)\]</span></p>
+<p><span class="math display">\[log L(\theta) = \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]\]</span></p>
 <ul>
 <li><strong>Step 3</strong>. Take the negative log likelihood <span class="math inline">\(- log L(\theta)\)</span>. Because optimizers work by minimizing a function, we have to work on negative log likelihood. See <a href="calib.html#sec-calib-negloglik" class="quarto-xref"><span>Section 2.3</span></a> for more details.</li>
 </ul>
-<p><span class="math display">\[- log L(\theta) = - \sum_{i = 1}^{n} f_Y(y_i| \theta)\]</span></p>
+<p><span class="math display">\[- log L(\theta) = - \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]\]</span></p>
 <ul>
 <li><strong>Step 4</strong>. The optimizer try different values of <span class="math inline">\(\theta\)</span> in the paramater space <span class="math inline">\(\Theta\)</span> for which negative log likelihood <span class="math inline">\(- log L(\theta)\)</span> is minimized.</li>
 </ul>
