@@ -359,7 +359,7 @@ window.Quarto = {
    
   <ul>
   <li><a href="#methods" id="toc-methods" class="nav-link active" data-scroll-target="#methods"><span class="header-section-number">8.1</span> Methods</a></li>
-  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">8.2</span> Code</a></li>
+  <li><a href="#sec-lse-code" id="toc-sec-lse-code" class="nav-link" data-scroll-target="#sec-lse-code"><span class="header-section-number">8.2</span> Code</a></li>
   </ul>
 </nav>
     </div>
@@ -396,7 +396,7 @@ Preparation
 </div>
 <div class="callout-body-container callout-body">
 <p>Download influenza incidence data here:</p>
-<p><a href="#dnldts3587" onclick="fetch('data:application/x-gzip;base64,H4sIAAAAAAAABqXQ3U7CMBTA8dJ2w4GKCip+iwjK11S48Ql8Akm4bUATE4UETAh3vqCv5PwP2mRZDDc2+XXtWc/pzgY5IYQSWjN7LIXXf37qPLIrspHYQk+sRsbGFHR8GD6y2ECAuGAemzZ3GwXsYBd7iGuXsI8DHKKMIxzjBKc4wzkucIkKrlDFNWqo4wa3aKCJFtroIMQd7vGA7h89Zexa2p5Ugp+IBzbX9eb69BNUql56yDXv/jG0XN6rl9/ojc3Hy0ysfrq0QTUyC7d8Gw/TKcN3M3MpLpgbmU8Tvk6pljoeTCfz0N0S/wr5xRRF0TePn1/Of5jsVgIAAA==').then(res => res.blob()).then(blob => {
+<p><a href="#dnldts23524" onclick="fetch('data:application/x-gzip;base64,H4sIAAAAAAAABqXQ3U7CMBTA8dJ2w4GKCip+iwjK11S48Ql8Akm4bUATE4UETAh3vqCv5PwP2mRZDDc2+XXtWc/pzgY5IYQSWjN7LIXXf37qPLIrspHYQk+sRsbGFHR8GD6y2ECAuGAemzZ3GwXsYBd7iGuXsI8DHKKMIxzjBKc4wzkucIkKrlDFNWqo4wa3aKCJFtroIMQd7vGA7h89Zexa2p5Ugp+IBzbX9eb69BNUql56yDXv/jG0XN6rl9/ojc3Hy0ysfrq0QTUyC7d8Gw/TKcN3M3MpLpgbmU8Tvk6pljoeTCfz0N0S/wr5xRRF0TePn1/Of5jsVgIAAA==').then(res => res.blob()).then(blob => {
       const downloadURL = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -404,7 +404,7 @@ Preparation
       a.download = 'flu_inc.rds'; a.click();
       window.URL.revokeObjectURL(downloadURL);
       document.body.removeChild(a);
-        });"><button class="btn btn-light downloadthis  " id="dnldts3587"><i class="bi bi-download"></i> flu_inc.rds </button></a></p>
+        });"><button class="btn btn-light downloadthis  " id="dnldts23524"><i class="bi bi-download"></i> flu_inc.rds </button></a></p>
 </div>
 </div>
 <section id="methods" class="level2" data-number="8.1">
@@ -418,8 +418,8 @@ Preparation
 </ul>
 <p>The least squares method finds the optimal parameters by <strong>minimizing the RSS</strong>.</p>
 </section>
-<section id="code" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="code"><span class="header-section-number">8.2</span> Code</h2>
+<section id="sec-lse-code" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="sec-lse-code"><span class="header-section-number">8.2</span> Code</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(deSolve)</span>

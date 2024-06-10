@@ -1,12 +1,151 @@
 # Maximum likelihood estimation
 
+::: {.callout-note}
+
+## Preparation
+
+Download influenza incidence data here:
+
+{{< downloadthis data/flu_inc.rds dname="flu_inc" label="flu_inc.rds" type=light >}}
+
+:::
+
 ## Methods
 
+The maximum likelihood estimation follows 4 steps:
 
+- **Step 1**. Write down the likelihood function $L(\theta)$. Likelihood function is a function of $\theta$, which is the product of the $n$ mass/density function terms of the observed values $y_i$.
+
+$$L(\theta) = \prod_{i = 1}^{n} f_Y(y_i| \theta)$$
+
+- **Step 2**. Take the natural log of the likelihood $log L(\theta)$, or log-likelihood. The production in log likelihood now becomes the sum. See @sec-calib-loglik for more details.
+
+$$log L(\theta) = \sum_{i = 1}^{n} f_Y(y_i| \theta)$$
+
+- **Step 3**. Take the negative log likelihood $- log L(\theta)$. Because optimizers work by minimizing a function, we have to work on negative log likelihood. See @sec-calib-negloglik for more details.
+
+$$- log L(\theta) = - \sum_{i = 1}^{n} f_Y(y_i| \theta)$$
+
+- **Step 4**. The optimizer try different values of $\theta$ in the paramater space $\Theta$ for which negative log likelihood $- log L(\theta)$ is minimized.
 
 ## Code
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
+library(tidyr)
+library(deSolve)
+library(bbmle)
+library(ggplot2)
+library(RColorBrewer)
+```
 
+We will use the same data of a H1N1 influenza outbreak in an elementary school in @sec-lse-code and fit the deterministic SEIR model with code @lst-seir-det.
+
+```{r}
+df <- readRDS("data/flu_inc.rds")
+```
+
+```{r, echo=FALSE}
+seir_mod <- function(beta, sigma, gamma, S0, E0, I0, R0, times) {
+  
+  equations <- function(time, variables, parameters) {
+    with(as.list(c(variables, parameters)), {
+      dS <-   -beta * I * S
+      dE <-    beta * I * S - sigma * E
+      dI <-    sigma * E - gamma * I
+      dR <-    gamma * I
+      dCInc <- sigma * E
+      return(list(c(dS, dE, dI, dR, dCInc)))
+    })
+  }
+  
+  parameters_values <- c(beta = beta, sigma = sigma, gamma = gamma)
+  initial_values <- c(S = S0, E = E0, I = I0, R = R0, CInc = 0)
+  
+  out <- ode(y = initial_values, times = times, func = equations, parms = parameters_values)
+
+  out <- as.data.frame(out)
+  # Compute incidence from cumulative incidence
+  out$Inc <- c(I0, diff(out$CInc))
+  out$CInc <- NULL
+  out
+}
+```
+
+Looking at the original paper, the school has 370 students [@cauchemez2011]. So we set the initial values as below.
+
+```{r}
+S0 <- 369
+E0 <- 0
+I0 <- 1
+R0 <- 0
+```
+
+- **Step 1**. Write down the likelihood function $L(\theta)$.
+
+We assume the incidence data is generated from a normal distribution with mean $\mu_{inc}$ is the predicted incidence and a standard deviation $\sigma_{inc}$.
+
+$$L(\theta) = \prod_{i = 1}^{n} \mathcal{N}(\mu_{inc}, \sigma_{inc})$$
+
+We use the `dnorm()` function to define this likelihood.
+
+```{r, eval=FALSE}
+dnorm(x = data, mean = pred, sd = sd_inc)
+```
+
+- **Step 2**. Take the natural log of the likelihood $log L(\theta)$, product becomes sum.
+
+$$log L(\theta) = \sum_{i = 1}^{n} \mathcal{N}(\mu_{inc}, \sigma_{inc})$$
+
+```{r, eval=FALSE}
+sum(dnorm(x = data, mean = pred, sd = sd_inc, log = T))
+```
+
+- **Step 3**. Take the negative log likelihood $- log L(\theta)$.
+
+$$- log L(\theta) = - \sum_{i = 1}^{n} \mathcal{N}(\mu_{inc}, \sigma_{inc})$$
+
+```{r, eval=FALSE}
+- sum(dnorm(x = data, mean = pred, sd = sd_inc, log = T))
+```
+
+- **Step 4**. Pass the negative log likelihood $- log L(\theta)$ to the optimizer.
+
+```{r}
+mll <- function(beta, sigma, gamma, sd_inc) {
+  # Make sure that parameters are positive
+  beta <- exp(beta) 
+  gamma <- exp(gamma)
+  sd_inc <- exp(sd_inc)
+  pred <- seir_mod(beta = beta, sigma = sigma, gamma = gamma, S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = 0:(length(df$inc) - 1))
+  pred <- pred$Inc
+  # Return the negative log likelihood
+  - sum(dnorm(x = df$inc, mean = pred, sd = sd_inc, log = T))
+}
+
+starting_param_val <- list(beta = 0.004, sigma = 0.5, gamma = 0.5, sd_inc = 1)
+
+estimates <- mle2(minuslogl = mll, start = lapply(starting_param_val, log), method = "Nelder-Mead")
+
+summary(estimates)
+```
+
+```{r}
+params <- exp(coef(estimates))
+```
+
+Compare the model with data.
+
+```{r}
+pred <- seir_mod(beta = params[1], sigma = params[2], gamma = params[3], S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = df$day)
+df_plot <- pred[,c("time", "Inc")]
+
+my_palette <- brewer.pal(11, "PuOr")[c(10, 1, 4, 3, 8)]
+
+ggplot(df_plot, aes(x = time, y = Inc)) +
+  geom_point(color = my_palette[3]) +
+  geom_line(color = my_palette[3]) +
+  geom_point(data = df, aes(x = day, y = inc)) +
+  labs(x = "Day", y = "Incidence") +
+  theme_minimal()
 ```
 

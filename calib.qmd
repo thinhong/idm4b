@@ -4,13 +4,35 @@
 
 Least squares estimation corresponds to maximum likelihood estimation when the noise is normally distributed with equal variances.
 
+We assume the incidence data is generated from a normal distribution with mean $\mu_{inc}$ is the predicted incidence and a standard deviation $\sigma_{inc}$.
+
+$$L(\theta) = \prod_{i = 1}^{n} \mathcal{N}(\mu_{inc}, \sigma_{inc}) = \prod_{i = 1}^{n} \frac{1}{\sigma_{inc}\sqrt{2 \pi}} \text{exp} \left[ \frac{-1}{2 \sigma_{inc}^2} (y_i - \mu_{inc})^2 \right]$$
+
+$$L(\theta) = \frac{1}{(\sigma_{inc} \sqrt{2 \pi})^n} \text{exp} \left[ \frac{-1}{2 \sigma_{inc}^2} \sum_{i = 1}^n (y_i - \mu_{inc})^2 \right]$$
+
+Since $\sigma_{inc}$ and $\sqrt{2 \pi})^n}$ are constant.
+
+$$L(\theta) \varpropto \text{exp} \left[ - \sum_{i = 1}^n (y_i - \mu_{inc})^2 \right]$$
+
+### Step 2
+
+Take the natural log of the likelihood.
+
+$$log L(\theta) = - \sum_{i = 1}^n (y_i - \mu_{inc})^2$$
+
+### Step 3
+
+Take the negative log likelihood.
+
 ## Maximum likelihood estimation {#sec-calib-mle}
 
 A generalization of the least squares idea is the likelihood.
 
-### Log-likelihood
+### Likelihood
 
 The likelihood is the probability of observing data $x$ given that our model is true[^2], $\mathbb{P}(x|M)$.
+
+### Log-likelihood {#sec-calib-loglik}
 
 We have a lot of data points, and they are independent. The probability of observing all these data points at the same time is the production of these likelihood $\mathbb{P}(x_1|M) \times \mathbb{P}(x_2|M) \times \mathbb{P}(x_3|M)... = \prod\mathbb{P}(x|M)$.
 
@@ -20,7 +42,7 @@ But remember that $log(a \times b) = log(a) + log(b)$, and very convenient that 
 
 So $log(\mathbb{P}(x_1|M) \times \mathbb{P}(x_2|M) \times \mathbb{P}(x_3|M)...)$ $=$ $log(\mathbb{P}(x_1|M)) + log(\mathbb{P}(x_2|M)) + log(\mathbb{P}(x_3|M))...$ and it is so much easier to handle.
 
-### Negative log-likelihood
+### Negative log-likelihood {#sec-calib-negloglik}
 
 Because statistical packages optimizers work by minimizing a function. Minimizing means **decrease the distance of two distributions** to its lowest, this is fairly easy because we get this when the distance close to 0 (just like the trick we do in hypothesis testing).
 

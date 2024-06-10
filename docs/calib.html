@@ -299,11 +299,16 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-calib-lse" id="toc-sec-calib-lse" class="nav-link active" data-scroll-target="#sec-calib-lse">Least squares estimation</a></li>
+  <li><a href="#sec-calib-lse" id="toc-sec-calib-lse" class="nav-link active" data-scroll-target="#sec-calib-lse">Least squares estimation</a>
+  <ul>
+  <li><a href="#step-2" id="toc-step-2" class="nav-link" data-scroll-target="#step-2">Step 2</a></li>
+  <li><a href="#step-3" id="toc-step-3" class="nav-link" data-scroll-target="#step-3">Step 3</a></li>
+  </ul></li>
   <li><a href="#sec-calib-mle" id="toc-sec-calib-mle" class="nav-link" data-scroll-target="#sec-calib-mle">Maximum likelihood estimation</a>
   <ul>
-  <li><a href="#log-likelihood" id="toc-log-likelihood" class="nav-link" data-scroll-target="#log-likelihood">Log-likelihood</a></li>
-  <li><a href="#negative-log-likelihood" id="toc-negative-log-likelihood" class="nav-link" data-scroll-target="#negative-log-likelihood">Negative log-likelihood</a></li>
+  <li><a href="#likelihood" id="toc-likelihood" class="nav-link" data-scroll-target="#likelihood">Likelihood</a></li>
+  <li><a href="#sec-calib-loglik" id="toc-sec-calib-loglik" class="nav-link" data-scroll-target="#sec-calib-loglik">Log-likelihood</a></li>
+  <li><a href="#sec-calib-negloglik" id="toc-sec-calib-negloglik" class="nav-link" data-scroll-target="#sec-calib-negloglik">Negative log-likelihood</a></li>
   </ul></li>
   <li><a href="#poisson-distribution" id="toc-poisson-distribution" class="nav-link" data-scroll-target="#poisson-distribution">Poisson distribution</a></li>
   </ul>
@@ -334,20 +339,37 @@ window.Quarto = {
 <section id="sec-calib-lse" class="level2">
 <h2 class="anchored" data-anchor-id="sec-calib-lse">Least squares estimation</h2>
 <p>Least squares estimation corresponds to maximum likelihood estimation when the noise is normally distributed with equal variances.</p>
+<p>We assume the incidence data is generated from a normal distribution with mean <span class="math inline">\(\mu_{inc}\)</span> is the predicted incidence and a standard deviation <span class="math inline">\(\sigma_{inc}\)</span>.</p>
+<p><span class="math display">\[L(\theta) = \prod_{i = 1}^{n} \mathcal{N}(\mu_{inc}, \sigma_{inc}) = \prod_{i = 1}^{n} \frac{1}{\sigma_{inc}\sqrt{2 \pi}} \text{exp} \left[ \frac{-1}{2 \sigma_{inc}^2} (y_i - \mu_{inc})^2 \right]\]</span></p>
+<p><span class="math display">\[L(\theta) = \frac{1}{(\sigma_{inc} \sqrt{2 \pi})^n} \text{exp} \left[ \frac{-1}{2 \sigma_{inc}^2} \sum_{i = 1}^n (y_i - \mu_{inc})^2 \right]\]</span></p>
+<p>Since <span class="math inline">\(\sigma_{inc}\)</span> and <span class="math inline">\(\sqrt{2 \pi})^n}\)</span> are constant.</p>
+<p><span class="math display">\[L(\theta) \varpropto \text{exp} \left[ - \sum_{i = 1}^n (y_i - \mu_{inc})^2 \right]\]</span></p>
+<section id="step-2" class="level3">
+<h3 class="anchored" data-anchor-id="step-2">Step 2</h3>
+<p>Take the natural log of the likelihood.</p>
+<p><span class="math display">\[log L(\theta) = - \sum_{i = 1}^n (y_i - \mu_{inc})^2\]</span></p>
+</section>
+<section id="step-3" class="level3">
+<h3 class="anchored" data-anchor-id="step-3">Step 3</h3>
+<p>Take the negative log likelihood.</p>
+</section>
 </section>
 <section id="sec-calib-mle" class="level2">
 <h2 class="anchored" data-anchor-id="sec-calib-mle">Maximum likelihood estimation</h2>
 <p>A generalization of the least squares idea is the likelihood.</p>
-<section id="log-likelihood" class="level3">
-<h3 class="anchored" data-anchor-id="log-likelihood">Log-likelihood</h3>
+<section id="likelihood" class="level3">
+<h3 class="anchored" data-anchor-id="likelihood">Likelihood</h3>
 <p>The likelihood is the probability of observing data <span class="math inline">\(x\)</span> given that our model is true[^2], <span class="math inline">\(\mathbb{P}(x|M)\)</span>.</p>
+</section>
+<section id="sec-calib-loglik" class="level3">
+<h3 class="anchored" data-anchor-id="sec-calib-loglik">Log-likelihood</h3>
 <p>We have a lot of data points, and they are independent. The probability of observing all these data points at the same time is the production of these likelihood <span class="math inline">\(\mathbb{P}(x_1|M) \times \mathbb{P}(x_2|M) \times \mathbb{P}(x_3|M)... = \prod\mathbb{P}(x|M)\)</span>.</p>
 <p>Multiplying things together, you will end up losing precision if the numbers are too low. Here you are dealing with probability (a value &lt; 1), multiplying 100 probabilities you will end up with 1e-100.</p>
 <p>But remember that <span class="math inline">\(log(a \times b) = log(a) + log(b)\)</span>, and very convenient that <span class="math inline">\(log(1^{-100} = -230.2585)\)</span>.</p>
 <p>So <span class="math inline">\(log(\mathbb{P}(x_1|M) \times \mathbb{P}(x_2|M) \times \mathbb{P}(x_3|M)...)\)</span> <span class="math inline">\(=\)</span> <span class="math inline">\(log(\mathbb{P}(x_1|M)) + log(\mathbb{P}(x_2|M)) + log(\mathbb{P}(x_3|M))...\)</span> and it is so much easier to handle.</p>
 </section>
-<section id="negative-log-likelihood" class="level3">
-<h3 class="anchored" data-anchor-id="negative-log-likelihood">Negative log-likelihood</h3>
+<section id="sec-calib-negloglik" class="level3">
+<h3 class="anchored" data-anchor-id="sec-calib-negloglik">Negative log-likelihood</h3>
 <p>Because statistical packages optimizers work by minimizing a function. Minimizing means <strong>decrease the distance of two distributions</strong> to its lowest, this is fairly easy because we get this when the distance close to 0 (just like the trick we do in hypothesis testing).</p>
 <p>Minimizing negative log-likelihood (meaning that <span class="math inline">\(-1 \times \text{log-likelihood}\)</span>) is equivalent to maximizing the log-likelihood, which is what we want to do (MLE: maximum likelihood estimation).</p>
 </section>

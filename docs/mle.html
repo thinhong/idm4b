@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -41,6 +95,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/quarto-contrib/downloadthis-1.9.1/downloadthis.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -330,13 +385,160 @@ window.Quarto = {
 </header>
 
 
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Preparation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Download influenza incidence data here:</p>
+<p><a href="#dnldts40384" onclick="fetch('data:application/x-gzip;base64,H4sIAAAAAAAABqXQ3U7CMBTA8dJ2w4GKCip+iwjK11S48Ql8Akm4bUATE4UETAh3vqCv5PwP2mRZDDc2+XXtWc/pzgY5IYQSWjN7LIXXf37qPLIrspHYQk+sRsbGFHR8GD6y2ECAuGAemzZ3GwXsYBd7iGuXsI8DHKKMIxzjBKc4wzkucIkKrlDFNWqo4wa3aKCJFtroIMQd7vGA7h89Zexa2p5Ugp+IBzbX9eb69BNUql56yDXv/jG0XN6rl9/ojc3Hy0ysfrq0QTUyC7d8Gw/TKcN3M3MpLpgbmU8Tvk6pljoeTCfz0N0S/wr5xRRF0TePn1/Of5jsVgIAAA==').then(res => res.blob()).then(blob => {
+      const downloadURL = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.href = downloadURL;
+      a.download = 'flu_inc.rds'; a.click();
+      window.URL.revokeObjectURL(downloadURL);
+      document.body.removeChild(a);
+        });"><button class="btn btn-light downloadthis  " id="dnldts40384"><i class="bi bi-download"></i> flu_inc.rds </button></a></p>
+</div>
+</div>
 <section id="methods" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="methods"><span class="header-section-number">9.1</span> Methods</h2>
+<p>The maximum likelihood estimation follows 4 steps:</p>
+<ul>
+<li><strong>Step 1</strong>. Write down the likelihood function <span class="math inline">\(L(\theta)\)</span>. Likelihood function is a function of <span class="math inline">\(\theta\)</span>, which is the product of the <span class="math inline">\(n\)</span> mass/density function terms of the observed values <span class="math inline">\(y_i\)</span>.</li>
+</ul>
+<p><span class="math display">\[L(\theta) = \prod_{i = 1}^{n} f_Y(y_i| \theta)\]</span></p>
+<ul>
+<li><strong>Step 2</strong>. Take the natural log of the likelihood <span class="math inline">\(log L(\theta)\)</span>, or log-likelihood. The production in log likelihood now becomes the sum. See <a href="calib.html#sec-calib-loglik" class="quarto-xref"><span>Section 2.2</span></a> for more details.</li>
+</ul>
+<p><span class="math display">\[log L(\theta) = \sum_{i = 1}^{n} f_Y(y_i| \theta)\]</span></p>
+<ul>
+<li><strong>Step 3</strong>. Take the negative log likelihood <span class="math inline">\(- log L(\theta)\)</span>. Because optimizers work by minimizing a function, we have to work on negative log likelihood. See <a href="calib.html#sec-calib-negloglik" class="quarto-xref"><span>Section 2.3</span></a> for more details.</li>
+</ul>
+<p><span class="math display">\[- log L(\theta) = - \sum_{i = 1}^{n} f_Y(y_i| \theta)\]</span></p>
+<ul>
+<li><strong>Step 4</strong>. The optimizer try different values of <span class="math inline">\(\theta\)</span> in the paramater space <span class="math inline">\(\Theta\)</span> for which negative log likelihood <span class="math inline">\(- log L(\theta)\)</span> is minimized.</li>
+</ul>
 </section>
 <section id="code" class="level2" data-number="9.2">
 <h2 data-number="9.2" class="anchored" data-anchor-id="code"><span class="header-section-number">9.2</span> Code</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(deSolve)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bbmle)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We will use the same data of a H1N1 influenza outbreak in an elementary school in <a href="lse.html#sec-lse-code" class="quarto-xref"><span>Section 8.2</span></a> and fit the deterministic SEIR model with code <a href="seir-det.html#lst-seir-det" class="quarto-xref">Listing&nbsp;<span>5.1</span></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/flu_inc.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Looking at the original paper, the school has 370 students <span class="citation" data-cites="cauchemez2011">(<a href="references.html#ref-cauchemez2011" role="doc-biblioref">Cauchemez et al., 2011</a>)</span>. So we set the initial values as below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>S0 <span class="ot">&lt;-</span> <span class="dv">369</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>E0 <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>I0 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>R0 <span class="ot">&lt;-</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><strong>Step 1</strong>. Write down the likelihood function <span class="math inline">\(L(\theta)\)</span>.</li>
+</ul>
+<p>We assume the incidence data is generated from a normal distribution with mean <span class="math inline">\(\mu_{inc}\)</span> is the predicted incidence and a standard deviation <span class="math inline">\(\sigma_{inc}\)</span>.</p>
+<p><span class="math display">\[L(\theta) = \prod_{i = 1}^{n} \mathcal{N}(\mu_{inc}, \sigma_{inc})\]</span></p>
+<p>We use the <code>dnorm()</code> function to define this likelihood.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dnorm</span>(<span class="at">x =</span> data, <span class="at">mean =</span> pred, <span class="at">sd =</span> sd_inc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><strong>Step 2</strong>. Take the natural log of the likelihood <span class="math inline">\(log L(\theta)\)</span>, product becomes sum.</li>
+</ul>
+<p><span class="math display">\[log L(\theta) = \sum_{i = 1}^{n} \mathcal{N}(\mu_{inc}, \sigma_{inc})\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">dnorm</span>(<span class="at">x =</span> data, <span class="at">mean =</span> pred, <span class="at">sd =</span> sd_inc, <span class="at">log =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><strong>Step 3</strong>. Take the negative log likelihood <span class="math inline">\(- log L(\theta)\)</span>.</li>
+</ul>
+<p><span class="math display">\[- log L(\theta) = - \sum_{i = 1}^{n} \mathcal{N}(\mu_{inc}, \sigma_{inc})\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="fu">sum</span>(<span class="fu">dnorm</span>(<span class="at">x =</span> data, <span class="at">mean =</span> pred, <span class="at">sd =</span> sd_inc, <span class="at">log =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><strong>Step 4</strong>. Pass the negative log likelihood <span class="math inline">\(- log L(\theta)\)</span> to the optimizer.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>mll <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, sigma, gamma, sd_inc) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Make sure that parameters are positive</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  beta <span class="ot">&lt;-</span> <span class="fu">exp</span>(beta) </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  gamma <span class="ot">&lt;-</span> <span class="fu">exp</span>(gamma)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  sd_inc <span class="ot">&lt;-</span> <span class="fu">exp</span>(sd_inc)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> <span class="fu">seir_mod</span>(<span class="at">beta =</span> beta, <span class="at">sigma =</span> sigma, <span class="at">gamma =</span> gamma, <span class="at">S0 =</span> S0, <span class="at">E0 =</span> E0, <span class="at">I0 =</span> I0, <span class="at">R0 =</span> R0, <span class="at">times =</span> <span class="dv">0</span><span class="sc">:</span>(<span class="fu">length</span>(df<span class="sc">$</span>inc) <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> pred<span class="sc">$</span>Inc</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return the negative log likelihood</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span> <span class="fu">sum</span>(<span class="fu">dnorm</span>(<span class="at">x =</span> df<span class="sc">$</span>inc, <span class="at">mean =</span> pred, <span class="at">sd =</span> sd_inc, <span class="at">log =</span> T))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>starting_param_val <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">beta =</span> <span class="fl">0.004</span>, <span class="at">sigma =</span> <span class="fl">0.5</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>, <span class="at">sd_inc =</span> <span class="dv">1</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>estimates <span class="ot">&lt;-</span> <span class="fu">mle2</span>(<span class="at">minuslogl =</span> mll, <span class="at">start =</span> <span class="fu">lapply</span>(starting_param_val, log), <span class="at">method =</span> <span class="st">"Nelder-Mead"</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(estimates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Maximum likelihood estimation
+
+Call:
+mle2(minuslogl = mll, start = lapply(starting_param_val, log), 
+    method = "Nelder-Mead")
+
+Coefficients:
+        Estimate Std. Error  z value     Pr(z)    
+beta   -5.088100   0.091028 -55.8960 &lt; 2.2e-16 ***
+sigma   2.089725   0.287055   7.2799 3.341e-13 ***
+gamma   0.575974   0.091507   6.2943 3.088e-10 ***
+sd_inc  0.530695   0.099593   5.3286 9.896e-08 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+-2 log L: 198.8645 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">coef</span>(estimates))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Compare the model with data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">seir_mod</span>(<span class="at">beta =</span> params[<span class="dv">1</span>], <span class="at">sigma =</span> params[<span class="dv">2</span>], <span class="at">gamma =</span> params[<span class="dv">3</span>], <span class="at">S0 =</span> S0, <span class="at">E0 =</span> E0, <span class="at">I0 =</span> I0, <span class="at">R0 =</span> R0, <span class="at">times =</span> df<span class="sc">$</span>day)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df_plot <span class="ot">&lt;-</span> pred[,<span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"Inc"</span>)]</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>my_palette <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="dv">11</span>, <span class="st">"PuOr"</span>)[<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">8</span>)]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_plot, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> Inc)) <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> my_palette[<span class="dv">3</span>]) <span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> my_palette[<span class="dv">3</span>]) <span class="sc">+</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> df, <span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> inc)) <span class="sc">+</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Day"</span>, <span class="at">y =</span> <span class="st">"Incidence"</span>) <span class="sc">+</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mle_files/figure-html/unnamed-chunk-10-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-cauchemez2011" class="csl-entry" role="listitem">
+Cauchemez, S., Bhattarai, A., Marchbanks, T. L., Fagan, R. P., Ostroff, S., Ferguson, N. M., Swerdlow, D., Pennsylvania H1N1 working group, the, Sodha, S. V., Moll, M. E., Angulo, F. J., Palekar, R., Archer, W. R., &amp; Finelli, L. (2011). Role of social networks in shaping disease transmission during a community outbreak of 2009 H1N1 pandemic influenza. <em>Proceedings of the National Academy of Sciences</em>, <em>108</em>(7), 2825–2830. <a href="https://doi.org/10.1073/pnas.1008895108">https://doi.org/10.1073/pnas.1008895108</a>
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
