@@ -38,6 +38,7 @@ book:
       chapters: 
         - rp-risk.qmd
     - dict.qmd
+    - func.qmd
     - references.qmd
 
 bibliography: references.bib

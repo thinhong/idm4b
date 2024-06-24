@@ -178,12 +178,14 @@ p2 <- sir_sa(vals = vals, parm = "beta", outcome = "inc", times = 0:13)
 p1 / p2 + plot_layout(guides = "collect") & theme(legend.position = "bottom")
 ```
 
-When $\beta$ **increases**, more susceptible individuals become infected per unit time:
+When $\beta$ **decreases**, less susceptible individuals become infected per unit time:
 
--   Outbreak size **increases**: $R_0 = \frac{\beta}{\gamma}$, so if $\beta$ increases, $R_0$ **increases**, each infected individual infect more people on average.
--   **Larger** epidemic peak: the peak number at any given time will be higher, because more susceptible individuals are infected.
--   Time until peak ***decreases***: because the speed of susceptible individuals become infected is faster.
--   Epidemic duration ***decreases***: because the pool of susceptible individuals depletes quickly, the epidemic may conclude sooner when there are few susceptible individuals left.
+-   Time until peak ***increases***: because the speed of susceptible individuals become infected is slower.
+-   Epidemic duration ***increases***: the rate of new infections slows down so it can lead to a longer epidemic period, but depends on the balance between the infection rate and the recovery rate.
+-   Outbreak size **decreases**: $R_0 = \frac{\beta}{\gamma}$, so if $\beta$ decreases, $R_0$ **decreases**, each infected individual infect less people on average.
+-   **Lower** epidemic peak: because fewer infections occurring simultaneously.
+
+Interventions that decrease $\beta$ cause a lower outbreak size and a lower epidemic peak. This effect is often referred to as **"flattening the curve"**.
 
 ### Recovery rate $\gamma$
 
@@ -201,12 +203,12 @@ p2 <- sir_sa(vals = vals, parm = "gamma", outcome = "inc", times = 0:13)
 p1 / p2 + plot_layout(guides = "collect") & theme(legend.position = "bottom")
 ```
 
-When $\gamma$ **increases**, patients recover with a faster speed:
+When $\gamma$ **decreases**, patients recover more slowly:
 
--   Outbreak size ***decreases***: patients have ***less time to infect*** susceptible individuals; and also $R_0 = \frac{\beta}{\gamma}$, so if $\gamma$ increases, $R_0$ ***decreases***, each infected individual infect less people on average.
--   ***Smaller*** epidemic peak: the peak number of infected individuals will be lower because $R_0$ ***decreases***.
--   Time until peak ***slightly decreases***: because the infected population clears out faster, but this depends on the balance between the faster recovery and the rate of new infections.
--   Epidemic duration ***slightly decreases***: for same reason as the peak time.
+-   Outbreak size ***increases***: patients remain infectious for a longer period; since $R_0 = \frac{\beta}{\gamma}$, a decrease in $\gamma$ leads to an increase in $R_0$, meaning each infected individual infects less people on average.
+-   ***Higher*** epidemic peak: with a higher $R_0$ more individuals are infected after each generation.
+-   Time until peak ***may increases***: the infected population takes longer to clear out due to slower recovery, but the exact timing of the peak also depends on the balance between infection and recovery rates.
+-   Epidemic duration ***slightly increases***: for same reason as the peak time, the overall duration of the epidemic is prolonged due to slower recovery rates.
 
 ## Corollaries
 

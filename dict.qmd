@@ -1,5 +1,7 @@
 # Dictionary
 
+infection fatality ratio (IFR) and case fatality ratio (CFR) and serology data.
+
 ::: {#def-residual}
 **Residual**: is the difference between the observed value and the **estimated** value.
 :::

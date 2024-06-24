@@ -6,7 +6,7 @@
 
 Download influenza incidence data here:
 
-{{< downloadthis data/flu_inc.rds dname="flu_inc" label="flu_inc.rds" type=light >}}
+{{< downloadthis data/flu_inc.csv dname="flu_inc" label="flu_inc.csv" type=light >}}
 
 :::
 
@@ -37,7 +37,7 @@ We will use data collected during a H1N1 influenza outbreak in an elementary sch
 #| fig-width: 4
 #| fig-height: 2.5
 #| out-width: "100%"
-df <- readRDS("data/flu_inc.rds")
+df <- read.csv("data/flu_inc.csv")
 
 ggplot(df, aes(x = day, y = inc)) +
   geom_point() +

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.553">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -285,6 +305,12 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./func.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Useful functions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
@@ -333,6 +359,14 @@ window.Quarto = {
 </header>
 
 
+<p>Model fitting methods typically include <span class="citation" data-cites="rui2024">(<a href="references.html#ref-rui2024" role="doc-biblioref">Rui et al., 2024</a>)</span>:</p>
+<ul>
+<li>Least squares estimation (LSE).</li>
+<li>Maximum likelihood estimation (MLE).</li>
+<li>Root mean square estimation (RMSE).</li>
+<li>Akaike information criterion (AIC).</li>
+<li>Bayesian information criterion (BIC).</li>
+</ul>
 <section id="sec-calib-lse" class="level2">
 <h2 class="anchored" data-anchor-id="sec-calib-lse">Least squares estimation</h2>
 <p><span id="eq-calib-rss"><span class="math display">\[RSS = \sum_{i = 1}^{n}[y_i - f(x_i)]^2 \tag{1}\]</span></span></p>
@@ -378,15 +412,20 @@ window.Quarto = {
 </ul>
 <p><span class="math display">\[log L(\theta) \varpropto - \sum_{i = 1}^n (y_i - \mu_i)^2\]</span></p>
 <ul>
-<li><strong>Step 3</strong>. Take the negative log likelihood <span class="math inline">\(- log L(\theta)\)</span>.</li>
+<li><strong>Step 3</strong>. Take the negative log-likelihood <span class="math inline">\(- log L(\theta)\)</span>.</li>
 </ul>
 <p><span class="math display">\[- log L(\theta) \varpropto \sum_{i = 1}^n (y_i - \mu_i)^2\]</span></p>
 <p>This looks exactly like the residual sum of squares at <a href="#eq-calib-rss" class="quarto-xref">Equation&nbsp;<span>1</span></a>.</p>
 <ul>
-<li><strong>Step 4</strong>. The optimizer <strong>minimize negative log likelihood</strong> <span class="math inline">\(- log L(\theta)\)</span>. It does the same thing as the LSE finds the optimal parameters by <strong>minimizing the RSS</strong>.</li>
+<li><strong>Step 4</strong>. The optimizer <strong>minimize negative log-likelihood</strong> <span class="math inline">\(- log L(\theta)\)</span>. It does the same thing as the LSE finds the optimal parameters by <strong>minimizing the RSS</strong>.</li>
 </ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-rui2024" class="csl-entry" role="listitem">
+Rui, J., Li, K., Wei, H., Guo, X., Zhao, Z., Wang, Y., Song, W., Abudunaibi, B., &amp; Chen, T. (2024). MODELS: A six-step framework for developing an infectious disease model. <em>Infectious Diseases of Poverty</em>, <em>13</em>(1), 30. <a href="https://doi.org/10.1186/s40249-024-01195-3">https://doi.org/10.1186/s40249-024-01195-3</a>
+</div>
+</div>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>

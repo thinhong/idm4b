@@ -182,4 +182,71 @@ If the distribution of delays can be estimated, then $R_t$ can be estimated in 2
 
 ## Code
 
+### EpiEstim
+
+```{r, message=FALSE, warning=FALSE}
+library(EpiEstim)
+library(ggplot2)
+```
+
+The input data
+
+```{r}
+data(Flu2009)
+
+df <- Flu2009$incidence
+head(df)
+```
+
+Let have a look at the data.
+
+```{r}
+ggplot(df, aes(x = dates, y = I)) +
+  geom_point() +
+  labs(x = "Day", y = "Incidence") +
+  theme_minimal()
+```
+
+####
+
+```{r}
+mod <- estimate_R(
+  incid = df, 
+  method = "parametric_si", 
+  config = make_config(
+    list(
+      mean_si = 2.6, 
+      std_si = 1.5
+    )
+  )
+)
+```
+Noted that the default config will estimate R on weekly sliding windows (day 2 to day 8).
+
+```{r}
+head(mod$R)
+```
+
+```{r, warning=FALSE}
+plot(mod)
+```
+
+
+```{r}
+tmp <- df[df$dates < as.Date("2009-05-11"),]
+mod <- estimate_R(
+  incid = tmp, 
+  method = "parametric_si", 
+  config = make_config(
+    list(
+      mean_si = 2.6, 
+      std_si = 1.5
+    )
+  )
+)
+head(mod$R)
+plot(mod)
+```
+
+
 ### EpiNow2

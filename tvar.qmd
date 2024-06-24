@@ -1,0 +1,186 @@
+# Time-varying parameters
+
+[Source](https://stackoverflow.com/questions/67478946/in-r-fme-desolve-sir-fitting-time-varying-parameters)
+
+```{r, message=FALSE, warning=FALSE}
+library(FME)
+library(bbmle)
+library(odin)
+library(tidyr)
+library(ggplot2)
+library(RColorBrewer)
+library(patchwork)
+```
+
+## Issues
+
+We have a flu outbreak with 2 peaks.
+
+```{r}
+#| fig-width: 4
+#| fig-height: 2.5
+#| out-width: "100%"
+df <- read.csv("data/flu_inc_2p.csv")
+
+ggplot(df, aes(x = day, y = inc)) +
+  geom_point() +
+  labs(x = "Day", y = "Incidence") +
+  theme_minimal()
+```
+
+Let fit a deterministic SEIR model and reuse the code from @lst-seir-det. We fit this using MLE assuming the incidence data is generated from a normal distribution.
+
+```{r, echo = F}
+odin_mod <- odin({
+  deriv(S) <- -beta * I * S
+  deriv(E) <- beta * I * S - sigma * E
+  deriv(I) <- sigma * E - gamma * I
+  deriv(R) <- gamma * I
+  deriv(CInc) <- sigma * E
+  
+  initial(S) <- S_init
+  initial(E) <- E_init
+  initial(I) <- I_init
+  initial(R) <- R_init
+  initial(CInc) <- CInc_init
+  
+  beta <- if (t < t1) beta_1 else if (t >= t1 && t < t2) beta_2 else beta_3
+  
+  beta_1 <- user(0.002)
+  beta_2 <- user(0.001)
+  beta_3 <- user(0.003)
+  sigma <- user(0.5)
+  gamma <- user(0.5)
+  S_init <- user(369)
+  E_init <- user(0)
+  I_init <- user(1)
+  R_init <- user(0)
+  CInc_init <- user(0)
+  t1 <- user(20)
+  t2 <- user(30)
+})
+
+seir_mod <- function(beta_1, beta_2, beta_3, t1, t2, sigma, gamma, S0, E0, I0, R0, times = 0:50) {
+  odin_run <- odin_mod$new(beta_1 = beta_1, beta_2 = beta_2, beta_3 = beta_3, t1 = t1, t2 = t2, sigma = sigma, gamma = gamma, S_init = S0, E_init = E0, I_init = I0, R_init = R0)
+  
+  # run the model
+  out <- data.frame(odin_run$run(times))
+
+  # Compute incidence from cumulative incidence
+  out$Inc <- c(I0, diff(out$CInc))
+  out$CInc <- NULL
+  out
+}
+
+```
+
+```{r}
+S0 <- 20000
+E0 <- 0
+I0 <- 1
+R0 <- 0
+
+mll <- function(beta_1, beta_2, beta_3, sigma, gamma, sd_inc) {
+  # Make sure that parameters are positive
+  beta_1 <- exp(beta_1)
+  beta_2 <- exp(beta_2)
+  beta_3 <- exp(beta_3)
+  sigma <- exp(sigma)
+  gamma <- exp(gamma)
+  sd_inc <- exp(sd_inc)
+  
+  pred <- seir_mod(beta_1 = beta_1, beta_2 = beta_2, beta_3 = beta_3, sigma = sigma, gamma = gamma, S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = 0:(length(df$inc) - 1))
+  pred <- pred$Inc
+  # Return the negative log likelihood
+  - sum(dnorm(x = df$inc, mean = pred, sd = sd_inc, log = T))
+}
+
+starting_param_val <- list(beta_1 = 0.003, beta_2 = 0.002, beta_3 = 0.003, sigma = 0.5, gamma = 0.5, sd_inc = 3)
+
+estimates <- mle2(minuslogl = mll, start = lapply(starting_param_val, log), method = "Nelder-Mead")
+
+params <- exp(coef(estimates))
+params
+```
+
+MLE will fit a curve going in the middle of the two peaks.
+
+```{r}
+#| fig-width: 4
+#| fig-height: 2.5
+#| out-width: "100%"
+pred <- seir_mod(beta_1 = params[1], beta_2 = params[2], beta_3 = params[3], sigma = params[4], gamma = params[5], S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = df$day)
+df_plot <- pred[,c("t", "Inc")]
+
+# Compute 95% confidence interval
+lwr <- qnorm(p = 0.025, mean = pred$Inc, sd = params[6])
+upr <- qnorm(p = 0.975, mean = pred$Inc, sd = params[6])
+
+my_palette <- brewer.pal(11, "PuOr")[c(10, 1, 4, 3, 8)]
+
+ggplot(df_plot, aes(x = t, y = Inc)) +
+  geom_point(color = my_palette[3]) +
+  geom_line(color = my_palette[3]) +
+  geom_ribbon(aes(ymin = lwr, ymax = upr), fill = my_palette[3], alpha = 0.15) +
+  geom_point(data = df, aes(x = day, y = inc)) +
+  coord_cartesian(ylim = c(0, max(upr) + 10)) +
+  labs(x = "Day", y = "Incidence") +
+  theme_minimal()
+```
+
+## Code
+
+```{r}
+sir_1 <- function(f_beta, S0, I0, R0, times) {
+  # the differential equations
+  sir_equations <- function(time, variables, parameters) {
+    beta  <- parameters$f_beta(time)
+    with(as.list(variables), {
+      dS <- -beta * I * S/10000
+      dI <-  beta * I * S/10000 - 1/5 * I
+      dR <-  1/5 * I
+      return(list(c(dS, dI, dR), beta=beta))
+    })
+  }
+
+  initial_values <- c(S = S0, I = I0, R = R0)
+  parameters <- list(f_beta=f_beta)
+  out <- ode(initial_values, times, sir_equations, parameters)
+}
+
+times <- df$day
+datareal <- cbind(time = times, I=df$inc)
+
+sir_cost <- function (p) {
+  f_beta <- approxfun(x=times, y=p, method="constant", rule=2)
+  outsir <- sir_1(f_beta=f_beta,  S0 = 9990,  I0 = 10, R0 = 0, times = times)
+  modCost(model = outsir, obs = datareal)
+}
+
+# Play with start values!!!
+p <- rep(0.8, 20)
+
+# e.g.: consider random start values
+set.seed(123)
+p <- runif(length(times), min=0.8, max=1.2)
+
+
+# try other solvers, especially such with true box constraints
+Fit <- modFit(f = sir_cost, p = p, 
+              lower=rep(0.2, length(times)), upper=rep(5, length(times)), # box constraints
+              method="Port")
+summary(Fit) # system is singular (that is what we expected)
+
+# goes in a surprisingly good direction
+Fit$par
+
+f_beta <- approxfun(x=times, y=Fit$par, method="constant", rule=2)
+out2 <- sir_1(f_beta=f_beta,  S0 = 9990,  I0 = 10, R0 = 0, times = times)
+
+# compare with data
+plot(out, out2, obs=datareal)
+
+# but see how unstable beta is
+plot(out2) 
+```
+

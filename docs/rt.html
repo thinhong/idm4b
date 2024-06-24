@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.553">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 /* CSS for citations */
 div.csl-bib-body { }
@@ -97,6 +131,10 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-X391ZN63GG', { 'anonymize_ip': true});
 </script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -305,6 +343,12 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./func.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Useful functions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
@@ -341,7 +385,11 @@ window.Quarto = {
   </ul></li>
   <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">3.6</span> Code</a>
   <ul>
-  <li><a href="#epinow2" id="toc-epinow2" class="nav-link" data-scroll-target="#epinow2"><span class="header-section-number">3.6.1</span> EpiNow2</a></li>
+  <li><a href="#epiestim" id="toc-epiestim" class="nav-link" data-scroll-target="#epiestim"><span class="header-section-number">3.6.1</span> EpiEstim</a>
+  <ul>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"><span class="header-section-number">3.6.1.1</span> </a></li>
+  </ul></li>
+  <li><a href="#epinow2" id="toc-epinow2" class="nav-link" data-scroll-target="#epinow2"><span class="header-section-number">3.6.2</span> EpiNow2</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -551,8 +599,116 @@ Important
 </section>
 <section id="code" class="level2" data-number="3.6">
 <h2 data-number="3.6" class="anchored" data-anchor-id="code"><span class="header-section-number">3.6</span> Code</h2>
-<section id="epinow2" class="level3" data-number="3.6.1">
-<h3 data-number="3.6.1" class="anchored" data-anchor-id="epinow2"><span class="header-section-number">3.6.1</span> EpiNow2</h3>
+<section id="epiestim" class="level3" data-number="3.6.1">
+<h3 data-number="3.6.1" class="anchored" data-anchor-id="epiestim"><span class="header-section-number">3.6.1</span> EpiEstim</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(EpiEstim)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The input data</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(Flu2009)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> Flu2009<span class="sc">$</span>incidence</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["dates"],"name":[1],"type":["date"],"align":["right"]},{"label":["I"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"2009-04-27","2":"1","_rn_":"1"},{"1":"2009-04-28","2":"1","_rn_":"2"},{"1":"2009-04-29","2":"0","_rn_":"3"},{"1":"2009-04-30","2":"2","_rn_":"4"},{"1":"2009-05-01","2":"5","_rn_":"5"},{"1":"2009-05-02","2":"3","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>Let have a look at the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> dates, <span class="at">y =</span> I)) <span class="sc">+</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Day"</span>, <span class="at">y =</span> <span class="st">"Incidence"</span>) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="rt_files/figure-html/unnamed-chunk-3-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="section" class="level4" data-number="3.6.1.1">
+<h4 data-number="3.6.1.1" class="anchored" data-anchor-id="section"><span class="header-section-number">3.6.1.1</span> </h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">estimate_R</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">incid =</span> df, </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"parametric_si"</span>, </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">config =</span> <span class="fu">make_config</span>(</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean_si =</span> <span class="fl">2.6</span>, </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">std_si =</span> <span class="fl">1.5</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Default config will estimate R on weekly sliding windows.
+    To change this change the t_start and t_end arguments. </code></pre>
+</div>
+</div>
+<p>Noted that the default config will estimate R on weekly sliding windows (day 2 to day 8).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mod<span class="sc">$</span>R)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["t_start"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["t_end"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Mean(R)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Std(R)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Quantile.0.025(R)"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Quantile.0.05(R)"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Quantile.0.25(R)"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["Median(R)"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["Quantile.0.75(R)"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["Quantile.0.95(R)"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["Quantile.0.975(R)"],"name":[11],"type":["dbl"],"align":["right"]}],"data":[{"1":"2","2":"8","3":"1.735798","4":"0.4091314","5":"1.0287437","6":"1.121933","7":"1.445198","8":"1.703761","9":"1.991520","10":"2.458972","11":"2.624781","_rn_":"1"},{"1":"3","2":"9","3":"1.749168","4":"0.3647267","5":"1.1088223","6":"1.195480","7":"1.491345","8":"1.723884","9":"1.979457","10":"2.389121","11":"2.533119","_rn_":"2"},{"1":"4","2":"10","3":"1.537058","4":"0.3074116","5":"0.9947030","6":"1.068694","7":"1.320090","8":"1.516613","9":"1.731761","10":"2.075176","11":"2.195540","_rn_":"3"},{"1":"5","2":"11","3":"1.431839","4":"0.2705921","5":"0.9514466","6":"1.017661","7":"1.241251","8":"1.414830","9":"1.603900","10":"1.904047","11":"2.008849","_rn_":"4"},{"1":"6","2":"12","3":"1.422725","4":"0.2515046","5":"0.9731426","6":"1.035808","7":"1.245996","8":"1.407932","9":"1.583340","10":"1.860107","11":"1.956336","_rn_":"5"},{"1":"7","2":"13","3":"1.635373","4":"0.2523436","5":"1.1786332","6":"1.243590","7":"1.458847","8":"1.622413","9":"1.797779","10":"2.071372","11":"2.165745","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="rt_files/figure-html/unnamed-chunk-6-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> df[df<span class="sc">$</span>dates <span class="sc">&lt;</span> <span class="fu">as.Date</span>(<span class="st">"2009-05-11"</span>),]</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">estimate_R</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">incid =</span> tmp, </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"parametric_si"</span>, </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">config =</span> <span class="fu">make_config</span>(</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean_si =</span> <span class="fl">2.6</span>, </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">std_si =</span> <span class="fl">1.5</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Default config will estimate R on weekly sliding windows.
+    To change this change the t_start and t_end arguments. </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mod<span class="sc">$</span>R)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["t_start"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["t_end"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Mean(R)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Std(R)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Quantile.0.025(R)"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Quantile.0.05(R)"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Quantile.0.25(R)"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["Median(R)"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["Quantile.0.75(R)"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["Quantile.0.95(R)"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["Quantile.0.975(R)"],"name":[11],"type":["dbl"],"align":["right"]}],"data":[{"1":"2","2":"8","3":"1.735798","4":"0.4091314","5":"1.0287437","6":"1.121933","7":"1.445198","8":"1.703761","9":"1.991520","10":"2.458972","11":"2.624781","_rn_":"1"},{"1":"3","2":"9","3":"1.749168","4":"0.3647267","5":"1.1088223","6":"1.195480","7":"1.491345","8":"1.723884","9":"1.979457","10":"2.389121","11":"2.533119","_rn_":"2"},{"1":"4","2":"10","3":"1.537058","4":"0.3074116","5":"0.9947030","6":"1.068694","7":"1.320090","8":"1.516613","9":"1.731761","10":"2.075176","11":"2.195540","_rn_":"3"},{"1":"5","2":"11","3":"1.431839","4":"0.2705921","5":"0.9514466","6":"1.017661","7":"1.241251","8":"1.414830","9":"1.603900","10":"1.904047","11":"2.008849","_rn_":"4"},{"1":"6","2":"12","3":"1.422725","4":"0.2515046","5":"0.9731426","6":"1.035808","7":"1.245996","8":"1.407932","9":"1.583340","10":"1.860107","11":"1.956336","_rn_":"5"},{"1":"7","2":"13","3":"1.635373","4":"0.2523436","5":"1.1786332","6":"1.243590","7":"1.458847","8":"1.622413","9":"1.797779","10":"2.071372","11":"2.165745","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="rt_files/figure-html/unnamed-chunk-7-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="epinow2" class="level3" data-number="3.6.2">
+<h3 data-number="3.6.2" class="anchored" data-anchor-id="epinow2"><span class="header-section-number">3.6.2</span> EpiNow2</h3>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.553">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -343,6 +343,12 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./func.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Useful functions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
@@ -605,13 +611,14 @@ Important
 </div>
 </div>
 </div>
-<p>When <span class="math inline">\(\beta\)</span> <strong>increases</strong>, more susceptible individuals become infected per unit time:</p>
+<p>When <span class="math inline">\(\beta\)</span> <strong>decreases</strong>, less susceptible individuals become infected per unit time:</p>
 <ul>
-<li>Outbreak size <strong>increases</strong>: <span class="math inline">\(R_0 = \frac{\beta}{\gamma}\)</span>, so if <span class="math inline">\(\beta\)</span> increases, <span class="math inline">\(R_0\)</span> <strong>increases</strong>, each infected individual infect more people on average.</li>
-<li><strong>Larger</strong> epidemic peak: the peak number at any given time will be higher, because more susceptible individuals are infected.</li>
-<li>Time until peak <strong><em>decreases</em></strong>: because the speed of susceptible individuals become infected is faster.</li>
-<li>Epidemic duration <strong><em>decreases</em></strong>: because the pool of susceptible individuals depletes quickly, the epidemic may conclude sooner when there are few susceptible individuals left.</li>
+<li>Time until peak <strong><em>increases</em></strong>: because the speed of susceptible individuals become infected is slower.</li>
+<li>Epidemic duration <strong><em>increases</em></strong>: the rate of new infections slows down so it can lead to a longer epidemic period, but depends on the balance between the infection rate and the recovery rate.</li>
+<li>Outbreak size <strong>decreases</strong>: <span class="math inline">\(R_0 = \frac{\beta}{\gamma}\)</span>, so if <span class="math inline">\(\beta\)</span> decreases, <span class="math inline">\(R_0\)</span> <strong>decreases</strong>, each infected individual infect less people on average.</li>
+<li><strong>Lower</strong> epidemic peak: because fewer infections occurring simultaneously.</li>
 </ul>
+<p>Interventions that decrease <span class="math inline">\(\beta\)</span> cause a lower outbreak size and a lower epidemic peak. This effect is often referred to as <strong>“flattening the curve”</strong>.</p>
 </section>
 <section id="recovery-rate-gamma" class="level3" data-number="4.4.2">
 <h3 data-number="4.4.2" class="anchored" data-anchor-id="recovery-rate-gamma"><span class="header-section-number">4.4.2</span> Recovery rate <span class="math inline">\(\gamma\)</span></h3>
@@ -633,12 +640,12 @@ Important
 </div>
 </div>
 </div>
-<p>When <span class="math inline">\(\gamma\)</span> <strong>increases</strong>, patients recover with a faster speed:</p>
+<p>When <span class="math inline">\(\gamma\)</span> <strong>decreases</strong>, patients recover more slowly:</p>
 <ul>
-<li>Outbreak size <strong><em>decreases</em></strong>: patients have <strong><em>less time to infect</em></strong> susceptible individuals; and also <span class="math inline">\(R_0 = \frac{\beta}{\gamma}\)</span>, so if <span class="math inline">\(\gamma\)</span> increases, <span class="math inline">\(R_0\)</span> <strong><em>decreases</em></strong>, each infected individual infect less people on average.</li>
-<li><strong><em>Smaller</em></strong> epidemic peak: the peak number of infected individuals will be lower because <span class="math inline">\(R_0\)</span> <strong><em>decreases</em></strong>.</li>
-<li>Time until peak <strong><em>slightly decreases</em></strong>: because the infected population clears out faster, but this depends on the balance between the faster recovery and the rate of new infections.</li>
-<li>Epidemic duration <strong><em>slightly decreases</em></strong>: for same reason as the peak time.</li>
+<li>Outbreak size <strong><em>increases</em></strong>: patients remain infectious for a longer period; since <span class="math inline">\(R_0 = \frac{\beta}{\gamma}\)</span>, a decrease in <span class="math inline">\(\gamma\)</span> leads to an increase in <span class="math inline">\(R_0\)</span>, meaning each infected individual infects less people on average.</li>
+<li><strong><em>Higher</em></strong> epidemic peak: with a higher <span class="math inline">\(R_0\)</span> more individuals are infected after each generation.</li>
+<li>Time until peak <strong><em>may increases</em></strong>: the infected population takes longer to clear out due to slower recovery, but the exact timing of the peak also depends on the balance between infection and recovery rates.</li>
+<li>Epidemic duration <strong><em>slightly increases</em></strong>: for same reason as the peak time, the overall duration of the epidemic is prolonged due to slower recovery rates.</li>
 </ul>
 </section>
 </section>

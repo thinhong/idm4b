@@ -1,5 +1,13 @@
 # Calibration
 
+Model fitting methods typically include [@rui2024]:
+
+- Least squares estimation (LSE).
+- Maximum likelihood estimation (MLE).
+- Root mean square estimation (RMSE).
+- Akaike information criterion (AIC).
+- Bayesian information criterion (BIC).
+
 ## Least squares estimation {#sec-calib-lse}
 
 $$RSS = \sum_{i = 1}^{n}[y_i - f(x_i)]^2$$ {#eq-calib-rss}
@@ -12,7 +20,7 @@ A generalization of the least squares idea is the likelihood.
 
 ### Likelihood
 
-The likelihood is the probability of observing data $x$ given that our model is true[^2], $\mathbb{P}(x|M)$.
+The likelihood is the probability of observing data $x$ given that our model is true\[\^2\], $\mathbb{P}(x|M)$.
 
 ### Log-likelihood {#sec-calib-loglik}
 
@@ -32,9 +40,9 @@ Minimizing negative log-likelihood (meaning that $-1 \times \text{log-likelihood
 
 ## Poisson distribution
 
-Poisson distribution is a **discrete probability distribution** that expresses probability of a given **number of events** occurring **in a fixed interval of time**[^sir-det-1].
+Poisson distribution is a **discrete probability distribution** that expresses probability of a given **number of events** occurring **in a fixed interval of time**[^calib-1].
 
-[^sir-det-1]: Wikipedia <https://en.wikipedia.org/wiki/Poisson_distribution>
+[^calib-1]: Wikipedia <https://en.wikipedia.org/wiki/Poisson_distribution>
 
 Suitable to use because here we are fitting a number of prev occurring in this period.
 
@@ -42,7 +50,7 @@ Suitable to use because here we are fitting a number of prev occurring in this p
 
 Assuming the data is generated from a normal distribution with mean $\mu$ and a standard deviation $\sigma$.
 
-- **Step 1**. Write down the likelihood function $L(\theta)$.
+-   **Step 1**. Write down the likelihood function $L(\theta)$.
 
 $$L(\theta) = \prod_{i = 1}^{n} \mathcal{N}(\mu_i, \sigma) = \prod_{i = 1}^{n} \frac{1}{\sigma\sqrt{2 \pi}} \text{exp} \left[ \frac{-1}{2 \sigma^2} (y_i - \mu_i)^2 \right]$$
 
@@ -52,15 +60,14 @@ Since $\sigma$ and $\sqrt{2 \pi}$ are constant.
 
 $$L(\theta) \varpropto \text{exp} \left[ - \sum_{i = 1}^n (y_i - \mu_i)^2 \right]$$
 
-- **Step 2**. Take the natural log of the likelihood $log L(\theta)$.
+-   **Step 2**. Take the natural log of the likelihood $log L(\theta)$.
 
 $$log L(\theta) \varpropto - \sum_{i = 1}^n (y_i - \mu_i)^2$$
 
-- **Step 3**. Take the negative log likelihood $- log L(\theta)$.
+-   **Step 3**. Take the negative log-likelihood $- log L(\theta)$.
 
 $$- log L(\theta) \varpropto \sum_{i = 1}^n (y_i - \mu_i)^2$$
 
 This looks exactly like the residual sum of squares at @eq-calib-rss.
 
-- **Step 4**. The optimizer **minimize negative log likelihood** $- log L(\theta)$. It does the same thing as the LSE finds the optimal parameters by **minimizing the RSS**.
-
+-   **Step 4**. The optimizer **minimize negative log-likelihood** $- log L(\theta)$. It does the same thing as the LSE finds the optimal parameters by **minimizing the RSS**.
