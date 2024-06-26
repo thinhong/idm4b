@@ -21,6 +21,39 @@ $$\frac{dR}{dt} = \gamma I$$ {#eq-sir-dr}
 -   $\gamma$: removal rate.
 -   $\beta I = \lambda$: the rate from S to I is called **force of infection**.
 
+## Density or frequency-dependent
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**Density-dependent**
+
+$$\frac{dS}{dt} = -\beta SI$$
+
+- Transmission increases as density increases
+- For aerosol contacts: COVID-19
+
+:::
+
+::: {.column width="50%"}
+
+**Frequency-dependent**
+
+$$\frac{dS}{dt} = -\beta S \frac{I}{N}$$
+
+Transmission does not increase as density increases
+Direct contacts
+Sexually-transmitted diseases
+
+
+:::
+
+
+::::
+
+$$$$
+
 ## Code
 
 ```{r, message=FALSE, warning=FALSE}

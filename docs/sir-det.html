@@ -365,16 +365,17 @@ window.Quarto = {
   <ul>
   <li><a href="#assumptions" id="toc-assumptions" class="nav-link active" data-scroll-target="#assumptions"><span class="header-section-number">4.1</span> Assumptions</a></li>
   <li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model"><span class="header-section-number">4.2</span> Model</a></li>
-  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">4.3</span> Code</a></li>
-  <li><a href="#sensitivity-analysis" id="toc-sensitivity-analysis" class="nav-link" data-scroll-target="#sensitivity-analysis"><span class="header-section-number">4.4</span> Sensitivity analysis</a>
+  <li><a href="#density-or-frequency-dependent" id="toc-density-or-frequency-dependent" class="nav-link" data-scroll-target="#density-or-frequency-dependent"><span class="header-section-number">4.3</span> Density or frequency-dependent</a></li>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">4.4</span> Code</a></li>
+  <li><a href="#sensitivity-analysis" id="toc-sensitivity-analysis" class="nav-link" data-scroll-target="#sensitivity-analysis"><span class="header-section-number">4.5</span> Sensitivity analysis</a>
   <ul>
-  <li><a href="#effective-contact-rate-beta" id="toc-effective-contact-rate-beta" class="nav-link" data-scroll-target="#effective-contact-rate-beta"><span class="header-section-number">4.4.1</span> Effective contact rate <span class="math inline">\(\beta\)</span></a></li>
-  <li><a href="#recovery-rate-gamma" id="toc-recovery-rate-gamma" class="nav-link" data-scroll-target="#recovery-rate-gamma"><span class="header-section-number">4.4.2</span> Recovery rate <span class="math inline">\(\gamma\)</span></a></li>
+  <li><a href="#effective-contact-rate-beta" id="toc-effective-contact-rate-beta" class="nav-link" data-scroll-target="#effective-contact-rate-beta"><span class="header-section-number">4.5.1</span> Effective contact rate <span class="math inline">\(\beta\)</span></a></li>
+  <li><a href="#recovery-rate-gamma" id="toc-recovery-rate-gamma" class="nav-link" data-scroll-target="#recovery-rate-gamma"><span class="header-section-number">4.5.2</span> Recovery rate <span class="math inline">\(\gamma\)</span></a></li>
   </ul></li>
-  <li><a href="#corollaries" id="toc-corollaries" class="nav-link" data-scroll-target="#corollaries"><span class="header-section-number">4.5</span> Corollaries</a>
+  <li><a href="#corollaries" id="toc-corollaries" class="nav-link" data-scroll-target="#corollaries"><span class="header-section-number">4.6</span> Corollaries</a>
   <ul>
-  <li><a href="#the-threshold-phenomenon" id="toc-the-threshold-phenomenon" class="nav-link" data-scroll-target="#the-threshold-phenomenon"><span class="header-section-number">4.5.1</span> The threshold phenomenon</a></li>
-  <li><a href="#epidemic-burnout" id="toc-epidemic-burnout" class="nav-link" data-scroll-target="#epidemic-burnout"><span class="header-section-number">4.5.2</span> Epidemic burnout</a></li>
+  <li><a href="#the-threshold-phenomenon" id="toc-the-threshold-phenomenon" class="nav-link" data-scroll-target="#the-threshold-phenomenon"><span class="header-section-number">4.6.1</span> The threshold phenomenon</a></li>
+  <li><a href="#epidemic-burnout" id="toc-epidemic-burnout" class="nav-link" data-scroll-target="#epidemic-burnout"><span class="header-section-number">4.6.2</span> Epidemic burnout</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -423,8 +424,26 @@ window.Quarto = {
 <li><span class="math inline">\(\beta I = \lambda\)</span>: the rate from S to I is called <strong>force of infection</strong>.</li>
 </ul>
 </section>
-<section id="code" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="code"><span class="header-section-number">4.3</span> Code</h2>
+<section id="density-or-frequency-dependent" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="density-or-frequency-dependent"><span class="header-section-number">4.3</span> Density or frequency-dependent</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Density-dependent</strong></p>
+<p><span class="math display">\[\frac{dS}{dt} = -\beta SI\]</span></p>
+<ul>
+<li>Transmission increases as density increases</li>
+<li>For aerosol contacts: COVID-19</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Frequency-dependent</strong></p>
+<p><span class="math display">\[\frac{dS}{dt} = -\beta S \frac{I}{N}\]</span></p>
+<p>Transmission does not increase as density increases Direct contacts Sexually-transmitted diseases</p>
+</div>
+</div>
+<p>$$$$</p>
+</section>
+<section id="code" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="code"><span class="header-section-number">4.4</span> Code</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(deSolve)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
@@ -553,8 +572,8 @@ Important
 <li>Prevalence accumulates both new and existing cases. Even after the incidence starts to decline, the active cases who were infected before the incidence peak are still there waiting for recovering. Prevalence only starts to decline when the recovery rate surpasses the rate of new infections significantly.</li>
 </ul>
 </section>
-<section id="sensitivity-analysis" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="sensitivity-analysis"><span class="header-section-number">4.4</span> Sensitivity analysis</h2>
+<section id="sensitivity-analysis" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="sensitivity-analysis"><span class="header-section-number">4.5</span> Sensitivity analysis</h2>
 <p>The effective contact rate <span class="math inline">\(\beta\)</span> and the recovery rate <span class="math inline">\(\gamma\)</span> both affect whether or not there is an epidemic. The total number of people in the population and the initial number of infected people have no effect on whether there is an epidemic.</p>
 <p>Below is a function that take a range of values of parameters and compare the model outputs.</p>
 <div class="cell">
@@ -591,8 +610,8 @@ Important
 <span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<section id="effective-contact-rate-beta" class="level3" data-number="4.4.1">
-<h3 data-number="4.4.1" class="anchored" data-anchor-id="effective-contact-rate-beta"><span class="header-section-number">4.4.1</span> Effective contact rate <span class="math inline">\(\beta\)</span></h3>
+<section id="effective-contact-rate-beta" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="effective-contact-rate-beta"><span class="header-section-number">4.5.1</span> Effective contact rate <span class="math inline">\(\beta\)</span></h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -620,8 +639,8 @@ Important
 </ul>
 <p>Interventions that decrease <span class="math inline">\(\beta\)</span> cause a lower outbreak size and a lower epidemic peak. This effect is often referred to as <strong>“flattening the curve”</strong>.</p>
 </section>
-<section id="recovery-rate-gamma" class="level3" data-number="4.4.2">
-<h3 data-number="4.4.2" class="anchored" data-anchor-id="recovery-rate-gamma"><span class="header-section-number">4.4.2</span> Recovery rate <span class="math inline">\(\gamma\)</span></h3>
+<section id="recovery-rate-gamma" class="level3" data-number="4.5.2">
+<h3 data-number="4.5.2" class="anchored" data-anchor-id="recovery-rate-gamma"><span class="header-section-number">4.5.2</span> Recovery rate <span class="math inline">\(\gamma\)</span></h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -649,10 +668,10 @@ Important
 </ul>
 </section>
 </section>
-<section id="corollaries" class="level2" data-number="4.5">
-<h2 data-number="4.5" class="anchored" data-anchor-id="corollaries"><span class="header-section-number">4.5</span> Corollaries</h2>
-<section id="the-threshold-phenomenon" class="level3" data-number="4.5.1">
-<h3 data-number="4.5.1" class="anchored" data-anchor-id="the-threshold-phenomenon"><span class="header-section-number">4.5.1</span> The threshold phenomenon</h3>
+<section id="corollaries" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="corollaries"><span class="header-section-number">4.6</span> Corollaries</h2>
+<section id="the-threshold-phenomenon" class="level3" data-number="4.6.1">
+<h3 data-number="4.6.1" class="anchored" data-anchor-id="the-threshold-phenomenon"><span class="header-section-number">4.6.1</span> The threshold phenomenon</h3>
 <p>From <a href="#eq-sir-di" class="quarto-xref">Equation&nbsp;<span>4.2</span></a>:</p>
 <p><span class="math display">\[\frac{dI}{dt} = \beta SI - \gamma I = I(\beta S - \gamma)\]</span></p>
 <p>The infection “dies out” when:</p>
@@ -662,8 +681,8 @@ Important
 </blockquote>
 <p>The inverse of the relative removal rate is called the basic reproductive ratio <span class="math inline">\(R_0 = \frac{\beta}{\gamma}\)</span> <span class="citation" data-cites="keeling2011">(<a href="references.html#ref-keeling2011" role="doc-biblioref">Keeling &amp; Rohani, 2011</a>)</span>. See <a href="rnum.html#def-r0" class="quarto-xref">Definition&nbsp;<span>1</span></a> for more details.</p>
 </section>
-<section id="epidemic-burnout" class="level3" data-number="4.5.2">
-<h3 data-number="4.5.2" class="anchored" data-anchor-id="epidemic-burnout"><span class="header-section-number">4.5.2</span> Epidemic burnout</h3>
+<section id="epidemic-burnout" class="level3" data-number="4.6.2">
+<h3 data-number="4.6.2" class="anchored" data-anchor-id="epidemic-burnout"><span class="header-section-number">4.6.2</span> Epidemic burnout</h3>
 <p>Divide <a href="#eq-sir-ds" class="quarto-xref">Equation&nbsp;<span>4.1</span></a> by <a href="#eq-sir-dr" class="quarto-xref">Equation&nbsp;<span>4.3</span></a>:</p>
 <p><span class="math display">\[\frac{dS}{dR} = \frac{-\beta S I}{\gamma I} = -\frac{\beta}{\gamma} S\]</span></p>
 <p>Upon integrating with respect to R, we obtain:</p>

@@ -16,9 +16,95 @@ $$\frac{dI}{dt} = \beta SI - \gamma I = I(\beta S - \gamma)$$
 
 ### SEIR model
 
-## Next generation matrix
+## Next generation matrix (NGM)
 
 $R_0$ is the maximum absolute eigenvalue (also called the spectral radius) of the next generation matrix [@vandendriessche2017].
+
+Let consider a SEIR model with equal birth and death rate $\mu$
+
+$$\frac{dS}{dt} = \mu (S + E + I + R) -\beta SI - \mu S$$
+
+$$\frac{dE}{dt} = \beta SI - \sigma E - \mu E$$
+
+$$\frac{dI}{dt} = \sigma E - \gamma I - \mu I$$
+
+$$\frac{dR}{dt} = \gamma I - \mu R$$
+
+### Step 1. Identify the infected compartments
+
+For our SEIR model, the infected compartments are $E$ and $I$.
+
+### Step 2. Write the NGM functions
+
+- $\mathcal{F}_i(x)$: is the rate of appearance of new infections in compartment $i$ [@vandendriessche2017] (caused by contact).
+- $\mathcal{V}_i(x)$: is the rate of other transitions between compartment $i$ and other infected compartments [@vandendriessche2017] (caused by transition between compartments).
+
+For our SEIR model, we would write $\mathcal{F}$ and $\mathcal{V}$ as follows:
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+$$\mathcal{F} = \begin{bmatrix} \beta SI \\ 0 \end{bmatrix}$$
+
+In which $\mathcal{F}$ is a vector contains of $\begin{bmatrix} \mathcal{F}_1 \\ \mathcal{F}_2 \end{bmatrix}$:
+
+- $\mathcal{F}_1 = \beta SI$: the rate of new infections (caused by contact) in compartment $E$.
+- $\mathcal{F}_2 = 0$: as there is no new infections (caused by contact) in compartment $I$.
+
+:::
+
+::: {.column width="50%"}
+
+$$\mathcal{V} = \begin{bmatrix} \sigma E + \mu E \\ - \sigma E + \gamma I + \mu I \end{bmatrix}$$
+
+In which $\mathcal{V}$ is a vector contains of $\begin{bmatrix} \mathcal{V}_1 \\ \mathcal{V}_2 \end{bmatrix}$:
+
+- $\mathcal{V}_1 = \sigma E + \mu E$: is the rate of other transitions to and from compartment $E$.
+- $\mathcal{V}_2 = - \sigma E + \gamma I + \mu I$: is the rate of other transitions to and from compartment $I$.
+
+:::
+
+::::
+
+$\mathcal{F}$ and $\mathcal{V}$ are written such that:
+
+$$\frac{dx}{dt} = \mathcal{F} - \mathcal{V}$$
+
+Here we have:
+
+$$\frac{dE}{dt} = \mathcal{F}_1 - \mathcal{V}_1 = \beta SI - (\sigma E + \mu E)$$
+
+$$\frac{dI}{dt} = \mathcal{F}_2 - \mathcal{V}_2 = 0 - (- \sigma E + \gamma I + \mu I)$$
+
+### Step 3. Find the Jacobian matrix
+
+Jacobian matrix $F$ for $\mathcal{F}$, and $V$ for $\mathcal{V}$. Jacobian matrix is a matrix contain all partial derivatives of a vector function.
+
+$$F = \begin{bmatrix} \frac{\partial \mathcal{F}_1}{\partial E} & \frac{\partial \mathcal{F}_1}{\partial I} \\ \frac{\partial \mathcal{F}_2}{\partial E} & \frac{\partial \mathcal{F}_2}{\partial I} \end{bmatrix} = \begin{bmatrix} \frac{\partial [\beta SI]}{\partial E} & \frac{\partial [\beta SI]}{\partial I} \\ \frac{\partial [0]}{\partial E} & \frac{\partial [0]}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} 0 & \beta S \\ 0 & 0 \end{bmatrix}$$
+
+In which:
+
+- $\frac{\partial [\beta SI]}{\partial E} = 0$: because there is no $E$ in $\beta SI$.
+- $\frac{\partial [\beta SI]}{\partial I} = \beta S$.
+
+$$V = \begin{bmatrix} \frac{\partial \mathcal{V}_1}{\partial E} & \frac{\partial \mathcal{V}_1}{\partial I} \\ \frac{\partial \mathcal{V}_2}{\partial E} & \frac{\partial \mathcal{V}_2}{\partial I} \end{bmatrix} = \begin{bmatrix} \frac{\partial [\sigma E + \mu E]}{\partial E} & \frac{\partial [\sigma E + \mu E]}{\partial I} \\ \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial E} & \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} \sigma + \mu & 0 \\ - \sigma & \gamma + \mu \end{bmatrix}$$
+
+### Step 4. Compute the NGM
+
+Use @def-inv-matrix to compute inverse matrix $V^{-1}$:
+
+$$V^{-1} = \frac{1}{(\sigma + \mu)(\gamma + \mu)} \begin{bmatrix} \gamma + \mu & - 0 \\ - \sigma & \sigma + \mu \end{bmatrix} = \begin{bmatrix} \frac{1}{\sigma + \mu} & 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} & \frac{1}{\gamma + \mu} \end{bmatrix}$$
+
+$$K = FV^{-1} = \begin{bmatrix} 0 & \beta S \\ 0 & 0 \end{bmatrix} \begin{bmatrix} \frac{1}{\sigma + \mu} & 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} & \frac{1}{\gamma + \mu} \end{bmatrix} \\ = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} & \frac{\beta S}{\gamma + \mu} \\ 0 & 0 \end{bmatrix}$$
+
+### Step 5. Compute $R_0$
+
+$R_0$ is the eigenvalues of the NGM.
+
+$$det(K - \lambda) = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda & \frac{\beta S}{\gamma + \mu} \\ 0 & 0 - \lambda \end{bmatrix} \\ = [\frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda][0 - \lambda]$$
+
+$$R_0 = \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)}$$
 
 ::: {.callout-note collapse="true"}
 ## A simple example

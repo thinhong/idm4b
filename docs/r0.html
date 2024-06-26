@@ -330,7 +330,14 @@ window.Quarto = {
   <li><a href="#sir-model" id="toc-sir-model" class="nav-link" data-scroll-target="#sir-model"><span class="header-section-number">2.1.1</span> SIR model</a></li>
   <li><a href="#seir-model" id="toc-seir-model" class="nav-link" data-scroll-target="#seir-model"><span class="header-section-number">2.1.2</span> SEIR model</a></li>
   </ul></li>
-  <li><a href="#next-generation-matrix" id="toc-next-generation-matrix" class="nav-link" data-scroll-target="#next-generation-matrix"><span class="header-section-number">2.2</span> Next generation matrix</a></li>
+  <li><a href="#next-generation-matrix-ngm" id="toc-next-generation-matrix-ngm" class="nav-link" data-scroll-target="#next-generation-matrix-ngm"><span class="header-section-number">2.2</span> Next generation matrix (NGM)</a>
+  <ul>
+  <li><a href="#step-1.-identify-the-infected-compartments" id="toc-step-1.-identify-the-infected-compartments" class="nav-link" data-scroll-target="#step-1.-identify-the-infected-compartments"><span class="header-section-number">2.2.1</span> Step 1. Identify the infected compartments</a></li>
+  <li><a href="#step-2.-write-the-ngm-functions" id="toc-step-2.-write-the-ngm-functions" class="nav-link" data-scroll-target="#step-2.-write-the-ngm-functions"><span class="header-section-number">2.2.2</span> Step 2. Write the NGM functions</a></li>
+  <li><a href="#step-3.-find-the-jacobian-matrix" id="toc-step-3.-find-the-jacobian-matrix" class="nav-link" data-scroll-target="#step-3.-find-the-jacobian-matrix"><span class="header-section-number">2.2.3</span> Step 3. Find the Jacobian matrix</a></li>
+  <li><a href="#step-4.-compute-the-ngm" id="toc-step-4.-compute-the-ngm" class="nav-link" data-scroll-target="#step-4.-compute-the-ngm"><span class="header-section-number">2.2.4</span> Step 4. Compute the NGM</a></li>
+  <li><a href="#step-5.-compute-r_0" id="toc-step-5.-compute-r_0" class="nav-link" data-scroll-target="#step-5.-compute-r_0"><span class="header-section-number">2.2.5</span> Step 5. Compute <span class="math inline">\(R_0\)</span></a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -370,9 +377,70 @@ window.Quarto = {
 <h3 data-number="2.1.2" class="anchored" data-anchor-id="seir-model"><span class="header-section-number">2.1.2</span> SEIR model</h3>
 </section>
 </section>
-<section id="next-generation-matrix" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="next-generation-matrix"><span class="header-section-number">2.2</span> Next generation matrix</h2>
+<section id="next-generation-matrix-ngm" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="next-generation-matrix-ngm"><span class="header-section-number">2.2</span> Next generation matrix (NGM)</h2>
 <p><span class="math inline">\(R_0\)</span> is the maximum absolute eigenvalue (also called the spectral radius) of the next generation matrix <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span>.</p>
+<p>Let consider a SEIR model with equal birth and death rate <span class="math inline">\(\mu\)</span></p>
+<p><span class="math display">\[\frac{dS}{dt} = \mu (S + E + I + R) -\beta SI - \mu S\]</span></p>
+<p><span class="math display">\[\frac{dE}{dt} = \beta SI - \sigma E - \mu E\]</span></p>
+<p><span class="math display">\[\frac{dI}{dt} = \sigma E - \gamma I - \mu I\]</span></p>
+<p><span class="math display">\[\frac{dR}{dt} = \gamma I - \mu R\]</span></p>
+<section id="step-1.-identify-the-infected-compartments" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="step-1.-identify-the-infected-compartments"><span class="header-section-number">2.2.1</span> Step 1. Identify the infected compartments</h3>
+<p>For our SEIR model, the infected compartments are <span class="math inline">\(E\)</span> and <span class="math inline">\(I\)</span>.</p>
+</section>
+<section id="step-2.-write-the-ngm-functions" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="step-2.-write-the-ngm-functions"><span class="header-section-number">2.2.2</span> Step 2. Write the NGM functions</h3>
+<ul>
+<li><span class="math inline">\(\mathcal{F}_i(x)\)</span>: is the rate of appearance of new infections in compartment <span class="math inline">\(i\)</span> <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span> (caused by contact).</li>
+<li><span class="math inline">\(\mathcal{V}_i(x)\)</span>: is the rate of other transitions between compartment <span class="math inline">\(i\)</span> and other infected compartments <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span> (caused by transition between compartments).</li>
+</ul>
+<p>For our SEIR model, we would write <span class="math inline">\(\mathcal{F}\)</span> and <span class="math inline">\(\mathcal{V}\)</span> as follows:</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><span class="math display">\[\mathcal{F} = \begin{bmatrix} \beta SI \\ 0 \end{bmatrix}\]</span></p>
+<p>In which <span class="math inline">\(\mathcal{F}\)</span> is a vector contains of <span class="math inline">\(\begin{bmatrix} \mathcal{F}_1 \\ \mathcal{F}_2 \end{bmatrix}\)</span>:</p>
+<ul>
+<li><span class="math inline">\(\mathcal{F}_1 = \beta SI\)</span>: the rate of new infections (caused by contact) in compartment <span class="math inline">\(E\)</span>.</li>
+<li><span class="math inline">\(\mathcal{F}_2 = 0\)</span>: as there is no new infections (caused by contact) in compartment <span class="math inline">\(I\)</span>.</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><span class="math display">\[\mathcal{V} = \begin{bmatrix} \sigma E + \mu E \\ - \sigma E + \gamma I + \mu I \end{bmatrix}\]</span></p>
+<p>In which <span class="math inline">\(\mathcal{V}\)</span> is a vector contains of <span class="math inline">\(\begin{bmatrix} \mathcal{V}_1 \\ \mathcal{V}_2 \end{bmatrix}\)</span>:</p>
+<ul>
+<li><span class="math inline">\(\mathcal{V}_1 = \sigma E + \mu E\)</span>: is the rate of other transitions to and from compartment <span class="math inline">\(E\)</span>.</li>
+<li><span class="math inline">\(\mathcal{V}_2 = - \sigma E + \gamma I + \mu I\)</span>: is the rate of other transitions to and from compartment <span class="math inline">\(I\)</span>.</li>
+</ul>
+</div>
+</div>
+<p><span class="math inline">\(\mathcal{F}\)</span> and <span class="math inline">\(\mathcal{V}\)</span> are written such that:</p>
+<p><span class="math display">\[\frac{dx}{dt} = \mathcal{F} - \mathcal{V}\]</span></p>
+<p>Here we have:</p>
+<p><span class="math display">\[\frac{dE}{dt} = \mathcal{F}_1 - \mathcal{V}_1 = \beta SI - (\sigma E + \mu E)\]</span></p>
+<p><span class="math display">\[\frac{dI}{dt} = \mathcal{F}_2 - \mathcal{V}_2 = 0 - (- \sigma E + \gamma I + \mu I)\]</span></p>
+</section>
+<section id="step-3.-find-the-jacobian-matrix" class="level3" data-number="2.2.3">
+<h3 data-number="2.2.3" class="anchored" data-anchor-id="step-3.-find-the-jacobian-matrix"><span class="header-section-number">2.2.3</span> Step 3. Find the Jacobian matrix</h3>
+<p>Jacobian matrix <span class="math inline">\(F\)</span> for <span class="math inline">\(\mathcal{F}\)</span>, and <span class="math inline">\(V\)</span> for <span class="math inline">\(\mathcal{V}\)</span>. Jacobian matrix is a matrix contain all partial derivatives of a vector function.</p>
+<p><span class="math display">\[F = \begin{bmatrix} \frac{\partial \mathcal{F}_1}{\partial E} &amp; \frac{\partial \mathcal{F}_1}{\partial I} \\ \frac{\partial \mathcal{F}_2}{\partial E} &amp; \frac{\partial \mathcal{F}_2}{\partial I} \end{bmatrix} = \begin{bmatrix} \frac{\partial [\beta SI]}{\partial E} &amp; \frac{\partial [\beta SI]}{\partial I} \\ \frac{\partial [0]}{\partial E} &amp; \frac{\partial [0]}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} 0 &amp; \beta S \\ 0 &amp; 0 \end{bmatrix}\]</span></p>
+<p>In which:</p>
+<ul>
+<li><span class="math inline">\(\frac{\partial [\beta SI]}{\partial E} = 0\)</span>: because there is no <span class="math inline">\(E\)</span> in <span class="math inline">\(\beta SI\)</span>.</li>
+<li><span class="math inline">\(\frac{\partial [\beta SI]}{\partial I} = \beta S\)</span>.</li>
+</ul>
+<p><span class="math display">\[V = \begin{bmatrix} \frac{\partial \mathcal{V}_1}{\partial E} &amp; \frac{\partial \mathcal{V}_1}{\partial I} \\ \frac{\partial \mathcal{V}_2}{\partial E} &amp; \frac{\partial \mathcal{V}_2}{\partial I} \end{bmatrix} = \begin{bmatrix} \frac{\partial [\sigma E + \mu E]}{\partial E} &amp; \frac{\partial [\sigma E + \mu E]}{\partial I} \\ \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial E} &amp; \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} \sigma + \mu &amp; 0 \\ - \sigma &amp; \gamma + \mu \end{bmatrix}\]</span></p>
+</section>
+<section id="step-4.-compute-the-ngm" class="level3" data-number="2.2.4">
+<h3 data-number="2.2.4" class="anchored" data-anchor-id="step-4.-compute-the-ngm"><span class="header-section-number">2.2.4</span> Step 4. Compute the NGM</h3>
+<p>Use <a href="dict.html#def-inv-matrix" class="quarto-xref">Definition&nbsp;<span>13.3</span></a> to compute inverse matrix <span class="math inline">\(V^{-1}\)</span>:</p>
+<p><span class="math display">\[V^{-1} = \frac{1}{(\sigma + \mu)(\gamma + \mu)} \begin{bmatrix} \gamma + \mu &amp; - 0 \\ - \sigma &amp; \sigma + \mu \end{bmatrix} = \begin{bmatrix} \frac{1}{\sigma + \mu} &amp; 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{1}{\gamma + \mu} \end{bmatrix}\]</span></p>
+<p><span class="math display">\[K = FV^{-1} = \begin{bmatrix} 0 &amp; \beta S \\ 0 &amp; 0 \end{bmatrix} \begin{bmatrix} \frac{1}{\sigma + \mu} &amp; 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{1}{\gamma + \mu} \end{bmatrix} \\ = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{\beta S}{\gamma + \mu} \\ 0 &amp; 0 \end{bmatrix}\]</span></p>
+</section>
+<section id="step-5.-compute-r_0" class="level3" data-number="2.2.5">
+<h3 data-number="2.2.5" class="anchored" data-anchor-id="step-5.-compute-r_0"><span class="header-section-number">2.2.5</span> Step 5. Compute <span class="math inline">\(R_0\)</span></h3>
+<p><span class="math inline">\(R_0\)</span> is the eigenvalues of the NGM.</p>
+<p><span class="math display">\[det(K - \lambda) = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda &amp; \frac{\beta S}{\gamma + \mu} \\ 0 &amp; 0 - \lambda \end{bmatrix} \\ = [\frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda][0 - \lambda]\]</span></p>
+<p><span class="math display">\[R_0 = \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)}\]</span></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -416,6 +484,7 @@ Driessche, P. van den. (2017). Reproduction numbers of infectious disease models
 Jones, J. H. (2007). Notes on R0. <em>California: Department of Anthropological Sciences</em>, <em>323</em>, 1–19.
 </div>
 </div>
+</section>
 </section>
 
 </main> <!-- /main -->
