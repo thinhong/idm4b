@@ -12,356 +12,207 @@
   {
     "objectID": "mod.html",
     "href": "mod.html",
-    "title": "1  Infectious disease modelling",
+    "title": "Infectious disease modelling",
     "section": "",
-    "text": "1.1 Modelling\nA model is a simplified representation of a complex phenomenon (Vynnycky & White, 2010).\nWe all use models in our daily lives, often without realizing it. Imagine a colleague asks, “How long will it take to get to the restaurant?”. There are different ways you might answer this question, each reflecting a different “model” in your head:\nModels help us navigate and make decisions about complex situations by focusing on the most relevant factors and ignoring the less critical details.",
+    "text": "Modelling\nA model is a simplified representation of a complex phenomenon (Vynnycky & White, 2010).\nWe all use models in our daily lives, often without realizing it. Imagine a colleague asks, “How long will it take to get to the restaurant?”. There are different ways you might answer this question, each reflecting a different “model” in your head:\nModels help us navigate and make decisions about complex situations by focusing on the most relevant factors and ignoring the less critical details.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Infectious disease modelling</span>"
+      "Infectious disease modelling"
     ]
   },
   {
     "objectID": "mod.html#modelling",
     "href": "mod.html#modelling",
-    "title": "1  Infectious disease modelling",
+    "title": "Infectious disease modelling",
     "section": "",
     "text": "The Bull, by Pablo Picasso (source).\n\n\n\n\nExperience-based model: You might think, “Last week it took me 20 minutes to get to this restaurant”. This model simplifies by assuming past experiences are a reliable predictor of future outcomes, ignoring daily variations like traffic or weather.\nDistance and speed model: You might think, “The restaurant is 15 kilometers away, and I drive at 45 km/h, so it should take about 20 minutes”. This model uses the formula \\(\\text{time} = \\frac{\\text{distance}}{\\text{speed}}\\). It simplifies by assuming a constant speed, and not accounting for real-world complexities like traffic lights or congestion.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Infectious disease modelling</span>"
+      "Infectious disease modelling"
     ]
   },
   {
     "objectID": "mod.html#there-is-no-perfect-model",
     "href": "mod.html#there-is-no-perfect-model",
-    "title": "1  Infectious disease modelling",
-    "section": "1.2 There is no perfect model",
-    "text": "1.2 There is no perfect model\n\nDespite the advances in modelling that will arise in the coming decades, models will never be able to accurately predict if, or when, a particular person, farm or community will become infected. This is for two reasons:\n\nThe transmission of infection is a stochastic process, such that no two epidemics are identical.\nModels will always be an approximation, and rare or unforeseen behavioural events can have a significant impact on the disease dynamics\n\nKeeling M (2006) State-of-science review: predictive and real-time epidemiological modelling. London: Office of Science and Innovation (Christley et al., 2013; Keeling, 2006).\n\n\n\n\n\nChristley, R. M., Mort, M., Wynne, B., Wastling, J. M., Heathwaite, A. L., Pickup, R., Austin, Z., & Latham, S. M. (2013). “Wrong, but Useful”: Negotiating Uncertainty in Infectious Disease Modelling. PLOS ONE, 8(10), e76277. https://doi.org/10.1371/journal.pone.0076277\n\n\nKeeling, M. J. (2006). State-of-science review: Predictive and real-time epidemiological modelling. S9. DTI.\n\n\nVynnycky, E., & White, R. (2010). An Introduction to Infectious Disease Modelling. OUP Oxford.",
+    "title": "Infectious disease modelling",
+    "section": "There is no perfect model",
+    "text": "There is no perfect model\n\nDespite the advances in modelling that will arise in the coming decades, models will never be able to accurately predict if, or when, a particular person, farm or community will become infected. This is for two reasons:\n\nThe transmission of infection is a stochastic process, such that no two epidemics are identical.\nModels will always be an approximation, and rare or unforeseen behavioural events can have a significant impact on the disease dynamics\n\nKeeling M (2006) State-of-science review: predictive and real-time epidemiological modelling. London: Office of Science and Innovation (Christley et al., 2013; Keeling, 2006).\n\n\n\n\n\nChristley, R. M., Mort, M., Wynne, B., Wastling, J. M., Heathwaite, A. L., Pickup, R., Austin, Z., & Latham, S. M. (2013). “Wrong, but Useful”: Negotiating Uncertainty in Infectious Disease Modelling. PLOS ONE, 8(10), e76277. https://doi.org/10.1371/journal.pone.0076277\n\n\nKeeling, M. J. (2006). State-of-science review: Predictive and real-time epidemiological modelling. S9. DTI.\n\n\nVynnycky, E., & White, R. (2010). An Introduction to Infectious Disease Modelling. OUP Oxford.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Infectious disease modelling</span>"
-    ]
-  },
-  {
-    "objectID": "rnum.html",
-    "href": "rnum.html",
-    "title": "Reproduction number",
-    "section": "",
-    "text": "Basic reproduction number \\(R_0\\)\nThe basic reproduction number is sometimes called the basic reproductive number or basic reproductive ratio (Driessche, 2017).",
-    "crumbs": [
-      "Reproduction number"
-    ]
-  },
-  {
-    "objectID": "rnum.html#basic-reproduction-number-r_0",
-    "href": "rnum.html#basic-reproduction-number-r_0",
-    "title": "Reproduction number",
-    "section": "",
-    "text": "Definition 1 \\(R_0\\) (pronounced /R naught/) is the average number of individuals infected by each infectious individual in a fully susceptible population (Vegvari et al., 2022). In short, \\(R_0\\) is the \\(R\\) in a fully susceptible population, the maximum \\(R\\) in a population.",
-    "crumbs": [
-      "Reproduction number"
-    ]
-  },
-  {
-    "objectID": "rnum.html#effective-reproduction-number-r_e",
-    "href": "rnum.html#effective-reproduction-number-r_e",
-    "title": "Reproduction number",
-    "section": "Effective reproduction number \\(R_e\\)",
-    "text": "Effective reproduction number \\(R_e\\)\n\nDefinition 2 \\(R_e\\) is the average number of secondary cases generated by each infectious individual throughout their infectious period in a population where not all individuals are susceptible.\n\nLet \\(s\\) be the proportion of the population that is susceptible.\n\\[R_e = s \\times R_0\\]",
-    "crumbs": [
-      "Reproduction number"
-    ]
-  },
-  {
-    "objectID": "rnum.html#effective-reproduction-number-at-time-t-r_t",
-    "href": "rnum.html#effective-reproduction-number-at-time-t-r_t",
-    "title": "Reproduction number",
-    "section": "Effective reproduction number at time \\(t\\) \\(R_t\\)",
-    "text": "Effective reproduction number at time \\(t\\) \\(R_t\\)\n\nDefinition 3 \\(R_e(t)\\) (Knight & Mishra, 2020) or \\(R_t\\) is the average number of secondary cases generated by one infected person at time \\(t\\) during the outbreak, where some individuals may no longer be susceptible (Gostic et al., 2020).\n\nA public health control strategy will end an outbreak if it can keep \\(R_t\\) below 1. The level of immunity at which \\(R_t = 1\\) is the herd immunity threshold (Vegvari et al., 2022).\n\n\n\n\n\n\n\n\n\nAt the beginning of an outbreak, we can estimate \\(R_0\\) when the whole population is fully susceptible. As the outbreak progresses, the number of susceptible individuals decreases, leading to a decline in \\(R_0\\). This adjusted value is referred to as \\(R_t\\) (if we want to measure at each time \\(t\\)). At the peak of the epidemic curve, \\(R_t = 1\\). After this peak, \\(R_t\\) continues to decrease, resulting in a decline in the number of new cases and the epidemic curve going down.\n\\(R_t\\) can be defined in 2 ways:\n\nInstantaneous reproduction number: the average number of individuals someone infected at time \\(t\\) would infect if conditions remained unchanged (Green et al., 2022).\nCase reproduction number: the average number of people an individual infected at time t actually infects, which will depend on changes in policy or behavior over the period of that cohort’s infection, and can only be estimated in retrospect (Green et al., 2022).\n\n\nInstantaneous reproduction number \\(R_t^i\\)\n\n\nFigure illustrates the Cori method (Gostic et al., 2020).\n\nMeasures transmission at a specific point in time (Gostic et al., 2020). The instantaneous reproduction number quantifies the number of new infections at a single point in time \\(t_i\\) (blue arrow), using the number of infections in the previous generation (green arrows) and their current infectiousness (green curve) (Gostic et al., 2020). The analyses can be done near real-time.\nMethods to estimate instantaneous reproduction number includes Cori and colleagues (Cori et al., 2013) (the best for near real-time estimation (Gostic et al., 2020)), and Bettencourt and Ribeiro (Bettencourt & Ribeiro, 2008) (use with caution because they implicitly assume the generation interval follows an exponential distribution, as in SIR model, which does not include alatent period).\n\n\nCase reproduction number \\(R_t^c\\)\n\n\nFigure illustrates the Wallinga and Teunis method (Gostic et al., 2020).\n\nMeasures transmission by a specific cohort of individuals (Gostic et al., 2020). A cohort is a group of individuals with the same date of infection or the same date of symptom onset. The case reproduction number is the average number of new infections that an individual who becomes infected on day \\(t_i\\) (green arrows in B) or symptomatic on day \\(t_s\\) (yellow arrows in C) will eventually go on to cause (blue downward arrows in B and C). It is a more natural choice for analyses that consider heterogeneity among individuals (Gostic et al., 2020).\nMethods to estimate instantaneous reproduction number includes Wallinga and Teunis method (Wallinga & Teunis, 2004).",
-    "crumbs": [
-      "Reproduction number"
-    ]
-  },
-  {
-    "objectID": "rnum.html#growth-rate-r-and-reproduction-number-r",
-    "href": "rnum.html#growth-rate-r-and-reproduction-number-r",
-    "title": "Reproduction number",
-    "section": "Growth rate \\(r\\) and reproduction number \\(R\\)",
-    "text": "Growth rate \\(r\\) and reproduction number \\(R\\)\nGrowth rate \\(r\\) and reproduction number \\(R\\) are basically the same. \\(r\\) is used in continuous time and \\(R\\) is used in discrete time.\n\nGrowth rate \\(r\\)\nThe rate at which new cases are arising (Anderson et al., 2020). It can be a positive number (new infections is increasing) or a negative number (new infections is decreasing).\nThe number of new infections at an increasing or decreasing exponential rate. It is dependent on the reproduction number and timescale between infections.\n\\[\\frac{d_\\text{newCases}}{dt}\\]\n\n\n\n\nAnderson, R., Donnelly, C., Hollingsworth, D., Keeling, M., Vegvari, C., Baggaley, R., & Maddren, R. (2020). Reproduction number (R) and growth rate (r) of the COVID-19 epidemic in the UK. The Royal Society.\n\n\nBettencourt, L. M. A., & Ribeiro, R. M. (2008). Real Time Bayesian Estimation of the Epidemic Potential of Emerging Infectious Diseases. PLOS ONE, 3(5), e2185. https://doi.org/10.1371/journal.pone.0002185\n\n\nCori, A., Ferguson, N. M., Fraser, C., & Cauchemez, S. (2013). A new framework and software to estimate time-varying reproduction numbers during epidemics. American Journal of Epidemiology, 178(9), 1505–1512. https://doi.org/10.1093/aje/kwt133\n\n\nDriessche, P. van den. (2017). Reproduction numbers of infectious disease models. Infectious Disease Modelling, 2(3), 288–303. https://doi.org/10.1016/j.idm.2017.06.002\n\n\nGostic, K. M., McGough, L., Baskerville, E. B., Abbott, S., Joshi, K., Tedijanto, C., Kahn, R., Niehus, R., Hay, J. A., Salazar, P. M. D., Hellewell, J., Meakin, S., Munday, J. D., Bosse, N. I., Sherrat, K., Thompson, R. N., White, L. F., Huisman, J. S., Scire, J., … Cobey, S. (2020). Practical considerations for measuring the effective reproductive number, Rt. PLOS Computational Biology, 16(12), e1008409. https://doi.org/10.1371/journal.pcbi.1008409\n\n\nGreen, W. D., Ferguson, N. M., & Cori, A. (2022). Inferring the reproduction number using the renewal equation in heterogeneous epidemics. Journal of The Royal Society Interface, 19(188), 20210429. https://doi.org/10.1098/rsif.2021.0429\n\n\nKnight, J., & Mishra, S. (2020). Estimating effective reproduction number using generation time versus serial interval, with application to covid-19 in the greater toronto area, canada. Infectious Disease Modelling, 5, 889–896. https://doi.org/10.1016/j.idm.2020.10.009\n\n\nVegvari, C., Abbott, S., Ball, F., Brooks-Pollock, E., Challen, R., Collyer, B. S., Dangerfield, C., Gog, J. R., Gostic, K. M., Heffernan, J. M., Hollingsworth, T. D., Isham, V., Kenah, E., Mollison, D., Panovska-Griffiths, J., Pellis, L., Roberts, M. G., Scalia Tomba, G., Thompson, R. N., & Trapman, P. (2022). Commentary on the use of the reproduction number R during the COVID-19 pandemic. Statistical Methods in Medical Research, 31(9), 1675–1685. https://doi.org/10.1177/09622802211037079\n\n\nWallinga, J., & Teunis, P. (2004). Different epidemic curves for severe acute respiratory syndrome reveal similar impacts of control measures. American Journal of Epidemiology, 160(6), 509–516. https://doi.org/10.1093/aje/kwh255",
-    "crumbs": [
-      "Reproduction number"
-    ]
-  },
-  {
-    "objectID": "r0.html",
-    "href": "r0.html",
-    "title": "2  Estimating \\(R_0\\)",
-    "section": "",
-    "text": "2.1 Compartmental models",
-    "crumbs": [
-      "Reproduction number",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Estimating $R_0$</span>"
-    ]
-  },
-  {
-    "objectID": "r0.html#compartmental-models",
-    "href": "r0.html#compartmental-models",
-    "title": "2  Estimating \\(R_0\\)",
-    "section": "",
-    "text": "2.1.1 SIR model\nOrdinary differential equations (ODEs) for SIR model are given by Equation 4.1, Equation 4.2, Equation 4.3.\nConsider the \\(I\\) equation:\n\\[\\frac{dI}{dt} = \\beta SI - \\gamma I = I(\\beta S - \\gamma)\\]\n\n\n2.1.2 SEIR model",
-    "crumbs": [
-      "Reproduction number",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Estimating $R_0$</span>"
-    ]
-  },
-  {
-    "objectID": "r0.html#next-generation-matrix-ngm",
-    "href": "r0.html#next-generation-matrix-ngm",
-    "title": "2  Estimating \\(R_0\\)",
-    "section": "2.2 Next generation matrix (NGM)",
-    "text": "2.2 Next generation matrix (NGM)\n\\(R_0\\) is the maximum absolute eigenvalue (also called the spectral radius) of the next generation matrix (Driessche, 2017).\nLet consider a SEIR model with equal birth and death rate \\(\\mu\\)\n\\[\\frac{dS}{dt} = \\mu (S + E + I + R) -\\beta SI - \\mu S\\]\n\\[\\frac{dE}{dt} = \\beta SI - \\sigma E - \\mu E\\]\n\\[\\frac{dI}{dt} = \\sigma E - \\gamma I - \\mu I\\]\n\\[\\frac{dR}{dt} = \\gamma I - \\mu R\\]\n\n2.2.1 Step 1. Identify the infected compartments\nFor our SEIR model, the infected compartments are \\(E\\) and \\(I\\).\n\n\n2.2.2 Step 2. Write the NGM functions\n\n\\(\\mathcal{F}_i(x)\\): is the rate of appearance of new infections in compartment \\(i\\) (Driessche, 2017) (caused by contact).\n\\(\\mathcal{V}_i(x)\\): is the rate of other transitions between compartment \\(i\\) and other infected compartments (Driessche, 2017) (caused by transition between compartments).\n\nFor our SEIR model, we would write \\(\\mathcal{F}\\) and \\(\\mathcal{V}\\) as follows:\n\n\n\\[\\mathcal{F} = \\begin{bmatrix} \\beta SI \\\\ 0 \\end{bmatrix}\\]\nIn which \\(\\mathcal{F}\\) is a vector contains of \\(\\begin{bmatrix} \\mathcal{F}_1 \\\\ \\mathcal{F}_2 \\end{bmatrix}\\):\n\n\\(\\mathcal{F}_1 = \\beta SI\\): the rate of new infections (caused by contact) in compartment \\(E\\).\n\\(\\mathcal{F}_2 = 0\\): as there is no new infections (caused by contact) in compartment \\(I\\).\n\n\n\\[\\mathcal{V} = \\begin{bmatrix} \\sigma E + \\mu E \\\\ - \\sigma E + \\gamma I + \\mu I \\end{bmatrix}\\]\nIn which \\(\\mathcal{V}\\) is a vector contains of \\(\\begin{bmatrix} \\mathcal{V}_1 \\\\ \\mathcal{V}_2 \\end{bmatrix}\\):\n\n\\(\\mathcal{V}_1 = \\sigma E + \\mu E\\): is the rate of other transitions to and from compartment \\(E\\).\n\\(\\mathcal{V}_2 = - \\sigma E + \\gamma I + \\mu I\\): is the rate of other transitions to and from compartment \\(I\\).\n\n\n\n\\(\\mathcal{F}\\) and \\(\\mathcal{V}\\) are written such that:\n\\[\\frac{dx}{dt} = \\mathcal{F} - \\mathcal{V}\\]\nHere we have:\n\\[\\frac{dE}{dt} = \\mathcal{F}_1 - \\mathcal{V}_1 = \\beta SI - (\\sigma E + \\mu E)\\]\n\\[\\frac{dI}{dt} = \\mathcal{F}_2 - \\mathcal{V}_2 = 0 - (- \\sigma E + \\gamma I + \\mu I)\\]\n\n\n2.2.3 Step 3. Find the Jacobian matrix\nJacobian matrix \\(F\\) for \\(\\mathcal{F}\\), and \\(V\\) for \\(\\mathcal{V}\\). Jacobian matrix is a matrix contain all partial derivatives of a vector function.\n\\[F = \\begin{bmatrix} \\frac{\\partial \\mathcal{F}_1}{\\partial E} & \\frac{\\partial \\mathcal{F}_1}{\\partial I} \\\\ \\frac{\\partial \\mathcal{F}_2}{\\partial E} & \\frac{\\partial \\mathcal{F}_2}{\\partial I} \\end{bmatrix} = \\begin{bmatrix} \\frac{\\partial [\\beta SI]}{\\partial E} & \\frac{\\partial [\\beta SI]}{\\partial I} \\\\ \\frac{\\partial [0]}{\\partial E} & \\frac{\\partial [0]}{\\partial I} \\end{bmatrix} \\\\ = \\begin{bmatrix} 0 & \\beta S \\\\ 0 & 0 \\end{bmatrix}\\]\nIn which:\n\n\\(\\frac{\\partial [\\beta SI]}{\\partial E} = 0\\): because there is no \\(E\\) in \\(\\beta SI\\).\n\\(\\frac{\\partial [\\beta SI]}{\\partial I} = \\beta S\\).\n\n\\[V = \\begin{bmatrix} \\frac{\\partial \\mathcal{V}_1}{\\partial E} & \\frac{\\partial \\mathcal{V}_1}{\\partial I} \\\\ \\frac{\\partial \\mathcal{V}_2}{\\partial E} & \\frac{\\partial \\mathcal{V}_2}{\\partial I} \\end{bmatrix} = \\begin{bmatrix} \\frac{\\partial [\\sigma E + \\mu E]}{\\partial E} & \\frac{\\partial [\\sigma E + \\mu E]}{\\partial I} \\\\ \\frac{\\partial [- \\sigma E + \\gamma I + \\mu I]}{\\partial E} & \\frac{\\partial [- \\sigma E + \\gamma I + \\mu I]}{\\partial I} \\end{bmatrix} \\\\ = \\begin{bmatrix} \\sigma + \\mu & 0 \\\\ - \\sigma & \\gamma + \\mu \\end{bmatrix}\\]\n\n\n2.2.4 Step 4. Compute the NGM\nUse Definition 13.3 to compute inverse matrix \\(V^{-1}\\):\n\\[V^{-1} = \\frac{1}{(\\sigma + \\mu)(\\gamma + \\mu)} \\begin{bmatrix} \\gamma + \\mu & - 0 \\\\ - \\sigma & \\sigma + \\mu \\end{bmatrix} = \\begin{bmatrix} \\frac{1}{\\sigma + \\mu} & 0 \\\\ \\frac{\\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)} & \\frac{1}{\\gamma + \\mu} \\end{bmatrix}\\]\n\\[K = FV^{-1} = \\begin{bmatrix} 0 & \\beta S \\\\ 0 & 0 \\end{bmatrix} \\begin{bmatrix} \\frac{1}{\\sigma + \\mu} & 0 \\\\ \\frac{\\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)} & \\frac{1}{\\gamma + \\mu} \\end{bmatrix} \\\\ = \\begin{bmatrix} \\frac{\\beta S \\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)} & \\frac{\\beta S}{\\gamma + \\mu} \\\\ 0 & 0 \\end{bmatrix}\\]\n\n\n2.2.5 Step 5. Compute \\(R_0\\)\n\\(R_0\\) is the eigenvalues of the NGM.\n\\[det(K - \\lambda) = \\begin{bmatrix} \\frac{\\beta S \\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)} - \\lambda & \\frac{\\beta S}{\\gamma + \\mu} \\\\ 0 & 0 - \\lambda \\end{bmatrix} \\\\ = [\\frac{\\beta S \\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)} - \\lambda][0 - \\lambda]\\]\n\\[R_0 = \\frac{\\beta S \\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)}\\]\n\n\n\n\n\n\nA simple example\n\n\n\n\n\nSource: quantpie’s video.\nA population consists of two groups: young and old.\n\nA young person on average infects 3 young and 2 old: \\(\\begin{bmatrix} 3 \\\\ 2 \\end{bmatrix}\\).\nAn old person on average infects 1 young and 2 old: \\(\\begin{bmatrix} 1 \\\\ 2 \\end{bmatrix}\\).\n\nEach group becomes a column in the next generation matrix (NGM):\n\\[\\text{NGM} = \\begin{bmatrix} 3 & 1 \\\\ 2 & 2 \\end{bmatrix}\\]\n\\(R_0\\) is the root of equation:\n\\[\\begin{bmatrix} 3 - \\lambda & 1 \\\\ 2 & 2 - \\lambda \\end{bmatrix} = 0\\]\n\\[\\Leftrightarrow (3 - \\lambda) \\times (2 - \\lambda) - 2 \\times 1 = 0\\]\n\\[\\Leftrightarrow \\lambda^2 - 5 \\lambda + 6 - 2 = 0\\]\n\\[\\Leftrightarrow \\lambda^2 - 5 \\lambda + 4 = 0\\]\nThere are two root \\(\\lambda = 4\\) and \\(\\lambda = 1\\), for an outbreak to occur \\(R_0 &gt; 1\\), so here \\(R_0 = 4\\).\n\n\n\nFor more complex compartmental models, especially those with more infected compartments (Driessche, 2017)\n\n\n\n\nChitnis, N. (2017). Introduction to SEIR Models.\n\n\nDriessche, P. van den. (2017). Reproduction numbers of infectious disease models. Infectious Disease Modelling, 2(3), 288–303. https://doi.org/10.1016/j.idm.2017.06.002\n\n\nJones, J. H. (2007). Notes on R0. California: Department of Anthropological Sciences, 323, 1–19.",
-    "crumbs": [
-      "Reproduction number",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Estimating $R_0$</span>"
-    ]
-  },
-  {
-    "objectID": "rt.html",
-    "href": "rt.html",
-    "title": "3  Estimating \\(R_t\\)",
-    "section": "",
-    "text": "3.1 Instantaneous reproduction number \\(R_t^i\\)",
-    "crumbs": [
-      "Reproduction number",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Estimating $R_t$</span>"
-    ]
-  },
-  {
-    "objectID": "rt.html#instantaneous-reproduction-number-r_ti",
-    "href": "rt.html#instantaneous-reproduction-number-r_ti",
-    "title": "3  Estimating \\(R_t\\)",
-    "section": "",
-    "text": "Definition 3.1 The instantaneous reproduction number is the expected number of secondary infections occurring at time \\(t\\), divided by the number of infected individuals, each scaled by their relative infectiousness at time \\(t\\) (an individual’s relative infectiousness is based on the generation interval and time since infection) (Gostic et al., 2020).\n\n\n3.1.1 Exact calculation\nFor a compartmental model (SIR or SEIR), \\(R_t^i\\) can be calculated exactly as (Gostic et al., 2020):\n\\[R_t^i = \\beta(t) S(t) D\\]\n\n\\(\\beta(t)\\): the time-varying transmission rate.\n\\(S(t)\\): the fraction of the population that is susceptible.\n\\(D\\): the mean duration of infectiousness.\n\n\n\n3.1.2 Cori method\n\\[R_t^i = \\frac{I_t}{\\sum_{s = 1}^{t} I_{t - s} w_s}\\]\n\n\\(I_t\\): the number of infection on day \\(t\\).\n\\(I_{t - s}\\): the number of individuals who became infected \\(s\\) days in the past.\n\\(w_s\\): the infectivity profile, describes how infectious an individual is \\(s\\) days since infection, \\(w_s\\) dependent on time since infection \\(s\\) but independent of calendar time \\(t\\), and often be approximated by the generation interval (Cori et al., 2013).\n\\(I_{t - s} w_s\\): we scale the number of individuals who became infected \\(s\\) days in the past by how infectiousness are they still on day \\(t\\) (which is \\(s\\) days after the date they got infected, \\(w_s\\)).\n\nLooking back at Definition 3.1, \\(R_t^i\\) is the expected number of secondary infections occurring at time \\(t\\) (\\(I_t\\)), divided by the number of infected individuals (\\(\\sum_{s = 1}^{t} I_{t - s}\\)), each scaled by their relative infectiousness at time \\(t\\) (\\(w_s\\)).\nThe only parametric assumption required by this method is the form of the generation interval. The standard assumption is that \\(w_s\\) follows a discretized gamma distribution, but any parametric or empirical discrete distribution also work (Gostic et al., 2020).\n\n\n3.1.3 When can we start estimating \\(R_t^i\\)?\nCori et al. suggest starting estimating \\(R_t^i\\) once those three criteria are fulfilled (Cori et al., 2013):\n\nAt least after the sliding window size.\nAt least after one mean serial interval.\nAt least 12 cases (the initial case + 11) have been observed since the beginning of the epidemic (in a time window): to get a posterior credible interval of 0.3, the time window must comprise at least 11 incident cases.\n\n\n\n3.1.4 Key considerations\nSource: Dr. Anne Cori’s webinar.\n\nTemporal resolution: we can’t apply the \\(R_t^i\\) method when the time step of observation is too large (&gt; mean generation interval).\nSpatial resolution: ideally use a spatial scale that you can distinguish locally infected cases from imported cases.\n\\(R_t^i\\) is very sensitive to the size of the sliding window: small windows can lead to highly variable estimates with wide credible intervals, whereas longer windows lead to smoothed estimates with narrower credible intervals. Perhaps also consider at least 11 incident cases in a sliding window to get a posterior credible interval of 0.3 (Cori et al., 2013).",
-    "crumbs": [
-      "Reproduction number",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Estimating $R_t$</span>"
-    ]
-  },
-  {
-    "objectID": "rt.html#case-reproduction-number-r_tc",
-    "href": "rt.html#case-reproduction-number-r_tc",
-    "title": "3  Estimating \\(R_t\\)",
-    "section": "3.2 Case reproduction number \\(R_t^c\\)",
-    "text": "3.2 Case reproduction number \\(R_t^c\\)\n\nDefinition 3.2 The case or cohort reproduction number is the expected number of secondary infections that an individual who becomes infected at time \\(t\\) will eventually cause as they progress through their infection (Gostic et al., 2020).\n\n\n3.2.1 Exact calculation\n\\[R_t^c = \\int_{u = t}^{\\infty} R_u^i w_{u-t} du\\]\n\n\\(R_u^i\\): the instantaneous reproduction number of current infected cases at time \\(u\\), starting from \\(t\\) to the end of their infectious period \\(\\infty\\).\n\\(w_{u-t}\\): the infectiousness of them at that time.\n\n\n\n3.2.2 Wallinga and Teunis method\nThere are 3 steps (Gostic et al., 2020):\nStep 1. Estimate the likelihood that case \\(j\\) (infected at time \\(t_j\\)) infected case \\(i\\) (at time \\(t_i\\)).\n\\[p_{ij} = \\frac{w_{t_i - t_j}}{\\sum_{i \\neq k} w_{t_i - t_k}}\\]\n\n\\(\\sum_{i \\neq k} w_{t_i - t_k}\\): sum of the infectiousness of all cases (other than \\(i\\)) infects case \\(i\\).\n\nStep 2. Compute the individual reproduction number of case \\(j\\).\n\\[R_j = \\sum_i p_{ij}\\]\nStep 3. Compute the case reproduction number at time \\(t\\), it is the expected value of \\(R_j\\) for all individuals infected at time \\(t\\).\n\\[R_t^c = \\mathbb{E}(R_j)\\]",
-    "crumbs": [
-      "Reproduction number",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Estimating $R_t$</span>"
-    ]
-  },
-  {
-    "objectID": "rt.html#proofs",
-    "href": "rt.html#proofs",
-    "title": "3  Estimating \\(R_t\\)",
-    "section": "3.3 Proofs",
-    "text": "3.3 Proofs\nThe renewal equation is a cornerstone of demographic theory and backbone of the \\(R_t\\) estimators.\n\\[b(t) = \\int_{a = 0}^{\\infty} b(t - a) n(a) da\\]\n\n\\(b(t)\\): the number of births at time \\(t\\).\n\\(b(t - a)\\): the number of birth at time \\(t - a\\), or the number of people of age \\(a\\) at time \\(t\\).\n\\(n(a)\\): the birth ability of people of age \\(a\\), scaled by the probability of surviving to age \\(a\\).\n\nTo describe epidemic dynamics, the renewal equation is expressed in terms of \\(I(t)\\).\n\\[I(t) = R_0 S(t) \\int_{s = 0}^{\\infty} I(t - s) w_s ds\\]\n\n\\(R_0 S(t) = R_t\\): see Definition 3.\n\\(I(t - s)\\): the number of individuals who became infected \\(s\\) time points ago in the past.\n\\(w_s\\): the infectivity profile, or the probability of how infectiousness are they still at time \\(t\\) (which is \\(s\\) time points after the date they got infected).\n\\(I(t - s) w_s\\): we scale the number of individuals who in the past by how infectiousness are they still at time \\(t\\).\n\nNow we transform the equation a bit, and we got something very similar to the Cori method (see Section 3.1.2).\n\\[R_t = \\frac{I(t)}{\\int_{s = 0}^{\\infty} I(t - s) w_s ds}\\]",
-    "crumbs": [
-      "Reproduction number",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Estimating $R_t$</span>"
-    ]
-  },
-  {
-    "objectID": "rt.html#compare-r_ti-and-r_tc",
-    "href": "rt.html#compare-r_ti-and-r_tc",
-    "title": "3  Estimating \\(R_t\\)",
-    "section": "3.4 Compare \\(R_t^i\\) and \\(R_t^c\\)",
-    "text": "3.4 Compare \\(R_t^i\\) and \\(R_t^c\\)\nThere are several important differences (Gostic et al., 2020):\n\nInstantaneous \\(R_t^i\\) is real-time estimation and only use data from before time \\(t\\), while case \\(R_t^c\\) is inherently forward-looking.\n\n\nInstantaneous \\(R_t^i\\) overestimates \\(R_t\\) early in the time series, because any infections that occurred before the first observed date are missing terms in the denominator (the \\(I_{t - s}\\) in Section 3.1.2, data is left-truncated at the beginning).\nCase \\(R_t^c\\) underestimates \\(R_t\\) at the end of the time series, because it relies on time points not yet observed which become missing terms in the integral (the \\(R_u^i\\) in Section 3.2.1, data is right-truncated at the end).\n\n\nCase \\(R_t^c\\) is shifted forward in time relative to instantaneous \\(R_t^i\\), produces leading estimates of \\(R_t\\) because it uses data from time points after \\(t\\), whereas the \\(R_t^i\\) uses data from time points before \\(t\\).\n\n\n\n\n\n\n\nImportant\n\n\n\nOverall, for real-time analyses aiming to infer the impact of changes in policy, behavior, or other extrinsic factors on transmission, the instantaneous reproductive number will provide more temporally accurate estimates and is most appropriate.",
-    "crumbs": [
-      "Reproduction number",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Estimating $R_t$</span>"
-    ]
-  },
-  {
-    "objectID": "rt.html#potential-biases",
-    "href": "rt.html#potential-biases",
-    "title": "3  Estimating \\(R_t\\)",
-    "section": "3.5 Potential biases",
-    "text": "3.5 Potential biases\n\\(R_t\\) is a value in specific time, therefore there are 2 potential forms of bias in \\(R_t\\) estimates (Gostic et al., 2020):\n\nAccuracy (the value): Systematic over- or underestimation caused by misspecification of the generation interval. Mostly impact when \\(R_t\\) is substantially &gt; 1 (e.g., the beginning of COVID-19 when \\(R_t\\) is relatively high) or &lt; 1 (e.g., after a very effective intervention then \\(R_t\\) might be low).\nTimeliness (the time): Temporal inaccuracy that \\(R_t\\) estimates may be leading or lagging the true date, has several possible causes and can be difficult to avoid.\n\n\n\nFigure from Sender et al. (Sender et al., 2022).\n\n\n3.5.1 Generation interval\n\nDefinition 3.3 Generation interval is the time from the infection of a primary case to infection of the cases he/she generates (Cori et al., 2013).\n\nIf we match this to an SEIR model, the generation interval starts when the infector enters the E compartment (meaning they got infected). The latest time they can infect an infectee is at the end of their residence in the I compartment (they are infectious). Therefore, generation interval is the sum of residence times in compartments E and I (Gostic et al., 2020).\nThe mean generation interval decreases when susceptible persons are at risk of infectious contact from multiple sources. Because when a susceptible person has multiple potential infectors, there is a “race” to infect him/her in which only the first infectious contact leads to infection (Kenah et al., 2008).\n\n\nBiases from misspecification of the generation interval mean (A) or variance (B) (Gostic et al., 2020).\n\n\nIf mean generation interval is set too high, \\(R_t\\) will be more extreme (too high when true \\(R_t &gt; 1\\) and too low when true \\(R_t &lt; 1\\)).\nIf mean generation interval is set too low, \\(R_t\\) will be closer to 1 than the true value.\nThe effect of the mean generation interval is large when true \\(R_t\\) further from 1. Therefore, this bias may be greatest at the early epidemic, when true \\(R_t\\) is high, together with highly uncertain generation interval and limited data.\n\nTools like EpiEstim and EpiNow2 allow users to specify the prior variance of the mean and standard deviation. However, bear in mind that uncertainty around an incorrect generation interval only widen the 95% credible interval, but will not shift the estimates toward the truth and will not correct this bias.\n\n\n3.5.2 Serial interval\n\nDefinition 3.4 Serial interval is the time between symptom onset in an infector–infectee pair (Gostic et al., 2020).\n\nSerial interval is more easily observed than generation interval and often used in its place. Although the serial and generation intervals are often conflated, there are important differences (Gostic et al., 2020):\n\nSerial interval and generation interval usually have the same mean, but different variances.\nSerial interval can be negative (when the symptom onset of infector is later than infectee, such as in COVID-19), generation interval is always positive.\n\nThe distributions of the serial interval and the generation interval are identical in these scenarios (Cori et al., 2013):\n\nFor diseases such as influenza, SARS, measles, and smallpox, it is expected that infectiousness starts only around the time of symptom onset.\nWhen the infectiousness profile after symptoms is independent of the incubation period.\n\n\n\n3.5.3 Delays\n\n\nAdjusting for delays (Gostic et al., 2020).\n\nIf \\(d\\) is the delay from infection to observation, then observations at time \\(t\\) inform \\(R_{t − d}\\), not \\(R_t\\).\nIf the distribution of delays can be estimated, then \\(R_t\\) can be estimated in 2 steps:\n\nInfer the underlying time series of infections.\nInput the adjusted time series into an \\(R_t\\) estimation method.",
-    "crumbs": [
-      "Reproduction number",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Estimating $R_t$</span>"
-    ]
-  },
-  {
-    "objectID": "rt.html#code",
-    "href": "rt.html#code",
-    "title": "3  Estimating \\(R_t\\)",
-    "section": "3.6 Code",
-    "text": "3.6 Code\n\n3.6.1 EpiEstim\n\nlibrary(EpiEstim)\nlibrary(ggplot2)\n\nThe input data\n\ndata(Flu2009)\n\ndf &lt;- Flu2009$incidence\nhead(df)\n\n\n  \n\n\n\nLet have a look at the data.\n\nggplot(df, aes(x = dates, y = I)) +\n  geom_point() +\n  labs(x = \"Day\", y = \"Incidence\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\n3.6.1.1 \n\nmod &lt;- estimate_R(\n  incid = df, \n  method = \"parametric_si\", \n  config = make_config(\n    list(\n      mean_si = 2.6, \n      std_si = 1.5\n    )\n  )\n)\n\nDefault config will estimate R on weekly sliding windows.\n    To change this change the t_start and t_end arguments. \n\n\nNoted that the default config will estimate R on weekly sliding windows (day 2 to day 8).\n\nhead(mod$R)\n\n\n  \n\n\n\n\nplot(mod)\n\n\n\n\n\n\n\n\n\ntmp &lt;- df[df$dates &lt; as.Date(\"2009-05-11\"),]\nmod &lt;- estimate_R(\n  incid = tmp, \n  method = \"parametric_si\", \n  config = make_config(\n    list(\n      mean_si = 2.6, \n      std_si = 1.5\n    )\n  )\n)\n\nDefault config will estimate R on weekly sliding windows.\n    To change this change the t_start and t_end arguments. \n\nhead(mod$R)\n\n\n  \n\n\nplot(mod)\n\n\n\n\n\n\n\n\n\n\n\n3.6.2 EpiNow2\n\n\n\n\nCori, A., Ferguson, N. M., Fraser, C., & Cauchemez, S. (2013). A new framework and software to estimate time-varying reproduction numbers during epidemics. American Journal of Epidemiology, 178(9), 1505–1512. https://doi.org/10.1093/aje/kwt133\n\n\nGostic, K. M., McGough, L., Baskerville, E. B., Abbott, S., Joshi, K., Tedijanto, C., Kahn, R., Niehus, R., Hay, J. A., Salazar, P. M. D., Hellewell, J., Meakin, S., Munday, J. D., Bosse, N. I., Sherrat, K., Thompson, R. N., White, L. F., Huisman, J. S., Scire, J., … Cobey, S. (2020). Practical considerations for measuring the effective reproductive number, Rt. PLOS Computational Biology, 16(12), e1008409. https://doi.org/10.1371/journal.pcbi.1008409\n\n\nKenah, E., Lipsitch, M., & Robins, J. M. (2008). Generation interval contraction and epidemic data analysis. Mathematical Biosciences, 213(1), 71–79. https://doi.org/10.1016/j.mbs.2008.02.007\n\n\nSender, R., Bar-On, Y., Park, S. W., Noor, E., Dushoff, J., & Milo, R. (2022). The unmitigated profile of COVID-19 infectiousness. eLife, 11, e79134. https://doi.org/10.7554/eLife.79134",
-    "crumbs": [
-      "Reproduction number",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Estimating $R_t$</span>"
+      "Infectious disease modelling"
     ]
   },
   {
     "objectID": "sir-det.html",
     "href": "sir-det.html",
-    "title": "4  SIR",
+    "title": "1  SIR",
     "section": "",
-    "text": "4.1 Assumptions",
+    "text": "1.1 Model\n\\[\\frac{dS}{dt} = -\\beta SI = -\\lambda S \\tag{1.1}\\]\n\\[\\frac{dI}{dt} = \\beta SI - \\gamma I = \\lambda S - \\gamma I \\tag{1.2}\\]\n\\[\\frac{dR}{dt} = \\gamma I \\tag{1.3}\\]",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>SIR</span>"
-    ]
-  },
-  {
-    "objectID": "sir-det.html#assumptions",
-    "href": "sir-det.html#assumptions",
-    "title": "4  SIR",
-    "section": "",
-    "text": "Each member of a population is either susceptible, infectious, or recovered (Driessche, 2017).\nThe disease spreads through direct contact between susceptible and infected individuals.\nWell-mixed population, or homogeneous mixing (represented by a single contact rate \\(\\beta\\)) (Becker & Grenfell, 2017).\nIn the most basic form it considers a “closed population” without demographics (no births, deaths, or migration) (Keeling & Rohani, 2011), make sense when the disease is short lived compared with the population lifetime (Driessche, 2017).\nInfectious disease properties are for a single pathogen (Becker & Grenfell, 2017).\nRecovered individuals gain lifelong immunity.",
-    "crumbs": [
-      "Deterministic models",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>SIR</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>SIR</span>"
     ]
   },
   {
     "objectID": "sir-det.html#model",
     "href": "sir-det.html#model",
-    "title": "4  SIR",
-    "section": "4.2 Model",
-    "text": "4.2 Model\n\\[\\frac{dS}{dt} = -\\beta SI = -\\lambda S \\tag{4.1}\\]\n\\[\\frac{dI}{dt} = \\beta SI - \\gamma I = \\lambda S - \\gamma I \\tag{4.2}\\]\n\\[\\frac{dR}{dt} = \\gamma I \\tag{4.3}\\]\n\n\\(\\beta\\): effective contact rate.\n\\(\\gamma\\): removal rate.\n\\(\\beta I = \\lambda\\): the rate from S to I is called force of infection.",
+    "title": "1  SIR",
+    "section": "",
+    "text": "\\(\\beta\\): effective contact rate.\n\\(\\gamma\\): removal rate.\n\\(\\beta I = \\lambda\\): the rate from S to I is called force of infection.",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>SIR</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>SIR</span>"
+    ]
+  },
+  {
+    "objectID": "sir-det.html#assumptions",
+    "href": "sir-det.html#assumptions",
+    "title": "1  SIR",
+    "section": "1.2 Assumptions",
+    "text": "1.2 Assumptions\n\nEach member of a population is either susceptible, infectious, or recovered (Driessche, 2017).\nThe disease spreads through direct contact between susceptible and infected individuals.\nWell-mixed population, or homogeneous mixing (represented by a single contact rate \\(\\beta\\)) (Becker & Grenfell, 2017).\nIn the most basic form it considers a “closed population” without demographics (no births, deaths, or migration) (Keeling & Rohani, 2011), make sense when the disease is short lived compared with the population lifetime (Driessche, 2017).\nThere is no latent period, individuals become infectious immediately upon contracting the disease.\nThe contact rate and recovery rate are constant over time.\nInfectious disease properties are for a single pathogen (Becker & Grenfell, 2017).\nRecovered individuals gain lifelong immunity.",
+    "crumbs": [
+      "Deterministic models",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>SIR</span>"
     ]
   },
   {
     "objectID": "sir-det.html#density-or-frequency-dependent",
     "href": "sir-det.html#density-or-frequency-dependent",
-    "title": "4  SIR",
-    "section": "4.3 Density or frequency-dependent",
-    "text": "4.3 Density or frequency-dependent\n\n\nDensity-dependent\n\\[\\frac{dS}{dt} = -\\beta SI\\]\n\nTransmission increases as density increases\nFor aerosol contacts: COVID-19\n\n\nFrequency-dependent\n\\[\\frac{dS}{dt} = -\\beta S \\frac{I}{N}\\]\nTransmission does not increase as density increases Direct contacts Sexually-transmitted diseases\n\n\n$$$$",
+    "title": "1  SIR",
+    "section": "1.3 Density or frequency-dependent",
+    "text": "1.3 Density or frequency-dependent\n\n\n\nDensity-dependent\n\\[\\frac{dS}{dt} = -\\beta SI\\]\n\nThe unit of contact rate \\(\\beta\\) is \\(\\frac{1}{\\text{time} \\times \\text{people}}\\).\nTransmission increases as density increases.\nFor aerosol contacts: COVID-19.\n\n\nFrequency-dependent\n\\[\\frac{dS}{dt} = -\\beta S \\frac{I}{N}\\]\n\nThe unit of contact rate \\(\\beta\\) is \\(\\frac{1}{\\text{time}}\\).\nTransmission does not increase as density increases.\nSexually-transmitted diseases.",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>SIR</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>SIR</span>"
     ]
   },
   {
     "objectID": "sir-det.html#code",
     "href": "sir-det.html#code",
-    "title": "4  SIR",
-    "section": "4.4 Code",
-    "text": "4.4 Code\n\nlibrary(deSolve)\nlibrary(tidyr)\nlibrary(ggplot2)\nlibrary(RColorBrewer)\nlibrary(patchwork)\n\nBelow is how we solve the differential equations Equation 4.1, Equation 4.2 and Equation 4.3 in R with the deSolve package.\n\n\n\nListing 4.1: Deterministic SIR model\n\n\n\nsir_mod &lt;- function(beta, gamma, S0, I0, R0, times) {\n  \n  equations &lt;- function(time, variables, parameters) {\n    with(as.list(c(variables, parameters)), {\n      dS &lt;-   -beta * S * I\n      dI &lt;-    beta * S * I - gamma * I\n      dR &lt;-    gamma * I\n      dCInc &lt;- beta * S * I\n      return(list(c(dS, dI, dR, dCInc)))\n    })\n  }\n  \n  parameters_values &lt;- c(beta = beta, gamma = gamma)\n  initial_values &lt;- c(S = S0, I = I0, R = R0, CInc = 0)\n  \n  out &lt;- ode(y = initial_values, times = times, func = equations, parms = parameters_values)\n\n  out &lt;- as.data.frame(out)\n  # Compute incidence from cumulative incidence\n  out$Inc &lt;- c(I0, diff(out$CInc))\n  out$CInc &lt;- NULL\n  out\n}\n\n\n\n\n\n\n\n\n\n\nImportant\n\n\n\nBe careful of what kind of data we are using to fit the model:\n\nIncidence: use the \\(\\beta SI\\) part.\n\n\\[\\text{Incidence} = \\frac{\\text{Number of new cases during a period}}{\\text{Population at risk during the same period}}\\]\n\nPrevalence: use the I compartment.\n\n\\[\\text{Prevalence} = \\frac{\\text{Number of existing cases at time t}}{\\text{Total population at time t}}\\]\n\n\nThere are two ways to compute incidence.\n\nWhile writing the differential equations, we tell deSolve to compute the cumulative incidence, then compute the incidence by using diff() on the cumulative incidence.\n\n\n# Cumulative incidence\ndCInc &lt;- beta * S * I\n# Compute incidence from cumulative incidence\nout$Inc &lt;- c(I0, diff(out$CInc))\n\n\nIn this “closed population”, the incidence is the number of individuals moving out of \\(S\\) in each time step. So we can compute it from the \\(S\\) column. Let compare it with the previous method.\n\n\npred &lt;- sir_mod(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = 0:13)\n\ntmp &lt;- pred\ntmp$Inc2 &lt;- c(1, -diff(tmp$S))\ntmp[,\"Inc-Inc2\"] &lt;- round(tmp$Inc - tmp$Inc2)\ntmp[,c(\"Inc\", \"Inc2\", \"Inc-Inc2\")]\n\n\n  \n\n\n\nNow let have a look at the output.\n\nhead(pred)\n\n\n  \n\n\n\n\n\nCode\ndf_plot &lt;- pivot_longer(pred, cols = S:Inc, names_to = \"comp\", values_to = \"n\")\n\nggplot(df_plot, aes(x = time, y = n, color = comp)) +\n  geom_point() + geom_line() +\n  scale_color_brewer(palette = \"PuOr\", breaks = c(\"S\", \"Inc\", \"I\", \"R\")) +\n  labs(color = NULL, y = NULL, x = \"Time\") +\n  theme_minimal() +\n  theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\nThe time to peak of incidence is earlier than prevalence:\n\nIncidence reflects the immediate rate of new infections, the peak of incidence is reached when the transmission rate begins to decline.\nPrevalence accumulates both new and existing cases. Even after the incidence starts to decline, the active cases who were infected before the incidence peak are still there waiting for recovering. Prevalence only starts to decline when the recovery rate surpasses the rate of new infections significantly.",
+    "title": "1  SIR",
+    "section": "1.4 Code",
+    "text": "1.4 Code\n\nlibrary(odin)\nlibrary(tidyr)\nlibrary(ggplot2)\nlibrary(RColorBrewer)\nlibrary(patchwork)\n\nBelow is how we numerically solve the differential equations Equation 1.1, Equation 1.2 and Equation 1.3 in R with the odin package.\n\n\n\nListing 1.1: Deterministic SIR model\n\n\n\nodin_mod &lt;- odin::odin({\n  # Derivatives\n  deriv(S) &lt;- -beta * I * S\n  deriv(I) &lt;- beta * S * I - gamma * I\n  deriv(R) &lt;- gamma * I\n  deriv(CInc) &lt;- beta * S * I\n  \n  # Initial conditions\n  initial(S) &lt;- S_init\n  initial(I) &lt;- I_init\n  initial(R) &lt;- R_init\n  initial(CInc) &lt;- CInc_init\n  \n  # Parameters and initial values\n  beta &lt;- user(0.004)\n  gamma &lt;- user(0.5)\n  S_init &lt;- user(999)\n  I_init &lt;- user(1)\n  R_init &lt;- user(0)\n  CInc_init &lt;- user(0)\n})\n\nsir_mod &lt;- function(beta, gamma, S0, I0, R0, times) {\n  # Set values for new parameters\n  odin_run &lt;- odin_mod$new(beta = beta, gamma = gamma, S_init = S0, I_init = I0, R_init = R0)\n  \n  # Run the model\n  out &lt;- data.frame(odin_run$run(times))\n\n  # Compute incidence from cumulative incidence\n  out$Inc &lt;- c(I0, diff(out$CInc))\n  out$CInc &lt;- NULL\n  out\n}",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>SIR</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>SIR</span>"
+    ]
+  },
+  {
+    "objectID": "sir-det.html#incidence-or-prevalence",
+    "href": "sir-det.html#incidence-or-prevalence",
+    "title": "1  SIR",
+    "section": "1.5 Incidence or prevalence",
+    "text": "1.5 Incidence or prevalence\n\n\n\n\n\n\nImportant\n\n\n\nBe careful of what kind of data we are using to fit the model:\n\nIncidence: use the \\(\\beta SI\\) part.\n\n\\[\\text{Incidence} = \\frac{\\text{Number of new cases during a period}}{\\text{Population at risk during the same period}}\\]\n\nPrevalence: use the I compartment.\n\n\\[\\text{Prevalence} = \\frac{\\text{Number of existing cases at time t}}{\\text{Total population at time t}}\\]\n\n\nThere are two ways to compute incidence.\n\nWhile writing the differential equations, we tell deSolve to compute the cumulative incidence, then compute the incidence by using diff() on the cumulative incidence.\n\n\n# Cumulative incidence\ndCInc &lt;- beta * S * I\n# Compute incidence from cumulative incidence\nout$Inc &lt;- c(I0, diff(out$CInc))\n\n\nIn this “closed population”, the incidence is the number of individuals moving out of \\(S\\) in each time step. So we can compute it from the \\(S\\) column. Let compare it with the previous method.\n\n\npred &lt;- sir_mod(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = 0:13)\n\ntmp &lt;- pred\ntmp$Inc2 &lt;- c(1, -diff(tmp$S))\ntmp[,\"Inc-Inc2\"] &lt;- round(tmp$Inc - tmp$Inc2)\ntmp[,c(\"Inc\", \"Inc2\", \"Inc-Inc2\")]\n\n\n  \n\n\n\nNow let have a look at the output.\n\nhead(pred)\n\n\n  \n\n\n\n\n\nCode\ndf_plot &lt;- pivot_longer(pred, cols = S:Inc, names_to = \"comp\", values_to = \"n\")\n\nggplot(df_plot, aes(x = t, y = n, color = comp)) +\n  geom_point() + geom_line() +\n  scale_color_brewer(palette = \"PuOr\", breaks = c(\"S\", \"Inc\", \"I\", \"R\")) +\n  labs(color = NULL, y = NULL, x = \"Time\") +\n  theme_minimal() +\n  theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\nThe time to peak of incidence is earlier than prevalence:\n\nIncidence reflects the immediate rate of new infections, the peak of incidence is reached when the transmission rate begins to decline.\nPrevalence accumulates both new and existing cases. Even after the incidence starts to decline, the active cases who were infected before the incidence peak are still there waiting for recovering. Prevalence only starts to decline when the recovery rate surpasses the rate of new infections significantly.\n\n\n\n\n\n\n\nImportant\n\n\n\nNormally, public health officials are interested in the incidence in the general population (to track disease spread) and the prevalence in intensive care units (to ensure it does not exceed ICU bed capacity).",
+    "crumbs": [
+      "Deterministic models",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>SIR</span>"
     ]
   },
   {
     "objectID": "sir-det.html#sensitivity-analysis",
     "href": "sir-det.html#sensitivity-analysis",
-    "title": "4  SIR",
-    "section": "4.5 Sensitivity analysis",
-    "text": "4.5 Sensitivity analysis\nThe effective contact rate \\(\\beta\\) and the recovery rate \\(\\gamma\\) both affect whether or not there is an epidemic. The total number of people in the population and the initial number of infected people have no effect on whether there is an epidemic.\nBelow is a function that take a range of values of parameters and compare the model outputs.\n\n\nCode\nsir_sa &lt;- function(vals, parm, outcome, times, init_beta = 0.004, init_gamma = 0.5) {\n  pick_comp &lt;- ifelse(outcome == \"prev\", \"I\", \"Inc\")\n  plot_lab &lt;- ifelse(outcome == \"prev\", \"Prevalence\", \"Incidence\")\n  symb &lt;- ifelse(parm == \"beta\", \"\\u03b2\", \"\\u03b3\")\n  l &lt;- list()\n  for(i in 1:length(vals)) {\n    if (parm == \"beta\") {\n      pred &lt;- sir_mod(beta = vals[i], gamma = init_gamma, S0 = 999, I0 = 1, R0 = 0, times = times)[, c(\"time\", pick_comp)]\n    } else {\n      pred &lt;- sir_mod(beta = init_beta, gamma = vals[i], S0 = 999, I0 = 1, R0 = 0, times = times)[, c(\"time\", pick_comp)]\n    }\n    pred$comp &lt;- paste0(pick_comp, i)\n    colnames(pred) &lt;- c(\"time\", \"n\", \"comp\")\n    l[[i]] &lt;- pred\n  }\n  # Bind this list into a data frame\n  df_plot &lt;- Reduce(rbind, l)\n  # Set level I1 &lt; I2 &lt; I3... according to the increase of beta values\n  df_plot$comp &lt;- factor(df_plot$comp, levels = c(paste0(pick_comp, 1:length(vals))))\n  \n  # Plot results\n  my_palette &lt;- brewer.pal(9, \"Blues\")[(9-length(vals)+1):9]\n  \n  ggplot(df_plot, aes(x = time, y = n, color = comp)) + \n    geom_point() + geom_line() +\n    scale_color_manual(values = my_palette, labels = c(paste0(symb, \" = \", vals))) +\n    labs(color = NULL, y = plot_lab, x = \"Time\") +\n    theme_minimal()\n}\n\n\n\n4.5.1 Effective contact rate \\(\\beta\\)\n\n\nCode\nvals &lt;- seq(0.001, 0.006, 0.001)\n\np1 &lt;- sir_sa(vals = vals, parm = \"beta\", outcome = \"prev\", times = 0:13) + labs(x = NULL)\np2 &lt;- sir_sa(vals = vals, parm = \"beta\", outcome = \"inc\", times = 0:13)\n\np1 / p2 + plot_layout(guides = \"collect\") & theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\nWhen \\(\\beta\\) decreases, less susceptible individuals become infected per unit time:\n\nTime until peak increases: because the speed of susceptible individuals become infected is slower.\nEpidemic duration increases: the rate of new infections slows down so it can lead to a longer epidemic period, but depends on the balance between the infection rate and the recovery rate.\nOutbreak size decreases: \\(R_0 = \\frac{\\beta}{\\gamma}\\), so if \\(\\beta\\) decreases, \\(R_0\\) decreases, each infected individual infect less people on average.\nLower epidemic peak: because fewer infections occurring simultaneously.\n\nInterventions that decrease \\(\\beta\\) cause a lower outbreak size and a lower epidemic peak. This effect is often referred to as “flattening the curve”.\n\n\n4.5.2 Recovery rate \\(\\gamma\\)\n\n\nCode\nvals &lt;- seq(0.3, 0.8, 0.1)\n\np1 &lt;- sir_sa(vals = vals, parm = \"gamma\", outcome = \"prev\", times = 0:13) + labs(x = NULL)\np2 &lt;- sir_sa(vals = vals, parm = \"gamma\", outcome = \"inc\", times = 0:13)\n\np1 / p2 + plot_layout(guides = \"collect\") & theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\nWhen \\(\\gamma\\) decreases, patients recover more slowly:\n\nOutbreak size increases: patients remain infectious for a longer period; since \\(R_0 = \\frac{\\beta}{\\gamma}\\), a decrease in \\(\\gamma\\) leads to an increase in \\(R_0\\), meaning each infected individual infects less people on average.\nHigher epidemic peak: with a higher \\(R_0\\) more individuals are infected after each generation.\nTime until peak may increases: the infected population takes longer to clear out due to slower recovery, but the exact timing of the peak also depends on the balance between infection and recovery rates.\nEpidemic duration slightly increases: for same reason as the peak time, the overall duration of the epidemic is prolonged due to slower recovery rates.",
+    "title": "1  SIR",
+    "section": "1.6 Sensitivity analysis",
+    "text": "1.6 Sensitivity analysis\nThe effective contact rate \\(\\beta\\) and the recovery rate \\(\\gamma\\) both affect whether or not there is an epidemic. The total number of people in the population and the initial number of infected people have no effect on whether there is an epidemic.\nBelow is a function that take a range of values of parameters and compare the model outputs.\n\n\nCode\nsir_sa &lt;- function(vals, parm, outcome, times, init_beta = 0.004, init_gamma = 0.5) {\n  pick_comp &lt;- ifelse(outcome == \"prev\", \"I\", \"Inc\")\n  plot_lab &lt;- ifelse(outcome == \"prev\", \"Prevalence\", \"Incidence\")\n  symb &lt;- ifelse(parm == \"beta\", \"\\u03b2\", \"\\u03b3\")\n  l &lt;- list()\n  for(i in 1:length(vals)) {\n    if (parm == \"beta\") {\n      pred &lt;- sir_mod(beta = vals[i], gamma = init_gamma, S0 = 999, I0 = 1, R0 = 0, times = times)[, c(\"t\", pick_comp)]\n    } else {\n      pred &lt;- sir_mod(beta = init_beta, gamma = vals[i], S0 = 999, I0 = 1, R0 = 0, times = times)[, c(\"t\", pick_comp)]\n    }\n    pred$comp &lt;- paste0(pick_comp, i)\n    colnames(pred) &lt;- c(\"t\", \"n\", \"comp\")\n    l[[i]] &lt;- pred\n  }\n  # Bind this list into a data frame\n  df_plot &lt;- Reduce(rbind, l)\n  # Set level I1 &lt; I2 &lt; I3... according to the increase of beta values\n  df_plot$comp &lt;- factor(df_plot$comp, levels = c(paste0(pick_comp, 1:length(vals))))\n  \n  # Plot results\n  my_palette &lt;- brewer.pal(9, \"Blues\")[(9-length(vals)+1):9]\n  \n  ggplot(df_plot, aes(x = t, y = n, color = comp)) + \n    geom_point() + geom_line() +\n    scale_color_manual(values = my_palette, labels = c(paste0(symb, \" = \", vals))) +\n    labs(color = NULL, y = plot_lab, x = \"Time\") +\n    theme_minimal()\n}\n\n\n\n1.6.1 Effective contact rate \\(\\beta\\)\n\n\nCode\nvals &lt;- seq(0.001, 0.006, 0.001)\n\np1 &lt;- sir_sa(vals = vals, parm = \"beta\", outcome = \"prev\", times = 0:13) + labs(x = NULL)\np2 &lt;- sir_sa(vals = vals, parm = \"beta\", outcome = \"inc\", times = 0:13)\n\np1 / p2 + plot_layout(guides = \"collect\") & theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\nWhen \\(\\beta\\) decreases, less susceptible individuals become infected per unit time:\n\nTime until peak increases: because the speed of susceptible individuals become infected is slower.\nEpidemic duration increases: the rate of new infections slows down so it can lead to a longer epidemic period, but depends on the balance between the infection rate and the recovery rate.\nOutbreak size decreases: \\(R_0 = \\frac{\\beta}{\\gamma}\\), so if \\(\\beta\\) decreases, \\(R_0\\) decreases, each infected individual infect less people on average.\nLower epidemic peak: because fewer infections occurring simultaneously.\n\nInterventions that decrease \\(\\beta\\) cause a lower outbreak size and a lower epidemic peak. This effect is often referred to as “flattening the curve”.\n\n\n1.6.2 Recovery rate \\(\\gamma\\)\n\n\nCode\nvals &lt;- seq(0.3, 0.8, 0.1)\n\np1 &lt;- sir_sa(vals = vals, parm = \"gamma\", outcome = \"prev\", times = 0:13) + labs(x = NULL)\np2 &lt;- sir_sa(vals = vals, parm = \"gamma\", outcome = \"inc\", times = 0:13)\n\np1 / p2 + plot_layout(guides = \"collect\") & theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\nWhen \\(\\gamma\\) decreases, patients recover more slowly:\n\nOutbreak size increases: patients remain infectious for a longer period; since \\(R_0 = \\frac{\\beta}{\\gamma}\\), a decrease in \\(\\gamma\\) leads to an increase in \\(R_0\\), meaning each infected individual infects less people on average.\nHigher epidemic peak: with a higher \\(R_0\\) more individuals are infected after each generation.\nTime until peak may increases: the infected population takes longer to clear out due to slower recovery, but the exact timing of the peak also depends on the balance between infection and recovery rates.\nEpidemic duration slightly increases: for same reason as the peak time, the overall duration of the epidemic is prolonged due to slower recovery rates.",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>SIR</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>SIR</span>"
     ]
   },
   {
     "objectID": "sir-det.html#corollaries",
     "href": "sir-det.html#corollaries",
-    "title": "4  SIR",
-    "section": "4.6 Corollaries",
-    "text": "4.6 Corollaries\n\n4.6.1 The threshold phenomenon\nFrom Equation 4.2:\n\\[\\frac{dI}{dt} = \\beta SI - \\gamma I = I(\\beta S - \\gamma)\\]\nThe infection “dies out” when:\n\\[\\frac{dI}{dt} &lt; 0 \\Leftrightarrow \\beta S - \\gamma &lt; 0 \\Leftrightarrow S &lt; \\frac{\\gamma}{\\beta}\\]\n\nThe proportion of susceptibles in the population must exceed this critical threshold \\(\\frac{\\gamma}{\\beta}\\) for an infection to invade (Keeling & Rohani, 2011).\n\nThe inverse of the relative removal rate is called the basic reproductive ratio \\(R_0 = \\frac{\\beta}{\\gamma}\\) (Keeling & Rohani, 2011). See Definition 1 for more details.\n\n\n4.6.2 Epidemic burnout\nDivide Equation 4.1 by Equation 4.3:\n\\[\\frac{dS}{dR} = \\frac{-\\beta S I}{\\gamma I} = -\\frac{\\beta}{\\gamma} S\\]\nUpon integrating with respect to R, we obtain:\n\\[S(t) = S(0)e^{-\\frac{\\beta}{\\gamma} R(t)}\\]\nGiven that \\(e^x &gt; 0 \\quad \\forall x\\), therefore \\(S(t) &gt; 0\\) there will always be some susceptibles in the population who escape infection, leading to an important counter-intuitive conclusion from this model:\n\nThe chain of transmission eventually breaks due to the decline in infectives, not due to a complete lack of susceptibles (Keeling & Rohani, 2011).\n\n\n\n\n\nBecker, A. D., & Grenfell, B. T. (2017). tsiR: An R package for time-series Susceptible-Infected-Recovered models of epidemics. PLOS ONE, 12(9), e0185528. https://doi.org/10.1371/journal.pone.0185528\n\n\nDriessche, P. van den. (2017). Reproduction numbers of infectious disease models. Infectious Disease Modelling, 2(3), 288–303. https://doi.org/10.1016/j.idm.2017.06.002\n\n\nKeeling, M. J., & Rohani, P. (2011). Modeling Infectious Diseases in Humans and Animals. Princeton University Press. https://doi.org/10.1515/9781400841035",
+    "title": "1  SIR",
+    "section": "1.7 Corollaries",
+    "text": "1.7 Corollaries\n\n1.7.1 The threshold phenomenon\nFrom Equation 1.2:\n\\[\\frac{dI}{dt} = \\beta SI - \\gamma I = I(\\beta S - \\gamma)\\]\nThe infection “dies out” when:\n\\[\\frac{dI}{dt} &lt; 0 \\Leftrightarrow \\beta S - \\gamma &lt; 0 \\Leftrightarrow S &lt; \\frac{\\gamma}{\\beta}\\]\n\nThe proportion of susceptibles in the population must exceed this critical threshold \\(\\frac{\\gamma}{\\beta}\\) for an infection to invade (Keeling & Rohani, 2011).\n\nThe inverse of the relative removal rate is called the basic reproductive ratio \\(R_0 = \\frac{\\beta}{\\gamma}\\) (Keeling & Rohani, 2011). See Definition 1 for more details.\n\n\n1.7.2 Epidemic burnout\nDivide Equation 1.1 by Equation 1.3:\n\\[\\frac{dS}{dR} = \\frac{-\\beta S I}{\\gamma I} = -\\frac{\\beta}{\\gamma} S\\]\nUpon integrating with respect to R, we obtain:\n\\[S(t) = S(0)e^{-\\frac{\\beta}{\\gamma} R(t)}\\]\nGiven that \\(e^x &gt; 0 \\quad \\forall x\\), therefore \\(S(t) &gt; 0\\) there will always be some susceptibles in the population who escape infection, leading to an important counter-intuitive conclusion from this model:\n\nThe chain of transmission eventually breaks due to the decline in infectives, not due to a complete lack of susceptibles (Keeling & Rohani, 2011).\n\n\n\n\n\nBecker, A. D., & Grenfell, B. T. (2017). tsiR: An R package for time-series Susceptible-Infected-Recovered models of epidemics. PLOS ONE, 12(9), e0185528. https://doi.org/10.1371/journal.pone.0185528\n\n\nDriessche, P. van den. (2017). Reproduction numbers of infectious disease models. Infectious Disease Modelling, 2(3), 288–303. https://doi.org/10.1016/j.idm.2017.06.002\n\n\nKeeling, M. J., & Rohani, P. (2011). Modeling Infectious Diseases in Humans and Animals. Princeton University Press. https://doi.org/10.1515/9781400841035",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>SIR</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>SIR</span>"
     ]
   },
   {
     "objectID": "seir-det.html",
     "href": "seir-det.html",
-    "title": "5  SEIR",
+    "title": "2  SEIR",
     "section": "",
-    "text": "5.1 Code\nlibrary(deSolve)\nlibrary(tidyr)\nlibrary(ggplot2)\nlibrary(RColorBrewer)\nlibrary(patchwork)\nLet reuse the deterministic SIR model code from Listing 4.1 and write code for the deterministic SEIR model.\nCode\npred1 &lt;- sir_mod(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = 1:20)\npred2 &lt;- seir_mod(beta = 0.004, sigma = 0.5, gamma = 0.5, S0 = 999, E0 = 0, I0 = 1, R0 = 0, times = 1:20)\n\ndf_plot &lt;- pivot_longer(pred1, cols = S:Inc, names_to = \"comp\", values_to = \"n\")\n\nmy_palette &lt;- brewer.pal(11, \"PuOr\")[c(10, 4, 3, 8)]\n\np1 &lt;- ggplot(df_plot, aes(x = time, y = n, color = comp)) +\n  geom_point() + geom_line() +\n  scale_color_manual(values = my_palette, breaks = c(\"S\", \"Inc\", \"I\", \"R\")) +\n  labs(color = NULL, y = NULL) +\n  theme_minimal() +\n  theme(legend.position = \"none\")\n\ndf_plot &lt;- pivot_longer(pred2, cols = S:Inc, names_to = \"comp\", values_to = \"n\")\n\nmy_palette &lt;- brewer.pal(11, \"PuOr\")[c(10, 1, 4, 3, 8)]\n\np2 &lt;- ggplot(df_plot, aes(x = time, y = n, color = comp)) +\n  geom_point() + geom_line() +\n  scale_color_manual(values = my_palette, breaks = c(\"S\", \"E\", \"Inc\", \"I\", \"R\")) +\n  labs(color = NULL, y = NULL) +\n  theme_minimal() +\n  theme(legend.position = \"bottom\")\n\np1 / p2",
+    "text": "2.1 Code\nlibrary(deSolve)\nlibrary(tidyr)\nlibrary(ggplot2)\nlibrary(RColorBrewer)\nlibrary(patchwork)\nLet reuse the deterministic SIR model code from Listing 1.1 and write code for the deterministic SEIR model.\nCode\npred1 &lt;- sir_mod(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = 1:20)\npred2 &lt;- seir_mod(beta = 0.004, sigma = 0.5, gamma = 0.5, S0 = 999, E0 = 0, I0 = 1, R0 = 0, times = 1:20)\n\ndf_plot &lt;- pivot_longer(pred1, cols = S:Inc, names_to = \"comp\", values_to = \"n\")\n\nmy_palette &lt;- brewer.pal(11, \"PuOr\")[c(10, 4, 3, 8)]\n\np1 &lt;- ggplot(df_plot, aes(x = time, y = n, color = comp)) +\n  geom_point() + geom_line() +\n  scale_color_manual(values = my_palette, breaks = c(\"S\", \"Inc\", \"I\", \"R\")) +\n  labs(color = NULL, y = NULL) +\n  theme_minimal() +\n  theme(legend.position = \"none\")\n\ndf_plot &lt;- pivot_longer(pred2, cols = S:Inc, names_to = \"comp\", values_to = \"n\")\n\nmy_palette &lt;- brewer.pal(11, \"PuOr\")[c(10, 1, 4, 3, 8)]\n\np2 &lt;- ggplot(df_plot, aes(x = time, y = n, color = comp)) +\n  geom_point() + geom_line() +\n  scale_color_manual(values = my_palette, breaks = c(\"S\", \"E\", \"Inc\", \"I\", \"R\")) +\n  labs(color = NULL, y = NULL) +\n  theme_minimal() +\n  theme(legend.position = \"bottom\")\n\np1 / p2",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>SEIR</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>SEIR</span>"
     ]
   },
   {
     "objectID": "seir-det.html#code",
     "href": "seir-det.html#code",
-    "title": "5  SEIR",
+    "title": "2  SEIR",
     "section": "",
-    "text": "Listing 5.1: Deterministic SEIR model\n\n\n\nseir_mod &lt;- function(beta, sigma, gamma, S0, E0, I0, R0, times) {\n  \n  equations &lt;- function(time, variables, parameters) {\n    with(as.list(c(variables, parameters)), {\n      dS &lt;-   -beta * I * S\n      dE &lt;-    beta * I * S - sigma * E\n      dI &lt;-    sigma * E - gamma * I\n      dR &lt;-    gamma * I\n      dCInc &lt;- sigma * E\n      return(list(c(dS, dE, dI, dR, dCInc)))\n    })\n  }\n  \n  parameters_values &lt;- c(beta = beta, sigma = sigma, gamma = gamma)\n  initial_values &lt;- c(S = S0, E = E0, I = I0, R = R0, CInc = 0)\n  \n  out &lt;- ode(y = initial_values, times = times, func = equations, parms = parameters_values)\n\n  out &lt;- as.data.frame(out)\n  # Compute incidence from cumulative incidence\n  out$Inc &lt;- c(I0, diff(out$CInc))\n  out$CInc &lt;- NULL\n  out\n}",
+    "text": "Listing 2.1: Deterministic SEIR model\n\n\n\nseir_mod &lt;- function(beta, sigma, gamma, S0, E0, I0, R0, times) {\n  \n  equations &lt;- function(time, variables, parameters) {\n    with(as.list(c(variables, parameters)), {\n      dS &lt;-   -beta * I * S\n      dE &lt;-    beta * I * S - sigma * E\n      dI &lt;-    sigma * E - gamma * I\n      dR &lt;-    gamma * I\n      dCInc &lt;- sigma * E\n      return(list(c(dS, dE, dI, dR, dCInc)))\n    })\n  }\n  \n  parameters_values &lt;- c(beta = beta, sigma = sigma, gamma = gamma)\n  initial_values &lt;- c(S = S0, E = E0, I = I0, R = R0, CInc = 0)\n  \n  out &lt;- ode(y = initial_values, times = times, func = equations, parms = parameters_values)\n\n  out &lt;- as.data.frame(out)\n  # Compute incidence from cumulative incidence\n  out$Inc &lt;- c(I0, diff(out$CInc))\n  out$CInc &lt;- NULL\n  out\n}",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>SEIR</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>SEIR</span>"
     ]
   },
   {
     "objectID": "tsir.html",
     "href": "tsir.html",
-    "title": "6  tsiR",
+    "title": "3  tsiR",
     "section": "",
-    "text": "6.1 Assumptions\nThe TSIR model relies on two main assumptions (Becker & Grenfell, 2017):",
+    "text": "3.1 Assumptions\nThe TSIR model relies on two main assumptions (Becker & Grenfell, 2017):",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>tsiR</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>tsiR</span>"
     ]
   },
   {
     "objectID": "tsir.html#assumptions",
     "href": "tsir.html#assumptions",
-    "title": "6  tsiR",
+    "title": "3  tsiR",
     "section": "",
     "text": "Infectious period is fixed at the sampling interval of the data (e.g., bi-weekly for measles). The time step of the model is equal to the infectious period.\nOver a long enough time (e.g., 10-20 years), the sum of births and cases should be approximately equal due to the high infectivity of pathogens such as measles and other childhood infections, in the pre-vaccine era.",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>tsiR</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>tsiR</span>"
     ]
   },
   {
     "objectID": "tsir.html#model",
     "href": "tsir.html#model",
-    "title": "6  tsiR",
-    "section": "6.2 Model",
-    "text": "6.2 Model\n\\[\\mathbb{E}(I_{t + 1}) = \\beta_{t + 1} S_t I_t^{\\alpha}\\]\n\n\n\n\n\n\nExplain\n\n\n\n\n\nThis equation describes the transmission through the multiplicative interaction between susceptible and infected individuals (Finkenstädt & Grenfell, 2000).\n\\[I_{t + 1} = \\beta_{t + 1} S_t^{\\alpha_1} I_t^{\\alpha_2} \\epsilon_t\\]\n\nSusceptible (\\(S_t\\)) meet infectious individuals (\\(I_t\\)) with contact rate \\(\\beta_{t + 1}\\).\n\\(\\alpha_1\\) and \\(\\alpha_2\\) are mixing parameters of the contact process, such that \\(\\alpha_1 = \\alpha_2 = 1\\) is the homogeneous mixing.\n\\(\\epsilon_t\\) is the noise, \\(\\mathbb{E}\\{ log(\\epsilon_t) \\} = 0\\) and \\(\\mathbb{V}\\{ log(\\epsilon_t) \\} = 0\\).\n\n\n\n\n\\[S_{t + 1} = B_{t + 1} + S_t - I_{t + 1}\\]\n\n\n\n\n\n\nExplain\n\n\n\n\n\nSusceptible class in the next time step recruited by births (\\(B_{t + 1}\\)) and depleted by the infected individuals leaving the class (\\(I_{t + 1}\\)) (Finkenstädt & Grenfell, 2000).",
+    "title": "3  tsiR",
+    "section": "3.2 Model",
+    "text": "3.2 Model\n\\[\\mathbb{E}(I_{t + 1}) = \\beta_{t + 1} S_t I_t^{\\alpha}\\]\n\n\n\n\n\n\nExplain\n\n\n\n\n\nThis equation describes the transmission through the multiplicative interaction between susceptible and infected individuals (Finkenstädt & Grenfell, 2000).\n\\[I_{t + 1} = \\beta_{t + 1} S_t^{\\alpha_1} I_t^{\\alpha_2} \\epsilon_t\\]\n\nSusceptible (\\(S_t\\)) meet infectious individuals (\\(I_t\\)) with contact rate \\(\\beta_{t + 1}\\).\n\\(\\alpha_1\\) and \\(\\alpha_2\\) are mixing parameters of the contact process, such that \\(\\alpha_1 = \\alpha_2 = 1\\) is the homogeneous mixing.\n\\(\\epsilon_t\\) is the noise, \\(\\mathbb{E}\\{ log(\\epsilon_t) \\} = 0\\) and \\(\\mathbb{V}\\{ log(\\epsilon_t) \\} = 0\\).\n\n\n\n\n\\[S_{t + 1} = B_{t + 1} + S_t - I_{t + 1}\\]\n\n\n\n\n\n\nExplain\n\n\n\n\n\nSusceptible class in the next time step recruited by births (\\(B_{t + 1}\\)) and depleted by the infected individuals leaving the class (\\(I_{t + 1}\\)) (Finkenstädt & Grenfell, 2000).",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>tsiR</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>tsiR</span>"
     ]
   },
   {
     "objectID": "tsir.html#tsir-framework",
     "href": "tsir.html#tsir-framework",
-    "title": "6  tsiR",
-    "section": "6.3 tsiR framework",
-    "text": "6.3 tsiR framework\n\n6.3.1 Reconstruct susceptible dynamics\nFit a regression between cumulative cases and cumulative births. The slope is assumed to be the report rate \\(\\rho_t\\) (rho) (Du et al., 2017), the residuals is assumed to be the shape of the susceptible dynamics (\\(Z_t\\)).\n\n\n\n\n\n\nExplain\n\n\n\n\n\nLet \\(\\rho_t\\) be the reporting rate and assume \\(\\rho_t\\) has a probability function with expected value \\(\\mathbb{E}(\\rho_t) = \\rho\\).\n\\[I_t = \\rho_t C_t\\]\n\n\\(I_t\\): the number of true cases.\n\\(C_t\\): the number of reported cases.\n\nThe number of true cases is under-reported if \\(\\rho_t &gt; 1\\) and is fully reported if \\(\\rho_t = 1\\).\nReplace \\(I_t\\) here:\n\\[S_t = B_t + S_{t - 1} - I_t\\]\n\\[S_t = B_t + S_{t - 1} - \\rho_t C_t\\]\nLet \\(\\mathbb{E}(S_t) = \\bar{S}\\) so that \\(S_t = \\bar{S} + Z_t\\), with \\(\\mathbb{E}(Z_t) = 0\\). The deviations \\(Z_t\\) from their mean follow the same recursive relationship as \\(S_t\\).\n\\[Z_t = B_t + Z_{t - 1} - \\rho_t C_t\\]\nA successive iteration to compute \\(Z_t\\) from \\(Z_0\\) gives:\n\\[Z_t = \\sum_{i = 1}^{t} B_i + Z_0 - \\sum_{i = 1}^{t} \\rho_i C_i\\]\n\n\\(\\sum_{i = 1}^{t} B_i\\): cumulative births.\n\\(\\sum_{i = 1}^{t} C_i\\): cumulative reported cases.\n\nFor ease of notation, let \\(Y_\\text{cumBirths} = \\sum_{i = 1}^{t} B_i\\), \\(X_\\text{cumCases} = \\sum_{i = 1}^{t} C_i\\), rearrange that equation so that we have:\n\\[Y_\\text{cumBirths} = \\rho X_\\text{cumCases} + Z_t - Z_0\\]\nIf we assume a constant reporting rate, this equation is a simple linear regression relationship between cumulative births \\(Y\\) and cumulative cases \\(X\\).\n\n\n\n\n\n6.3.2 Estimate parameters\nSet the expectation to the mean, then take log of both sides:\n\\[\\mathbb{E}(I_{t + 1}) = \\beta_{t + 1} S_t I_t^{\\alpha}\\]\n\\[log I_{t + 1} = log \\beta_{t + 1} + log(Z_t + \\bar{S}) + \\alpha log I_t\\]\n\n\\(\\bar{S}\\): mean susceptible individuals across the time-series. \\(Z_t\\) is the residuals or the shape of the susceptible dynamics, so \\(Z_t + \\bar{S} = S_t\\)\n\\(\\beta_t\\): contact rate at time t.\n\\(\\alpha\\): describes the epidemic saturation, a correction factor for switching from continuous to discrete time.",
+    "title": "3  tsiR",
+    "section": "3.3 tsiR framework",
+    "text": "3.3 tsiR framework\n\n3.3.1 Reconstruct susceptible dynamics\nFit a regression between cumulative cases and cumulative births. The slope is assumed to be the report rate \\(\\rho_t\\) (rho) (Du et al., 2017), the residuals is assumed to be the shape of the susceptible dynamics (\\(Z_t\\)).\n\n\n\n\n\n\nExplain\n\n\n\n\n\nLet \\(\\rho_t\\) be the reporting rate and assume \\(\\rho_t\\) has a probability function with expected value \\(\\mathbb{E}(\\rho_t) = \\rho\\).\n\\[I_t = \\rho_t C_t\\]\n\n\\(I_t\\): the number of true cases.\n\\(C_t\\): the number of reported cases.\n\nThe number of true cases is under-reported if \\(\\rho_t &gt; 1\\) and is fully reported if \\(\\rho_t = 1\\).\nReplace \\(I_t\\) here:\n\\[S_t = B_t + S_{t - 1} - I_t\\]\n\\[S_t = B_t + S_{t - 1} - \\rho_t C_t\\]\nLet \\(\\mathbb{E}(S_t) = \\bar{S}\\) so that \\(S_t = \\bar{S} + Z_t\\), with \\(\\mathbb{E}(Z_t) = 0\\). The deviations \\(Z_t\\) from their mean follow the same recursive relationship as \\(S_t\\).\n\\[Z_t = B_t + Z_{t - 1} - \\rho_t C_t\\]\nA successive iteration to compute \\(Z_t\\) from \\(Z_0\\) gives:\n\\[Z_t = \\sum_{i = 1}^{t} B_i + Z_0 - \\sum_{i = 1}^{t} \\rho_i C_i\\]\n\n\\(\\sum_{i = 1}^{t} B_i\\): cumulative births.\n\\(\\sum_{i = 1}^{t} C_i\\): cumulative reported cases.\n\nFor ease of notation, let \\(Y_\\text{cumBirths} = \\sum_{i = 1}^{t} B_i\\), \\(X_\\text{cumCases} = \\sum_{i = 1}^{t} C_i\\), rearrange that equation so that we have:\n\\[Y_\\text{cumBirths} = \\rho X_\\text{cumCases} + Z_t - Z_0\\]\nIf we assume a constant reporting rate, this equation is a simple linear regression relationship between cumulative births \\(Y\\) and cumulative cases \\(X\\).\n\n\n\n\n\n3.3.2 Estimate parameters\nSet the expectation to the mean, then take log of both sides:\n\\[\\mathbb{E}(I_{t + 1}) = \\beta_{t + 1} S_t I_t^{\\alpha}\\]\n\\[log I_{t + 1} = log \\beta_{t + 1} + log(Z_t + \\bar{S}) + \\alpha log I_t\\]\n\n\\(\\bar{S}\\): mean susceptible individuals across the time-series. \\(Z_t\\) is the residuals or the shape of the susceptible dynamics, so \\(Z_t + \\bar{S} = S_t\\)\n\\(\\beta_t\\): contact rate at time t.\n\\(\\alpha\\): describes the epidemic saturation, a correction factor for switching from continuous to discrete time.",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>tsiR</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>tsiR</span>"
     ]
   },
   {
     "objectID": "tsir.html#basic-reproduction-number",
     "href": "tsir.html#basic-reproduction-number",
-    "title": "6  tsiR",
-    "section": "6.4 Basic reproduction number",
-    "text": "6.4 Basic reproduction number\n\\[R_0 = \\beta \\times \\bar{S}\\]",
+    "title": "3  tsiR",
+    "section": "3.4 Basic reproduction number",
+    "text": "3.4 Basic reproduction number\n\\[R_0 = \\beta \\times \\bar{S}\\]",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>tsiR</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>tsiR</span>"
     ]
   },
   {
     "objectID": "tsir.html#code",
     "href": "tsir.html#code",
-    "title": "6  tsiR",
-    "section": "6.5 Code",
-    "text": "6.5 Code\n\nlibrary(tsiR)\n\nThe London measles data is available in the tsiR package.\n\nLondonMeas &lt;- twentymeas[[\"London\"]]\nhead(LondonMeas)\n\n\n  \n\n\n\nThe data frame containing cases and interpolated births and populations.\n\nplotdata(LondonMeas)\n\n\n\n\n\n\n\n\n\nLondonRes &lt;- runtsir(data = LondonMeas, IP = 2, xreg = \"cumcases\", regtype = \"gaussian\", alpha = NULL, sbar = NULL, method = \"negbin\", nsim = 100, family = \"gaussian\", link = \"identity\")\n\n           alpha        mean beta         mean rho         mean sus \n        9.60e-01         1.19e-05         4.57e-01         1.14e+05 \nprop. init. sus. prop. init. inf. \n        3.01e-02         6.12e-05 \n\n\n\nalpha: describes the epidemic saturation, a correction factor for switching from continuous to discrete time.\nmean beta: mean of the contact rate across the time-series.\nmean rho: mean of the report rate across the time-series.\nmean sus: mean of the number of susceptible across the time-series.\nprop. init. sus.: proportion of the initial susceptible individuals.\nprop. init. inf.: proportion of the initial infectious individuals.\n\n\n6.5.1 Reconstruct susceptible dynamics\nIn this step we compute the reported rate using cumulative births and cumulative reported cases.\n\\[Y_\\text{cumBirths} = \\rho X_\\text{cumCases} + Z_t - Z_0\\]\n\nplotregression(LondonRes)\n\n\n\n\n\n\n\n\n\nplotrho(LondonRes)\n\n\n\n\n\n\n\n\n\n\n6.5.2 Estimate parameters\nHaving \\(\\rho\\), we adjust the \\(I_t\\) to estimate other parameters.\n\\[I_t = \\rho_t C_t\\] \\[log I_{t + 1} = log \\beta_{t + 1} + log(Z_t + \\bar{S}) + \\alpha log I_t\\]\n\nplotres(LondonRes)\n\nWarning in geom_line(data = dat$res, aes_string(x = \"time\", y = \"cases\", :\nIgnoring unknown aesthetics: fill\n\n\n\n\n\n\n\n\n\n\n\n\n\nBecker, A. D., & Grenfell, B. T. (2017). tsiR: An R package for time-series Susceptible-Infected-Recovered models of epidemics. PLOS ONE, 12(9), e0185528. https://doi.org/10.1371/journal.pone.0185528\n\n\nDu, Z., Zhang, W., Zhang, D., Yu, S., & Hao, Y. (2017). Estimating the basic reproduction rate of HFMD using the time series SIR model in Guangdong, China. PLOS ONE, 12(7), e0179623. https://doi.org/10.1371/journal.pone.0179623\n\n\nFinkenstädt, B. F., & Grenfell, B. T. (2000). Time series modelling of childhood diseases: A dynamical systems approach. Journal of the Royal Statistical Society Series C: Applied Statistics, 49(2), 187–205. https://doi.org/10.1111/1467-9876.00187",
+    "title": "3  tsiR",
+    "section": "3.5 Code",
+    "text": "3.5 Code\n\nlibrary(tsiR)\n\nThe London measles data is available in the tsiR package.\n\nLondonMeas &lt;- twentymeas[[\"London\"]]\nhead(LondonMeas)\n\n\n  \n\n\n\nThe data frame containing cases and interpolated births and populations.\n\nplotdata(LondonMeas)\n\n\n\n\n\n\n\n\n\nLondonRes &lt;- runtsir(data = LondonMeas, IP = 2, xreg = \"cumcases\", regtype = \"gaussian\", alpha = NULL, sbar = NULL, method = \"negbin\", nsim = 100, family = \"gaussian\", link = \"identity\")\n\n           alpha        mean beta         mean rho         mean sus \n        9.60e-01         1.19e-05         4.57e-01         1.14e+05 \nprop. init. sus. prop. init. inf. \n        3.01e-02         6.12e-05 \n\n\n\nalpha: describes the epidemic saturation, a correction factor for switching from continuous to discrete time.\nmean beta: mean of the contact rate across the time-series.\nmean rho: mean of the report rate across the time-series.\nmean sus: mean of the number of susceptible across the time-series.\nprop. init. sus.: proportion of the initial susceptible individuals.\nprop. init. inf.: proportion of the initial infectious individuals.\n\n\n3.5.1 Reconstruct susceptible dynamics\nIn this step we compute the reported rate using cumulative births and cumulative reported cases.\n\\[Y_\\text{cumBirths} = \\rho X_\\text{cumCases} + Z_t - Z_0\\]\n\nplotregression(LondonRes)\n\n\n\n\n\n\n\n\n\nplotrho(LondonRes)\n\n\n\n\n\n\n\n\n\n\n3.5.2 Estimate parameters\nHaving \\(\\rho\\), we adjust the \\(I_t\\) to estimate other parameters.\n\\[I_t = \\rho_t C_t\\] \\[log I_{t + 1} = log \\beta_{t + 1} + log(Z_t + \\bar{S}) + \\alpha log I_t\\]\n\nplotres(LondonRes)\n\nWarning in geom_line(data = dat$res, aes_string(x = \"time\", y = \"cases\", :\nIgnoring unknown aesthetics: fill\n\n\n\n\n\n\n\n\n\n\n\n\n\nBecker, A. D., & Grenfell, B. T. (2017). tsiR: An R package for time-series Susceptible-Infected-Recovered models of epidemics. PLOS ONE, 12(9), e0185528. https://doi.org/10.1371/journal.pone.0185528\n\n\nDu, Z., Zhang, W., Zhang, D., Yu, S., & Hao, Y. (2017). Estimating the basic reproduction rate of HFMD using the time series SIR model in Guangdong, China. PLOS ONE, 12(7), e0179623. https://doi.org/10.1371/journal.pone.0179623\n\n\nFinkenstädt, B. F., & Grenfell, B. T. (2000). Time series modelling of childhood diseases: A dynamical systems approach. Journal of the Royal Statistical Society Series C: Applied Statistics, 49(2), 187–205. https://doi.org/10.1111/1467-9876.00187",
     "crumbs": [
       "Deterministic models",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>tsiR</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>tsiR</span>"
     ]
   },
   {
@@ -417,129 +268,260 @@
   {
     "objectID": "lse.html",
     "href": "lse.html",
-    "title": "8  Least squares estimation",
+    "title": "5  Least squares estimation",
     "section": "",
-    "text": "8.1 Methods\nRefer to Definition 13.1, the residual sum of squares (RSS) is the sum of the squares of residuals.\n\\[RSS = \\sum_{i = 1}^{n}[y_i - f(x_i)]^2\\]\nThe least squares method finds the optimal parameters by minimizing the RSS.",
+    "text": "5.1 Methods\nRefer to Definition A.1, the residual sum of squares (RSS) is the sum of the squares of residuals.\n\\[RSS = \\sum_{i = 1}^{n}[y_i - f(x_i)]^2\\]\nThe least squares method finds the optimal parameters by minimizing the RSS.",
     "crumbs": [
       "Calibration",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Least squares estimation</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Least squares estimation</span>"
     ]
   },
   {
     "objectID": "lse.html#methods",
     "href": "lse.html#methods",
-    "title": "8  Least squares estimation",
+    "title": "5  Least squares estimation",
     "section": "",
     "text": "\\(y_i\\): the observed value.\n\\(f(x_i)\\): the predicted value.\n\\(y_i - f(x_i)\\): the residual.",
     "crumbs": [
       "Calibration",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Least squares estimation</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Least squares estimation</span>"
     ]
   },
   {
     "objectID": "lse.html#sec-lse-code",
     "href": "lse.html#sec-lse-code",
-    "title": "8  Least squares estimation",
-    "section": "8.2 Code",
-    "text": "8.2 Code\n\nlibrary(tidyr)\nlibrary(deSolve)\nlibrary(ggplot2)\nlibrary(RColorBrewer)\n\nWe will use data collected during a H1N1 influenza outbreak in an elementary school in Pennsylvania (Cauchemez et al., 2011). Let load the data and have a look.\n\ndf &lt;- read.csv(\"data/flu_inc.csv\")\n\nggplot(df, aes(x = day, y = inc)) +\n  geom_point() +\n  labs(x = \"Day\", y = \"Incidence\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\nWe will fit a deterministic SEIR model and reuse the code from Listing 5.1. Let plug some initial values for the parameters and run the model.\nLooking at the original paper, the school has 370 students (Cauchemez et al., 2011). So we set the initial values as below.\n\nS0 &lt;- 369\nE0 &lt;- 0\nI0 &lt;- 1\nR0 &lt;- 0\n\n\n\nCode\npred &lt;- seir_mod(beta = 0.004, sigma = 0.5, gamma = 0.5, S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = df$day)\n\ndf_plot &lt;- pivot_longer(pred, cols = S:Inc, names_to = \"comp\", values_to = \"n\")\n\nmy_palette &lt;- brewer.pal(11, \"PuOr\")[c(10, 1, 4, 3, 8)]\n\nggplot(df_plot, aes(x = time, y = n, color = comp)) +\n  geom_point() + geom_line() +\n  scale_color_manual(values = my_palette, breaks = c(\"S\", \"E\", \"Inc\", \"I\", \"R\")) +\n  labs(color = NULL, y = NULL, x = \"Day\") +\n  theme_minimal() +\n  theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\nNow just plot the incidence to compare with our data.\n\n\nCode\ndf_plot &lt;- pred[,c(\"time\", \"Inc\")]\nggplot(df_plot, aes(x = time, y = Inc)) +\n  geom_point(color = my_palette[3]) +\n  geom_line(color = my_palette[3]) +\n  geom_point(data = df, aes(x = day, y = inc)) +\n  labs(x = \"Day\", y = \"Incidence\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\nWe need to calculate the residual sum of squares. The rss() function must be defined this way with 2 arguments data and par so that it could be passed to the optim() function.\n\nrss &lt;- function(data, par) {\n  pred &lt;- seir_mod(beta = par[1], sigma = par[2], gamma = par[3], S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = 0:(length(data) - 1))\n  sum((data - pred$Inc)^2)\n}\n\nThe optim() function needs at least 2 inputs:\n\npar: a vector of initial values for the parameters to be optimized over.\nfn: a function to be minimized.\n...: other arguments will be passed to fn, here our function rss() needs an additional argument data, so we pass data = df$inc.\n\n\nseir_optim &lt;- optim(par = c(0.004, 0.5, 0.5), fn = rss, data = df$inc)\nseir_optim\n\n$par\n[1] 0.007665126 1.697323120 2.209129854\n\n$value\n[1] 147.9004\n\n$counts\nfunction gradient \n     197       NA \n\n$convergence\n[1] 0\n\n$message\nNULL\n\n\nLet plug these values into the model and compare with our data.\n\nCode\npred &lt;- seir_mod(beta = seir_optim$par[1], sigma = seir_optim$par[2], gamma = seir_optim$par[3], S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = df$day)\ndf_plot &lt;- pred[,c(\"time\", \"Inc\")]\nggplot(df_plot, aes(x = time, y = Inc)) +\n  geom_point(color = my_palette[3]) +\n  geom_line(color = my_palette[3]) +\n  geom_point(data = df, aes(x = day, y = inc)) +\n  labs(x = \"Day\", y = \"Incidence\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 8.1: Deterministic SEIR model fitted with least squares estimation.\n\n\n\nSince we are using a “closed population” SEIR model, \\(R_0 = \\frac{\\beta}{\\gamma} S_0\\).\n\n\n\nListing 8.1: \\(R_0\\) from deterministic SEIR model fitted with least squares estimation.\n\n\n\nrnum0 &lt;- seir_optim$par[1] * S0 / seir_optim$par[3]\nrnum0\n\n[1] 1.280337\n\n\n\n\n\nThis is quite close to 1.4 (95% CI: 1.2, 1.5) as reported by (Cauchemez et al., 2011), considering that they used more complicated methods.\n\n\n\n\nCauchemez, S., Bhattarai, A., Marchbanks, T. L., Fagan, R. P., Ostroff, S., Ferguson, N. M., Swerdlow, D., Pennsylvania H1N1 working group, the, Sodha, S. V., Moll, M. E., Angulo, F. J., Palekar, R., Archer, W. R., & Finelli, L. (2011). Role of social networks in shaping disease transmission during a community outbreak of 2009 H1N1 pandemic influenza. Proceedings of the National Academy of Sciences, 108(7), 2825–2830. https://doi.org/10.1073/pnas.1008895108",
+    "title": "5  Least squares estimation",
+    "section": "5.2 Code",
+    "text": "5.2 Code\n\nlibrary(tidyr)\nlibrary(deSolve)\nlibrary(ggplot2)\nlibrary(RColorBrewer)\n\nWe will use data collected during a H1N1 influenza outbreak in an elementary school in Pennsylvania (Cauchemez et al., 2011). Let load the data and have a look.\n\ndf &lt;- read.csv(\"data/flu_inc.csv\")\n\nggplot(df, aes(x = day, y = inc)) +\n  geom_point() +\n  labs(x = \"Day\", y = \"Incidence\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\nWe will fit a deterministic SEIR model and reuse the code from Listing 2.1. Let plug some initial values for the parameters and run the model.\nLooking at the original paper, the school has 370 students (Cauchemez et al., 2011). So we set the initial values as below.\n\nS0 &lt;- 369\nE0 &lt;- 0\nI0 &lt;- 1\nR0 &lt;- 0\n\n\n\nCode\npred &lt;- seir_mod(beta = 0.004, sigma = 0.5, gamma = 0.5, S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = df$day)\n\ndf_plot &lt;- pivot_longer(pred, cols = S:Inc, names_to = \"comp\", values_to = \"n\")\n\nmy_palette &lt;- brewer.pal(11, \"PuOr\")[c(10, 1, 4, 3, 8)]\n\nggplot(df_plot, aes(x = time, y = n, color = comp)) +\n  geom_point() + geom_line() +\n  scale_color_manual(values = my_palette, breaks = c(\"S\", \"E\", \"Inc\", \"I\", \"R\")) +\n  labs(color = NULL, y = NULL, x = \"Day\") +\n  theme_minimal() +\n  theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\nNow just plot the incidence to compare with our data.\n\n\nCode\ndf_plot &lt;- pred[,c(\"time\", \"Inc\")]\nggplot(df_plot, aes(x = time, y = Inc)) +\n  geom_point(color = my_palette[3]) +\n  geom_line(color = my_palette[3]) +\n  geom_point(data = df, aes(x = day, y = inc)) +\n  labs(x = \"Day\", y = \"Incidence\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\nWe need to calculate the residual sum of squares. The rss() function must be defined this way with 2 arguments data and par so that it could be passed to the optim() function.\n\nrss &lt;- function(data, par) {\n  pred &lt;- seir_mod(beta = par[1], sigma = par[2], gamma = par[3], S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = 0:(length(data) - 1))\n  sum((data - pred$Inc)^2)\n}\n\nThe optim() function needs at least 2 inputs:\n\npar: a vector of initial values for the parameters to be optimized over.\nfn: a function to be minimized.\n...: other arguments will be passed to fn, here our function rss() needs an additional argument data, so we pass data = df$inc.\n\n\nseir_optim &lt;- optim(par = c(0.004, 0.5, 0.5), fn = rss, data = df$inc)\nseir_optim\n\n$par\n[1] 0.007665126 1.697323120 2.209129854\n\n$value\n[1] 147.9004\n\n$counts\nfunction gradient \n     197       NA \n\n$convergence\n[1] 0\n\n$message\nNULL\n\n\nLet plug these values into the model and compare with our data.\n\nCode\npred &lt;- seir_mod(beta = seir_optim$par[1], sigma = seir_optim$par[2], gamma = seir_optim$par[3], S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = df$day)\ndf_plot &lt;- pred[,c(\"time\", \"Inc\")]\nggplot(df_plot, aes(x = time, y = Inc)) +\n  geom_point(color = my_palette[3]) +\n  geom_line(color = my_palette[3]) +\n  geom_point(data = df, aes(x = day, y = inc)) +\n  labs(x = \"Day\", y = \"Incidence\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 5.1: Deterministic SEIR model fitted with least squares estimation.\n\n\n\nSince we are using a “closed population” SEIR model, \\(R_0 = \\frac{\\beta}{\\gamma} S_0\\).\n\n\n\nListing 5.1: \\(R_0\\) from deterministic SEIR model fitted with least squares estimation.\n\n\n\nrnum0 &lt;- seir_optim$par[1] * S0 / seir_optim$par[3]\nrnum0\n\n[1] 1.280337\n\n\n\n\n\nThis is quite close to 1.4 (95% CI: 1.2, 1.5) as reported by (Cauchemez et al., 2011), considering that they used more complicated methods.\n\n\n\n\nCauchemez, S., Bhattarai, A., Marchbanks, T. L., Fagan, R. P., Ostroff, S., Ferguson, N. M., Swerdlow, D., Pennsylvania H1N1 working group, the, Sodha, S. V., Moll, M. E., Angulo, F. J., Palekar, R., Archer, W. R., & Finelli, L. (2011). Role of social networks in shaping disease transmission during a community outbreak of 2009 H1N1 pandemic influenza. Proceedings of the National Academy of Sciences, 108(7), 2825–2830. https://doi.org/10.1073/pnas.1008895108",
     "crumbs": [
       "Calibration",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Least squares estimation</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Least squares estimation</span>"
     ]
   },
   {
     "objectID": "mle.html",
     "href": "mle.html",
-    "title": "9  Maximum likelihood estimation",
+    "title": "6  Maximum likelihood estimation",
     "section": "",
-    "text": "9.1 Methods\nThe maximum likelihood estimation follows 4 steps:\n\\[L(\\theta) = \\prod_{i = 1}^{n} f_Y(y_i| \\theta)\\]\n\\[log L(\\theta) = \\sum_{i = 1}^{n} log \\left[ f_Y(y_i| \\theta) \\right]\\]\n\\[- log L(\\theta) = - \\sum_{i = 1}^{n} log \\left[ f_Y(y_i| \\theta) \\right]\\]",
+    "text": "6.1 Methods\nThe maximum likelihood estimation follows 4 steps:\n\\[L(\\theta) = \\prod_{i = 1}^{n} f_Y(y_i| \\theta)\\]\n\\[log L(\\theta) = \\sum_{i = 1}^{n} log \\left[ f_Y(y_i| \\theta) \\right]\\]\n\\[- log L(\\theta) = - \\sum_{i = 1}^{n} log \\left[ f_Y(y_i| \\theta) \\right]\\]",
     "crumbs": [
       "Calibration",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Maximum likelihood estimation</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Maximum likelihood estimation</span>"
     ]
   },
   {
     "objectID": "mle.html#methods",
     "href": "mle.html#methods",
-    "title": "9  Maximum likelihood estimation",
+    "title": "6  Maximum likelihood estimation",
     "section": "",
     "text": "Step 1. Write down the likelihood function \\(L(\\theta)\\). Likelihood function is a function of \\(\\theta\\), which is the product of the \\(n\\) mass/density function terms of the observed values \\(y_i\\).\n\n\n\nStep 2. Take the natural log of the likelihood \\(log L(\\theta)\\), or log-likelihood. The production in likelihood now becomes the sum in log-likelihood. See Section 2.2 for more details.\n\n\n\nStep 3. Take the negative log-likelihood \\(- log L(\\theta)\\). Because optimizers work by minimizing a function, we have to work on negative log-likelihood. See Section 2.3 for more details.\n\n\n\nStep 4. The optimizer try different values of \\(\\theta\\) in the paramater space \\(\\Theta\\) for which negative log-likelihood \\(- log L(\\theta)\\) is minimized.",
     "crumbs": [
       "Calibration",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Maximum likelihood estimation</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Maximum likelihood estimation</span>"
     ]
   },
   {
     "objectID": "mle.html#code",
     "href": "mle.html#code",
-    "title": "9  Maximum likelihood estimation",
-    "section": "9.2 Code",
-    "text": "9.2 Code\n\nlibrary(tidyr)\nlibrary(odin)\nlibrary(bbmle)\nlibrary(ggplot2)\nlibrary(RColorBrewer)\n\nWe will use the same data of a H1N1 influenza outbreak in an elementary school in Section 8.2 and fit the deterministic SEIR model with code Listing 5.1.\n\ndf &lt;- read.csv(\"data/flu_inc.csv\")\n\n\n\nLoading required namespace: pkgbuild\n\n\nGenerating model in c\n\n\nℹ Re-compiling odin21c6f1cd (debug build)\n\n\n── R CMD INSTALL ───────────────────────────────────────────────────────────────\n- The project is out-of-sync -- use `renv::status()` for details.\n* installing *source* package 'odin21c6f1cd' ...\n** using staged installation\n** libs\nusing C compiler: 'gcc.exe (GCC) 13.2.0'\ngcc  -I\"C:/PROGRA~1/R/R-44~1.0/include\" -DNDEBUG     -I\"C:/rtools44/x86_64-w64-mingw32.static.posix/include\"     -O2 -Wall -gdwarf-2 -mfpmath=sse -msse2 -mstackrealign  -UNDEBUG -Wall -pedantic -g -O0 -c odin.c -o odin.o\nodin.c: In function 'odin_metadata':\nodin.c:144:18: warning: unused variable 'internal' [-Wunused-variable]\n  144 |   odin_internal *internal = odin_get_internal(internal_p, 1);\n      |                  ^~~~~~~~\nodin.c: In function 'user_get_scalar_int':\nodin.c:236:47: warning: format '%d' expects argument of type 'int', but argument 2 has type 'const char *' [-Wformat=]\n  236 |       Rf_error(\"Expected scalar integer for '%d'\", name);\n      |                                              ~^    ~~~~\n      |                                               |    |\n      |                                               int  const char *\n      |                                              %s\ngcc  -I\"C:/PROGRA~1/R/R-44~1.0/include\" -DNDEBUG     -I\"C:/rtools44/x86_64-w64-mingw32.static.posix/include\"     -O2 -Wall -gdwarf-2 -mfpmath=sse -msse2 -mstackrealign  -UNDEBUG -Wall -pedantic -g -O0 -c registration.c -o registration.o\ngcc -shared -static-libgcc -o odin21c6f1cd.dll tmp.def odin.o registration.o -LC:/rtools44/x86_64-w64-mingw32.static.posix/lib/x64 -LC:/rtools44/x86_64-w64-mingw32.static.posix/lib -LC:/PROGRA~1/R/R-44~1.0/bin/x64 -lR\ninstalling to C:/Users/ongph/AppData/Local/Temp/Rtmp2jdtgM/devtools_install_6f783fa939d1/00LOCK-file6f78b7566af/00new/odin21c6f1cd/libs/x64\n* DONE (odin21c6f1cd)\n\n\nℹ Loading odin21c6f1cd\n\n\nLooking at the original paper, the school has 370 students (Cauchemez et al., 2011). So we set the initial values as below.\n\nS0 &lt;- 369\nE0 &lt;- 0\nI0 &lt;- 1\nR0 &lt;- 0\n\n\nStep 1. Write down the likelihood function \\(L(\\theta)\\).\n\nWe assume the incidence data is generated from a normal distribution with mean \\(\\mu_{inc}\\) is the predicted incidence and a standard deviation \\(\\sigma_{inc}\\).\n\\[L(\\theta) = \\prod_{i = 1}^{n} \\mathcal{N}(\\mu_{inc}, \\sigma_{inc})\\]\nWe use the dnorm() function to define this likelihood.\n\ndnorm(x = data, mean = pred, sd = sd_inc)\n\n\nStep 2. Take the natural log of the likelihood \\(log L(\\theta)\\), product becomes sum.\n\n\\[log L(\\theta) = \\sum_{i = 1}^{n} log \\left[ \\mathcal{N}(\\mu_{inc}, \\sigma_{inc}) \\right]\\]\n\nsum(dnorm(x = data, mean = pred, sd = sd_inc, log = T))\n\n\nStep 3. Take the negative log-likelihood \\(- log L(\\theta)\\).\n\n\\[- log L(\\theta) = - \\sum_{i = 1}^{n} log \\left[ \\mathcal{N}(\\mu_{inc}, \\sigma_{inc}) \\right]\\]\n\n- sum(dnorm(x = data, mean = pred, sd = sd_inc, log = T))\n\n\nStep 4. Pass the negative log-likelihood \\(- log L(\\theta)\\) to the optimizer.\n\nRoot mean squared error as SD\n\nmll &lt;- function(beta, sigma, gamma, sd_inc) {\n  # Make sure that parameters are positive\n  beta &lt;- exp(beta) \n  sigma &lt;- exp(sigma)\n  gamma &lt;- exp(gamma)\n  sd_inc &lt;- exp(sd_inc)\n  \n  pred &lt;- seir_mod(beta = beta, sigma = sigma, gamma = gamma, S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = 0:(length(df$inc) - 1))\n  pred &lt;- pred$Inc\n  # Return the negative log-likelihood\n  - sum(dnorm(x = df$inc, mean = pred, sd = sd_inc, log = T))\n}\n\nstarting_param_val &lt;- list(beta = 0.004, sigma = 0.5, gamma = 0.5, sd_inc = 3)\n\nestimates &lt;- mle2(minuslogl = mll, start = lapply(starting_param_val, log), method = \"Nelder-Mead\")\n\nsummary(estimates)\n\nMaximum likelihood estimation\n\nCall:\nmle2(minuslogl = mll, start = lapply(starting_param_val, log), \n    method = \"Nelder-Mead\")\n\nCoefficients:\n        Estimate Std. Error  z value     Pr(z)    \nbeta   -5.063479   0.092641 -54.6567 &lt; 2.2e-16 ***\nsigma   0.708384   0.134498   5.2669 1.388e-07 ***\ngamma   0.600399   0.092968   6.4581 1.060e-10 ***\nsd_inc  0.530870   0.099628   5.3285 9.902e-08 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n-2 log L: 198.8602 \n\n\n\nparams &lt;- exp(coef(estimates))\nparams\n\n       beta       sigma       gamma      sd_inc \n0.006323524 2.030707475 1.822846603 1.700410622 \n\n\nCompare the model with data.\n\n\nCode\npred &lt;- seir_mod(beta = params[1], sigma = params[2], gamma = params[3], S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = df$day)\ndf_plot &lt;- pred[,c(\"t\", \"Inc\")]\n\n# Compute 95% confidence interval\nlwr &lt;- qnorm(p = 0.025, mean = pred$Inc, sd = params[4])\nupr &lt;- qnorm(p = 0.975, mean = pred$Inc, sd = params[4])\n\nmy_palette &lt;- brewer.pal(11, \"PuOr\")[c(10, 1, 4, 3, 8)]\n\nggplot(df_plot, aes(x = t, y = Inc)) +\n  geom_point(color = my_palette[3]) +\n  geom_line(color = my_palette[3]) +\n  geom_ribbon(aes(ymin = lwr, ymax = upr), fill = my_palette[3], alpha = 0.15) +\n  geom_point(data = df, aes(x = day, y = inc)) +\n  coord_cartesian(ylim = c(0, max(upr))) +\n  labs(x = \"Day\", y = \"Incidence\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\nIt looks very similar to the model we fitted with LSE at Figure 8.1.\nLet compute \\(R_0\\). For a “closed population” SEIR model, \\(R_0 = \\frac{\\beta}{\\gamma} S_0\\). Again, this is similar to the \\(R_0\\) estimated from LSE at Listing 8.1. The reason is MLE is equal to LSE when we pick the normal distribution likelihood, see Section 4 for more details.\n\nrnum0 &lt;- params[1] * S0 / params[3]\nrnum0\n\n    beta \n1.280075 \n\n\n\n\n\n\nCauchemez, S., Bhattarai, A., Marchbanks, T. L., Fagan, R. P., Ostroff, S., Ferguson, N. M., Swerdlow, D., Pennsylvania H1N1 working group, the, Sodha, S. V., Moll, M. E., Angulo, F. J., Palekar, R., Archer, W. R., & Finelli, L. (2011). Role of social networks in shaping disease transmission during a community outbreak of 2009 H1N1 pandemic influenza. Proceedings of the National Academy of Sciences, 108(7), 2825–2830. https://doi.org/10.1073/pnas.1008895108",
+    "title": "6  Maximum likelihood estimation",
+    "section": "6.2 Code",
+    "text": "6.2 Code\n\nlibrary(tidyr)\nlibrary(odin)\nlibrary(bbmle)\nlibrary(ggplot2)\nlibrary(RColorBrewer)\n\nWe will use the same data of a H1N1 influenza outbreak in an elementary school in Section 5.2 and fit the deterministic SEIR model with code Listing 2.1.\n\ndf &lt;- read.csv(\"data/flu_inc.csv\")\n\nLooking at the original paper, the school has 370 students (Cauchemez et al., 2011). So we set the initial values as below.\n\nS0 &lt;- 369\nE0 &lt;- 0\nI0 &lt;- 1\nR0 &lt;- 0\n\n\nStep 1. Write down the likelihood function \\(L(\\theta)\\).\n\nWe assume the incidence data is generated from a normal distribution with mean \\(\\mu_{inc}\\) is the predicted incidence and a standard deviation \\(\\sigma_{inc}\\).\n\\[L(\\theta) = \\prod_{i = 1}^{n} \\mathcal{N}(\\mu_{inc}, \\sigma_{inc})\\]\nWe use the dnorm() function to define this likelihood.\n\ndnorm(x = data, mean = pred, sd = sd_inc)\n\n\nStep 2. Take the natural log of the likelihood \\(log L(\\theta)\\), product becomes sum.\n\n\\[log L(\\theta) = \\sum_{i = 1}^{n} log \\left[ \\mathcal{N}(\\mu_{inc}, \\sigma_{inc}) \\right]\\]\n\nsum(dnorm(x = data, mean = pred, sd = sd_inc, log = T))\n\n\nStep 3. Take the negative log-likelihood \\(- log L(\\theta)\\).\n\n\\[- log L(\\theta) = - \\sum_{i = 1}^{n} log \\left[ \\mathcal{N}(\\mu_{inc}, \\sigma_{inc}) \\right]\\]\n\n- sum(dnorm(x = data, mean = pred, sd = sd_inc, log = T))\n\n\nStep 4. Pass the negative log-likelihood \\(- log L(\\theta)\\) to the optimizer.\n\nRoot mean squared error as SD\n\nmll &lt;- function(beta, sigma, gamma, sd_inc) {\n  # Make sure that parameters are positive\n  beta &lt;- exp(beta) \n  sigma &lt;- exp(sigma)\n  gamma &lt;- exp(gamma)\n  sd_inc &lt;- exp(sd_inc)\n  \n  pred &lt;- seir_mod(beta = beta, sigma = sigma, gamma = gamma, S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = 0:(length(df$inc) - 1))\n  pred &lt;- pred$Inc\n  # Return the negative log-likelihood\n  - sum(dnorm(x = df$inc, mean = pred, sd = sd_inc, log = T))\n}\n\nstarting_param_val &lt;- list(beta = 0.004, sigma = 0.5, gamma = 0.5, sd_inc = 3)\n\nestimates &lt;- mle2(minuslogl = mll, start = lapply(starting_param_val, log), method = \"Nelder-Mead\")\n\nsummary(estimates)\n\nMaximum likelihood estimation\n\nCall:\nmle2(minuslogl = mll, start = lapply(starting_param_val, log), \n    method = \"Nelder-Mead\")\n\nCoefficients:\n        Estimate Std. Error  z value     Pr(z)    \nbeta   -5.063479   0.092641 -54.6567 &lt; 2.2e-16 ***\nsigma   0.708384   0.134498   5.2669 1.388e-07 ***\ngamma   0.600399   0.092968   6.4581 1.060e-10 ***\nsd_inc  0.530870   0.099628   5.3285 9.902e-08 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n-2 log L: 198.8602 \n\n\n\nparams &lt;- exp(coef(estimates))\nparams\n\n       beta       sigma       gamma      sd_inc \n0.006323524 2.030707475 1.822846603 1.700410622 \n\n\nCompare the model with data.\n\n\nCode\npred &lt;- seir_mod(beta = params[1], sigma = params[2], gamma = params[3], S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = df$day)\ndf_plot &lt;- pred[,c(\"t\", \"Inc\")]\n\n# Compute 95% confidence interval\nlwr &lt;- qnorm(p = 0.025, mean = pred$Inc, sd = params[4])\nupr &lt;- qnorm(p = 0.975, mean = pred$Inc, sd = params[4])\n\nmy_palette &lt;- brewer.pal(11, \"PuOr\")[c(10, 1, 4, 3, 8)]\n\nggplot(df_plot, aes(x = t, y = Inc)) +\n  geom_point(color = my_palette[3]) +\n  geom_line(color = my_palette[3]) +\n  geom_ribbon(aes(ymin = lwr, ymax = upr), fill = my_palette[3], alpha = 0.15) +\n  geom_point(data = df, aes(x = day, y = inc)) +\n  coord_cartesian(ylim = c(0, max(upr))) +\n  labs(x = \"Day\", y = \"Incidence\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\nIt looks very similar to the model we fitted with LSE at Figure 5.1.\nLet compute \\(R_0\\). For a “closed population” SEIR model, \\(R_0 = \\frac{\\beta}{\\gamma} S_0\\). Again, this is similar to the \\(R_0\\) estimated from LSE at Listing 5.1. The reason is MLE is equal to LSE when we pick the normal distribution likelihood, see Section 4 for more details.\n\nrnum0 &lt;- params[1] * S0 / params[3]\nrnum0\n\n    beta \n1.280075 \n\n\n\n\n\n\nCauchemez, S., Bhattarai, A., Marchbanks, T. L., Fagan, R. P., Ostroff, S., Ferguson, N. M., Swerdlow, D., Pennsylvania H1N1 working group, the, Sodha, S. V., Moll, M. E., Angulo, F. J., Palekar, R., Archer, W. R., & Finelli, L. (2011). Role of social networks in shaping disease transmission during a community outbreak of 2009 H1N1 pandemic influenza. Proceedings of the National Academy of Sciences, 108(7), 2825–2830. https://doi.org/10.1073/pnas.1008895108",
     "crumbs": [
       "Calibration",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Maximum likelihood estimation</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Maximum likelihood estimation</span>"
     ]
   },
   {
-    "objectID": "surv.html",
-    "href": "surv.html",
-    "title": "11  Survival analysis",
+    "objectID": "rnum.html",
+    "href": "rnum.html",
+    "title": "Reproduction number",
     "section": "",
-    "text": "11.1 Definitions",
+    "text": "Basic reproduction number \\(R_0\\)\nThe basic reproduction number is sometimes called the basic reproductive number or basic reproductive ratio (Driessche, 2017).",
     "crumbs": [
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Survival analysis</span>"
+      "Reproduction number"
     ]
   },
   {
-    "objectID": "surv.html#definitions",
-    "href": "surv.html#definitions",
-    "title": "11  Survival analysis",
+    "objectID": "rnum.html#basic-reproduction-number-r_0",
+    "href": "rnum.html#basic-reproduction-number-r_0",
+    "title": "Reproduction number",
     "section": "",
-    "text": "11.1.1 Hazard, rate, incidence\nThey are the same word, using in different fields, hazard = rate = incidence:\n\nRate: number of new events that occur during specified time period.\nIncidence: when the event is a disease, it is called incidence.\nHazard: in survival analysis, it is called hazard.\n\nLet consider a discrete\n\n\n11.1.2 Hazard function\nHazard function \\(h(t)\\) gives the probability that someone die at time \\(t\\), given that they have survived up to that time \\(t\\) (survived during the period \\([0;t]\\)).\n\\[h(t) = \\frac{f(t)}{\\mathbb{P}(T &gt; t)} = \\frac{f(t)}{S(t)}\\]\nWhere \\(f(t)\\) is the time to first\n\n\n11.1.3 Cumulative hazard function\nCumulative hazard function \\(F(t)\\) gives the probability that someone die by time \\(t\\) (die anytime during \\([0;t]\\)).\n\\[F(t) = \\mathbb{P}(T \\leq t) = \\sum_{t = 0}^t h(t)\\]\n\n\n11.1.4 Survival function\nThe survival function \\(S(t)\\) gives the probability that someone will survive beyond time \\(t\\) (they have survived \\([0;t]\\) and will continue to survive).\n\\[S(t) = \\mathbb{P}(T &gt; t) = 1 - \\mathbb{P}(T \\leq t) = 1 - F(t)\\]\n\n\n\n\nHay, J., Routledge, I., & Takahashi, S. (n.d.). Serodynamics: a review of methods for epidemiological inference using serological data. https://doi.org/10.31219/osf.io/kqdsn",
+    "text": "Definition 1 \\(R_0\\) (pronounced /R naught/) is the average number of individuals infected by each infectious individual in a fully susceptible population (Vegvari et al., 2022). In short, \\(R_0\\) is the \\(R\\) in a fully susceptible population, the maximum \\(R\\) in a population.",
     "crumbs": [
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Survival analysis</span>"
+      "Reproduction number"
+    ]
+  },
+  {
+    "objectID": "rnum.html#effective-reproduction-number-r_e",
+    "href": "rnum.html#effective-reproduction-number-r_e",
+    "title": "Reproduction number",
+    "section": "Effective reproduction number \\(R_e\\)",
+    "text": "Effective reproduction number \\(R_e\\)\n\nDefinition 2 \\(R_e\\) is the average number of secondary cases generated by each infectious individual throughout their infectious period in a population where not all individuals are susceptible.\n\nLet \\(s\\) be the proportion of the population that is susceptible.\n\\[R_e = s \\times R_0\\]",
+    "crumbs": [
+      "Reproduction number"
+    ]
+  },
+  {
+    "objectID": "rnum.html#effective-reproduction-number-at-time-t-r_t",
+    "href": "rnum.html#effective-reproduction-number-at-time-t-r_t",
+    "title": "Reproduction number",
+    "section": "Effective reproduction number at time \\(t\\) \\(R_t\\)",
+    "text": "Effective reproduction number at time \\(t\\) \\(R_t\\)\n\nDefinition 3 \\(R_e(t)\\) (Knight & Mishra, 2020) or \\(R_t\\) is the average number of secondary cases generated by one infected person at time \\(t\\) during the outbreak, where some individuals may no longer be susceptible (Gostic et al., 2020).\n\nA public health control strategy will end an outbreak if it can keep \\(R_t\\) below 1. The level of immunity at which \\(R_t = 1\\) is the herd immunity threshold (Vegvari et al., 2022).\n\n\n\n\n\n\n\n\n\nAt the beginning of an outbreak, we can estimate \\(R_0\\) when the whole population is fully susceptible. As the outbreak progresses, the number of susceptible individuals decreases, leading to a decline in \\(R_0\\). This adjusted value is referred to as \\(R_t\\) (if we want to measure at each time \\(t\\)). At the peak of the epidemic curve, \\(R_t = 1\\). After this peak, \\(R_t\\) continues to decrease, resulting in a decline in the number of new cases and the epidemic curve going down.\n\\(R_t\\) can be defined in 2 ways:\n\nInstantaneous reproduction number: the average number of individuals someone infected at time \\(t\\) would infect if conditions remained unchanged (Green et al., 2022).\nCase reproduction number: the average number of people an individual infected at time t actually infects, which will depend on changes in policy or behavior over the period of that cohort’s infection, and can only be estimated in retrospect (Green et al., 2022).\n\n\nInstantaneous reproduction number \\(R_t^i\\)\n\n\nFigure illustrates the Cori method (Gostic et al., 2020).\n\nMeasures transmission at a specific point in time (Gostic et al., 2020). The instantaneous reproduction number quantifies the number of new infections at a single point in time \\(t_i\\) (blue arrow), using the number of infections in the previous generation (green arrows) and their current infectiousness (green curve) (Gostic et al., 2020). The analyses can be done near real-time.\nMethods to estimate instantaneous reproduction number includes Cori and colleagues (Cori et al., 2013) (the best for near real-time estimation (Gostic et al., 2020)), and Bettencourt and Ribeiro (Bettencourt & Ribeiro, 2008) (use with caution because they implicitly assume the generation interval follows an exponential distribution, as in SIR model, which does not include alatent period).\n\n\nCase reproduction number \\(R_t^c\\)\n\n\nFigure illustrates the Wallinga and Teunis method (Gostic et al., 2020).\n\nMeasures transmission by a specific cohort of individuals (Gostic et al., 2020). A cohort is a group of individuals with the same date of infection or the same date of symptom onset. The case reproduction number is the average number of new infections that an individual who becomes infected on day \\(t_i\\) (green arrows in B) or symptomatic on day \\(t_s\\) (yellow arrows in C) will eventually go on to cause (blue downward arrows in B and C). It is a more natural choice for analyses that consider heterogeneity among individuals (Gostic et al., 2020).\nMethods to estimate instantaneous reproduction number includes Wallinga and Teunis method (Wallinga & Teunis, 2004).",
+    "crumbs": [
+      "Reproduction number"
+    ]
+  },
+  {
+    "objectID": "rnum.html#growth-rate-r-and-reproduction-number-r",
+    "href": "rnum.html#growth-rate-r-and-reproduction-number-r",
+    "title": "Reproduction number",
+    "section": "Growth rate \\(r\\) and reproduction number \\(R\\)",
+    "text": "Growth rate \\(r\\) and reproduction number \\(R\\)\nGrowth rate \\(r\\) and reproduction number \\(R\\) are basically the same. \\(r\\) is used in continuous time and \\(R\\) is used in discrete time.\n\nGrowth rate \\(r\\)\nThe rate at which new cases are arising (Anderson et al., 2020). It can be a positive number (new infections is increasing) or a negative number (new infections is decreasing).\nThe number of new infections at an increasing or decreasing exponential rate. It is dependent on the reproduction number and timescale between infections.\n\\[\\frac{d_\\text{newCases}}{dt}\\]\n\n\n\n\nAnderson, R., Donnelly, C., Hollingsworth, D., Keeling, M., Vegvari, C., Baggaley, R., & Maddren, R. (2020). Reproduction number (R) and growth rate (r) of the COVID-19 epidemic in the UK. The Royal Society.\n\n\nBettencourt, L. M. A., & Ribeiro, R. M. (2008). Real Time Bayesian Estimation of the Epidemic Potential of Emerging Infectious Diseases. PLOS ONE, 3(5), e2185. https://doi.org/10.1371/journal.pone.0002185\n\n\nCori, A., Ferguson, N. M., Fraser, C., & Cauchemez, S. (2013). A new framework and software to estimate time-varying reproduction numbers during epidemics. American Journal of Epidemiology, 178(9), 1505–1512. https://doi.org/10.1093/aje/kwt133\n\n\nDriessche, P. van den. (2017). Reproduction numbers of infectious disease models. Infectious Disease Modelling, 2(3), 288–303. https://doi.org/10.1016/j.idm.2017.06.002\n\n\nGostic, K. M., McGough, L., Baskerville, E. B., Abbott, S., Joshi, K., Tedijanto, C., Kahn, R., Niehus, R., Hay, J. A., Salazar, P. M. D., Hellewell, J., Meakin, S., Munday, J. D., Bosse, N. I., Sherrat, K., Thompson, R. N., White, L. F., Huisman, J. S., Scire, J., … Cobey, S. (2020). Practical considerations for measuring the effective reproductive number, Rt. PLOS Computational Biology, 16(12), e1008409. https://doi.org/10.1371/journal.pcbi.1008409\n\n\nGreen, W. D., Ferguson, N. M., & Cori, A. (2022). Inferring the reproduction number using the renewal equation in heterogeneous epidemics. Journal of The Royal Society Interface, 19(188), 20210429. https://doi.org/10.1098/rsif.2021.0429\n\n\nKnight, J., & Mishra, S. (2020). Estimating effective reproduction number using generation time versus serial interval, with application to covid-19 in the greater toronto area, canada. Infectious Disease Modelling, 5, 889–896. https://doi.org/10.1016/j.idm.2020.10.009\n\n\nVegvari, C., Abbott, S., Ball, F., Brooks-Pollock, E., Challen, R., Collyer, B. S., Dangerfield, C., Gog, J. R., Gostic, K. M., Heffernan, J. M., Hollingsworth, T. D., Isham, V., Kenah, E., Mollison, D., Panovska-Griffiths, J., Pellis, L., Roberts, M. G., Scalia Tomba, G., Thompson, R. N., & Trapman, P. (2022). Commentary on the use of the reproduction number R during the COVID-19 pandemic. Statistical Methods in Medical Research, 31(9), 1675–1685. https://doi.org/10.1177/09622802211037079\n\n\nWallinga, J., & Teunis, P. (2004). Different epidemic curves for severe acute respiratory syndrome reveal similar impacts of control measures. American Journal of Epidemiology, 160(6), 509–516. https://doi.org/10.1093/aje/kwh255",
+    "crumbs": [
+      "Reproduction number"
+    ]
+  },
+  {
+    "objectID": "r0.html",
+    "href": "r0.html",
+    "title": "8  Estimating \\(R_0\\)",
+    "section": "",
+    "text": "8.1 Next generation matrix\n\\(R_0\\) is the maximum absolute eigenvalue (also called the spectral radius) of the next generation matrix (NGM) (Driessche, 2017).\nLet consider a SEIR model with equal birth and death rate \\(\\mu\\)\n\\[\\frac{dS}{dt} = \\mu (S + E + I + R) -\\beta SI - \\mu S\\]\n\\[\\frac{dE}{dt} = \\beta SI - \\sigma E - \\mu E\\]\n\\[\\frac{dI}{dt} = \\sigma E - \\gamma I - \\mu I\\]\n\\[\\frac{dR}{dt} = \\gamma I - \\mu R\\]",
+    "crumbs": [
+      "Reproduction number",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Estimating $R_0$</span>"
+    ]
+  },
+  {
+    "objectID": "r0.html#compartmental-models",
+    "href": "r0.html#compartmental-models",
+    "title": "8  Estimating \\(R_0\\)",
+    "section": "",
+    "text": "8.1.1 SIR model\nOrdinary differential equations (ODEs) for SIR model are given by Equation 1.1, Equation 1.2, Equation 1.3.\nConsider the \\(I\\) equation:\n\\[\\frac{dI}{dt} = \\beta SI - \\gamma I = I(\\beta S - \\gamma)\\]\n\n\n8.1.2 SEIR model",
+    "crumbs": [
+      "Reproduction number",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Estimating $R_0$</span>"
+    ]
+  },
+  {
+    "objectID": "r0.html#next-generation-matrix-ngm",
+    "href": "r0.html#next-generation-matrix-ngm",
+    "title": "8  Estimating \\(R_0\\)",
+    "section": "",
+    "text": "8.1.1 Step 1. Identify the infected compartments\nFor our SEIR model, the infected compartments are \\(E\\) and \\(I\\).\n\n\n8.1.2 Step 2. Write the NGM functions\n\n\\(\\mathcal{F}_i(x)\\): is the rate of appearance of new infections in compartment \\(i\\) (Driessche, 2017) (caused by contact).\n\\(\\mathcal{V}_i(x)\\): is the rate of other transitions between compartment \\(i\\) and other infected compartments (Driessche, 2017) (caused by transition between compartments).\n\nFor our SEIR model, we would write \\(\\mathcal{F}\\) and \\(\\mathcal{V}\\) as follows:\n\n\n\\[\\mathcal{F} = \\begin{bmatrix} \\beta SI \\\\ 0 \\end{bmatrix}\\]\nIn which \\(\\mathcal{F}\\) is a vector contains of \\(\\begin{bmatrix} \\mathcal{F}_1 \\\\ \\mathcal{F}_2 \\end{bmatrix}\\):\n\n\\(\\mathcal{F}_1 = \\beta SI\\): the rate of new infections (caused by contact) in compartment \\(E\\).\n\\(\\mathcal{F}_2 = 0\\): as there is no new infections (caused by contact) in compartment \\(I\\).\n\n\n\\[\\mathcal{V} = \\begin{bmatrix} \\sigma E + \\mu E \\\\ - \\sigma E + \\gamma I + \\mu I \\end{bmatrix}\\]\nIn which \\(\\mathcal{V}\\) is a vector contains of \\(\\begin{bmatrix} \\mathcal{V}_1 \\\\ \\mathcal{V}_2 \\end{bmatrix}\\):\n\n\\(\\mathcal{V}_1 = \\sigma E + \\mu E\\): is the rate of other transitions to and from compartment \\(E\\).\n\\(\\mathcal{V}_2 = - \\sigma E + \\gamma I + \\mu I\\): is the rate of other transitions to and from compartment \\(I\\).\n\n\n\n\\(\\mathcal{F}\\) and \\(\\mathcal{V}\\) are written such that:\n\\[\\frac{dx}{dt} = \\mathcal{F} - \\mathcal{V}\\]\nHere we have:\n\\[\\frac{dE}{dt} = \\mathcal{F}_1 - \\mathcal{V}_1 = \\beta SI - (\\sigma E + \\mu E)\\]\n\\[\\frac{dI}{dt} = \\mathcal{F}_2 - \\mathcal{V}_2 = 0 - (- \\sigma E + \\gamma I + \\mu I)\\]\n\n\n8.1.3 Step 3. Find the Jacobian matrix\nJacobian matrix \\(F\\) for \\(\\mathcal{F}\\), and \\(V\\) for \\(\\mathcal{V}\\). Jacobian matrix is a matrix contain all partial derivatives of a vector function.\n\\[F = \\begin{bmatrix} \\frac{\\partial \\mathcal{F}_1}{\\partial E} & \\frac{\\partial \\mathcal{F}_1}{\\partial I} \\\\ \\frac{\\partial \\mathcal{F}_2}{\\partial E} & \\frac{\\partial \\mathcal{F}_2}{\\partial I} \\end{bmatrix} \\\\ = \\begin{bmatrix} \\frac{\\partial [\\beta SI]}{\\partial E} & \\frac{\\partial [\\beta SI]}{\\partial I} \\\\ \\frac{\\partial [0]}{\\partial E} & \\frac{\\partial [0]}{\\partial I} \\end{bmatrix} \\\\ = \\begin{bmatrix} 0 & \\beta S \\\\ 0 & 0 \\end{bmatrix}\\]\nIn which:\n\n\\(\\frac{\\partial [\\beta SI]}{\\partial E} = 0\\): because there is no \\(E\\) in \\(\\beta SI\\).\n\\(\\frac{\\partial [\\beta SI]}{\\partial I} = \\beta S\\).\n\n\\[V = \\begin{bmatrix} \\frac{\\partial \\mathcal{V}_1}{\\partial E} & \\frac{\\partial \\mathcal{V}_1}{\\partial I} \\\\ \\frac{\\partial \\mathcal{V}_2}{\\partial E} & \\frac{\\partial \\mathcal{V}_2}{\\partial I} \\end{bmatrix} \\\\ = \\begin{bmatrix} \\frac{\\partial [\\sigma E + \\mu E]}{\\partial E} & \\frac{\\partial [\\sigma E + \\mu E]}{\\partial I} \\\\ \\frac{\\partial [- \\sigma E + \\gamma I + \\mu I]}{\\partial E} & \\frac{\\partial [- \\sigma E + \\gamma I + \\mu I]}{\\partial I} \\end{bmatrix} \\\\ = \\begin{bmatrix} \\sigma + \\mu & 0 \\\\ - \\sigma & \\gamma + \\mu \\end{bmatrix}\\]\n\n\n8.1.4 Step 4. Compute the NGM\nUse Definition A.3 to compute inverse matrix \\(V^{-1}\\):\n\\[V^{-1} = \\frac{1}{(\\sigma + \\mu)(\\gamma + \\mu)} \\begin{bmatrix} \\gamma + \\mu & - 0 \\\\ - \\sigma & \\sigma + \\mu \\end{bmatrix} \\\\ = \\begin{bmatrix} \\frac{1}{\\sigma + \\mu} & 0 \\\\ \\frac{\\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)} & \\frac{1}{\\gamma + \\mu} \\end{bmatrix}\\]\n\\[K = FV^{-1} \\\\ = \\begin{bmatrix} 0 & \\beta S \\\\ 0 & 0 \\end{bmatrix} \\begin{bmatrix} \\frac{1}{\\sigma + \\mu} & 0 \\\\ \\frac{\\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)} & \\frac{1}{\\gamma + \\mu} \\end{bmatrix} \\\\ = \\begin{bmatrix} \\frac{\\beta S \\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)} & \\frac{\\beta S}{\\gamma + \\mu} \\\\ 0 & 0 \\end{bmatrix}\\]\n\n\n8.1.5 Step 5. Compute \\(R_0\\)\n\\(R_0\\) is the eigenvalues of the NGM.\n\\[det(K - \\lambda) = \\begin{bmatrix} \\frac{\\beta S \\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)} - \\lambda & \\frac{\\beta S}{\\gamma + \\mu} \\\\ 0 & 0 - \\lambda \\end{bmatrix} \\\\ = [\\frac{\\beta S \\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)} - \\lambda][0 - \\lambda]\\]\n\\[R_0 = \\frac{\\beta S \\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)}\\]\n\n\n\n\n\n\nA simple example\n\n\n\n\n\nSource: quantpie’s video.\nA population consists of two groups: young and old.\n\nA young person on average infects 3 young and 2 old: \\(\\begin{bmatrix} 3 \\\\ 2 \\end{bmatrix}\\).\nAn old person on average infects 1 young and 2 old: \\(\\begin{bmatrix} 1 \\\\ 2 \\end{bmatrix}\\).\n\nEach group becomes a column in the next generation matrix (NGM):\n\\[\\text{NGM} = \\begin{bmatrix} 3 & 1 \\\\ 2 & 2 \\end{bmatrix}\\]\n\\(R_0\\) is the root of equation:\n\\[\\begin{bmatrix} 3 - \\lambda & 1 \\\\ 2 & 2 - \\lambda \\end{bmatrix} = 0\\]\n\\[\\Leftrightarrow (3 - \\lambda) \\times (2 - \\lambda) - 2 \\times 1 = 0\\]\n\\[\\Leftrightarrow \\lambda^2 - 5 \\lambda + 6 - 2 = 0\\]\n\\[\\Leftrightarrow \\lambda^2 - 5 \\lambda + 4 = 0\\]\nThere are two root \\(\\lambda = 4\\) and \\(\\lambda = 1\\), for an outbreak to occur \\(R_0 &gt; 1\\), so here \\(R_0 = 4\\).\n\n\n\nFor more complex compartmental models, especially those with more infected compartments (Driessche, 2017)\n\n\n\n\nChitnis, N. (2017). Introduction to SEIR Models.\n\n\nDriessche, P. van den. (2017). Reproduction numbers of infectious disease models. Infectious Disease Modelling, 2(3), 288–303. https://doi.org/10.1016/j.idm.2017.06.002\n\n\nJones, J. H. (2007). Notes on R0. California: Department of Anthropological Sciences, 323, 1–19.",
+    "crumbs": [
+      "Reproduction number",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Estimating $R_0$</span>"
+    ]
+  },
+  {
+    "objectID": "rt.html",
+    "href": "rt.html",
+    "title": "9  Estimating \\(R_t\\)",
+    "section": "",
+    "text": "9.1 Instantaneous reproduction number \\(R_t^i\\)",
+    "crumbs": [
+      "Reproduction number",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Estimating $R_t$</span>"
+    ]
+  },
+  {
+    "objectID": "rt.html#instantaneous-reproduction-number-r_ti",
+    "href": "rt.html#instantaneous-reproduction-number-r_ti",
+    "title": "9  Estimating \\(R_t\\)",
+    "section": "",
+    "text": "Definition 9.1 The instantaneous reproduction number is the expected number of secondary infections occurring at time \\(t\\), divided by the number of infected individuals, each scaled by their relative infectiousness at time \\(t\\) (an individual’s relative infectiousness is based on the generation interval and time since infection) (Gostic et al., 2020).\n\n\n9.1.1 Exact calculation\nFor a compartmental model (SIR or SEIR), \\(R_t^i\\) can be calculated exactly as (Gostic et al., 2020):\n\\[R_t^i = \\beta(t) S(t) D\\]\n\n\\(\\beta(t)\\): the time-varying transmission rate.\n\\(S(t)\\): the fraction of the population that is susceptible.\n\\(D\\): the mean duration of infectiousness.\n\n\n\n9.1.2 Cori method\n\\[R_t^i = \\frac{I_t}{\\sum_{s = 1}^{t} I_{t - s} w_s}\\]\n\n\\(I_t\\): the number of infection on day \\(t\\).\n\\(I_{t - s}\\): the number of individuals who became infected \\(s\\) days in the past.\n\\(w_s\\): the infectivity profile, describes how infectious an individual is \\(s\\) days since infection, \\(w_s\\) dependent on time since infection \\(s\\) but independent of calendar time \\(t\\), and often be approximated by the generation interval (Cori et al., 2013).\n\\(I_{t - s} w_s\\): we scale the number of individuals who became infected \\(s\\) days in the past by how infectiousness are they still on day \\(t\\) (which is \\(s\\) days after the date they got infected, \\(w_s\\)).\n\nLooking back at Definition 9.1, \\(R_t^i\\) is the expected number of secondary infections occurring at time \\(t\\) (\\(I_t\\)), divided by the number of infected individuals (\\(\\sum_{s = 1}^{t} I_{t - s}\\)), each scaled by their relative infectiousness at time \\(t\\) (\\(w_s\\)).\nThe only parametric assumption required by this method is the form of the generation interval. The standard assumption is that \\(w_s\\) follows a discretized gamma distribution, but any parametric or empirical discrete distribution also work (Gostic et al., 2020).\n\n\n9.1.3 When can we start estimating \\(R_t^i\\)?\nCori et al. suggest starting estimating \\(R_t^i\\) once those three criteria are fulfilled (Cori et al., 2013):\n\nAt least after the sliding window size.\nAt least after one mean serial interval.\nAt least 12 cases (the initial case + 11) have been observed since the beginning of the epidemic (in a time window): to get a posterior credible interval of 0.3, the time window must comprise at least 11 incident cases.\n\n\n\n9.1.4 Key considerations\nSource: Dr. Anne Cori’s webinar.\n\nTemporal resolution: we can’t apply the \\(R_t^i\\) method when the time step of observation is too large (&gt; mean generation interval).\nSpatial resolution: ideally use a spatial scale that you can distinguish locally infected cases from imported cases.\n\\(R_t^i\\) is very sensitive to the size of the sliding window: small windows can lead to highly variable estimates with wide credible intervals, whereas longer windows lead to smoothed estimates with narrower credible intervals. Perhaps also consider at least 11 incident cases in a sliding window to get a posterior credible interval of 0.3 (Cori et al., 2013).",
+    "crumbs": [
+      "Reproduction number",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Estimating $R_t$</span>"
+    ]
+  },
+  {
+    "objectID": "rt.html#case-reproduction-number-r_tc",
+    "href": "rt.html#case-reproduction-number-r_tc",
+    "title": "9  Estimating \\(R_t\\)",
+    "section": "9.2 Case reproduction number \\(R_t^c\\)",
+    "text": "9.2 Case reproduction number \\(R_t^c\\)\n\nDefinition 9.2 The case or cohort reproduction number is the expected number of secondary infections that an individual who becomes infected at time \\(t\\) will eventually cause as they progress through their infection (Gostic et al., 2020).\n\n\n9.2.1 Exact calculation\n\\[R_t^c = \\int_{u = t}^{\\infty} R_u^i w_{u-t} du\\]\n\n\\(R_u^i\\): the instantaneous reproduction number of current infected cases at time \\(u\\), starting from \\(t\\) to the end of their infectious period \\(\\infty\\).\n\\(w_{u-t}\\): the infectiousness of them at that time.\n\n\n\n9.2.2 Wallinga and Teunis method\nThere are 3 steps (Gostic et al., 2020):\nStep 1. Estimate the likelihood that case \\(j\\) (infected at time \\(t_j\\)) infected case \\(i\\) (at time \\(t_i\\)).\n\\[p_{ij} = \\frac{w_{t_i - t_j}}{\\sum_{i \\neq k} w_{t_i - t_k}}\\]\n\n\\(\\sum_{i \\neq k} w_{t_i - t_k}\\): sum of the infectiousness of all cases (other than \\(i\\)) infects case \\(i\\).\n\nStep 2. Compute the individual reproduction number of case \\(j\\).\n\\[R_j = \\sum_i p_{ij}\\]\nStep 3. Compute the case reproduction number at time \\(t\\), it is the expected value of \\(R_j\\) for all individuals infected at time \\(t\\).\n\\[R_t^c = \\mathbb{E}(R_j)\\]",
+    "crumbs": [
+      "Reproduction number",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Estimating $R_t$</span>"
+    ]
+  },
+  {
+    "objectID": "rt.html#proofs",
+    "href": "rt.html#proofs",
+    "title": "9  Estimating \\(R_t\\)",
+    "section": "9.3 Proofs",
+    "text": "9.3 Proofs\nThe renewal equation is a cornerstone of demographic theory and backbone of the \\(R_t\\) estimators.\n\\[b(t) = \\int_{a = 0}^{\\infty} b(t - a) n(a) da\\]\n\n\\(b(t)\\): the number of births at time \\(t\\).\n\\(b(t - a)\\): the number of birth at time \\(t - a\\), or the number of people of age \\(a\\) at time \\(t\\).\n\\(n(a)\\): the birth ability of people of age \\(a\\), scaled by the probability of surviving to age \\(a\\).\n\nTo describe epidemic dynamics, the renewal equation is expressed in terms of \\(I(t)\\).\n\\[I(t) = R_0 S(t) \\int_{s = 0}^{\\infty} I(t - s) w_s ds\\]\n\n\\(R_0 S(t) = R_t\\): see Definition 3.\n\\(I(t - s)\\): the number of individuals who became infected \\(s\\) time points ago in the past.\n\\(w_s\\): the infectivity profile, or the probability of how infectiousness are they still at time \\(t\\) (which is \\(s\\) time points after the date they got infected).\n\\(I(t - s) w_s\\): we scale the number of individuals who in the past by how infectiousness are they still at time \\(t\\).\n\nNow we transform the equation a bit, and we got something very similar to the Cori method (see Section 9.1.2).\n\\[R_t = \\frac{I(t)}{\\int_{s = 0}^{\\infty} I(t - s) w_s ds}\\]",
+    "crumbs": [
+      "Reproduction number",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Estimating $R_t$</span>"
+    ]
+  },
+  {
+    "objectID": "rt.html#compare-r_ti-and-r_tc",
+    "href": "rt.html#compare-r_ti-and-r_tc",
+    "title": "9  Estimating \\(R_t\\)",
+    "section": "9.4 Compare \\(R_t^i\\) and \\(R_t^c\\)",
+    "text": "9.4 Compare \\(R_t^i\\) and \\(R_t^c\\)\nThere are several important differences (Gostic et al., 2020):\n\nInstantaneous \\(R_t^i\\) is real-time estimation and only use data from before time \\(t\\), while case \\(R_t^c\\) is inherently forward-looking.\n\n\nInstantaneous \\(R_t^i\\) overestimates \\(R_t\\) early in the time series, because any infections that occurred before the first observed date are missing terms in the denominator (the \\(I_{t - s}\\) in Section 9.1.2, data is left-truncated at the beginning).\nCase \\(R_t^c\\) underestimates \\(R_t\\) at the end of the time series, because it relies on time points not yet observed which become missing terms in the integral (the \\(R_u^i\\) in Section 9.2.1, data is right-truncated at the end).\n\n\nCase \\(R_t^c\\) is shifted forward in time relative to instantaneous \\(R_t^i\\), produces leading estimates of \\(R_t\\) because it uses data from time points after \\(t\\), whereas the \\(R_t^i\\) uses data from time points before \\(t\\).\n\n\n\n\n\n\n\nImportant\n\n\n\nOverall, for real-time analyses aiming to infer the impact of changes in policy, behavior, or other extrinsic factors on transmission, the instantaneous reproductive number will provide more temporally accurate estimates and is most appropriate.",
+    "crumbs": [
+      "Reproduction number",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Estimating $R_t$</span>"
+    ]
+  },
+  {
+    "objectID": "rt.html#potential-biases",
+    "href": "rt.html#potential-biases",
+    "title": "9  Estimating \\(R_t\\)",
+    "section": "9.5 Potential biases",
+    "text": "9.5 Potential biases\n\\(R_t\\) is a value in specific time, therefore there are 2 potential forms of bias in \\(R_t\\) estimates (Gostic et al., 2020):\n\nAccuracy (the value): Systematic over- or underestimation caused by misspecification of the generation interval. Mostly impact when \\(R_t\\) is substantially &gt; 1 (e.g., the beginning of COVID-19 when \\(R_t\\) is relatively high) or &lt; 1 (e.g., after a very effective intervention then \\(R_t\\) might be low).\nTimeliness (the time): Temporal inaccuracy that \\(R_t\\) estimates may be leading or lagging the true date, has several possible causes and can be difficult to avoid.\n\n\n\nFigure from Sender et al. (Sender et al., 2022).\n\n\n9.5.1 Generation interval\n\nDefinition 9.3 Generation interval is the time from the infection of a primary case to infection of the cases he/she generates (Cori et al., 2013).\n\nIf we match this to an SEIR model, the generation interval starts when the infector enters the E compartment (meaning they got infected). The latest time they can infect an infectee is at the end of their residence in the I compartment (they are infectious). Therefore, generation interval is the sum of residence times in compartments E and I (Gostic et al., 2020).\nThe mean generation interval decreases when susceptible persons are at risk of infectious contact from multiple sources. Because when a susceptible person has multiple potential infectors, there is a “race” to infect him/her in which only the first infectious contact leads to infection (Kenah et al., 2008).\n\n\nBiases from misspecification of the generation interval mean (A) or variance (B) (Gostic et al., 2020).\n\n\nIf mean generation interval is set too high, \\(R_t\\) will be more extreme (too high when true \\(R_t &gt; 1\\) and too low when true \\(R_t &lt; 1\\)).\nIf mean generation interval is set too low, \\(R_t\\) will be closer to 1 than the true value.\nThe effect of the mean generation interval is large when true \\(R_t\\) further from 1. Therefore, this bias may be greatest at the early epidemic, when true \\(R_t\\) is high, together with highly uncertain generation interval and limited data.\n\nTools like EpiEstim and EpiNow2 allow users to specify the prior variance of the mean and standard deviation. However, bear in mind that uncertainty around an incorrect generation interval only widen the 95% credible interval, but will not shift the estimates toward the truth and will not correct this bias.\n\n\n9.5.2 Serial interval\n\nDefinition 9.4 Serial interval is the time between symptom onset in an infector–infectee pair (Gostic et al., 2020).\n\nSerial interval is more easily observed than generation interval and often used in its place. Although the serial and generation intervals are often conflated, there are important differences (Gostic et al., 2020):\n\nSerial interval and generation interval usually have the same mean, but different variances.\nSerial interval can be negative (when the symptom onset of infector is later than infectee, such as in COVID-19), generation interval is always positive.\n\nThe distributions of the serial interval and the generation interval are identical in these scenarios (Cori et al., 2013):\n\nFor diseases such as influenza, SARS, measles, and smallpox, it is expected that infectiousness starts only around the time of symptom onset.\nWhen the infectiousness profile after symptoms is independent of the incubation period.\n\n\n\n9.5.3 Delays\n\n\nAdjusting for delays (Gostic et al., 2020).\n\nIf \\(d\\) is the delay from infection to observation, then observations at time \\(t\\) inform \\(R_{t − d}\\), not \\(R_t\\).\nIf the distribution of delays can be estimated, then \\(R_t\\) can be estimated in 2 steps:\n\nInfer the underlying time series of infections.\nInput the adjusted time series into an \\(R_t\\) estimation method.",
+    "crumbs": [
+      "Reproduction number",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Estimating $R_t$</span>"
+    ]
+  },
+  {
+    "objectID": "rt.html#code",
+    "href": "rt.html#code",
+    "title": "9  Estimating \\(R_t\\)",
+    "section": "9.6 Code",
+    "text": "9.6 Code\n\n9.6.1 EpiEstim\n\nlibrary(EpiEstim)\nlibrary(ggplot2)\n\nThe input data\n\ndata(Flu2009)\n\ndf &lt;- Flu2009$incidence\nhead(df)\n\n\n  \n\n\n\nLet have a look at the data.\n\nggplot(df, aes(x = dates, y = I)) +\n  geom_point() +\n  labs(x = \"Day\", y = \"Incidence\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\n9.6.1.1 \n\nmod &lt;- estimate_R(\n  incid = df, \n  method = \"parametric_si\", \n  config = make_config(\n    list(\n      mean_si = 2.6, \n      std_si = 1.5\n    )\n  )\n)\n\nDefault config will estimate R on weekly sliding windows.\n    To change this change the t_start and t_end arguments. \n\n\nNoted that the default config will estimate R on weekly sliding windows (day 2 to day 8).\n\nhead(mod$R)\n\n\n  \n\n\n\n\nplot(mod)\n\n\n\n\n\n\n\n\n\ntmp &lt;- df[df$dates &lt; as.Date(\"2009-05-11\"),]\nmod &lt;- estimate_R(\n  incid = tmp, \n  method = \"parametric_si\", \n  config = make_config(\n    list(\n      mean_si = 2.6, \n      std_si = 1.5\n    )\n  )\n)\n\nDefault config will estimate R on weekly sliding windows.\n    To change this change the t_start and t_end arguments. \n\nhead(mod$R)\n\n\n  \n\n\nplot(mod)\n\n\n\n\n\n\n\n\n\n\n\n9.6.2 EpiNow2\n\n\n\n\nCori, A., Ferguson, N. M., Fraser, C., & Cauchemez, S. (2013). A new framework and software to estimate time-varying reproduction numbers during epidemics. American Journal of Epidemiology, 178(9), 1505–1512. https://doi.org/10.1093/aje/kwt133\n\n\nGostic, K. M., McGough, L., Baskerville, E. B., Abbott, S., Joshi, K., Tedijanto, C., Kahn, R., Niehus, R., Hay, J. A., Salazar, P. M. D., Hellewell, J., Meakin, S., Munday, J. D., Bosse, N. I., Sherrat, K., Thompson, R. N., White, L. F., Huisman, J. S., Scire, J., … Cobey, S. (2020). Practical considerations for measuring the effective reproductive number, Rt. PLOS Computational Biology, 16(12), e1008409. https://doi.org/10.1371/journal.pcbi.1008409\n\n\nKenah, E., Lipsitch, M., & Robins, J. M. (2008). Generation interval contraction and epidemic data analysis. Mathematical Biosciences, 213(1), 71–79. https://doi.org/10.1016/j.mbs.2008.02.007\n\n\nSender, R., Bar-On, Y., Park, S. W., Noor, E., Dushoff, J., & Milo, R. (2022). The unmitigated profile of COVID-19 infectiousness. eLife, 11, e79134. https://doi.org/10.7554/eLife.79134",
+    "crumbs": [
+      "Reproduction number",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Estimating $R_t$</span>"
+    ]
+  },
+  {
+    "objectID": "ftc.html",
+    "href": "ftc.html",
+    "title": "10  Flattening the curve",
+    "section": "",
+    "text": "10.1 Shock-intervention\nAssuming your intervention will effective immediately reduce the contacts by a constant factor.",
+    "crumbs": [
+      "Interventions",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Flattening the curve</span>"
     ]
   },
   {
     "objectID": "rp-risk.html",
     "href": "rp-risk.html",
-    "title": "12  Risk assessment report",
+    "title": "11  Risk assessment report",
     "section": "",
-    "text": "12.1 Examples\nRisk assessment for measles resurgence in the UK\nRapid risk assessment: Measles in Canada, public health implications in 2024",
+    "text": "11.1 Examples\nRisk assessment for measles resurgence in the UK\nRapid risk assessment: Measles in Canada, public health implications in 2024",
     "crumbs": [
       "Reports",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Risk assessment report</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Risk assessment report</span>"
     ]
   },
   {
     "objectID": "rp-risk.html#data",
     "href": "rp-risk.html#data",
-    "title": "12  Risk assessment report",
-    "section": "12.2 Data",
-    "text": "12.2 Data\n\nHistorical case notification of past outbreaks 2014 and 2019 Date of onset + date of birth (or age)\nCurrent level of susceptibility in HCMC:\n\n\nSerology\nVaccine registry\nBirth rates\n\n\nConnectivity between Phu Quoc and HCMC: Flight data / boat data?\n\nP = 1 – (1 / (R0 * s))^m",
+    "title": "11  Risk assessment report",
+    "section": "11.2 Data",
+    "text": "11.2 Data\n\nHistorical case notification of past outbreaks 2014 and 2019 Date of onset + date of birth (or age)\nCurrent level of susceptibility in HCMC:\n\n\nSerology\nVaccine registry\nBirth rates\n\n\nConnectivity between Phu Quoc and HCMC: Flight data / boat data?\n\nP = 1 – (1 / (R0 * s))^m",
     "crumbs": [
       "Reports",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Risk assessment report</span>"
-    ]
-  },
-  {
-    "objectID": "dict.html",
-    "href": "dict.html",
-    "title": "13  Dictionary",
-    "section": "",
-    "text": "infection fatality ratio (IFR) and case fatality ratio (CFR) and serology data.\n\nDefinition 13.1 Residual: is the difference between the observed value and the estimated value.\n\n\nDefinition 13.2 Error: is the deviation of the observed value from the true value.\n\nMatrix and linear transformation:\n\nLinear transformation is a function (transformation = function) that take in a vector and spit out a vector.\nLines remain lines, and origin remains fixed.\n\n\n\n\n\n\n\nVisualisation of linear transformation\n\n\n\n\n\n\n\n\n\nEigenvector (\\(\\vec{v}\\)):\nEigenvalue (\\(\\lambda\\)):\n\nDefinition 13.3 Inverse matrix:\n\\[\\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix}^{-1} = \\frac{1}{ad - bc} \\begin{bmatrix} d & -b \\\\ -c & a \\end{bmatrix}\\]",
-    "crumbs": [
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Dictionary</span>"
-    ]
-  },
-  {
-    "objectID": "func.html",
-    "href": "func.html",
-    "title": "14  Useful functions",
-    "section": "",
-    "text": "14.1 approxfun()",
-    "crumbs": [
-      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Useful functions</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Risk assessment report</span>"
     ]
   },
   {
@@ -550,6 +532,72 @@
     "text": "Anderson, R., Donnelly, C., Hollingsworth, D., Keeling, M., Vegvari, C.,\nBaggaley, R., & Maddren, R. (2020). Reproduction number (R) and\ngrowth rate (r) of the COVID-19 epidemic in the UK. The Royal\nSociety.\n\n\nBecker, A. D., & Grenfell, B. T. (2017). tsiR: An R package for\ntime-series Susceptible-Infected-Recovered models of epidemics. PLOS\nONE, 12(9), e0185528. https://doi.org/10.1371/journal.pone.0185528\n\n\nBettencourt, L. M. A., & Ribeiro, R. M. (2008). Real Time Bayesian\nEstimation of the Epidemic Potential of Emerging Infectious Diseases.\nPLOS ONE, 3(5), e2185. https://doi.org/10.1371/journal.pone.0002185\n\n\nCauchemez, S., Bhattarai, A., Marchbanks, T. L., Fagan, R. P., Ostroff,\nS., Ferguson, N. M., Swerdlow, D., Pennsylvania H1N1 working group, the,\nSodha, S. V., Moll, M. E., Angulo, F. J., Palekar, R., Archer, W. R.,\n& Finelli, L. (2011). Role of social networks in shaping disease\ntransmission during a community outbreak of 2009 H1N1 pandemic\ninfluenza. Proceedings of the National Academy of Sciences,\n108(7), 2825–2830. https://doi.org/10.1073/pnas.1008895108\n\n\nChitnis, N. (2017). Introduction to SEIR Models.\n\n\nChristley, R. M., Mort, M., Wynne, B., Wastling, J. M., Heathwaite, A.\nL., Pickup, R., Austin, Z., & Latham, S. M. (2013).\n“Wrong, but Useful”: Negotiating Uncertainty\nin Infectious Disease Modelling. PLOS ONE, 8(10),\ne76277. https://doi.org/10.1371/journal.pone.0076277\n\n\nCori, A., Ferguson, N. M., Fraser, C., & Cauchemez, S. (2013). A new\nframework and software to estimate time-varying reproduction numbers\nduring epidemics. American Journal of Epidemiology,\n178(9), 1505–1512. https://doi.org/10.1093/aje/kwt133\n\n\nDriessche, P. van den. (2017). Reproduction numbers of infectious\ndisease models. Infectious Disease Modelling, 2(3),\n288–303. https://doi.org/10.1016/j.idm.2017.06.002\n\n\nDu, Z., Zhang, W., Zhang, D., Yu, S., & Hao, Y. (2017). Estimating\nthe basic reproduction rate of HFMD using the time series SIR model in\nGuangdong, China. PLOS ONE, 12(7), e0179623. https://doi.org/10.1371/journal.pone.0179623\n\n\nFinkenstädt, B. F., & Grenfell, B. T. (2000). Time series modelling\nof childhood diseases: A dynamical systems approach. Journal of the\nRoyal Statistical Society Series C: Applied Statistics,\n49(2), 187–205. https://doi.org/10.1111/1467-9876.00187\n\n\nGostic, K. M., McGough, L., Baskerville, E. B., Abbott, S., Joshi, K.,\nTedijanto, C., Kahn, R., Niehus, R., Hay, J. A., Salazar, P. M. D.,\nHellewell, J., Meakin, S., Munday, J. D., Bosse, N. I., Sherrat, K.,\nThompson, R. N., White, L. F., Huisman, J. S., Scire, J., … Cobey, S.\n(2020). Practical considerations for measuring the effective\nreproductive number, Rt. PLOS Computational Biology,\n16(12), e1008409. https://doi.org/10.1371/journal.pcbi.1008409\n\n\nGreen, W. D., Ferguson, N. M., & Cori, A. (2022). Inferring the\nreproduction number using the renewal equation in heterogeneous\nepidemics. Journal of The Royal Society Interface,\n19(188), 20210429. https://doi.org/10.1098/rsif.2021.0429\n\n\nHay, J., Routledge, I., & Takahashi, S. (n.d.). Serodynamics: a\nreview of methods for epidemiological inference using serological\ndata. https://doi.org/10.31219/osf.io/kqdsn\n\n\nJones, J. H. (2007). Notes on R0. California: Department of\nAnthropological Sciences, 323, 1–19.\n\n\nKeeling, M. J. (2006). State-of-science review: Predictive and\nreal-time epidemiological modelling. S9. DTI.\n\n\nKeeling, M. J., & Rohani, P. (2011). Modeling Infectious\nDiseases in Humans and Animals. Princeton University Press. https://doi.org/10.1515/9781400841035\n\n\nKenah, E., Lipsitch, M., & Robins, J. M. (2008). Generation interval\ncontraction and epidemic data analysis. Mathematical\nBiosciences, 213(1), 71–79. https://doi.org/10.1016/j.mbs.2008.02.007\n\n\nKnight, J., & Mishra, S. (2020). Estimating effective reproduction\nnumber using generation time versus serial interval, with application to\ncovid-19 in the greater toronto area, canada. Infectious Disease\nModelling, 5, 889–896. https://doi.org/10.1016/j.idm.2020.10.009\n\n\nRui, J., Li, K., Wei, H., Guo, X., Zhao, Z., Wang, Y., Song, W.,\nAbudunaibi, B., & Chen, T. (2024). MODELS: A six-step framework for\ndeveloping an infectious disease model. Infectious Diseases of\nPoverty, 13(1), 30. https://doi.org/10.1186/s40249-024-01195-3\n\n\nSender, R., Bar-On, Y., Park, S. W., Noor, E., Dushoff, J., & Milo,\nR. (2022). The unmitigated profile of COVID-19 infectiousness.\neLife, 11, e79134. https://doi.org/10.7554/eLife.79134\n\n\nVegvari, C., Abbott, S., Ball, F., Brooks-Pollock, E., Challen, R.,\nCollyer, B. S., Dangerfield, C., Gog, J. R., Gostic, K. M., Heffernan,\nJ. M., Hollingsworth, T. D., Isham, V., Kenah, E., Mollison, D.,\nPanovska-Griffiths, J., Pellis, L., Roberts, M. G., Scalia Tomba, G.,\nThompson, R. N., & Trapman, P. (2022). Commentary on the use of the\nreproduction number R during the COVID-19 pandemic. Statistical\nMethods in Medical Research, 31(9), 1675–1685. https://doi.org/10.1177/09622802211037079\n\n\nVynnycky, E., & White, R. (2010). An Introduction to Infectious\nDisease Modelling. OUP Oxford.\n\n\nWallinga, J., & Teunis, P. (2004). Different epidemic curves for\nsevere acute respiratory syndrome reveal similar impacts of control\nmeasures. American Journal of Epidemiology, 160(6),\n509–516. https://doi.org/10.1093/aje/kwh255",
     "crumbs": [
       "References"
+    ]
+  },
+  {
+    "objectID": "dict.html",
+    "href": "dict.html",
+    "title": "Appendix A — Dictionary",
+    "section": "",
+    "text": "infection fatality ratio (IFR) and case fatality ratio (CFR) and serology data.\n\nDefinition A.1 Residual: is the difference between the observed value and the estimated value.\n\n\nDefinition A.2 Error: is the deviation of the observed value from the true value.\n\nMatrix and linear transformation:\n\nLinear transformation is a function (transformation = function) that take in a vector and spit out a vector.\nLines remain lines, and origin remains fixed.\n\n\n\n\n\n\n\nVisualisation of linear transformation\n\n\n\n\n\n\n\n\n\nEigenvector (\\(\\vec{v}\\)):\nEigenvalue (\\(\\lambda\\)):\n\nDefinition A.3 Inverse matrix:\n\\[\\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix}^{-1} = \\frac{1}{ad - bc} \\begin{bmatrix} d & -b \\\\ -c & a \\end{bmatrix}\\]",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Dictionary</span>"
+    ]
+  },
+  {
+    "objectID": "func.html",
+    "href": "func.html",
+    "title": "Appendix B — Useful functions",
+    "section": "",
+    "text": "B.1 approxfun()",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Useful functions</span>"
+    ]
+  },
+  {
+    "objectID": "surv.html",
+    "href": "surv.html",
+    "title": "Appendix C — Survival analysis",
+    "section": "",
+    "text": "C.1 Definitions",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Survival analysis</span>"
+    ]
+  },
+  {
+    "objectID": "surv.html#definitions",
+    "href": "surv.html#definitions",
+    "title": "Appendix C — Survival analysis",
+    "section": "",
+    "text": "C.1.1 Hazard, rate, incidence\nThey are the same word, using in different fields, hazard = rate = incidence:\n\nRate: number of new events that occur during specified time period.\nIncidence: when the event is a disease, it is called incidence.\nHazard: in survival analysis, it is called hazard.\n\nLet consider a discrete\n\n\nC.1.2 Hazard function\nHazard function \\(h(t)\\) gives the probability that someone die at time \\(t\\), given that they have survived up to that time \\(t\\) (survived during the period \\([0;t]\\)).\n\\[h(t) = \\frac{f(t)}{\\mathbb{P}(T &gt; t)} = \\frac{f(t)}{S(t)}\\]\nWhere \\(f(t)\\) is the time to first\n\n\nC.1.3 Cumulative hazard function\nCumulative hazard function \\(F(t)\\) gives the probability that someone die by time \\(t\\) (die anytime during \\([0;t]\\)).\n\\[F(t) = \\mathbb{P}(T \\leq t) = \\sum_{t = 0}^t h(t)\\]\n\n\nC.1.4 Survival function\nThe survival function \\(S(t)\\) gives the probability that someone will survive beyond time \\(t\\) (they have survived \\([0;t]\\) and will continue to survive).\n\\[S(t) = \\mathbb{P}(T &gt; t) = 1 - \\mathbb{P}(T \\leq t) = 1 - F(t)\\]",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Survival analysis</span>"
+    ]
+  },
+  {
+    "objectID": "surv.html#idm-and-survival-analysis",
+    "href": "surv.html#idm-and-survival-analysis",
+    "title": "Appendix C — Survival analysis",
+    "section": "C.2 IDM and survival analysis",
+    "text": "C.2 IDM and survival analysis\nMuch of infectious disease modeling is derived from, or at least shares, key concepts with survival analysis (Hay et al., n.d.).\n\nLinking survival analysis to infectious disease modelling\n\n\nSurvival analysis\nInfectious disease modelling\n\n\n\n\nHazard function\nInfection rate, force of infection\n\n\nSurvival function\nProbability of not infected\n\n\n\n\n\n\n\nHay, J., Routledge, I., & Takahashi, S. (n.d.). Serodynamics: a review of methods for epidemiological inference using serological data. https://doi.org/10.31219/osf.io/kqdsn",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Survival analysis</span>"
+    ]
+  },
+  {
+    "objectID": "r0.html#next-generation-matrix",
+    "href": "r0.html#next-generation-matrix",
+    "title": "8  Estimating \\(R_0\\)",
+    "section": "",
+    "text": "8.1.1 Step 1. Identify the infected compartments\nFor our SEIR model, the infected compartments are \\(E\\) and \\(I\\).\n\n\n8.1.2 Step 2. Write the NGM functions\n\n\\(\\mathcal{F}_i(x)\\): is the rate of appearance of new infections in compartment \\(i\\) (Driessche, 2017) (caused by contact).\n\\(\\mathcal{V}_i(x)\\): is the rate of other transitions between compartment \\(i\\) and other infected compartments (Driessche, 2017) (caused by transition between compartments).\n\nFor our SEIR model, we would write \\(\\mathcal{F}\\) and \\(\\mathcal{V}\\) as follows:\n\n\n\\[\\mathcal{F} = \\begin{bmatrix} \\beta SI \\\\ 0 \\end{bmatrix}\\]\nIn which \\(\\mathcal{F}\\) is a vector contains of \\(\\begin{bmatrix} \\mathcal{F}_1 \\\\ \\mathcal{F}_2 \\end{bmatrix}\\):\n\n\\(\\mathcal{F}_1 = \\beta SI\\): the rate of new infections (caused by contact) in compartment \\(E\\).\n\\(\\mathcal{F}_2 = 0\\): as there is no new infections (caused by contact) in compartment \\(I\\).\n\n\n\\[\\mathcal{V} = \\begin{bmatrix} \\sigma E + \\mu E \\\\ - \\sigma E + \\gamma I + \\mu I \\end{bmatrix}\\]\nIn which \\(\\mathcal{V}\\) is a vector contains of \\(\\begin{bmatrix} \\mathcal{V}_1 \\\\ \\mathcal{V}_2 \\end{bmatrix}\\):\n\n\\(\\mathcal{V}_1 = \\sigma E + \\mu E\\): is the rate of other transitions to and from compartment \\(E\\).\n\\(\\mathcal{V}_2 = - \\sigma E + \\gamma I + \\mu I\\): is the rate of other transitions to and from compartment \\(I\\).\n\n\n\n\\(\\mathcal{F}\\) and \\(\\mathcal{V}\\) are written such that:\n\\[\\frac{dx}{dt} = \\mathcal{F} - \\mathcal{V}\\]\nHere we have:\n\\[\\frac{dE}{dt} = \\mathcal{F}_1 - \\mathcal{V}_1 = \\beta SI - (\\sigma E + \\mu E)\\]\n\\[\\frac{dI}{dt} = \\mathcal{F}_2 - \\mathcal{V}_2 = 0 - (- \\sigma E + \\gamma I + \\mu I)\\]\n\n\n8.1.3 Step 3. Find the Jacobian matrix\nJacobian matrix \\(F\\) for \\(\\mathcal{F}\\), and \\(V\\) for \\(\\mathcal{V}\\). Jacobian matrix is a matrix contain all partial derivatives of a vector function.\n\\[F = \\begin{bmatrix} \\frac{\\partial \\mathcal{F}_1}{\\partial E} & \\frac{\\partial \\mathcal{F}_1}{\\partial I} \\\\ \\frac{\\partial \\mathcal{F}_2}{\\partial E} & \\frac{\\partial \\mathcal{F}_2}{\\partial I} \\end{bmatrix} \\\\ = \\begin{bmatrix} \\frac{\\partial [\\beta SI]}{\\partial E} & \\frac{\\partial [\\beta SI]}{\\partial I} \\\\ \\frac{\\partial [0]}{\\partial E} & \\frac{\\partial [0]}{\\partial I} \\end{bmatrix} \\\\ = \\begin{bmatrix} 0 & \\beta S \\\\ 0 & 0 \\end{bmatrix}\\]\nIn which:\n\n\\(\\frac{\\partial [\\beta SI]}{\\partial E} = 0\\): because there is no \\(E\\) in \\(\\beta SI\\).\n\\(\\frac{\\partial [\\beta SI]}{\\partial I} = \\beta S\\).\n\n\\[V = \\begin{bmatrix} \\frac{\\partial \\mathcal{V}_1}{\\partial E} & \\frac{\\partial \\mathcal{V}_1}{\\partial I} \\\\ \\frac{\\partial \\mathcal{V}_2}{\\partial E} & \\frac{\\partial \\mathcal{V}_2}{\\partial I} \\end{bmatrix} \\\\ = \\begin{bmatrix} \\frac{\\partial [\\sigma E + \\mu E]}{\\partial E} & \\frac{\\partial [\\sigma E + \\mu E]}{\\partial I} \\\\ \\frac{\\partial [- \\sigma E + \\gamma I + \\mu I]}{\\partial E} & \\frac{\\partial [- \\sigma E + \\gamma I + \\mu I]}{\\partial I} \\end{bmatrix} \\\\ = \\begin{bmatrix} \\sigma + \\mu & 0 \\\\ - \\sigma & \\gamma + \\mu \\end{bmatrix}\\]\n\n\n8.1.4 Step 4. Compute the NGM\nUse Definition A.3 to compute inverse matrix \\(V^{-1}\\):\n\\[V^{-1} = \\frac{1}{(\\sigma + \\mu)(\\gamma + \\mu)} \\begin{bmatrix} \\gamma + \\mu & - 0 \\\\ - \\sigma & \\sigma + \\mu \\end{bmatrix} \\\\ = \\begin{bmatrix} \\frac{1}{\\sigma + \\mu} & 0 \\\\ \\frac{\\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)} & \\frac{1}{\\gamma + \\mu} \\end{bmatrix}\\]\n\\[K = FV^{-1} \\\\ = \\begin{bmatrix} 0 & \\beta S \\\\ 0 & 0 \\end{bmatrix} \\begin{bmatrix} \\frac{1}{\\sigma + \\mu} & 0 \\\\ \\frac{\\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)} & \\frac{1}{\\gamma + \\mu} \\end{bmatrix} \\\\ = \\begin{bmatrix} \\frac{\\beta S \\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)} & \\frac{\\beta S}{\\gamma + \\mu} \\\\ 0 & 0 \\end{bmatrix}\\]\n\n\n8.1.5 Step 5. Compute \\(R_0\\)\n\\(R_0\\) is the eigenvalues of the NGM.\n\\[det(K - \\lambda) = \\begin{bmatrix} \\frac{\\beta S \\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)} - \\lambda & \\frac{\\beta S}{\\gamma + \\mu} \\\\ 0 & 0 - \\lambda \\end{bmatrix} \\\\ = [\\frac{\\beta S \\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)} - \\lambda][0 - \\lambda]\\]\n\\[R_0 = \\frac{\\beta S \\sigma}{(\\sigma + \\mu)(\\gamma + \\mu)}\\]\n\n\n\n\n\n\nA simple example\n\n\n\n\n\nSource: quantpie’s video.\nA population consists of two groups: young and old.\n\nA young person on average infects 3 young and 2 old: \\(\\begin{bmatrix} 3 \\\\ 2 \\end{bmatrix}\\).\nAn old person on average infects 1 young and 2 old: \\(\\begin{bmatrix} 1 \\\\ 2 \\end{bmatrix}\\).\n\nEach group becomes a column in the next generation matrix (NGM):\n\\[\\text{NGM} = \\begin{bmatrix} 3 & 1 \\\\ 2 & 2 \\end{bmatrix}\\]\n\\(R_0\\) is the root of equation:\n\\[\\begin{bmatrix} 3 - \\lambda & 1 \\\\ 2 & 2 - \\lambda \\end{bmatrix} = 0\\]\n\\[\\Leftrightarrow (3 - \\lambda) \\times (2 - \\lambda) - 2 \\times 1 = 0\\]\n\\[\\Leftrightarrow \\lambda^2 - 5 \\lambda + 6 - 2 = 0\\]\n\\[\\Leftrightarrow \\lambda^2 - 5 \\lambda + 4 = 0\\]\nThere are two root \\(\\lambda = 4\\) and \\(\\lambda = 1\\), for an outbreak to occur \\(R_0 &gt; 1\\), so here \\(R_0 = 4\\).\n\n\n\nFor more complex compartmental models, especially those with more infected compartments (Driessche, 2017)\n\n\n\n\nChitnis, N. (2017). Introduction to SEIR Models.\n\n\nDriessche, P. van den. (2017). Reproduction numbers of infectious disease models. Infectious Disease Modelling, 2(3), 288–303. https://doi.org/10.1016/j.idm.2017.06.002\n\n\nJones, J. H. (2007). Notes on R0. California: Department of Anthropological Sciences, 323, 1–19.",
+    "crumbs": [
+      "Reproduction number",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Estimating $R_0$</span>"
     ]
   }
 ]

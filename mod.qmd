@@ -1,4 +1,4 @@
-# Infectious disease modelling
+# Infectious disease modelling {.unnumbered}
 
 ## Modelling
 

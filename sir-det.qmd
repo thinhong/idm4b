@@ -1,14 +1,5 @@
 # SIR
 
-## Assumptions
-
--   Each member of a population is either susceptible, infectious, or recovered [@vandendriessche2017].
--   The disease spreads through direct contact between susceptible and infected individuals.
--   Well-mixed population, or homogeneous mixing (represented by a single contact rate $\beta$) [@becker2017].
--   In the most basic form it considers a "closed population" without demographics (no births, deaths, or migration) [@keeling2011], make sense when the disease is short lived compared with the population lifetime [@vandendriessche2017].
--   Infectious disease properties are for a single pathogen [@becker2017].
--   Recovered individuals gain lifelong immunity.
-
 ## Model
 
 $$\frac{dS}{dt} = -\beta SI = -\lambda S$$ {#eq-sir-ds}
@@ -21,7 +12,20 @@ $$\frac{dR}{dt} = \gamma I$$ {#eq-sir-dr}
 -   $\gamma$: removal rate.
 -   $\beta I = \lambda$: the rate from S to I is called **force of infection**.
 
+## Assumptions
+
+-   Each member of a population is either susceptible, infectious, or recovered [@vandendriessche2017].
+-   The disease spreads through direct contact between susceptible and infected individuals.
+-   Well-mixed population, or homogeneous mixing (represented by a single contact rate $\beta$) [@becker2017].
+-   In the most basic form it considers a "closed population" without demographics (no births, deaths, or migration) [@keeling2011], make sense when the disease is short lived compared with the population lifetime [@vandendriessche2017].
+-   There is no latent period, individuals become infectious immediately upon contracting the disease.
+-   The contact rate and recovery rate are constant over time.
+-   Infectious disease properties are for a single pathogen [@becker2017].
+-   Recovered individuals gain lifelong immunity.
+
 ## Density or frequency-dependent
+
+![](img/mod/density-frequency.webp)
 
 :::: {.columns}
 
@@ -31,8 +35,9 @@ $$\frac{dR}{dt} = \gamma I$$ {#eq-sir-dr}
 
 $$\frac{dS}{dt} = -\beta SI$$
 
-- Transmission increases as density increases
-- For aerosol contacts: COVID-19
+- The unit of contact rate $\beta$ is $\frac{1}{\text{time} \times \text{people}}$.
+- Transmission increases as density increases.
+- For aerosol contacts: COVID-19.
 
 :::
 
@@ -42,50 +47,57 @@ $$\frac{dS}{dt} = -\beta SI$$
 
 $$\frac{dS}{dt} = -\beta S \frac{I}{N}$$
 
-Transmission does not increase as density increases
-Direct contacts
-Sexually-transmitted diseases
-
+- The unit of contact rate $\beta$ is $\frac{1}{\text{time}}$.
+- Transmission does not increase as density increases.
+- Sexually-transmitted diseases.
 
 :::
 
-
 ::::
-
-$$$$
 
 ## Code
 
 ```{r, message=FALSE, warning=FALSE}
-library(deSolve)
+library(odin)
 library(tidyr)
 library(ggplot2)
 library(RColorBrewer)
 library(patchwork)
 ```
 
-Below is how we solve the differential equations @eq-sir-ds, @eq-sir-di and @eq-sir-dr in R with the `deSolve` package.
+Below is how we numerically solve the differential equations @eq-sir-ds, @eq-sir-di and @eq-sir-dr in R with the `odin` package.
 
 ::: {#lst-sir-det}
-```{r}
-sir_mod <- function(beta, gamma, S0, I0, R0, times) {
+```{r, results=FALSE, message=FALSE}
+odin_mod <- odin::odin({
+  # Derivatives
+  deriv(S) <- -beta * I * S
+  deriv(I) <- beta * S * I - gamma * I
+  deriv(R) <- gamma * I
+  deriv(CInc) <- beta * S * I
   
-  equations <- function(time, variables, parameters) {
-    with(as.list(c(variables, parameters)), {
-      dS <-   -beta * S * I
-      dI <-    beta * S * I - gamma * I
-      dR <-    gamma * I
-      dCInc <- beta * S * I
-      return(list(c(dS, dI, dR, dCInc)))
-    })
-  }
+  # Initial conditions
+  initial(S) <- S_init
+  initial(I) <- I_init
+  initial(R) <- R_init
+  initial(CInc) <- CInc_init
   
-  parameters_values <- c(beta = beta, gamma = gamma)
-  initial_values <- c(S = S0, I = I0, R = R0, CInc = 0)
-  
-  out <- ode(y = initial_values, times = times, func = equations, parms = parameters_values)
+  # Parameters and initial values
+  beta <- user(0.004)
+  gamma <- user(0.5)
+  S_init <- user(999)
+  I_init <- user(1)
+  R_init <- user(0)
+  CInc_init <- user(0)
+})
 
-  out <- as.data.frame(out)
+sir_mod <- function(beta, gamma, S0, I0, R0, times) {
+  # Set values for new parameters
+  odin_run <- odin_mod$new(beta = beta, gamma = gamma, S_init = S0, I_init = I0, R_init = R0)
+  
+  # Run the model
+  out <- data.frame(odin_run$run(times))
+
   # Compute incidence from cumulative incidence
   out$Inc <- c(I0, diff(out$CInc))
   out$CInc <- NULL
@@ -95,6 +107,8 @@ sir_mod <- function(beta, gamma, S0, I0, R0, times) {
 
 Deterministic SIR model
 :::
+
+## Incidence or prevalence
 
 ::: callout-important
 Be careful of what kind of data we are using to fit the model:
@@ -143,7 +157,7 @@ head(pred)
 #| out-width: "100%"
 df_plot <- pivot_longer(pred, cols = S:Inc, names_to = "comp", values_to = "n")
 
-ggplot(df_plot, aes(x = time, y = n, color = comp)) +
+ggplot(df_plot, aes(x = t, y = n, color = comp)) +
   geom_point() + geom_line() +
   scale_color_brewer(palette = "PuOr", breaks = c("S", "Inc", "I", "R")) +
   labs(color = NULL, y = NULL, x = "Time") +
@@ -155,6 +169,12 @@ The time to peak of incidence is earlier than prevalence:
 
 -   Incidence reflects the immediate rate of new infections, the peak of incidence is reached when the transmission rate begins to decline.
 -   Prevalence accumulates both new and existing cases. Even after the incidence starts to decline, the active cases who were infected before the incidence peak are still there waiting for recovering. Prevalence only starts to decline when the recovery rate surpasses the rate of new infections significantly.
+
+::: callout-important
+
+Normally, public health officials are interested in the **incidence** in the general population (to track disease spread) and the **prevalence** in intensive care units (to ensure it does not exceed ICU bed capacity).
+
+:::
 
 ## Sensitivity analysis
 
@@ -171,12 +191,12 @@ sir_sa <- function(vals, parm, outcome, times, init_beta = 0.004, init_gamma = 0
   l <- list()
   for(i in 1:length(vals)) {
     if (parm == "beta") {
-      pred <- sir_mod(beta = vals[i], gamma = init_gamma, S0 = 999, I0 = 1, R0 = 0, times = times)[, c("time", pick_comp)]
+      pred <- sir_mod(beta = vals[i], gamma = init_gamma, S0 = 999, I0 = 1, R0 = 0, times = times)[, c("t", pick_comp)]
     } else {
-      pred <- sir_mod(beta = init_beta, gamma = vals[i], S0 = 999, I0 = 1, R0 = 0, times = times)[, c("time", pick_comp)]
+      pred <- sir_mod(beta = init_beta, gamma = vals[i], S0 = 999, I0 = 1, R0 = 0, times = times)[, c("t", pick_comp)]
     }
     pred$comp <- paste0(pick_comp, i)
-    colnames(pred) <- c("time", "n", "comp")
+    colnames(pred) <- c("t", "n", "comp")
     l[[i]] <- pred
   }
   # Bind this list into a data frame
@@ -187,7 +207,7 @@ sir_sa <- function(vals, parm, outcome, times, init_beta = 0.004, init_gamma = 0
   # Plot results
   my_palette <- brewer.pal(9, "Blues")[(9-length(vals)+1):9]
   
-  ggplot(df_plot, aes(x = time, y = n, color = comp)) + 
+  ggplot(df_plot, aes(x = t, y = n, color = comp)) + 
     geom_point() + geom_line() +
     scale_color_manual(values = my_palette, labels = c(paste0(symb, " = ", vals))) +
     labs(color = NULL, y = plot_lab, x = "Time") +

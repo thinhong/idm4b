@@ -1,14 +1,5 @@
 # Survival analysis
 
-Much of infectious disease modeling is derived from, or at least shares, key concepts with survival analysis [@hay].
-
-| Survival analysis | Infectious disease modelling       |
-|-------------------|------------------------------------|
-| Hazard function   | Infection rate, force of infection |
-| Survival function | Probability of not infected        |
-
-: Linking survival analysis to infectious disease modelling
-
 ## Definitions
 
 ### Hazard, rate, incidence
@@ -41,4 +32,13 @@ The survival function $S(t)$ gives the probability that someone will survive bey
 
 $$S(t) = \mathbb{P}(T > t) = 1 - \mathbb{P}(T \leq t) = 1 - F(t)$$
 
+## IDM and survival analysis
 
+Much of infectious disease modeling is derived from, or at least shares, key concepts with survival analysis [@hay].
+
+| Survival analysis | Infectious disease modelling       |
+|-------------------|------------------------------------|
+| Hazard function   | Infection rate, force of infection |
+| Survival function | Probability of not infected        |
+
+: Linking survival analysis to infectious disease modelling

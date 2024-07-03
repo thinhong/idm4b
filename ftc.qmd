@@ -1,0 +1,5 @@
+# Flattening the curve
+
+## Shock-intervention
+
+Assuming your intervention will **effective immediately** reduce the contacts by a constant factor.

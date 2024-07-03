@@ -4,21 +4,9 @@
 
 $$R_0 = \begin{pmatrix} \text{Number of} \\ \text{contacts} \\ \text{per unit time} \end{pmatrix} \times \begin{pmatrix} \text{Probability of} \\ \text{transmission} \\ \text{per contact} \end{pmatrix} \times \begin{pmatrix} \text{Duration} \\ \text{of} \\ \text{infection} \end{pmatrix}$$
 
-## Compartmental models
+## Next generation matrix
 
-### SIR model
-
-Ordinary differential equations (ODEs) for SIR model are given by @eq-sir-ds, @eq-sir-di, @eq-sir-dr.
-
-Consider the $I$ equation:
-
-$$\frac{dI}{dt} = \beta SI - \gamma I = I(\beta S - \gamma)$$
-
-### SEIR model
-
-## Next generation matrix (NGM)
-
-$R_0$ is the maximum absolute eigenvalue (also called the spectral radius) of the next generation matrix [@vandendriessche2017].
+$R_0$ is the maximum absolute eigenvalue (also called the spectral radius) of the next generation matrix (NGM) [@vandendriessche2017].
 
 Let consider a SEIR model with equal birth and death rate $\mu$
 
@@ -81,22 +69,22 @@ $$\frac{dI}{dt} = \mathcal{F}_2 - \mathcal{V}_2 = 0 - (- \sigma E + \gamma I + \
 
 Jacobian matrix $F$ for $\mathcal{F}$, and $V$ for $\mathcal{V}$. Jacobian matrix is a matrix contain all partial derivatives of a vector function.
 
-$$F = \begin{bmatrix} \frac{\partial \mathcal{F}_1}{\partial E} & \frac{\partial \mathcal{F}_1}{\partial I} \\ \frac{\partial \mathcal{F}_2}{\partial E} & \frac{\partial \mathcal{F}_2}{\partial I} \end{bmatrix} = \begin{bmatrix} \frac{\partial [\beta SI]}{\partial E} & \frac{\partial [\beta SI]}{\partial I} \\ \frac{\partial [0]}{\partial E} & \frac{\partial [0]}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} 0 & \beta S \\ 0 & 0 \end{bmatrix}$$
+$$F = \begin{bmatrix} \frac{\partial \mathcal{F}_1}{\partial E} & \frac{\partial \mathcal{F}_1}{\partial I} \\ \frac{\partial \mathcal{F}_2}{\partial E} & \frac{\partial \mathcal{F}_2}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} \frac{\partial [\beta SI]}{\partial E} & \frac{\partial [\beta SI]}{\partial I} \\ \frac{\partial [0]}{\partial E} & \frac{\partial [0]}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} 0 & \beta S \\ 0 & 0 \end{bmatrix}$$
 
 In which:
 
 - $\frac{\partial [\beta SI]}{\partial E} = 0$: because there is no $E$ in $\beta SI$.
 - $\frac{\partial [\beta SI]}{\partial I} = \beta S$.
 
-$$V = \begin{bmatrix} \frac{\partial \mathcal{V}_1}{\partial E} & \frac{\partial \mathcal{V}_1}{\partial I} \\ \frac{\partial \mathcal{V}_2}{\partial E} & \frac{\partial \mathcal{V}_2}{\partial I} \end{bmatrix} = \begin{bmatrix} \frac{\partial [\sigma E + \mu E]}{\partial E} & \frac{\partial [\sigma E + \mu E]}{\partial I} \\ \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial E} & \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} \sigma + \mu & 0 \\ - \sigma & \gamma + \mu \end{bmatrix}$$
+$$V = \begin{bmatrix} \frac{\partial \mathcal{V}_1}{\partial E} & \frac{\partial \mathcal{V}_1}{\partial I} \\ \frac{\partial \mathcal{V}_2}{\partial E} & \frac{\partial \mathcal{V}_2}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} \frac{\partial [\sigma E + \mu E]}{\partial E} & \frac{\partial [\sigma E + \mu E]}{\partial I} \\ \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial E} & \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} \sigma + \mu & 0 \\ - \sigma & \gamma + \mu \end{bmatrix}$$
 
 ### Step 4. Compute the NGM
 
 Use @def-inv-matrix to compute inverse matrix $V^{-1}$:
 
-$$V^{-1} = \frac{1}{(\sigma + \mu)(\gamma + \mu)} \begin{bmatrix} \gamma + \mu & - 0 \\ - \sigma & \sigma + \mu \end{bmatrix} = \begin{bmatrix} \frac{1}{\sigma + \mu} & 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} & \frac{1}{\gamma + \mu} \end{bmatrix}$$
+$$V^{-1} = \frac{1}{(\sigma + \mu)(\gamma + \mu)} \begin{bmatrix} \gamma + \mu & - 0 \\ - \sigma & \sigma + \mu \end{bmatrix} \\ = \begin{bmatrix} \frac{1}{\sigma + \mu} & 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} & \frac{1}{\gamma + \mu} \end{bmatrix}$$
 
-$$K = FV^{-1} = \begin{bmatrix} 0 & \beta S \\ 0 & 0 \end{bmatrix} \begin{bmatrix} \frac{1}{\sigma + \mu} & 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} & \frac{1}{\gamma + \mu} \end{bmatrix} \\ = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} & \frac{\beta S}{\gamma + \mu} \\ 0 & 0 \end{bmatrix}$$
+$$K = FV^{-1} \\ = \begin{bmatrix} 0 & \beta S \\ 0 & 0 \end{bmatrix} \begin{bmatrix} \frac{1}{\sigma + \mu} & 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} & \frac{1}{\gamma + \mu} \end{bmatrix} \\ = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} & \frac{\beta S}{\gamma + \mu} \\ 0 & 0 \end{bmatrix}$$
 
 ### Step 5. Compute $R_0$
 

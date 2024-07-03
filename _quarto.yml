@@ -13,13 +13,11 @@ book:
       url: https://drthinhong.com/
       orcid: 0000-0001-6772-9291
   date: "05/22/2024"
+  sidebar:
+    collapse-level: 1
   chapters:
     - index.qmd
     - mod.qmd
-    - part: rnum.qmd
-      chapters:
-        - r0.qmd
-        - rt.qmd
     - part: det.qmd
       chapters: 
         - sir-det.qmd
@@ -33,13 +31,21 @@ book:
         - lse.qmd
         - mle.qmd
         - pomp.qmd
-    - surv.qmd
+    - part: rnum.qmd
+      chapters:
+        - r0.qmd
+        - rt.qmd
+    - part: intv.qmd
+      chapters: 
+        - ftc.qmd
     - part: rp.qmd
       chapters: 
         - rp-risk.qmd
+    - references.qmd
+  appendices:
     - dict.qmd
     - func.qmd
-    - references.qmd
+    - surv.qmd
 
 bibliography: references.bib
 csl: apa.csl

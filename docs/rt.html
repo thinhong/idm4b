@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Infectious disease modelling for babies - 3&nbsp; Estimating \(R_t\)</title>
+<title>Infectious disease modelling for babies - 9&nbsp; Estimating \(R_t\)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -84,7 +84,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./det.html" rel="next">
+<link href="./intv.html" rel="next">
 <link href="./r0.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -177,7 +177,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./rnum.html">Reproduction number</a></li><li class="breadcrumb-item"><a href="./rt.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./rnum.html">Reproduction number</a></li><li class="breadcrumb-item"><a href="./rt.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -211,57 +211,34 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./mod.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Infectious disease modelling</span></span></a>
+ <span class="menu-text">Infectious disease modelling</span></a>
   </div>
 </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="./rnum.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Reproduction number</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./r0.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./rt.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./det.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Deterministic models</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./sir-det.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SIR</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">SIR</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./seir-det.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">SEIR</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">SEIR</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tsir.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">tsiR</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">tsiR</span></span></a>
   </div>
 </li>
       </ul>
@@ -270,15 +247,15 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="./sto.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Stochastic models</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./sir-sto.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SIR</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SIR</span></span></a>
   </div>
 </li>
       </ul>
@@ -287,6 +264,35 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="./calib.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Calibration</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Least squares estimation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mle.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Maximum likelihood estimation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pomp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Particle filter</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./rnum.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Reproduction number</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -294,65 +300,87 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./lse.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Least squares estimation</span></span></a>
+  <a href="./r0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./mle.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Maximum likelihood estimation</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pomp.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Particle filter</span></span></a>
+  <a href="./rt.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></span></a>
   </div>
 </li>
       </ul>
   </li>
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./intv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Interventions</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./surv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Survival analysis</span></span></a>
+  <a href="./ftc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Flattening the curve</span></span></a>
   </div>
 </li>
+      </ul>
+  </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./rp.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Reports</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
       </ul>
   </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./dict.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Dictionary</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./func.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Useful functions</span></span></a>
-  </div>
-</li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dict.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Dictionary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./func.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Useful functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./surv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Survival analysis</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -363,33 +391,33 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#instantaneous-reproduction-number-r_ti" id="toc-instantaneous-reproduction-number-r_ti" class="nav-link active" data-scroll-target="#instantaneous-reproduction-number-r_ti"><span class="header-section-number">3.1</span> Instantaneous reproduction number <span class="math inline">\(R_t^i\)</span></a>
+  <li><a href="#instantaneous-reproduction-number-r_ti" id="toc-instantaneous-reproduction-number-r_ti" class="nav-link active" data-scroll-target="#instantaneous-reproduction-number-r_ti"><span class="header-section-number">9.1</span> Instantaneous reproduction number <span class="math inline">\(R_t^i\)</span></a>
   <ul>
-  <li><a href="#exact-calculation" id="toc-exact-calculation" class="nav-link" data-scroll-target="#exact-calculation"><span class="header-section-number">3.1.1</span> Exact calculation</a></li>
-  <li><a href="#sec-cori" id="toc-sec-cori" class="nav-link" data-scroll-target="#sec-cori"><span class="header-section-number">3.1.2</span> Cori method</a></li>
-  <li><a href="#when-can-we-start-estimating-r_ti" id="toc-when-can-we-start-estimating-r_ti" class="nav-link" data-scroll-target="#when-can-we-start-estimating-r_ti"><span class="header-section-number">3.1.3</span> When can we start estimating <span class="math inline">\(R_t^i\)</span>?</a></li>
-  <li><a href="#key-considerations" id="toc-key-considerations" class="nav-link" data-scroll-target="#key-considerations"><span class="header-section-number">3.1.4</span> Key considerations</a></li>
+  <li><a href="#exact-calculation" id="toc-exact-calculation" class="nav-link" data-scroll-target="#exact-calculation"><span class="header-section-number">9.1.1</span> Exact calculation</a></li>
+  <li><a href="#sec-cori" id="toc-sec-cori" class="nav-link" data-scroll-target="#sec-cori"><span class="header-section-number">9.1.2</span> Cori method</a></li>
+  <li><a href="#when-can-we-start-estimating-r_ti" id="toc-when-can-we-start-estimating-r_ti" class="nav-link" data-scroll-target="#when-can-we-start-estimating-r_ti"><span class="header-section-number">9.1.3</span> When can we start estimating <span class="math inline">\(R_t^i\)</span>?</a></li>
+  <li><a href="#key-considerations" id="toc-key-considerations" class="nav-link" data-scroll-target="#key-considerations"><span class="header-section-number">9.1.4</span> Key considerations</a></li>
   </ul></li>
-  <li><a href="#case-reproduction-number-r_tc" id="toc-case-reproduction-number-r_tc" class="nav-link" data-scroll-target="#case-reproduction-number-r_tc"><span class="header-section-number">3.2</span> Case reproduction number <span class="math inline">\(R_t^c\)</span></a>
+  <li><a href="#case-reproduction-number-r_tc" id="toc-case-reproduction-number-r_tc" class="nav-link" data-scroll-target="#case-reproduction-number-r_tc"><span class="header-section-number">9.2</span> Case reproduction number <span class="math inline">\(R_t^c\)</span></a>
   <ul>
-  <li><a href="#sec-rt-case-exact" id="toc-sec-rt-case-exact" class="nav-link" data-scroll-target="#sec-rt-case-exact"><span class="header-section-number">3.2.1</span> Exact calculation</a></li>
-  <li><a href="#wallinga-and-teunis-method" id="toc-wallinga-and-teunis-method" class="nav-link" data-scroll-target="#wallinga-and-teunis-method"><span class="header-section-number">3.2.2</span> Wallinga and Teunis method</a></li>
+  <li><a href="#sec-rt-case-exact" id="toc-sec-rt-case-exact" class="nav-link" data-scroll-target="#sec-rt-case-exact"><span class="header-section-number">9.2.1</span> Exact calculation</a></li>
+  <li><a href="#wallinga-and-teunis-method" id="toc-wallinga-and-teunis-method" class="nav-link" data-scroll-target="#wallinga-and-teunis-method"><span class="header-section-number">9.2.2</span> Wallinga and Teunis method</a></li>
   </ul></li>
-  <li><a href="#proofs" id="toc-proofs" class="nav-link" data-scroll-target="#proofs"><span class="header-section-number">3.3</span> Proofs</a></li>
-  <li><a href="#compare-r_ti-and-r_tc" id="toc-compare-r_ti-and-r_tc" class="nav-link" data-scroll-target="#compare-r_ti-and-r_tc"><span class="header-section-number">3.4</span> Compare <span class="math inline">\(R_t^i\)</span> and <span class="math inline">\(R_t^c\)</span></a></li>
-  <li><a href="#potential-biases" id="toc-potential-biases" class="nav-link" data-scroll-target="#potential-biases"><span class="header-section-number">3.5</span> Potential biases</a>
+  <li><a href="#proofs" id="toc-proofs" class="nav-link" data-scroll-target="#proofs"><span class="header-section-number">9.3</span> Proofs</a></li>
+  <li><a href="#compare-r_ti-and-r_tc" id="toc-compare-r_ti-and-r_tc" class="nav-link" data-scroll-target="#compare-r_ti-and-r_tc"><span class="header-section-number">9.4</span> Compare <span class="math inline">\(R_t^i\)</span> and <span class="math inline">\(R_t^c\)</span></a></li>
+  <li><a href="#potential-biases" id="toc-potential-biases" class="nav-link" data-scroll-target="#potential-biases"><span class="header-section-number">9.5</span> Potential biases</a>
   <ul>
-  <li><a href="#generation-interval" id="toc-generation-interval" class="nav-link" data-scroll-target="#generation-interval"><span class="header-section-number">3.5.1</span> Generation interval</a></li>
-  <li><a href="#serial-interval" id="toc-serial-interval" class="nav-link" data-scroll-target="#serial-interval"><span class="header-section-number">3.5.2</span> Serial interval</a></li>
-  <li><a href="#delays" id="toc-delays" class="nav-link" data-scroll-target="#delays"><span class="header-section-number">3.5.3</span> Delays</a></li>
+  <li><a href="#generation-interval" id="toc-generation-interval" class="nav-link" data-scroll-target="#generation-interval"><span class="header-section-number">9.5.1</span> Generation interval</a></li>
+  <li><a href="#serial-interval" id="toc-serial-interval" class="nav-link" data-scroll-target="#serial-interval"><span class="header-section-number">9.5.2</span> Serial interval</a></li>
+  <li><a href="#delays" id="toc-delays" class="nav-link" data-scroll-target="#delays"><span class="header-section-number">9.5.3</span> Delays</a></li>
   </ul></li>
-  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">3.6</span> Code</a>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">9.6</span> Code</a>
   <ul>
-  <li><a href="#epiestim" id="toc-epiestim" class="nav-link" data-scroll-target="#epiestim"><span class="header-section-number">3.6.1</span> EpiEstim</a>
+  <li><a href="#epiestim" id="toc-epiestim" class="nav-link" data-scroll-target="#epiestim"><span class="header-section-number">9.6.1</span> EpiEstim</a>
   <ul>
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"><span class="header-section-number">3.6.1.1</span> </a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"><span class="header-section-number">9.6.1.1</span> </a></li>
   </ul></li>
-  <li><a href="#epinow2" id="toc-epinow2" class="nav-link" data-scroll-target="#epinow2"><span class="header-section-number">3.6.2</span> EpiNow2</a></li>
+  <li><a href="#epinow2" id="toc-epinow2" class="nav-link" data-scroll-target="#epinow2"><span class="header-section-number">9.6.2</span> EpiNow2</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -397,9 +425,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./rnum.html">Reproduction number</a></li><li class="breadcrumb-item"><a href="./rt.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./rnum.html">Reproduction number</a></li><li class="breadcrumb-item"><a href="./rt.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></h1>
+<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></h1>
 </div>
 
 
@@ -417,13 +445,13 @@ window.Quarto = {
 
 
 <p><span class="math inline">\(R_t\)</span> can be defined in 2 ways: as the <strong>instantaneous reproduction number</strong> (see <a href="rnum.html#sec-rt-inst" class="quarto-xref"><span>Section 3.1</span></a>) or as the <strong>case reproduction number</strong> (see <a href="rnum.html#sec-rt-case" class="quarto-xref"><span>Section 3.2</span></a>).</p>
-<section id="instantaneous-reproduction-number-r_ti" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="instantaneous-reproduction-number-r_ti"><span class="header-section-number">3.1</span> Instantaneous reproduction number <span class="math inline">\(R_t^i\)</span></h2>
+<section id="instantaneous-reproduction-number-r_ti" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="instantaneous-reproduction-number-r_ti"><span class="header-section-number">9.1</span> Instantaneous reproduction number <span class="math inline">\(R_t^i\)</span></h2>
 <div id="def-rt-inst" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 3.1</strong></span> The instantaneous reproduction number is the expected number of secondary infections occurring at time <span class="math inline">\(t\)</span>, divided by the number of infected individuals, each scaled by their relative infectiousness at time <span class="math inline">\(t\)</span> (an individual’s relative infectiousness is based on the generation interval and time since infection) <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
+<p><span class="theorem-title"><strong>Definition 9.1</strong></span> The instantaneous reproduction number is the expected number of secondary infections occurring at time <span class="math inline">\(t\)</span>, divided by the number of infected individuals, each scaled by their relative infectiousness at time <span class="math inline">\(t\)</span> (an individual’s relative infectiousness is based on the generation interval and time since infection) <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 </div>
-<section id="exact-calculation" class="level3" data-number="3.1.1">
-<h3 data-number="3.1.1" class="anchored" data-anchor-id="exact-calculation"><span class="header-section-number">3.1.1</span> Exact calculation</h3>
+<section id="exact-calculation" class="level3" data-number="9.1.1">
+<h3 data-number="9.1.1" class="anchored" data-anchor-id="exact-calculation"><span class="header-section-number">9.1.1</span> Exact calculation</h3>
 <p>For a compartmental model (SIR or SEIR), <span class="math inline">\(R_t^i\)</span> can be calculated exactly as <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>:</p>
 <p><span class="math display">\[R_t^i = \beta(t) S(t) D\]</span></p>
 <ul>
@@ -432,8 +460,8 @@ window.Quarto = {
 <li><span class="math inline">\(D\)</span>: the mean duration of infectiousness.</li>
 </ul>
 </section>
-<section id="sec-cori" class="level3" data-number="3.1.2">
-<h3 data-number="3.1.2" class="anchored" data-anchor-id="sec-cori"><span class="header-section-number">3.1.2</span> Cori method</h3>
+<section id="sec-cori" class="level3" data-number="9.1.2">
+<h3 data-number="9.1.2" class="anchored" data-anchor-id="sec-cori"><span class="header-section-number">9.1.2</span> Cori method</h3>
 <p><span class="math display">\[R_t^i = \frac{I_t}{\sum_{s = 1}^{t} I_{t - s} w_s}\]</span></p>
 <ul>
 <li><span class="math inline">\(I_t\)</span>: the number of infection on day <span class="math inline">\(t\)</span>.</li>
@@ -441,11 +469,11 @@ window.Quarto = {
 <li><span class="math inline">\(w_s\)</span>: the infectivity profile, describes how infectious an individual is <span class="math inline">\(s\)</span> days since infection, <span class="math inline">\(w_s\)</span> dependent on time since infection <span class="math inline">\(s\)</span> but independent of calendar time <span class="math inline">\(t\)</span>, and often be approximated by the generation interval <span class="citation" data-cites="cori2013">(<a href="references.html#ref-cori2013" role="doc-biblioref">Cori et al., 2013</a>)</span>.</li>
 <li><span class="math inline">\(I_{t - s} w_s\)</span>: we scale the number of individuals who became infected <span class="math inline">\(s\)</span> days in the past by how infectiousness are they still on day <span class="math inline">\(t\)</span> (which is <span class="math inline">\(s\)</span> days after the date they got infected, <span class="math inline">\(w_s\)</span>).</li>
 </ul>
-<p>Looking back at <a href="#def-rt-inst" class="quarto-xref">Definition&nbsp;<span>3.1</span></a>, <span class="math inline">\(R_t^i\)</span> is the expected number of secondary infections occurring at time <span class="math inline">\(t\)</span> (<span class="math inline">\(I_t\)</span>), divided by the number of infected individuals (<span class="math inline">\(\sum_{s = 1}^{t} I_{t - s}\)</span>), each scaled by their relative infectiousness at time <span class="math inline">\(t\)</span> (<span class="math inline">\(w_s\)</span>).</p>
+<p>Looking back at <a href="#def-rt-inst" class="quarto-xref">Definition&nbsp;<span>9.1</span></a>, <span class="math inline">\(R_t^i\)</span> is the expected number of secondary infections occurring at time <span class="math inline">\(t\)</span> (<span class="math inline">\(I_t\)</span>), divided by the number of infected individuals (<span class="math inline">\(\sum_{s = 1}^{t} I_{t - s}\)</span>), each scaled by their relative infectiousness at time <span class="math inline">\(t\)</span> (<span class="math inline">\(w_s\)</span>).</p>
 <p>The only parametric assumption required by this method is <strong>the form of the generation interval</strong>. The standard assumption is that <span class="math inline">\(w_s\)</span> follows a <strong>discretized gamma distribution</strong>, but any parametric or empirical discrete distribution also work <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 </section>
-<section id="when-can-we-start-estimating-r_ti" class="level3" data-number="3.1.3">
-<h3 data-number="3.1.3" class="anchored" data-anchor-id="when-can-we-start-estimating-r_ti"><span class="header-section-number">3.1.3</span> When can we start estimating <span class="math inline">\(R_t^i\)</span>?</h3>
+<section id="when-can-we-start-estimating-r_ti" class="level3" data-number="9.1.3">
+<h3 data-number="9.1.3" class="anchored" data-anchor-id="when-can-we-start-estimating-r_ti"><span class="header-section-number">9.1.3</span> When can we start estimating <span class="math inline">\(R_t^i\)</span>?</h3>
 <p>Cori et al.&nbsp;suggest starting estimating <span class="math inline">\(R_t^i\)</span> once those three criteria are fulfilled <span class="citation" data-cites="cori2013">(<a href="references.html#ref-cori2013" role="doc-biblioref">Cori et al., 2013</a>)</span>:</p>
 <ul>
 <li>At least after the sliding window size.</li>
@@ -453,8 +481,8 @@ window.Quarto = {
 <li>At least 12 cases (the initial case + 11) have been observed since the beginning of the epidemic (in a time window): to get a posterior credible interval of 0.3, the time window must comprise at least 11 incident cases.</li>
 </ul>
 </section>
-<section id="key-considerations" class="level3" data-number="3.1.4">
-<h3 data-number="3.1.4" class="anchored" data-anchor-id="key-considerations"><span class="header-section-number">3.1.4</span> Key considerations</h3>
+<section id="key-considerations" class="level3" data-number="9.1.4">
+<h3 data-number="9.1.4" class="anchored" data-anchor-id="key-considerations"><span class="header-section-number">9.1.4</span> Key considerations</h3>
 <p>Source: Dr.&nbsp;Anne Cori’s <a href="https://www.youtube.com/watch?v=wv3BecZD5DU">webinar</a>.</p>
 <ul>
 <li>Temporal resolution: we can’t apply the <span class="math inline">\(R_t^i\)</span> method when the time step of observation is too large (&gt; mean generation interval).</li>
@@ -464,21 +492,21 @@ window.Quarto = {
 <p><img src="img/rnum/rt-window.png" class="img-fluid"></p>
 </section>
 </section>
-<section id="case-reproduction-number-r_tc" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="case-reproduction-number-r_tc"><span class="header-section-number">3.2</span> Case reproduction number <span class="math inline">\(R_t^c\)</span></h2>
+<section id="case-reproduction-number-r_tc" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="case-reproduction-number-r_tc"><span class="header-section-number">9.2</span> Case reproduction number <span class="math inline">\(R_t^c\)</span></h2>
 <div id="def-rt-case" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 3.2</strong></span> The case or cohort reproduction number is the expected number of secondary infections that an individual who becomes infected at time <span class="math inline">\(t\)</span> will eventually cause as they progress through their infection <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
+<p><span class="theorem-title"><strong>Definition 9.2</strong></span> The case or cohort reproduction number is the expected number of secondary infections that an individual who becomes infected at time <span class="math inline">\(t\)</span> will eventually cause as they progress through their infection <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 </div>
-<section id="sec-rt-case-exact" class="level3" data-number="3.2.1">
-<h3 data-number="3.2.1" class="anchored" data-anchor-id="sec-rt-case-exact"><span class="header-section-number">3.2.1</span> Exact calculation</h3>
+<section id="sec-rt-case-exact" class="level3" data-number="9.2.1">
+<h3 data-number="9.2.1" class="anchored" data-anchor-id="sec-rt-case-exact"><span class="header-section-number">9.2.1</span> Exact calculation</h3>
 <p><span class="math display">\[R_t^c = \int_{u = t}^{\infty} R_u^i w_{u-t} du\]</span></p>
 <ul>
 <li><span class="math inline">\(R_u^i\)</span>: the instantaneous reproduction number of current infected cases at time <span class="math inline">\(u\)</span>, starting from <span class="math inline">\(t\)</span> to the end of their infectious period <span class="math inline">\(\infty\)</span>.</li>
 <li><span class="math inline">\(w_{u-t}\)</span>: the infectiousness of them at that time.</li>
 </ul>
 </section>
-<section id="wallinga-and-teunis-method" class="level3" data-number="3.2.2">
-<h3 data-number="3.2.2" class="anchored" data-anchor-id="wallinga-and-teunis-method"><span class="header-section-number">3.2.2</span> Wallinga and Teunis method</h3>
+<section id="wallinga-and-teunis-method" class="level3" data-number="9.2.2">
+<h3 data-number="9.2.2" class="anchored" data-anchor-id="wallinga-and-teunis-method"><span class="header-section-number">9.2.2</span> Wallinga and Teunis method</h3>
 <p>There are 3 steps <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>:</p>
 <p><strong>Step 1</strong>. Estimate the likelihood that case <span class="math inline">\(j\)</span> (infected at time <span class="math inline">\(t_j\)</span>) infected case <span class="math inline">\(i\)</span> (at time <span class="math inline">\(t_i\)</span>).</p>
 <p><span class="math display">\[p_{ij} = \frac{w_{t_i - t_j}}{\sum_{i \neq k} w_{t_i - t_k}}\]</span></p>
@@ -491,8 +519,8 @@ window.Quarto = {
 <p><span class="math display">\[R_t^c = \mathbb{E}(R_j)\]</span></p>
 </section>
 </section>
-<section id="proofs" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="proofs"><span class="header-section-number">3.3</span> Proofs</h2>
+<section id="proofs" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="proofs"><span class="header-section-number">9.3</span> Proofs</h2>
 <p>The renewal equation is a cornerstone of demographic theory and backbone of the <span class="math inline">\(R_t\)</span> estimators.</p>
 <p><span class="math display">\[b(t) = \int_{a = 0}^{\infty} b(t - a) n(a) da\]</span></p>
 <ul>
@@ -508,18 +536,18 @@ window.Quarto = {
 <li><span class="math inline">\(w_s\)</span>: the infectivity profile, or the probability of how infectiousness are they still at time <span class="math inline">\(t\)</span> (which is <span class="math inline">\(s\)</span> time points after the date they got infected).</li>
 <li><span class="math inline">\(I(t - s) w_s\)</span>: we scale the number of individuals who in the past by how infectiousness are they still at time <span class="math inline">\(t\)</span>.</li>
 </ul>
-<p>Now we transform the equation a bit, and we got something very similar to the Cori method (see <a href="#sec-cori" class="quarto-xref"><span>Section 3.1.2</span></a>).</p>
+<p>Now we transform the equation a bit, and we got something very similar to the Cori method (see <a href="#sec-cori" class="quarto-xref"><span>Section 9.1.2</span></a>).</p>
 <p><span class="math display">\[R_t = \frac{I(t)}{\int_{s = 0}^{\infty} I(t - s) w_s ds}\]</span></p>
 </section>
-<section id="compare-r_ti-and-r_tc" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="compare-r_ti-and-r_tc"><span class="header-section-number">3.4</span> Compare <span class="math inline">\(R_t^i\)</span> and <span class="math inline">\(R_t^c\)</span></h2>
+<section id="compare-r_ti-and-r_tc" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="compare-r_ti-and-r_tc"><span class="header-section-number">9.4</span> Compare <span class="math inline">\(R_t^i\)</span> and <span class="math inline">\(R_t^c\)</span></h2>
 <p>There are several important differences <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>:</p>
 <ol type="1">
 <li>Instantaneous <span class="math inline">\(R_t^i\)</span> is real-time estimation and only use data from before time <span class="math inline">\(t\)</span>, while case <span class="math inline">\(R_t^c\)</span> is inherently forward-looking.</li>
 </ol>
 <ul>
-<li><p><strong>Instantaneous</strong> <span class="math inline">\(R_t^i\)</span> <strong>overestimates</strong> <span class="math inline">\(R_t\)</span> early in the time series, because any infections that occurred before the first observed date are missing terms in the denominator (the <span class="math inline">\(I_{t - s}\)</span> in <a href="#sec-cori" class="quarto-xref"><span>Section 3.1.2</span></a>, data is left-truncated at the beginning).</p></li>
-<li><p><strong>Case</strong> <span class="math inline">\(R_t^c\)</span> <strong>underestimates</strong> <span class="math inline">\(R_t\)</span> at the end of the time series, because it relies on time points not yet observed which become missing terms in the integral (the <span class="math inline">\(R_u^i\)</span> in <a href="#sec-rt-case-exact" class="quarto-xref"><span>Section 3.2.1</span></a>, data is right-truncated at the end).</p></li>
+<li><p><strong>Instantaneous</strong> <span class="math inline">\(R_t^i\)</span> <strong>overestimates</strong> <span class="math inline">\(R_t\)</span> early in the time series, because any infections that occurred before the first observed date are missing terms in the denominator (the <span class="math inline">\(I_{t - s}\)</span> in <a href="#sec-cori" class="quarto-xref"><span>Section 9.1.2</span></a>, data is left-truncated at the beginning).</p></li>
+<li><p><strong>Case</strong> <span class="math inline">\(R_t^c\)</span> <strong>underestimates</strong> <span class="math inline">\(R_t\)</span> at the end of the time series, because it relies on time points not yet observed which become missing terms in the integral (the <span class="math inline">\(R_u^i\)</span> in <a href="#sec-rt-case-exact" class="quarto-xref"><span>Section 9.2.1</span></a>, data is right-truncated at the end).</p></li>
 </ul>
 <ol start="2" type="1">
 <li>Case <span class="math inline">\(R_t^c\)</span> is shifted forward in time relative to instantaneous <span class="math inline">\(R_t^i\)</span>, produces leading estimates of <span class="math inline">\(R_t\)</span> because it uses data from time points <strong>after</strong> <span class="math inline">\(t\)</span>, whereas the <span class="math inline">\(R_t^i\)</span> uses data from time points <strong>before</strong> <span class="math inline">\(t\)</span>.</li>
@@ -538,8 +566,8 @@ Important
 </div>
 </div>
 </section>
-<section id="potential-biases" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="potential-biases"><span class="header-section-number">3.5</span> Potential biases</h2>
+<section id="potential-biases" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="potential-biases"><span class="header-section-number">9.5</span> Potential biases</h2>
 <p><span class="math inline">\(R_t\)</span> is a <strong>value</strong> in specific <strong>time</strong>, therefore there are 2 potential forms of bias in <span class="math inline">\(R_t\)</span> estimates <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>:</p>
 <ul>
 <li><p><strong>Accuracy</strong> (the value): Systematic over- or underestimation caused by misspecification of the generation interval. Mostly impact when <span class="math inline">\(R_t\)</span> is substantially &gt; 1 (e.g., the beginning of COVID-19 when <span class="math inline">\(R_t\)</span> is relatively high) or &lt; 1 (e.g., after a very effective intervention then <span class="math inline">\(R_t\)</span> might be low).</p></li>
@@ -549,10 +577,10 @@ Important
 <blockquote class="blockquote">
 <p>Figure from Sender et al. <span class="citation" data-cites="sender2022">(<a href="references.html#ref-sender2022" role="doc-biblioref">Sender et al., 2022</a>)</span>.</p>
 </blockquote>
-<section id="generation-interval" class="level3" data-number="3.5.1">
-<h3 data-number="3.5.1" class="anchored" data-anchor-id="generation-interval"><span class="header-section-number">3.5.1</span> Generation interval</h3>
+<section id="generation-interval" class="level3" data-number="9.5.1">
+<h3 data-number="9.5.1" class="anchored" data-anchor-id="generation-interval"><span class="header-section-number">9.5.1</span> Generation interval</h3>
 <div id="def-gen-int" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 3.3</strong></span> Generation interval is the time from the infection of a primary case to infection of the cases he/she generates <span class="citation" data-cites="cori2013">(<a href="references.html#ref-cori2013" role="doc-biblioref">Cori et al., 2013</a>)</span>.</p>
+<p><span class="theorem-title"><strong>Definition 9.3</strong></span> Generation interval is the time from the infection of a primary case to infection of the cases he/she generates <span class="citation" data-cites="cori2013">(<a href="references.html#ref-cori2013" role="doc-biblioref">Cori et al., 2013</a>)</span>.</p>
 </div>
 <p>If we match this to an SEIR model, the generation interval starts when the infector enters the E compartment (meaning they got infected). The latest time they can infect an infectee is at the end of their residence in the I compartment (they are infectious). Therefore, generation interval is the sum of residence times in compartments E and I <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 <p>The mean generation interval <strong>decreases</strong> when susceptible persons are at risk of infectious contact from <strong>multiple sources</strong>. Because when a susceptible person has multiple potential infectors, there is a “race” to infect him/her in which only the first infectious contact leads to infection <span class="citation" data-cites="kenah2008">(<a href="references.html#ref-kenah2008" role="doc-biblioref">Kenah et al., 2008</a>)</span>.</p>
@@ -567,10 +595,10 @@ Important
 </ul>
 <p>Tools like <code>EpiEstim</code> and <code>EpiNow2</code> allow users to specify the prior variance of the mean and standard deviation. However, bear in mind that uncertainty around an incorrect generation interval only widen the 95% credible interval, but will not shift the estimates toward the truth and will not correct this bias.</p>
 </section>
-<section id="serial-interval" class="level3" data-number="3.5.2">
-<h3 data-number="3.5.2" class="anchored" data-anchor-id="serial-interval"><span class="header-section-number">3.5.2</span> Serial interval</h3>
+<section id="serial-interval" class="level3" data-number="9.5.2">
+<h3 data-number="9.5.2" class="anchored" data-anchor-id="serial-interval"><span class="header-section-number">9.5.2</span> Serial interval</h3>
 <div id="def-ser-int" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 3.4</strong></span> Serial interval is the time between symptom onset in an infector–infectee pair <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
+<p><span class="theorem-title"><strong>Definition 9.4</strong></span> Serial interval is the time between symptom onset in an infector–infectee pair <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 </div>
 <p>Serial interval is more easily observed than generation interval and often used in its place. Although the serial and generation intervals are often conflated, there are important differences <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>:</p>
 <ul>
@@ -583,8 +611,8 @@ Important
 <li>When the infectiousness profile after symptoms is independent of the incubation period.</li>
 </ul>
 </section>
-<section id="delays" class="level3" data-number="3.5.3">
-<h3 data-number="3.5.3" class="anchored" data-anchor-id="delays"><span class="header-section-number">3.5.3</span> Delays</h3>
+<section id="delays" class="level3" data-number="9.5.3">
+<h3 data-number="9.5.3" class="anchored" data-anchor-id="delays"><span class="header-section-number">9.5.3</span> Delays</h3>
 <p><img src="img/rnum/delays.png" class="img-fluid"></p>
 <blockquote class="blockquote">
 <p>Adjusting for delays <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
@@ -597,10 +625,10 @@ Important
 </ol>
 </section>
 </section>
-<section id="code" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="code"><span class="header-section-number">3.6</span> Code</h2>
-<section id="epiestim" class="level3" data-number="3.6.1">
-<h3 data-number="3.6.1" class="anchored" data-anchor-id="epiestim"><span class="header-section-number">3.6.1</span> EpiEstim</h3>
+<section id="code" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="code"><span class="header-section-number">9.6</span> Code</h2>
+<section id="epiestim" class="level3" data-number="9.6.1">
+<h3 data-number="9.6.1" class="anchored" data-anchor-id="epiestim"><span class="header-section-number">9.6.1</span> EpiEstim</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(EpiEstim)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -633,8 +661,8 @@ Important
 </div>
 </div>
 </div>
-<section id="section" class="level4" data-number="3.6.1.1">
-<h4 data-number="3.6.1.1" class="anchored" data-anchor-id="section"><span class="header-section-number">3.6.1.1</span> </h4>
+<section id="section" class="level4" data-number="9.6.1.1">
+<h4 data-number="9.6.1.1" class="anchored" data-anchor-id="section"><span class="header-section-number">9.6.1.1</span> </h4>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">estimate_R</span>(</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">incid =</span> df, </span>
@@ -707,8 +735,8 @@ Important
 </div>
 </section>
 </section>
-<section id="epinow2" class="level3" data-number="3.6.2">
-<h3 data-number="3.6.2" class="anchored" data-anchor-id="epinow2"><span class="header-section-number">3.6.2</span> EpiNow2</h3>
+<section id="epinow2" class="level3" data-number="9.6.2">
+<h3 data-number="9.6.2" class="anchored" data-anchor-id="epinow2"><span class="header-section-number">9.6.2</span> EpiNow2</h3>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
@@ -1145,12 +1173,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./r0.html" class="pagination-link" aria-label="Estimating $R_0$">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./det.html" class="pagination-link" aria-label="Deterministic models">
-        <span class="nav-page-text">Deterministic models</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./intv.html" class="pagination-link" aria-label="Interventions">
+        <span class="nav-page-text">Interventions</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

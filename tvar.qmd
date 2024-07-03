@@ -30,7 +30,7 @@ ggplot(df, aes(x = day, y = inc)) +
 
 Let fit a deterministic SEIR model and reuse the code from @lst-seir-det. We fit this using MLE assuming the incidence data is generated from a normal distribution.
 
-```{r, echo = F}
+```{r, results=F, message=F, echo = F}
 odin_mod <- odin({
   deriv(S) <- -beta * I * S
   deriv(E) <- beta * I * S - sigma * E
