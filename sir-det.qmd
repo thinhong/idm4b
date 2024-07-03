@@ -27,6 +27,8 @@ $$\frac{dR}{dt} = \gamma I$$ {#eq-sir-dr}
 
 ![](img/mod/density-frequency.webp)
 
+> Source: Density-dependent vs. Frequency-dependent Disease Transmission - [Parasite Ecology](https://parasiteecology.wordpress.com/2013/10/17/density-dependent-vs-frequency-dependent-disease-transmission/).
+
 :::: {.columns}
 
 ::: {.column width="50%"}
@@ -37,7 +39,7 @@ $$\frac{dS}{dt} = -\beta SI$$
 
 - The unit of contact rate $\beta$ is $\frac{1}{\text{time} \times \text{people}}$.
 - Transmission increases as density increases.
-- For aerosol contacts: COVID-19.
+- Aerosol contacts (COVID-19).
 
 :::
 
@@ -124,11 +126,11 @@ $$\text{Prevalence} = \frac{\text{Number of existing cases at time t}}{\text{Tot
 
 There are two ways to compute incidence.
 
-1.  While writing the differential equations, we tell `deSolve` to compute the cumulative incidence, then compute the incidence by using `diff()` on the cumulative incidence.
+1.  While writing the differential equations, we tell `odin` to compute the cumulative incidence, then compute the incidence by using `diff()` on the cumulative incidence.
 
 ```{r, eval=F}
 # Cumulative incidence
-dCInc <- beta * S * I
+deriv(CInc) <- beta * S * I
 # Compute incidence from cumulative incidence
 out$Inc <- c(I0, diff(out$CInc))
 ```
@@ -139,7 +141,7 @@ out$Inc <- c(I0, diff(out$CInc))
 pred <- sir_mod(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = 0:13)
 
 tmp <- pred
-tmp$Inc2 <- c(1, -diff(tmp$S))
+tmp$Inc2 <- c(tmp$I[1], -diff(tmp$S))
 tmp[,"Inc-Inc2"] <- round(tmp$Inc - tmp$Inc2)
 tmp[,c("Inc", "Inc2", "Inc-Inc2")]
 ```
@@ -158,7 +160,7 @@ head(pred)
 df_plot <- pivot_longer(pred, cols = S:Inc, names_to = "comp", values_to = "n")
 
 ggplot(df_plot, aes(x = t, y = n, color = comp)) +
-  geom_point() + geom_line() +
+  geom_line() +
   scale_color_brewer(palette = "PuOr", breaks = c("S", "Inc", "I", "R")) +
   labs(color = NULL, y = NULL, x = "Time") +
   theme_minimal() +
@@ -208,7 +210,7 @@ sir_sa <- function(vals, parm, outcome, times, init_beta = 0.004, init_gamma = 0
   my_palette <- brewer.pal(9, "Blues")[(9-length(vals)+1):9]
   
   ggplot(df_plot, aes(x = t, y = n, color = comp)) + 
-    geom_point() + geom_line() +
+    geom_line() +
     scale_color_manual(values = my_palette, labels = c(paste0(symb, " = ", vals))) +
     labs(color = NULL, y = plot_lab, x = "Time") +
     theme_minimal()
