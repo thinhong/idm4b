@@ -10,13 +10,7 @@ $R_0$ is the maximum absolute eigenvalue (also called the spectral radius) of th
 
 Let consider a SEIR model with equal birth and death rate $\mu$
 
-$$\frac{dS}{dt} = \mu (S + E + I + R) -\beta SI - \mu S$$
-
-$$\frac{dE}{dt} = \beta SI - \sigma E - \mu E$$
-
-$$\frac{dI}{dt} = \sigma E - \gamma I - \mu I$$
-
-$$\frac{dR}{dt} = \gamma I - \mu R$$
+$$\begin{align} \frac{dS}{dt} & = \mu (S + E + I + R) -\beta SI - \mu S \\ \frac{dE}{dt} & = \beta SI - \sigma E - \mu E \\ \frac{dI}{dt} & = \sigma E - \gamma I - \mu I \\ \frac{dR}{dt} & = \gamma I - \mu R \end{align}$$
 
 ### Step 1. Identify the infected compartments
 
@@ -69,28 +63,28 @@ $$\frac{dI}{dt} = \mathcal{F}_2 - \mathcal{V}_2 = 0 - (- \sigma E + \gamma I + \
 
 Jacobian matrix $F$ for $\mathcal{F}$, and $V$ for $\mathcal{V}$. Jacobian matrix is a matrix contain all partial derivatives of a vector function.
 
-$$F = \begin{bmatrix} \frac{\partial \mathcal{F}_1}{\partial E} & \frac{\partial \mathcal{F}_1}{\partial I} \\ \frac{\partial \mathcal{F}_2}{\partial E} & \frac{\partial \mathcal{F}_2}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} \frac{\partial [\beta SI]}{\partial E} & \frac{\partial [\beta SI]}{\partial I} \\ \frac{\partial [0]}{\partial E} & \frac{\partial [0]}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} 0 & \beta S \\ 0 & 0 \end{bmatrix}$$
+$$\begin{align} F & = \begin{bmatrix} \frac{\partial \mathcal{F}_1}{\partial E} & \frac{\partial \mathcal{F}_1}{\partial I} \\ \frac{\partial \mathcal{F}_2}{\partial E} & \frac{\partial \mathcal{F}_2}{\partial I} \end{bmatrix} \\ & = \begin{bmatrix} \frac{\partial [\beta SI]}{\partial E} & \frac{\partial [\beta SI]}{\partial I} \\ \frac{\partial [0]}{\partial E} & \frac{\partial [0]}{\partial I} \end{bmatrix} \\ & = \begin{bmatrix} 0 & \beta S \\ 0 & 0 \end{bmatrix} \end{align}$$
 
 In which:
 
 - $\frac{\partial [\beta SI]}{\partial E} = 0$: because there is no $E$ in $\beta SI$.
 - $\frac{\partial [\beta SI]}{\partial I} = \beta S$.
 
-$$V = \begin{bmatrix} \frac{\partial \mathcal{V}_1}{\partial E} & \frac{\partial \mathcal{V}_1}{\partial I} \\ \frac{\partial \mathcal{V}_2}{\partial E} & \frac{\partial \mathcal{V}_2}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} \frac{\partial [\sigma E + \mu E]}{\partial E} & \frac{\partial [\sigma E + \mu E]}{\partial I} \\ \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial E} & \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} \sigma + \mu & 0 \\ - \sigma & \gamma + \mu \end{bmatrix}$$
+$$\begin{align} V & = \begin{bmatrix} \frac{\partial \mathcal{V}_1}{\partial E} & \frac{\partial \mathcal{V}_1}{\partial I} \\ \frac{\partial \mathcal{V}_2}{\partial E} & \frac{\partial \mathcal{V}_2}{\partial I} \end{bmatrix} \\ & = \begin{bmatrix} \frac{\partial [\sigma E + \mu E]}{\partial E} & \frac{\partial [\sigma E + \mu E]}{\partial I} \\ \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial E} & \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial I} \end{bmatrix} \\ & = \begin{bmatrix} \sigma + \mu & 0 \\ - \sigma & \gamma + \mu \end{bmatrix} \end{align}$$
 
 ### Step 4. Compute the NGM
 
 Use @def-inv-matrix to compute inverse matrix $V^{-1}$:
 
-$$V^{-1} = \frac{1}{(\sigma + \mu)(\gamma + \mu)} \begin{bmatrix} \gamma + \mu & - 0 \\ - \sigma & \sigma + \mu \end{bmatrix} \\ = \begin{bmatrix} \frac{1}{\sigma + \mu} & 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} & \frac{1}{\gamma + \mu} \end{bmatrix}$$
+$$\begin{align} V^{-1} & = \frac{1}{(\sigma + \mu)(\gamma + \mu)} \begin{bmatrix} \gamma + \mu & - 0 \\ - \sigma & \sigma + \mu \end{bmatrix} \\& = \begin{bmatrix} \frac{1}{\sigma + \mu} & 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} & \frac{1}{\gamma + \mu} \end{bmatrix} \end{align}$$
 
-$$K = FV^{-1} \\ = \begin{bmatrix} 0 & \beta S \\ 0 & 0 \end{bmatrix} \begin{bmatrix} \frac{1}{\sigma + \mu} & 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} & \frac{1}{\gamma + \mu} \end{bmatrix} \\ = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} & \frac{\beta S}{\gamma + \mu} \\ 0 & 0 \end{bmatrix}$$
+$$\begin{align} K & = FV^{-1} \\ & = \begin{bmatrix} 0 & \beta S \\ 0 & 0 \end{bmatrix} \begin{bmatrix} \frac{1}{\sigma + \mu} & 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} & \frac{1}{\gamma + \mu} \end{bmatrix} \\ & = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} & \frac{\beta S}{\gamma + \mu} \\ 0 & 0 \end{bmatrix} \end{align}$$
 
 ### Step 5. Compute $R_0$
 
 $R_0$ is the eigenvalues of the NGM.
 
-$$det(K - \lambda) = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda & \frac{\beta S}{\gamma + \mu} \\ 0 & 0 - \lambda \end{bmatrix} \\ = [\frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda][0 - \lambda]$$
+$$\begin{align} det(K - \lambda) & = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda & \frac{\beta S}{\gamma + \mu} \\ 0 & 0 - \lambda \end{bmatrix} \\ & = [\frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda][0 - \lambda] \end{align}$$
 
 $$R_0 = \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)}$$
 
@@ -110,15 +104,9 @@ $$\text{NGM} = \begin{bmatrix} 3 & 1 \\ 2 & 2 \end{bmatrix}$$
 
 $R_0$ is the root of equation:
 
-$$\begin{bmatrix} 3 - \lambda & 1 \\ 2 & 2 - \lambda \end{bmatrix} = 0$$
+$$\begin{align} \begin{bmatrix} 3 - \lambda & 1 \\ 2 & 2 - \lambda \end{bmatrix} & = 0 \\ \Leftrightarrow (3 - \lambda) \times (2 - \lambda) - 2 \times 1 & = 0 \\ \Leftrightarrow \lambda^2 - 5 \lambda + 6 - 2 & = 0 \\ \Leftrightarrow \lambda^2 - 5 \lambda + 4 & = 0 \end{align}$$
 
-$$\Leftrightarrow (3 - \lambda) \times (2 - \lambda) - 2 \times 1 = 0$$
-
-$$\Leftrightarrow \lambda^2 - 5 \lambda + 6 - 2 = 0$$
-
-$$\Leftrightarrow \lambda^2 - 5 \lambda + 4 = 0$$
-
-There are two root $\lambda = 4$ and $\lambda = 1$, for an outbreak to occur $R_0 > 1$, so here $R_0 = 4$.
+There are two roots $\lambda = 4$ and $\lambda = 1$, for an outbreak to occur $R_0 > 1$, so here $R_0 = 4$.
 :::
 
 For more complex compartmental models, especially those with more infected compartments [@vandendriessche2017]

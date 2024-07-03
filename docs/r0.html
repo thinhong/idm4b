@@ -392,10 +392,7 @@ window.Quarto = {
 <h2 data-number="8.1" class="anchored" data-anchor-id="next-generation-matrix"><span class="header-section-number">8.1</span> Next generation matrix</h2>
 <p><span class="math inline">\(R_0\)</span> is the maximum absolute eigenvalue (also called the spectral radius) of the next generation matrix (NGM) <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span>.</p>
 <p>Let consider a SEIR model with equal birth and death rate <span class="math inline">\(\mu\)</span></p>
-<p><span class="math display">\[\frac{dS}{dt} = \mu (S + E + I + R) -\beta SI - \mu S\]</span></p>
-<p><span class="math display">\[\frac{dE}{dt} = \beta SI - \sigma E - \mu E\]</span></p>
-<p><span class="math display">\[\frac{dI}{dt} = \sigma E - \gamma I - \mu I\]</span></p>
-<p><span class="math display">\[\frac{dR}{dt} = \gamma I - \mu R\]</span></p>
+<p><span class="math display">\[\begin{align} \frac{dS}{dt} &amp; = \mu (S + E + I + R) -\beta SI - \mu S \\ \frac{dE}{dt} &amp; = \beta SI - \sigma E - \mu E \\ \frac{dI}{dt} &amp; = \sigma E - \gamma I - \mu I \\ \frac{dR}{dt} &amp; = \gamma I - \mu R \end{align}\]</span></p>
 <section id="step-1.-identify-the-infected-compartments" class="level3" data-number="8.1.1">
 <h3 data-number="8.1.1" class="anchored" data-anchor-id="step-1.-identify-the-infected-compartments"><span class="header-section-number">8.1.1</span> Step 1. Identify the infected compartments</h3>
 <p>For our SEIR model, the infected compartments are <span class="math inline">\(E\)</span> and <span class="math inline">\(I\)</span>.</p>
@@ -433,24 +430,24 @@ window.Quarto = {
 <section id="step-3.-find-the-jacobian-matrix" class="level3" data-number="8.1.3">
 <h3 data-number="8.1.3" class="anchored" data-anchor-id="step-3.-find-the-jacobian-matrix"><span class="header-section-number">8.1.3</span> Step 3. Find the Jacobian matrix</h3>
 <p>Jacobian matrix <span class="math inline">\(F\)</span> for <span class="math inline">\(\mathcal{F}\)</span>, and <span class="math inline">\(V\)</span> for <span class="math inline">\(\mathcal{V}\)</span>. Jacobian matrix is a matrix contain all partial derivatives of a vector function.</p>
-<p><span class="math display">\[F = \begin{bmatrix} \frac{\partial \mathcal{F}_1}{\partial E} &amp; \frac{\partial \mathcal{F}_1}{\partial I} \\ \frac{\partial \mathcal{F}_2}{\partial E} &amp; \frac{\partial \mathcal{F}_2}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} \frac{\partial [\beta SI]}{\partial E} &amp; \frac{\partial [\beta SI]}{\partial I} \\ \frac{\partial [0]}{\partial E} &amp; \frac{\partial [0]}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} 0 &amp; \beta S \\ 0 &amp; 0 \end{bmatrix}\]</span></p>
+<p><span class="math display">\[\begin{align} F &amp; = \begin{bmatrix} \frac{\partial \mathcal{F}_1}{\partial E} &amp; \frac{\partial \mathcal{F}_1}{\partial I} \\ \frac{\partial \mathcal{F}_2}{\partial E} &amp; \frac{\partial \mathcal{F}_2}{\partial I} \end{bmatrix} \\ &amp; = \begin{bmatrix} \frac{\partial [\beta SI]}{\partial E} &amp; \frac{\partial [\beta SI]}{\partial I} \\ \frac{\partial [0]}{\partial E} &amp; \frac{\partial [0]}{\partial I} \end{bmatrix} \\ &amp; = \begin{bmatrix} 0 &amp; \beta S \\ 0 &amp; 0 \end{bmatrix} \end{align}\]</span></p>
 <p>In which:</p>
 <ul>
 <li><span class="math inline">\(\frac{\partial [\beta SI]}{\partial E} = 0\)</span>: because there is no <span class="math inline">\(E\)</span> in <span class="math inline">\(\beta SI\)</span>.</li>
 <li><span class="math inline">\(\frac{\partial [\beta SI]}{\partial I} = \beta S\)</span>.</li>
 </ul>
-<p><span class="math display">\[V = \begin{bmatrix} \frac{\partial \mathcal{V}_1}{\partial E} &amp; \frac{\partial \mathcal{V}_1}{\partial I} \\ \frac{\partial \mathcal{V}_2}{\partial E} &amp; \frac{\partial \mathcal{V}_2}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} \frac{\partial [\sigma E + \mu E]}{\partial E} &amp; \frac{\partial [\sigma E + \mu E]}{\partial I} \\ \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial E} &amp; \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial I} \end{bmatrix} \\ = \begin{bmatrix} \sigma + \mu &amp; 0 \\ - \sigma &amp; \gamma + \mu \end{bmatrix}\]</span></p>
+<p><span class="math display">\[\begin{align} V &amp; = \begin{bmatrix} \frac{\partial \mathcal{V}_1}{\partial E} &amp; \frac{\partial \mathcal{V}_1}{\partial I} \\ \frac{\partial \mathcal{V}_2}{\partial E} &amp; \frac{\partial \mathcal{V}_2}{\partial I} \end{bmatrix} \\ &amp; = \begin{bmatrix} \frac{\partial [\sigma E + \mu E]}{\partial E} &amp; \frac{\partial [\sigma E + \mu E]}{\partial I} \\ \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial E} &amp; \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial I} \end{bmatrix} \\ &amp; = \begin{bmatrix} \sigma + \mu &amp; 0 \\ - \sigma &amp; \gamma + \mu \end{bmatrix} \end{align}\]</span></p>
 </section>
 <section id="step-4.-compute-the-ngm" class="level3" data-number="8.1.4">
 <h3 data-number="8.1.4" class="anchored" data-anchor-id="step-4.-compute-the-ngm"><span class="header-section-number">8.1.4</span> Step 4. Compute the NGM</h3>
 <p>Use <a href="dict.html#def-inv-matrix" class="quarto-xref">Definition&nbsp;<span>A.3</span></a> to compute inverse matrix <span class="math inline">\(V^{-1}\)</span>:</p>
-<p><span class="math display">\[V^{-1} = \frac{1}{(\sigma + \mu)(\gamma + \mu)} \begin{bmatrix} \gamma + \mu &amp; - 0 \\ - \sigma &amp; \sigma + \mu \end{bmatrix} \\ = \begin{bmatrix} \frac{1}{\sigma + \mu} &amp; 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{1}{\gamma + \mu} \end{bmatrix}\]</span></p>
-<p><span class="math display">\[K = FV^{-1} \\ = \begin{bmatrix} 0 &amp; \beta S \\ 0 &amp; 0 \end{bmatrix} \begin{bmatrix} \frac{1}{\sigma + \mu} &amp; 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{1}{\gamma + \mu} \end{bmatrix} \\ = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{\beta S}{\gamma + \mu} \\ 0 &amp; 0 \end{bmatrix}\]</span></p>
+<p><span class="math display">\[\begin{align} V^{-1} &amp; = \frac{1}{(\sigma + \mu)(\gamma + \mu)} \begin{bmatrix} \gamma + \mu &amp; - 0 \\ - \sigma &amp; \sigma + \mu \end{bmatrix} \\&amp; = \begin{bmatrix} \frac{1}{\sigma + \mu} &amp; 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{1}{\gamma + \mu} \end{bmatrix} \end{align}\]</span></p>
+<p><span class="math display">\[\begin{align} K &amp; = FV^{-1} \\ &amp; = \begin{bmatrix} 0 &amp; \beta S \\ 0 &amp; 0 \end{bmatrix} \begin{bmatrix} \frac{1}{\sigma + \mu} &amp; 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{1}{\gamma + \mu} \end{bmatrix} \\ &amp; = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{\beta S}{\gamma + \mu} \\ 0 &amp; 0 \end{bmatrix} \end{align}\]</span></p>
 </section>
 <section id="step-5.-compute-r_0" class="level3" data-number="8.1.5">
 <h3 data-number="8.1.5" class="anchored" data-anchor-id="step-5.-compute-r_0"><span class="header-section-number">8.1.5</span> Step 5. Compute <span class="math inline">\(R_0\)</span></h3>
 <p><span class="math inline">\(R_0\)</span> is the eigenvalues of the NGM.</p>
-<p><span class="math display">\[det(K - \lambda) = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda &amp; \frac{\beta S}{\gamma + \mu} \\ 0 &amp; 0 - \lambda \end{bmatrix} \\ = [\frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda][0 - \lambda]\]</span></p>
+<p><span class="math display">\[\begin{align} det(K - \lambda) &amp; = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda &amp; \frac{\beta S}{\gamma + \mu} \\ 0 &amp; 0 - \lambda \end{bmatrix} \\ &amp; = [\frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda][0 - \lambda] \end{align}\]</span></p>
 <p><span class="math display">\[R_0 = \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)}\]</span></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -473,11 +470,8 @@ A simple example
 <p>Each group becomes a column in the next generation matrix (NGM):</p>
 <p><span class="math display">\[\text{NGM} = \begin{bmatrix} 3 &amp; 1 \\ 2 &amp; 2 \end{bmatrix}\]</span></p>
 <p><span class="math inline">\(R_0\)</span> is the root of equation:</p>
-<p><span class="math display">\[\begin{bmatrix} 3 - \lambda &amp; 1 \\ 2 &amp; 2 - \lambda \end{bmatrix} = 0\]</span></p>
-<p><span class="math display">\[\Leftrightarrow (3 - \lambda) \times (2 - \lambda) - 2 \times 1 = 0\]</span></p>
-<p><span class="math display">\[\Leftrightarrow \lambda^2 - 5 \lambda + 6 - 2 = 0\]</span></p>
-<p><span class="math display">\[\Leftrightarrow \lambda^2 - 5 \lambda + 4 = 0\]</span></p>
-<p>There are two root <span class="math inline">\(\lambda = 4\)</span> and <span class="math inline">\(\lambda = 1\)</span>, for an outbreak to occur <span class="math inline">\(R_0 &gt; 1\)</span>, so here <span class="math inline">\(R_0 = 4\)</span>.</p>
+<p><span class="math display">\[\begin{align} \begin{bmatrix} 3 - \lambda &amp; 1 \\ 2 &amp; 2 - \lambda \end{bmatrix} &amp; = 0 \\ \Leftrightarrow (3 - \lambda) \times (2 - \lambda) - 2 \times 1 &amp; = 0 \\ \Leftrightarrow \lambda^2 - 5 \lambda + 6 - 2 &amp; = 0 \\ \Leftrightarrow \lambda^2 - 5 \lambda + 4 &amp; = 0 \end{align}\]</span></p>
+<p>There are two roots <span class="math inline">\(\lambda = 4\)</span> and <span class="math inline">\(\lambda = 1\)</span>, for an outbreak to occur <span class="math inline">\(R_0 &gt; 1\)</span>, so here <span class="math inline">\(R_0 = 4\)</span>.</p>
 </div>
 </div>
 </div>

@@ -2,11 +2,7 @@
 
 ## Model
 
-$$\frac{dS}{dt} = -\beta SI = -\lambda S$$ {#eq-sir-ds}
-
-$$\frac{dI}{dt} = \beta SI - \gamma I = \lambda S - \gamma I$$ {#eq-sir-di}
-
-$$\frac{dR}{dt} = \gamma I$$ {#eq-sir-dr}
+$$\begin{align} \frac{dS}{dt} & = -\beta SI = -\lambda S \\ \frac{dI}{dt} & = \beta SI - \gamma I = \lambda S - \gamma I \\ \frac{dR}{dt} & = \gamma I \end{align}$$ {#eq-sir}
 
 -   $\beta$: effective contact rate.
 -   $\gamma$: removal rate.
@@ -67,7 +63,7 @@ library(RColorBrewer)
 library(patchwork)
 ```
 
-Below is how we numerically solve the differential equations @eq-sir-ds, @eq-sir-di and @eq-sir-dr in R with the `odin` package.
+Below is how we numerically solve the differential equations @eq-sir in R with the `odin` package.
 
 ::: {#lst-sir-det}
 ```{r, results=FALSE, message=FALSE}
