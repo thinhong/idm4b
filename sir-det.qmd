@@ -16,10 +16,10 @@ $$\frac{dR}{dt} = \gamma I$$ {#eq-sir-dr}
 
 -   Each member of a population is either susceptible, infectious, or recovered [@vandendriessche2017].
 -   The disease spreads through direct contact between susceptible and infected individuals.
--   Well-mixed population, or homogeneous mixing (represented by a single contact rate $\beta$) [@becker2017].
+-   Well-mixed population, or homogeneous mixing (represented by a single effective contact rate $\beta$) [@becker2017].
 -   In the most basic form it considers a "closed population" without demographics (no births, deaths, or migration) [@keeling2011], make sense when the disease is short lived compared with the population lifetime [@vandendriessche2017].
 -   There is no latent period, individuals become infectious immediately upon contracting the disease.
--   The contact rate and recovery rate are constant over time.
+-   The effective contact rate $\beta$ and recovery rate $\gamma$ are constant over time.
 -   Infectious disease properties are for a single pathogen [@becker2017].
 -   Recovered individuals gain lifelong immunity.
 
@@ -37,7 +37,7 @@ $$\frac{dR}{dt} = \gamma I$$ {#eq-sir-dr}
 
 $$\frac{dS}{dt} = -\beta SI$$
 
-- The unit of contact rate $\beta$ is $\frac{1}{\text{time} \times \text{people}}$.
+- The unit of $\beta$ is $\frac{1}{\text{time} \times \text{people}}$.
 - Transmission increases as density increases.
 - Aerosol contacts (COVID-19).
 
@@ -49,7 +49,7 @@ $$\frac{dS}{dt} = -\beta SI$$
 
 $$\frac{dS}{dt} = -\beta S \frac{I}{N}$$
 
-- The unit of contact rate $\beta$ is $\frac{1}{\text{time}}$.
+- The unit of $\beta$ is $\frac{1}{\text{time}}$.
 - Transmission does not increase as density increases.
 - Sexually-transmitted diseases.
 
@@ -71,9 +71,9 @@ Below is how we numerically solve the differential equations @eq-sir-ds, @eq-sir
 
 ::: {#lst-sir-det}
 ```{r, results=FALSE, message=FALSE}
-odin_mod <- odin::odin({
+odin_sir <- odin::odin({
   # Derivatives
-  deriv(S) <- -beta * I * S
+  deriv(S) <- -beta * S * I
   deriv(I) <- beta * S * I - gamma * I
   deriv(R) <- gamma * I
   deriv(CInc) <- beta * S * I
@@ -94,8 +94,8 @@ odin_mod <- odin::odin({
 })
 
 sir_mod <- function(beta, gamma, S0, I0, R0, times) {
-  # Set values for new parameters
-  odin_run <- odin_mod$new(beta = beta, gamma = gamma, S_init = S0, I_init = I0, R_init = R0)
+  # Set values for a new run
+  odin_run <- odin_sir$new(beta = beta, gamma = gamma, S_init = S0, I_init = I0, R_init = R0)
   
   # Run the model
   out <- data.frame(odin_run$run(times))
@@ -160,7 +160,7 @@ head(pred)
 df_plot <- pivot_longer(pred, cols = S:Inc, names_to = "comp", values_to = "n")
 
 ggplot(df_plot, aes(x = t, y = n, color = comp)) +
-  geom_line() +
+  geom_line(linewidth = 1.2) +
   scale_color_brewer(palette = "PuOr", breaks = c("S", "Inc", "I", "R")) +
   labs(color = NULL, y = NULL, x = "Time") +
   theme_minimal() +
@@ -210,7 +210,7 @@ sir_sa <- function(vals, parm, outcome, times, init_beta = 0.004, init_gamma = 0
   my_palette <- brewer.pal(9, "Blues")[(9-length(vals)+1):9]
   
   ggplot(df_plot, aes(x = t, y = n, color = comp)) + 
-    geom_line() +
+    geom_line(linewidth = 1.2) +
     scale_color_manual(values = my_palette, labels = c(paste0(symb, " = ", vals))) +
     labs(color = NULL, y = plot_lab, x = "Time") +
     theme_minimal()

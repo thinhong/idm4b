@@ -243,6 +243,13 @@
       ],
       "Hash": "c35768291560ce302c0a6589f92e837d"
     },
+    "cinterpolate": {
+      "Package": "cinterpolate",
+      "Version": "1.0.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "8c83a05857bcd884cb528ba9fbb82ab3"
+    },
     "cli": {
       "Package": "cli",
       "Version": "3.6.2",
@@ -762,6 +769,23 @@
       ],
       "Hash": "df58958f293b166e4ab885ebcad90e02"
     },
+    "odin": {
+      "Package": "odin",
+      "Version": "1.2.5",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R6",
+        "cinterpolate",
+        "deSolve",
+        "digest",
+        "glue",
+        "jsonlite",
+        "ring",
+        "withr"
+      ],
+      "Hash": "28f2759ad947425cf50aa0069b5a2f57"
+    },
     "patchwork": {
       "Package": "patchwork",
       "Version": "1.2.0",
@@ -883,6 +907,16 @@
         "stringr"
       ],
       "Hash": "bb5996d0bd962d214a11140d77589917"
+    },
+    "ring": {
+      "Package": "ring",
+      "Version": "1.0.5",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R6"
+      ],
+      "Hash": "e69993dcf583ad317b53ee37888d461e"
     },
     "rlang": {
       "Package": "rlang",

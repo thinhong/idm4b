@@ -3,7 +3,7 @@
 ## Code
 
 ```{r, message=FALSE, warning=FALSE}
-library(deSolve)
+library(odin)
 library(tidyr)
 library(ggplot2)
 library(RColorBrewer)
@@ -12,25 +12,36 @@ library(patchwork)
 
 Let reuse the deterministic SIR model code from @lst-sir-det and write code for the deterministic SEIR model.
 
-```{r, echo=FALSE}
-sir_mod <- function(beta, gamma, S0, I0, R0, times) {
+```{r, results=FALSE, message=FALSE, echo=FALSE}
+odin_sir <- odin::odin({
+  # Derivatives
+  deriv(S) <- -beta * S * I
+  deriv(I) <- beta * S * I - gamma * I
+  deriv(R) <- gamma * I
+  deriv(CInc) <- beta * S * I
   
-  equations <- function(time, variables, parameters) {
-    with(as.list(c(variables, parameters)), {
-      dS <-   -beta * S * I
-      dI <-    beta * S * I - gamma * I
-      dR <-    gamma * I
-      dCInc <- beta * S * I
-      return(list(c(dS, dI, dR, dCInc)))
-    })
-  }
+  # Initial conditions
+  initial(S) <- S_init
+  initial(I) <- I_init
+  initial(R) <- R_init
+  initial(CInc) <- CInc_init
   
-  parameters_values <- c(beta = beta, gamma = gamma)
-  initial_values <- c(S = S0, I = I0, R = R0, CInc = 0)
-  
-  out <- ode(y = initial_values, times = times, func = equations, parms = parameters_values)
+  # Parameters and initial values
+  beta <- user(0.004)
+  gamma <- user(0.5)
+  S_init <- user(999)
+  I_init <- user(1)
+  R_init <- user(0)
+  CInc_init <- user(0)
+})
 
-  out <- as.data.frame(out)
+sir_mod <- function(beta, gamma, S0, I0, R0, times) {
+  # Set values for a new run
+  odin_run <- odin_sir$new(beta = beta, gamma = gamma, S_init = S0, I_init = I0, R_init = R0)
+  
+  # Run the model
+  out <- data.frame(odin_run$run(times))
+
   # Compute incidence from cumulative incidence
   out$Inc <- c(I0, diff(out$CInc))
   out$CInc <- NULL
@@ -40,26 +51,40 @@ sir_mod <- function(beta, gamma, S0, I0, R0, times) {
 
 ::: {#lst-seir-det}
 
-```{r}
-seir_mod <- function(beta, sigma, gamma, S0, E0, I0, R0, times) {
+```{r, results=FALSE, message=FALSE}
+odin_seir <- odin::odin({
+  # Derivatives
+  deriv(S) <- -beta * S * I
+  deriv(E) <- beta * S * I - sigma * E
+  deriv(I) <- sigma * E - gamma * I
+  deriv(R) <- gamma * I
+  deriv(CInc) <- sigma * E
   
-  equations <- function(time, variables, parameters) {
-    with(as.list(c(variables, parameters)), {
-      dS <-   -beta * I * S
-      dE <-    beta * I * S - sigma * E
-      dI <-    sigma * E - gamma * I
-      dR <-    gamma * I
-      dCInc <- sigma * E
-      return(list(c(dS, dE, dI, dR, dCInc)))
-    })
-  }
+  # Initial conditions
+  initial(S) <- S_init
+  initial(E) <- E_init
+  initial(I) <- I_init
+  initial(R) <- R_init
+  initial(CInc) <- CInc_init
   
-  parameters_values <- c(beta = beta, sigma = sigma, gamma = gamma)
-  initial_values <- c(S = S0, E = E0, I = I0, R = R0, CInc = 0)
-  
-  out <- ode(y = initial_values, times = times, func = equations, parms = parameters_values)
+  # Parameters and initial values
+  beta <- user(0.004)
+  sigma <- user(0.5)
+  gamma <- user(0.5)
+  S_init <- user(369)
+  E_init <- user(0)
+  I_init <- user(1)
+  R_init <- user(0)
+  CInc_init <- user(0)
+})
 
-  out <- as.data.frame(out)
+seir_mod <- function(beta, sigma, gamma, S0, E0, I0, R0, times) {
+  # Set values for a new run
+  odin_run <- odin_seir$new(beta = beta, sigma = sigma, gamma = gamma, S_init = S0, E_init = E0, I_init = I0, R_init = R0)
+  
+  # Run the model
+  out <- data.frame(odin_run$run(times))
+
   # Compute incidence from cumulative incidence
   out$Inc <- c(I0, diff(out$CInc))
   out$CInc <- NULL
@@ -83,10 +108,10 @@ df_plot <- pivot_longer(pred1, cols = S:Inc, names_to = "comp", values_to = "n")
 
 my_palette <- brewer.pal(11, "PuOr")[c(10, 4, 3, 8)]
 
-p1 <- ggplot(df_plot, aes(x = time, y = n, color = comp)) +
-  geom_point() + geom_line() +
+p1 <- ggplot(df_plot, aes(x = t, y = n, color = comp)) +
+  geom_line(linewidth = 1.2) +
   scale_color_manual(values = my_palette, breaks = c("S", "Inc", "I", "R")) +
-  labs(color = NULL, y = NULL) +
+  labs(color = NULL, y = NULL, x = NULL) +
   theme_minimal() +
   theme(legend.position = "none")
 
@@ -94,10 +119,10 @@ df_plot <- pivot_longer(pred2, cols = S:Inc, names_to = "comp", values_to = "n")
 
 my_palette <- brewer.pal(11, "PuOr")[c(10, 1, 4, 3, 8)]
 
-p2 <- ggplot(df_plot, aes(x = time, y = n, color = comp)) +
-  geom_point() + geom_line() +
+p2 <- ggplot(df_plot, aes(x = t, y = n, color = comp)) +
+  geom_line(linewidth = 1.2) +
   scale_color_manual(values = my_palette, breaks = c("S", "E", "Inc", "I", "R")) +
-  labs(color = NULL, y = NULL) +
+  labs(color = NULL, y = NULL, x = "Time") +
   theme_minimal() +
   theme(legend.position = "bottom")
 

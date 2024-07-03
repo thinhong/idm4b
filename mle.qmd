@@ -45,19 +45,22 @@ df <- read.csv("data/flu_inc.csv")
 ```
 
 ```{r, results=FALSE, message=FALSE, echo=FALSE}
-odin_mod <- odin({
-  deriv(S) <- -beta * I * S
-  deriv(E) <- beta * I * S - sigma * E
+odin_seir <- odin::odin({
+  # Derivatives
+  deriv(S) <- -beta * S * I
+  deriv(E) <- beta * S * I - sigma * E
   deriv(I) <- sigma * E - gamma * I
   deriv(R) <- gamma * I
   deriv(CInc) <- sigma * E
   
+  # Initial conditions
   initial(S) <- S_init
   initial(E) <- E_init
   initial(I) <- I_init
   initial(R) <- R_init
   initial(CInc) <- CInc_init
   
+  # Parameters and initial values
   beta <- user(0.004)
   sigma <- user(0.5)
   gamma <- user(0.5)
@@ -69,9 +72,10 @@ odin_mod <- odin({
 })
 
 seir_mod <- function(beta, sigma, gamma, S0, E0, I0, R0, times) {
-  odin_run <- odin_mod$new(beta = beta, sigma = sigma, gamma = gamma, S_init = S0, E_init = E0, I_init = I0, R_init = R0)
+  # Set values for a new run
+  odin_run <- odin_seir$new(beta = beta, sigma = sigma, gamma = gamma, S_init = S0, E_init = E0, I_init = I0, R_init = R0)
   
-  # run the model
+  # Run the model
   out <- data.frame(odin_run$run(times))
 
   # Compute incidence from cumulative incidence
@@ -165,7 +169,7 @@ upr <- qnorm(p = 0.975, mean = pred$Inc, sd = params[4])
 my_palette <- brewer.pal(11, "PuOr")[c(10, 1, 4, 3, 8)]
 
 ggplot(df_plot, aes(x = t, y = Inc)) +
-  geom_line(color = my_palette[3]) +
+  geom_line(color = my_palette[3], linewidth = 1.2) +
   geom_ribbon(aes(ymin = lwr, ymax = upr), fill = my_palette[3], alpha = 0.15) +
   geom_point(data = df, aes(x = day, y = inc)) +
   coord_cartesian(ylim = c(0, max(upr))) +

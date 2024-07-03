@@ -447,10 +447,10 @@ window.Quarto = {
 <ul>
 <li>Each member of a population is either susceptible, infectious, or recovered <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span>.</li>
 <li>The disease spreads through direct contact between susceptible and infected individuals.</li>
-<li>Well-mixed population, or homogeneous mixing (represented by a single contact rate <span class="math inline">\(\beta\)</span>) <span class="citation" data-cites="becker2017">(<a href="references.html#ref-becker2017" role="doc-biblioref">Becker &amp; Grenfell, 2017</a>)</span>.</li>
+<li>Well-mixed population, or homogeneous mixing (represented by a single effective contact rate <span class="math inline">\(\beta\)</span>) <span class="citation" data-cites="becker2017">(<a href="references.html#ref-becker2017" role="doc-biblioref">Becker &amp; Grenfell, 2017</a>)</span>.</li>
 <li>In the most basic form it considers a “closed population” without demographics (no births, deaths, or migration) <span class="citation" data-cites="keeling2011">(<a href="references.html#ref-keeling2011" role="doc-biblioref">Keeling &amp; Rohani, 2011</a>)</span>, make sense when the disease is short lived compared with the population lifetime <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span>.</li>
 <li>There is no latent period, individuals become infectious immediately upon contracting the disease.</li>
-<li>The contact rate and recovery rate are constant over time.</li>
+<li>The effective contact rate <span class="math inline">\(\beta\)</span> and recovery rate <span class="math inline">\(\gamma\)</span> are constant over time.</li>
 <li>Infectious disease properties are for a single pathogen <span class="citation" data-cites="becker2017">(<a href="references.html#ref-becker2017" role="doc-biblioref">Becker &amp; Grenfell, 2017</a>)</span>.</li>
 <li>Recovered individuals gain lifelong immunity.</li>
 </ul>
@@ -466,7 +466,7 @@ window.Quarto = {
 <p><strong>Density-dependent</strong></p>
 <p><span class="math display">\[\frac{dS}{dt} = -\beta SI\]</span></p>
 <ul>
-<li>The unit of contact rate <span class="math inline">\(\beta\)</span> is <span class="math inline">\(\frac{1}{\text{time} \times \text{people}}\)</span>.</li>
+<li>The unit of <span class="math inline">\(\beta\)</span> is <span class="math inline">\(\frac{1}{\text{time} \times \text{people}}\)</span>.</li>
 <li>Transmission increases as density increases.</li>
 <li>Aerosol contacts (COVID-19).</li>
 </ul>
@@ -474,7 +474,7 @@ window.Quarto = {
 <p><strong>Frequency-dependent</strong></p>
 <p><span class="math display">\[\frac{dS}{dt} = -\beta S \frac{I}{N}\]</span></p>
 <ul>
-<li>The unit of contact rate <span class="math inline">\(\beta\)</span> is <span class="math inline">\(\frac{1}{\text{time}}\)</span>.</li>
+<li>The unit of <span class="math inline">\(\beta\)</span> is <span class="math inline">\(\frac{1}{\text{time}}\)</span>.</li>
 <li>Transmission does not increase as density increases.</li>
 <li>Sexually-transmitted diseases.</li>
 </ul>
@@ -498,9 +498,9 @@ Listing&nbsp;1.1: Deterministic SIR model
 </figcaption>
 <div aria-describedby="lst-sir-det-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>odin_mod <span class="ot">&lt;-</span> odin<span class="sc">::</span><span class="fu">odin</span>({</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>odin_sir <span class="ot">&lt;-</span> odin<span class="sc">::</span><span class="fu">odin</span>({</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Derivatives</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">deriv</span>(S) <span class="ot">&lt;-</span> <span class="sc">-</span>beta <span class="sc">*</span> I <span class="sc">*</span> S</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">deriv</span>(S) <span class="ot">&lt;-</span> <span class="sc">-</span>beta <span class="sc">*</span> S <span class="sc">*</span> I</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">deriv</span>(I) <span class="ot">&lt;-</span> beta <span class="sc">*</span> S <span class="sc">*</span> I <span class="sc">-</span> gamma <span class="sc">*</span> I</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">deriv</span>(R) <span class="ot">&lt;-</span> gamma <span class="sc">*</span> I</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">deriv</span>(CInc) <span class="ot">&lt;-</span> beta <span class="sc">*</span> S <span class="sc">*</span> I</span>
@@ -521,8 +521,8 @@ Listing&nbsp;1.1: Deterministic SIR model
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>sir_mod <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, gamma, S0, I0, R0, times) {</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set values for new parameters</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  odin_run <span class="ot">&lt;-</span> odin_mod<span class="sc">$</span><span class="fu">new</span>(<span class="at">beta =</span> beta, <span class="at">gamma =</span> gamma, <span class="at">S_init =</span> S0, <span class="at">I_init =</span> I0, <span class="at">R_init =</span> R0)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set values for a new run</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  odin_run <span class="ot">&lt;-</span> odin_sir<span class="sc">$</span><span class="fu">new</span>(<span class="at">beta =</span> beta, <span class="at">gamma =</span> gamma, <span class="at">S_init =</span> S0, <span class="at">I_init =</span> I0, <span class="at">R_init =</span> R0)</span>
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Run the model</span></span>
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(odin_run<span class="sc">$</span><span class="fu">run</span>(times))</span>
@@ -605,7 +605,7 @@ Important
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df_plot <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(pred, <span class="at">cols =</span> S<span class="sc">:</span>Inc, <span class="at">names_to =</span> <span class="st">"comp"</span>, <span class="at">values_to =</span> <span class="st">"n"</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_plot, <span class="fu">aes</span>(<span class="at">x =</span> t, <span class="at">y =</span> n, <span class="at">color =</span> comp)) <span class="sc">+</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"PuOr"</span>, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"S"</span>, <span class="st">"Inc"</span>, <span class="st">"I"</span>, <span class="st">"R"</span>)) <span class="sc">+</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">x =</span> <span class="st">"Time"</span>) <span class="sc">+</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
@@ -669,7 +669,7 @@ Important
 <span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  my_palette <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">"Blues"</span>)[(<span class="dv">9</span><span class="sc">-</span><span class="fu">length</span>(vals)<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span><span class="dv">9</span>]</span>
 <span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(df_plot, <span class="fu">aes</span>(<span class="at">x =</span> t, <span class="at">y =</span> n, <span class="at">color =</span> comp)) <span class="sc">+</span> </span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
 <span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> my_palette, <span class="at">labels =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(symb, <span class="st">" = "</span>, vals))) <span class="sc">+</span></span>
 <span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">color =</span> <span class="cn">NULL</span>, <span class="at">y =</span> plot_lab, <span class="at">x =</span> <span class="st">"Time"</span>) <span class="sc">+</span></span>
 <span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span>
