@@ -177,7 +177,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./mod.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Infectious disease modelling</span></a>
+ <span class="menu-text">Modelling</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -339,12 +339,6 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Useful functions</span></span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./surv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Survival analysis</span></span></a>
-  </div>
-</li>
       </ul>
   </li>
     </ul>
@@ -364,10 +358,7 @@ window.Quarto = {
   <li><a href="#sec-rt-inst" id="toc-sec-rt-inst" class="nav-link" data-scroll-target="#sec-rt-inst">Instantaneous reproduction number <span class="math inline">\(R_t^i\)</span></a></li>
   <li><a href="#sec-rt-case" id="toc-sec-rt-case" class="nav-link" data-scroll-target="#sec-rt-case">Case reproduction number <span class="math inline">\(R_t^c\)</span></a></li>
   </ul></li>
-  <li><a href="#growth-rate-r-and-reproduction-number-r" id="toc-growth-rate-r-and-reproduction-number-r" class="nav-link" data-scroll-target="#growth-rate-r-and-reproduction-number-r">Growth rate <span class="math inline">\(r\)</span> and reproduction number <span class="math inline">\(R\)</span></a>
-  <ul>
-  <li><a href="#growth-rate-r" id="toc-growth-rate-r" class="nav-link" data-scroll-target="#growth-rate-r">Growth rate <span class="math inline">\(r\)</span></a></li>
-  </ul></li>
+  <li><a href="#sec-rnum-growthrate-r0" id="toc-sec-rnum-growthrate-r0" class="nav-link" data-scroll-target="#sec-rnum-growthrate-r0">Growth rate <span class="math inline">\(r\)</span> and basic reproduction number <span class="math inline">\(R_0\)</span></a></li>
   </ul>
 </nav>
     </div>
@@ -404,11 +395,28 @@ window.Quarto = {
 <p><span class="theorem-title"><strong>Definition 1</strong></span> <span class="math inline">\(R_0\)</span> (pronounced /R naught/) is the average number of individuals infected by each infectious individual in a <strong>fully susceptible population</strong> <span class="citation" data-cites="vegvari2022">(<a href="references.html#ref-vegvari2022" role="doc-biblioref">Vegvari et al., 2022</a>)</span>. In short, <span class="math inline">\(R_0\)</span> is the <span class="math inline">\(R\)</span> in a fully susceptible population, the <strong>maximum</strong> <span class="math inline">\(R\)</span> in a population.</p>
 </div>
 <p>The basic reproduction number is sometimes called the <em>basic reproductive number</em> or <em>basic reproductive ratio</em> <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span>.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Cautions
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="math inline">\(R_0\)</span> is <strong>not a biological constant</strong> for a pathogen, a rate over time, or a measure of disease severity, and <span class="math inline">\(R_0\)</span> cannot be modified through vaccination campaigns <span class="citation" data-cites="delamater2019">(<a href="references.html#ref-delamater2019" role="doc-biblioref">Delamater et al., 2019</a>)</span>. In fact, more than 20 different <span class="math inline">\(R_0\)</span> values (range 5.4-18) were reported for measles in a variety of study areas and periods, and a review in 2017 identified feasible measles <span class="math inline">\(R_0\)</span> values of 3.7-203.3 <span class="citation" data-cites="delamater2019">(<a href="references.html#ref-delamater2019" role="doc-biblioref">Delamater et al., 2019</a>)</span>.</li>
+<li><span class="math inline">\(R_0\)</span> estimates in the early phase may <strong>not</strong> be <strong>representative</strong> for the population <strong>if</strong> the group of <strong>initial transmitters is atypical</strong> <span class="citation" data-cites="vegvari2022">(<a href="references.html#ref-vegvari2022" role="doc-biblioref">Vegvari et al., 2022</a>)</span> (e.g.&nbsp;monkeypox).</li>
+<li><span class="math inline">\(R_0\)</span> may be <strong>incorrectly</strong> estimated <strong>if asymptomatic individuals are not counted</strong> or recognised, and their epidemiologically relevant <strong>behaviour differs</strong> from that of symptomatic individuals <span class="citation" data-cites="vegvari2022">(<a href="references.html#ref-vegvari2022" role="doc-biblioref">Vegvari et al., 2022</a>)</span>.</li>
+</ul>
+</div>
+</div>
 </section>
 <section id="effective-reproduction-number-r_e" class="level2">
 <h2 class="anchored" data-anchor-id="effective-reproduction-number-r_e">Effective reproduction number <span class="math inline">\(R_e\)</span></h2>
 <div id="def-re" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 2</strong></span> <span class="math inline">\(R_e\)</span> is the average number of secondary cases generated by each infectious individual throughout their infectious period in a population where <strong>not all individuals are susceptible</strong>.</p>
+<p><span class="theorem-title"><strong>Definition 2</strong></span> <span class="math inline">\(R_e\)</span> is the average number of secondary cases generated by each infectious individual throughout their infectious period in a population that may be <strong>partially immune</strong> <span class="citation" data-cites="wallinga2006">(<a href="references.html#ref-wallinga2006" role="doc-biblioref">Wallinga &amp; Lipsitch, 2006</a>)</span>.</p>
 </div>
 <p>Let <span class="math inline">\(s\)</span> be the proportion of the population that is susceptible.</p>
 <p><span class="math display">\[R_e = s \times R_0\]</span></p>
@@ -431,8 +439,8 @@ window.Quarto = {
 <p>At the beginning of an outbreak, we can estimate <span class="math inline">\(R_0\)</span> when the whole population is fully susceptible. As the outbreak progresses, the number of susceptible individuals decreases, leading to a decline in <span class="math inline">\(R_0\)</span>. This adjusted value is referred to as <span class="math inline">\(R_t\)</span> (if we want to measure at each time <span class="math inline">\(t\)</span>). At the peak of the epidemic curve, <span class="math inline">\(R_t = 1\)</span>. After this peak, <span class="math inline">\(R_t\)</span> continues to decrease, resulting in a decline in the number of new cases and the epidemic curve going down.</p>
 <p><span class="math inline">\(R_t\)</span> can be defined in 2 ways:</p>
 <ol type="1">
-<li><strong>Instantaneous reproduction number</strong>: the average number of individuals someone infected at time <span class="math inline">\(t\)</span> <strong>would infect</strong> if <strong>conditions remained unchanged</strong> <span class="citation" data-cites="green2022">(<a href="references.html#ref-green2022" role="doc-biblioref">Green et al., 2022</a>)</span>.</li>
-<li><strong>Case reproduction number</strong>: the average number of people an individual infected at time t <strong>actually infects</strong>, which will depend on changes in policy or behavior over the period of that cohort’s infection, and <strong>can only be</strong> estimated in <strong>retrospect</strong> <span class="citation" data-cites="green2022">(<a href="references.html#ref-green2022" role="doc-biblioref">Green et al., 2022</a>)</span>.</li>
+<li><strong>Instantaneous reproduction number</strong> (<span class="math inline">\(R_t^i\)</span>): the average number of individuals someone infected at time <span class="math inline">\(t\)</span> <strong>would infect</strong> if <strong>conditions remained unchanged</strong> <span class="citation" data-cites="green2022">(<a href="references.html#ref-green2022" role="doc-biblioref">Green et al., 2022</a>)</span>.</li>
+<li><strong>Case reproduction number</strong> (<span class="math inline">\(R_t^c\)</span>): the average number of people an individual infected at time t <strong>actually infects</strong>, which will depend on changes in policy or behavior over the period of that cohort’s infection, and <strong>can only be</strong> estimated in <strong>retrospect</strong> <span class="citation" data-cites="green2022">(<a href="references.html#ref-green2022" role="doc-biblioref">Green et al., 2022</a>)</span>.</li>
 </ol>
 <section id="sec-rt-inst" class="level3">
 <h3 class="anchored" data-anchor-id="sec-rt-inst">Instantaneous reproduction number <span class="math inline">\(R_t^i\)</span></h3>
@@ -453,25 +461,96 @@ window.Quarto = {
 <p>Methods to estimate instantaneous reproduction number includes Wallinga and Teunis method <span class="citation" data-cites="wallinga2004">(<a href="references.html#ref-wallinga2004" role="doc-biblioref">Wallinga &amp; Teunis, 2004</a>)</span>.</p>
 </section>
 </section>
-<section id="growth-rate-r-and-reproduction-number-r" class="level2">
-<h2 class="anchored" data-anchor-id="growth-rate-r-and-reproduction-number-r">Growth rate <span class="math inline">\(r\)</span> and reproduction number <span class="math inline">\(R\)</span></h2>
-<p>Growth rate <span class="math inline">\(r\)</span> and reproduction number <span class="math inline">\(R\)</span> are basically the same. <span class="math inline">\(r\)</span> is used in continuous time and <span class="math inline">\(R\)</span> is used in discrete time.</p>
-<section id="growth-rate-r" class="level3">
-<h3 class="anchored" data-anchor-id="growth-rate-r">Growth rate <span class="math inline">\(r\)</span></h3>
-<p>The rate at which new cases are arising <span class="citation" data-cites="anderson2020">(<a href="references.html#ref-anderson2020" role="doc-biblioref">Anderson et al., 2020</a>)</span>. It can be a positive number (new infections is increasing) or a negative number (new infections is decreasing).</p>
-<p>The number of new infections at an increasing or decreasing exponential rate. It is dependent on the reproduction number and timescale between infections.</p>
-<p><span class="math display">\[\frac{d_\text{newCases}}{dt}\]</span></p>
+<section id="sec-rnum-growthrate-r0" class="level2">
+<h2 class="anchored" data-anchor-id="sec-rnum-growthrate-r0">Growth rate <span class="math inline">\(r\)</span> and basic reproduction number <span class="math inline">\(R_0\)</span></h2>
+<p>In the <strong>initial phase</strong> of an epidemic where the population is <strong>completely susceptible</strong>, incidence increase <strong>exponentially</strong>.</p>
+<p>The exponential growth rate <span class="math inline">\(r\)</span> is defined as the <em>per capita</em> change in number of new cases per unit of time <span class="citation" data-cites="wallinga2006">(<a href="references.html#ref-wallinga2006" role="doc-biblioref">Wallinga &amp; Lipsitch, 2006</a>)</span>. Let <span class="math inline">\(C_0\)</span> be the incidence at time <span class="math inline">\(t = 0\)</span>. For continuous time <span class="math inline">\(t\)</span>, the incidence at time <span class="math inline">\(t\)</span> is given by:</p>
+<p><span class="math display">\[C_t = C_0 e^{rt}\]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Explanation
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Let <span class="math inline">\(M\)</span> is the money you have at time <span class="math inline">\(t = 0\)</span>, <span class="math inline">\(r\)</span> is the annual interest rate. The money you have after each year would be:</p>
+<p><span class="math display">\[\begin{align} M_1 &amp; = M_0 + r M_0 = M_0 (1 + r) \\
+M_2 &amp; = M_1 + r M_1 = M_1 (1 + r) \\
+&amp; = M_0 (1 + r)(1 + r) = M_0 (1 + r)^2 \\
+M_3 &amp; = M_2 + r M_2 = M_2 (1 + r) \\
+&amp; = M_0 (1 + r)^2(1 + r) = M_0 (1 + r)^3 \\
+&amp; \cdots \\
+M_t &amp; = M_0 (1 + r)^t \end{align}\]</span></p>
+<p>Now we imagined that, instead of paying interest once a year at a rate of <span class="math inline">\(r\)</span>, a bank might add interest twice a year at the rate <span class="math inline">\(\frac{r}{2}\)</span>, or three times a year at the rate <span class="math inline">\(\frac{r}{3}\)</span>. In general, we considered interest added <span class="math inline">\(n\)</span> times a year at the rate of <span class="math inline">\(\frac{r}{n}\)</span>. In this case, each year your money is:</p>
+<p><span class="math display">\[M_t = M_0 \left(1 + \frac{r}{n} \right)^{nt}\]</span></p>
+<p>When <span class="math inline">\(n\)</span> is very large and thus <span class="math inline">\(\frac{r}{n}\)</span> is very small, we can prove that:</p>
+<p><span class="math display">\[\lim_{n \to \infty} \left(1 + \frac{r}{n}\right)^{n} \approx e^r\]</span></p>
+<p><strong>Proof</strong></p>
+<p><span class="math display">\[L = \lim_{n \to \infty} \left(1 + \frac{r}{n}\right)^{n}\]</span></p>
+<p>Take the natural logarithm:</p>
+<p><span class="math display">\[\log L = \log \left[ \lim_{n \to \infty} \left(1 + \frac{r}{n}\right)^n \right]\]</span></p>
+<p>Since the natural logarithm is a continuous function, we can bring the limit inside the logarithm.</p>
+<p><span class="math display">\[\begin{align} \log L &amp; = \lim_{n \to \infty} \log \left[ \left(1 + \frac{r}{n}\right)^n \right] \\
+&amp; = \lim_{n \to \infty} n \log \left(1 + \frac{r}{n} \right) \end{align}\]</span></p>
+<p>For small values of <span class="math inline">\(x\)</span>, we can approximate <span class="math inline">\(\log(1 + x) \approx x - \frac{x^2}{2} + \frac{x^3}{3} - \cdots\)</span>. When <span class="math inline">\(x\)</span> is very small, higher-order terms become negligible, so: <span class="math display">\[\log \left(1 + \frac{r}{n}\right) \approx \frac{r}{n}\]</span></p>
+<p>Substitute this approximation into <span class="math inline">\(L\)</span>:</p>
+<p><span class="math display">\[\log L \approx \lim_{n \to \infty} n \left( \frac{r}{n} \right) = \lim_{n \to \infty} r = r\]</span></p>
+<p>Therefore:</p>
+<p><span class="math display">\[\begin{align} \log L &amp; \approx r \\
+\Leftrightarrow L &amp; \approx e^r \\
+\Leftrightarrow \lim_{n \to \infty} \left(1 + \frac{r}{n}\right)^{n} &amp; \approx e^r \end{align}\]</span></p>
+<p>Therefore:</p>
+<p><span class="math display">\[M_t = M_0 \left(1 + \frac{r}{n} \right)^{nt} \approx M_0 e^{rt}\]</span></p>
+</div>
+</div>
+</div>
+<p>We start with <span class="math inline">\(C_0\)</span> infected individuals, each infects <span class="math inline">\(R_0\)</span> individuals after generation time <span class="math inline">\(T_g\)</span>. The number of infected individuals will be:</p>
+<p><span id="eq-c0-r0"><span class="math display">\[\begin{align} C_{T_g} &amp; = C_0 R_0 \end{align} \tag{1}\]</span></span></p>
+<p>We also proved that:</p>
+<p><span class="math display">\[\begin{align} C_t &amp; = C_0 e^{rt} \\
+\Leftrightarrow C_{T_g} &amp; = C_0 e^{rT_g} \end{align}\]</span></p>
+<p>Substitute <a href="#eq-c0-r0" class="quarto-xref">Equation&nbsp;<span>1</span></a>, we have:</p>
+<p><span class="math display">\[\begin{align} C_0 R_0 &amp; = C_0 e^{rT_g} \\
+\Leftrightarrow R_0 &amp; = e^{rT_g} \end{align}\]</span></p>
+<p>We can prove that:</p>
+<p><span class="math display">\[R_0 = e^{rT_g} \approx 1 + rT_g \]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Proof
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Expand <span class="math inline">\(e^x\)</span> using the Taylor series:</p>
+<p><span class="math display">\[e^x = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots\]</span></p>
+<p>Substitute <span class="math inline">\(x\)</span> with <span class="math inline">\(rT_g\)</span> in the Taylor series expansion:</p>
+<p><span class="math display">\[e^{rT_g} = 1 + rT_g + \frac{{rT_g}^2}{2!} + \frac{{rT_g}^3}{3!} + \cdots\]</span></p>
+<p>For small values of <span class="math inline">\(rT_g\)</span>, <span class="math inline">\(\frac{{rT_g}^2}{2!}\)</span>, <span class="math inline">\(\frac{{rT_g}^3}{3!}\)</span> become very small and can be neglected:</p>
+<p><span class="math display">\[e^{rT_g} \approx 1 + rT_g\]</span></p>
+</div>
+</div>
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
-<div id="ref-anderson2020" class="csl-entry" role="listitem">
-Anderson, R., Donnelly, C., Hollingsworth, D., Keeling, M., Vegvari, C., Baggaley, R., &amp; Maddren, R. (2020). Reproduction number (R) and growth rate (r) of the COVID-19 epidemic in the UK. <em>The Royal Society</em>.
-</div>
 <div id="ref-bettencourt2008" class="csl-entry" role="listitem">
 Bettencourt, L. M. A., &amp; Ribeiro, R. M. (2008). Real Time Bayesian Estimation of the Epidemic Potential of Emerging Infectious Diseases. <em>PLOS ONE</em>, <em>3</em>(5), e2185. <a href="https://doi.org/10.1371/journal.pone.0002185">https://doi.org/10.1371/journal.pone.0002185</a>
 </div>
 <div id="ref-cori2013" class="csl-entry" role="listitem">
 Cori, A., Ferguson, N. M., Fraser, C., &amp; Cauchemez, S. (2013). A new framework and software to estimate time-varying reproduction numbers during epidemics. <em>American Journal of Epidemiology</em>, <em>178</em>(9), 1505–1512. <a href="https://doi.org/10.1093/aje/kwt133">https://doi.org/10.1093/aje/kwt133</a>
+</div>
+<div id="ref-delamater2019" class="csl-entry" role="listitem">
+Delamater, P. L., Street, E. J., Leslie, T. F., Yang, Y. T., &amp; Jacobsen, K. H. (2019). <em>Complexity of the basic reproduction number (R0) - volume 25, number 1<span></span>january 2019 - emerging infectious diseases journal - CDC</em>. <a href="https://doi.org/10.3201/eid2501.171901">https://doi.org/10.3201/eid2501.171901</a>
 </div>
 <div id="ref-vandendriessche2017" class="csl-entry" role="listitem">
 Driessche, P. van den. (2017). Reproduction numbers of infectious disease models. <em>Infectious Disease Modelling</em>, <em>2</em>(3), 288–303. <a href="https://doi.org/10.1016/j.idm.2017.06.002">https://doi.org/10.1016/j.idm.2017.06.002</a>
@@ -488,11 +567,13 @@ Knight, J., &amp; Mishra, S. (2020). Estimating effective reproduction number us
 <div id="ref-vegvari2022" class="csl-entry" role="listitem">
 Vegvari, C., Abbott, S., Ball, F., Brooks-Pollock, E., Challen, R., Collyer, B. S., Dangerfield, C., Gog, J. R., Gostic, K. M., Heffernan, J. M., Hollingsworth, T. D., Isham, V., Kenah, E., Mollison, D., Panovska-Griffiths, J., Pellis, L., Roberts, M. G., Scalia Tomba, G., Thompson, R. N., &amp; Trapman, P. (2022). Commentary on the use of the reproduction number R during the COVID-19 pandemic. <em>Statistical Methods in Medical Research</em>, <em>31</em>(9), 1675–1685. <a href="https://doi.org/10.1177/09622802211037079">https://doi.org/10.1177/09622802211037079</a>
 </div>
+<div id="ref-wallinga2006" class="csl-entry" role="listitem">
+Wallinga, J., &amp; Lipsitch, M. (2006). How generation intervals shape the relationship between growth rates and reproductive numbers. <em>Proceedings of the Royal Society B: Biological Sciences</em>, <em>274</em>(1609), 599–604. <a href="https://doi.org/10.1098/rspb.2006.3754">https://doi.org/10.1098/rspb.2006.3754</a>
+</div>
 <div id="ref-wallinga2004" class="csl-entry" role="listitem">
 Wallinga, J., &amp; Teunis, P. (2004). Different epidemic curves for severe acute respiratory syndrome reveal similar impacts of control measures. <em>American Journal of Epidemiology</em>, <em>160</em>(6), 509–516. <a href="https://doi.org/10.1093/aje/kwh255">https://doi.org/10.1093/aje/kwh255</a>
 </div>
 </div>
-</section>
 </section>
 
 </main> <!-- /main -->

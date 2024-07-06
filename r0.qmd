@@ -1,53 +1,147 @@
 # Estimating $R_0$
 
-[@jones2007; @chitnis2017]
+Estimations of the R0 value are often calculated as a function of 3 primary parameters [@jones2007; @chitnis2017]:
 
-$$R_0 = \begin{pmatrix} \text{Number of} \\ \text{contacts} \\ \text{per unit time} \end{pmatrix} \times \begin{pmatrix} \text{Probability of} \\ \text{transmission} \\ \text{per contact} \end{pmatrix} \times \begin{pmatrix} \text{Duration} \\ \text{of} \\ \text{infection} \end{pmatrix}$$
+$$R_0 = \begin{pmatrix} \text{Number of} \\ \text{contacts} \\ \text{per unit time} \end{pmatrix} \times \begin{pmatrix} \text{Probability of} \\ \text{transmission} \\ \text{per contact} \end{pmatrix} \times \begin{pmatrix} \text{Duration} \\ \text{of} \\ \text{infectious} \end{pmatrix}$$
+
+## Exponential growth rate
+
+Step 1. Find an estimate for the mean generation time $T_g$.
+
+Step 2. Identify the exponential phase of the epidemic curve: the period of which $\log(\text{incidence})$ is linear.
+
+Step 3. Estimate the growth rate $r$ for that phase by finding the slope from the linear regression on the $\log(\text{incidence})$.
+
+::: {.callout-tip collapse="true"}
+
+## Proof
+
+See @sec-rnum-growthrate-r0 for more details. During the exponential phase, the incidence at time $t$ is given by:
+
+$$C_t = C_0 e^{rt}$$
+
+Take the natural logarithm:
+
+$$\log C_t = log C_0 + rt$$
+
+Therefore $r$ is the slope from the linear regression on the $\log(\text{incidence})$.
+
+:::
+
+Step 4. Given the exponential growth rate $r$ and the $T_g$, calculate the basic reproduction number:
+
+- In an SIR model $T_g = \frac{1}{\gamma}$ so:
+
+$$R_0 \approx 1 + \frac{r}{\gamma}$$
+
+- In an SEIR model $T_g = \frac{1}{\gamma} + \frac{1}{\sigma}$ so:
+
+$$R_0 \approx \left( 1 + \frac{r}{\gamma} \right) \left( 1 + \frac{r}{\sigma} \right)$$
+
+### Code
+
+```{r, message=FALSE, warning=FALSE}
+library(R0)
+library(ggplot2)
+```
+
+```{r}
+#| fig-width: 4
+#| fig-height: 2.5
+#| out-width: "100%"
+df <- read.csv("data/flu_inc.csv")
+
+ggplot(df, aes(x = day, y = inc)) +
+  geom_point() +
+  labs(x = "Day", y = "Incidence") +
+  theme_minimal()
+```
+
+```{r}
+#| fig-width: 4
+#| fig-height: 2.5
+#| out-width: "100%"
+df$loginc <- log(df$inc)
+
+ggplot(df, aes(x = day, y = loginc)) +
+  geom_point() +
+  labs(x = "Day", y = "Log incidence") +
+  theme_minimal()
+
+lm(loginc ~ day, data = df[5:13,])
+```
+
+### 
+
+```{r}
+1 + 0.09*4
+
+gt <- generation.time("gamma", c(3, 1.5))
+tmp <- data.frame()
+est.R0.EG(df$inc, gt, begin = 5, end = 13)
+```
+
+## Simple compartmental models
+
+Consider a simple closed population SIR model.
+
+$$\begin{align} \frac{dS}{dt} & = -\beta SI \\ \frac{dI}{dt} & = \beta SI - \gamma I\\ \frac{dR}{dt} & = \gamma I \end{align}$$
+
+Focusing on the $I$ equation:
+
+$$\frac{dI}{dt} = \beta SI - \gamma I = I (\beta S - \gamma)$$
+
+A disease spreads when:
+
+$$\begin{align} \frac{dI}{dt} & > 0 \\ \Leftrightarrow I (\beta S - \gamma) & > 0 \\ \Leftrightarrow \beta S - \gamma & > 0 \\ \Leftrightarrow \beta S & > \gamma \\ \Leftrightarrow \frac{\beta S}{\gamma} & > 1 \end{align}$$
+
+This leads to the definition of $R_0$. By @def-r0, $R_0$ is the $R$ in a fully susceptible population $S_0$:
+
+$$R_0 = \frac{\beta S_0}{\gamma}$$
+
+Therefore:
+
+-   $R_0 > 1$ meaning that $\frac{dI}{dt} > 0$, then the disease will spread.
+-   $R_0 < 1$ meaning that $\frac{dI}{dt} < 0$, then no epidemic occurs.
+
+For more complex compartmental models, especially those with more infected compartments, as proposed by [@diekmann1990] and [@vandendriessche2002], $R_0$ can be determined using the next generation matrix [@vandendriessche2017].
 
 ## Next generation matrix
 
 $R_0$ is the maximum absolute eigenvalue (also called the spectral radius) of the next generation matrix (NGM) [@vandendriessche2017].
 
-Let consider a SEIR model with equal birth and death rate $\mu$
+Consider a SEIR model with equal birth and death rate $\mu$.
 
 $$\begin{align} \frac{dS}{dt} & = \mu (S + E + I + R) -\beta SI - \mu S \\ \frac{dE}{dt} & = \beta SI - \sigma E - \mu E \\ \frac{dI}{dt} & = \sigma E - \gamma I - \mu I \\ \frac{dR}{dt} & = \gamma I - \mu R \end{align}$$
 
-### Step 1. Identify the infected compartments
+**Step 1. Identify the infected compartments**
 
 For our SEIR model, the infected compartments are $E$ and $I$.
 
-### Step 2. Write the NGM functions
+**Step 2. Write the NGM functions**
 
-- $\mathcal{F}_i(x)$: is the rate of appearance of new infections in compartment $i$ [@vandendriessche2017] (caused by contact).
-- $\mathcal{V}_i(x)$: is the rate of other transitions between compartment $i$ and other infected compartments [@vandendriessche2017] (caused by transition between compartments).
+-   $\mathcal{F}_i(x)$: is the rate of appearance of new infections in compartment $i$ [@vandendriessche2017] (caused by contact).
+-   $\mathcal{V}_i(x)$: is the rate of other transitions between compartment $i$ and other infected compartments [@vandendriessche2017] (caused by transition between compartments).
 
 For our SEIR model, we would write $\mathcal{F}$ and $\mathcal{V}$ as follows:
 
-:::: {.columns}
-
+::: columns
 ::: {.column width="50%"}
+$$\mathcal{F} = \begin{bmatrix} \beta SI \\ 0 \end{bmatrix}$$ $\mathcal{F}$ is a vector contains of $\begin{bmatrix} \mathcal{F}_1 \\ \mathcal{F}_2 \end{bmatrix}$:
 
-$$\mathcal{F} = \begin{bmatrix} \beta SI \\ 0 \end{bmatrix}$$
-
-In which $\mathcal{F}$ is a vector contains of $\begin{bmatrix} \mathcal{F}_1 \\ \mathcal{F}_2 \end{bmatrix}$:
-
-- $\mathcal{F}_1 = \beta SI$: the rate of new infections (caused by contact) in compartment $E$.
-- $\mathcal{F}_2 = 0$: as there is no new infections (caused by contact) in compartment $I$.
-
+-   $\mathcal{F}_1 = \beta SI$: the rate of new infections (caused by contact) in compartment $E$.
+-   $\mathcal{F}_2 = 0$: as there is no new infections (caused by contact) in compartment $I$.
 :::
 
 ::: {.column width="50%"}
-
 $$\mathcal{V} = \begin{bmatrix} \sigma E + \mu E \\ - \sigma E + \gamma I + \mu I \end{bmatrix}$$
 
-In which $\mathcal{V}$ is a vector contains of $\begin{bmatrix} \mathcal{V}_1 \\ \mathcal{V}_2 \end{bmatrix}$:
+$\mathcal{V}$ is a vector contains of $\begin{bmatrix} \mathcal{V}_1 \\ \mathcal{V}_2 \end{bmatrix}$:
 
-- $\mathcal{V}_1 = \sigma E + \mu E$: is the rate of other transitions to and from compartment $E$.
-- $\mathcal{V}_2 = - \sigma E + \gamma I + \mu I$: is the rate of other transitions to and from compartment $I$.
-
+-   $\mathcal{V}_1 = \sigma E + \mu E$: is the rate of other transitions to and from compartment $E$.
+-   $\mathcal{V}_2 = - \sigma E + \gamma I + \mu I$: is the rate of other transitions to and from compartment $I$.
 :::
-
-::::
+:::
 
 $\mathcal{F}$ and $\mathcal{V}$ are written such that:
 
@@ -59,7 +153,7 @@ $$\frac{dE}{dt} = \mathcal{F}_1 - \mathcal{V}_1 = \beta SI - (\sigma E + \mu E)$
 
 $$\frac{dI}{dt} = \mathcal{F}_2 - \mathcal{V}_2 = 0 - (- \sigma E + \gamma I + \mu I)$$
 
-### Step 3. Find the Jacobian matrix
+**Step 3. Find the Jacobian matrix**
 
 Jacobian matrix $F$ for $\mathcal{F}$, and $V$ for $\mathcal{V}$. Jacobian matrix is a matrix contain all partial derivatives of a vector function.
 
@@ -67,12 +161,12 @@ $$\begin{align} F & = \begin{bmatrix} \frac{\partial \mathcal{F}_1}{\partial E} 
 
 In which:
 
-- $\frac{\partial [\beta SI]}{\partial E} = 0$: because there is no $E$ in $\beta SI$.
-- $\frac{\partial [\beta SI]}{\partial I} = \beta S$.
+-   $\frac{\partial [\beta SI]}{\partial E} = 0$: because there is no $E$ in $\beta SI$.
+-   $\frac{\partial [\beta SI]}{\partial I} = \beta S$.
 
 $$\begin{align} V & = \begin{bmatrix} \frac{\partial \mathcal{V}_1}{\partial E} & \frac{\partial \mathcal{V}_1}{\partial I} \\ \frac{\partial \mathcal{V}_2}{\partial E} & \frac{\partial \mathcal{V}_2}{\partial I} \end{bmatrix} \\ & = \begin{bmatrix} \frac{\partial [\sigma E + \mu E]}{\partial E} & \frac{\partial [\sigma E + \mu E]}{\partial I} \\ \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial E} & \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial I} \end{bmatrix} \\ & = \begin{bmatrix} \sigma + \mu & 0 \\ - \sigma & \gamma + \mu \end{bmatrix} \end{align}$$
 
-### Step 4. Compute the NGM
+**Step 4. Compute the NGM**
 
 Use @def-inv-matrix to compute inverse matrix $V^{-1}$:
 
@@ -80,16 +174,8 @@ $$\begin{align} V^{-1} & = \frac{1}{(\sigma + \mu)(\gamma + \mu)} \begin{bmatrix
 
 $$\begin{align} K & = FV^{-1} \\ & = \begin{bmatrix} 0 & \beta S \\ 0 & 0 \end{bmatrix} \begin{bmatrix} \frac{1}{\sigma + \mu} & 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} & \frac{1}{\gamma + \mu} \end{bmatrix} \\ & = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} & \frac{\beta S}{\gamma + \mu} \\ 0 & 0 \end{bmatrix} \end{align}$$
 
-### Step 5. Compute $R_0$
-
-$R_0$ is the eigenvalues of the NGM.
-
-$$\begin{align} det(K - \lambda) & = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda & \frac{\beta S}{\gamma + \mu} \\ 0 & 0 - \lambda \end{bmatrix} \\ & = [\frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda][0 - \lambda] \end{align}$$
-
-$$R_0 = \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)}$$
-
-::: {.callout-note collapse="true"}
-## A simple example
+::: {.callout-tip collapse="true"}
+## What is a next generation matrix?
 
 Source: quantpie's [video](https://www.youtube.com/watch?v=xJ5mizenTII).
 
@@ -109,4 +195,54 @@ $$\begin{align} \begin{bmatrix} 3 - \lambda & 1 \\ 2 & 2 - \lambda \end{bmatrix}
 There are two roots $\lambda = 4$ and $\lambda = 1$, for an outbreak to occur $R_0 > 1$, so here $R_0 = 4$.
 :::
 
-For more complex compartmental models, especially those with more infected compartments [@vandendriessche2017]
+**Step 5. Compute** $R_0$
+
+$R_0$ is the eigenvalues of the NGM.
+
+$$\begin{align} det(K - \lambda) & = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda & \frac{\beta S}{\gamma + \mu} \\ 0 & 0 - \lambda \end{bmatrix} \\ & = [\frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda][0 - \lambda] \end{align}$$
+
+$$R_0 = \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)}$$
+
+::: {.callout-note collapse="true"}
+## Use NGM to compute $R_0$ for SIR model
+
+Consider a simple closed population SIR model.
+
+$$\begin{align} \frac{dS}{dt} & = -\beta SI \\ \frac{dI}{dt} & = \beta SI - \gamma I\\ \frac{dR}{dt} & = \gamma I \end{align}$$
+
+**Step 1. Identify the infected compartments**
+
+For our SIR model, the infected compartment is $I$.
+
+**Step 2. Write the NGM functions**
+
+$$\mathcal{F} = \beta SI$$
+
+$$\mathcal{V} = \gamma I$$
+
+Such that we have:
+
+$$\frac{dI}{dt} = \mathcal{F} - \mathcal{V} = \beta SI - \gamma I$$
+
+**Step 3. Find the Jacobian matrix**
+
+$$F = \frac{\partial \mathcal{F}}{\partial I} = \frac{\partial [\beta SI]}{\partial I} = \beta S$$
+
+$$V = \frac{\partial \mathcal{V}}{\partial I} = \frac{\partial [\gamma I]}{\partial I} = \gamma$$
+
+**Step 4 and 5. Compute the NGM and** $R_0$
+
+$$V^{-1} = \gamma^{-1} = \frac{1}{\gamma}$$
+
+$$K = FV^{-1} = \frac{\beta S}{\gamma}$$
+
+Here we also have $R_0$.
+
+$$R_0 = \frac{\beta S}{\gamma}$$
+:::
+
+## Epidemic final size
+
+If there were no interventions or changes in behavior, the proportion of the population infected during the entire course of an epidemic would be approximately the non-zero solution of the equation:
+
+\$\$\$\$

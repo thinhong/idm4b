@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -97,6 +131,10 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-X391ZN63GG', { 'anonymize_ip': true});
 </script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -173,7 +211,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./mod.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Infectious disease modelling</span></a>
+ <span class="menu-text">Modelling</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -335,12 +373,6 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Useful functions</span></span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./surv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Survival analysis</span></span></a>
-  </div>
-</li>
       </ul>
   </li>
     </ul>
@@ -353,14 +385,14 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#next-generation-matrix" id="toc-next-generation-matrix" class="nav-link active" data-scroll-target="#next-generation-matrix"><span class="header-section-number">8.1</span> Next generation matrix</a>
+  <li><a href="#exponential-growth-rate" id="toc-exponential-growth-rate" class="nav-link active" data-scroll-target="#exponential-growth-rate"><span class="header-section-number">8.1</span> Exponential growth rate</a>
   <ul>
-  <li><a href="#step-1.-identify-the-infected-compartments" id="toc-step-1.-identify-the-infected-compartments" class="nav-link" data-scroll-target="#step-1.-identify-the-infected-compartments"><span class="header-section-number">8.1.1</span> Step 1. Identify the infected compartments</a></li>
-  <li><a href="#step-2.-write-the-ngm-functions" id="toc-step-2.-write-the-ngm-functions" class="nav-link" data-scroll-target="#step-2.-write-the-ngm-functions"><span class="header-section-number">8.1.2</span> Step 2. Write the NGM functions</a></li>
-  <li><a href="#step-3.-find-the-jacobian-matrix" id="toc-step-3.-find-the-jacobian-matrix" class="nav-link" data-scroll-target="#step-3.-find-the-jacobian-matrix"><span class="header-section-number">8.1.3</span> Step 3. Find the Jacobian matrix</a></li>
-  <li><a href="#step-4.-compute-the-ngm" id="toc-step-4.-compute-the-ngm" class="nav-link" data-scroll-target="#step-4.-compute-the-ngm"><span class="header-section-number">8.1.4</span> Step 4. Compute the NGM</a></li>
-  <li><a href="#step-5.-compute-r_0" id="toc-step-5.-compute-r_0" class="nav-link" data-scroll-target="#step-5.-compute-r_0"><span class="header-section-number">8.1.5</span> Step 5. Compute <span class="math inline">\(R_0\)</span></a></li>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">8.1.1</span> Code</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"><span class="header-section-number">8.1.2</span> </a></li>
   </ul></li>
+  <li><a href="#simple-compartmental-models" id="toc-simple-compartmental-models" class="nav-link" data-scroll-target="#simple-compartmental-models"><span class="header-section-number">8.2</span> Simple compartmental models</a></li>
+  <li><a href="#next-generation-matrix" id="toc-next-generation-matrix" class="nav-link" data-scroll-target="#next-generation-matrix"><span class="header-section-number">8.3</span> Next generation matrix</a></li>
+  <li><a href="#epidemic-final-size" id="toc-epidemic-final-size" class="nav-link" data-scroll-target="#epidemic-final-size"><span class="header-section-number">8.4</span> Epidemic final size</a></li>
   </ul>
 </nav>
     </div>
@@ -386,19 +418,134 @@ window.Quarto = {
 </header>
 
 
-<p><span class="citation" data-cites="jones2007 chitnis2017">(<a href="references.html#ref-chitnis2017" role="doc-biblioref">Chitnis, 2017</a>; <a href="references.html#ref-jones2007" role="doc-biblioref">Jones, 2007</a>)</span></p>
-<p><span class="math display">\[R_0 = \begin{pmatrix} \text{Number of} \\ \text{contacts} \\ \text{per unit time} \end{pmatrix} \times \begin{pmatrix} \text{Probability of} \\ \text{transmission} \\ \text{per contact} \end{pmatrix} \times \begin{pmatrix} \text{Duration} \\ \text{of} \\ \text{infection} \end{pmatrix}\]</span></p>
-<section id="next-generation-matrix" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="next-generation-matrix"><span class="header-section-number">8.1</span> Next generation matrix</h2>
-<p><span class="math inline">\(R_0\)</span> is the maximum absolute eigenvalue (also called the spectral radius) of the next generation matrix (NGM) <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span>.</p>
-<p>Let consider a SEIR model with equal birth and death rate <span class="math inline">\(\mu\)</span></p>
-<p><span class="math display">\[\begin{align} \frac{dS}{dt} &amp; = \mu (S + E + I + R) -\beta SI - \mu S \\ \frac{dE}{dt} &amp; = \beta SI - \sigma E - \mu E \\ \frac{dI}{dt} &amp; = \sigma E - \gamma I - \mu I \\ \frac{dR}{dt} &amp; = \gamma I - \mu R \end{align}\]</span></p>
-<section id="step-1.-identify-the-infected-compartments" class="level3" data-number="8.1.1">
-<h3 data-number="8.1.1" class="anchored" data-anchor-id="step-1.-identify-the-infected-compartments"><span class="header-section-number">8.1.1</span> Step 1. Identify the infected compartments</h3>
-<p>For our SEIR model, the infected compartments are <span class="math inline">\(E\)</span> and <span class="math inline">\(I\)</span>.</p>
+<p>Estimations of the R0 value are often calculated as a function of 3 primary parameters <span class="citation" data-cites="jones2007 chitnis2017">(<a href="references.html#ref-chitnis2017" role="doc-biblioref">Chitnis, 2017</a>; <a href="references.html#ref-jones2007" role="doc-biblioref">Jones, 2007</a>)</span>:</p>
+<p><span class="math display">\[R_0 = \begin{pmatrix} \text{Number of} \\ \text{contacts} \\ \text{per unit time} \end{pmatrix} \times \begin{pmatrix} \text{Probability of} \\ \text{transmission} \\ \text{per contact} \end{pmatrix} \times \begin{pmatrix} \text{Duration} \\ \text{of} \\ \text{infectious} \end{pmatrix}\]</span></p>
+<section id="exponential-growth-rate" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="exponential-growth-rate"><span class="header-section-number">8.1</span> Exponential growth rate</h2>
+<p>Step 1. Find an estimate for the mean generation time <span class="math inline">\(T_g\)</span>.</p>
+<p>Step 2. Identify the exponential phase of the epidemic curve: the period of which <span class="math inline">\(\log(\text{incidence})\)</span> is linear.</p>
+<p>Step 3. Estimate the growth rate <span class="math inline">\(r\)</span> for that phase by finding the slope from the linear regression on the <span class="math inline">\(\log(\text{incidence})\)</span>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Proof
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>See <a href="rnum.html#sec-rnum-growthrate-r0" class="quarto-xref"><span>Section 4</span></a> for more details. During the exponential phase, the incidence at time <span class="math inline">\(t\)</span> is given by:</p>
+<p><span class="math display">\[C_t = C_0 e^{rt}\]</span></p>
+<p>Take the natural logarithm:</p>
+<p><span class="math display">\[\log C_t = log C_0 + rt\]</span></p>
+<p>Therefore <span class="math inline">\(r\)</span> is the slope from the linear regression on the <span class="math inline">\(\log(\text{incidence})\)</span>.</p>
+</div>
+</div>
+</div>
+<p>Step 4. Given the exponential growth rate <span class="math inline">\(r\)</span> and the <span class="math inline">\(T_g\)</span>, calculate the basic reproduction number:</p>
+<ul>
+<li>In an SIR model <span class="math inline">\(T_g = \frac{1}{\gamma}\)</span> so:</li>
+</ul>
+<p><span class="math display">\[R_0 \approx 1 + \frac{r}{\gamma}\]</span></p>
+<ul>
+<li>In an SEIR model <span class="math inline">\(T_g = \frac{1}{\gamma} + \frac{1}{\sigma}\)</span> so:</li>
+</ul>
+<p><span class="math display">\[R_0 \approx \left( 1 + \frac{r}{\gamma} \right) \left( 1 + \frac{r}{\sigma} \right)\]</span></p>
+<section id="code" class="level3" data-number="8.1.1">
+<h3 data-number="8.1.1" class="anchored" data-anchor-id="code"><span class="header-section-number">8.1.1</span> Code</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(R0)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/flu_inc.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> inc)) <span class="sc">+</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Day"</span>, <span class="at">y =</span> <span class="st">"Incidence"</span>) <span class="sc">+</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="r0_files/figure-html/unnamed-chunk-2-1.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>loginc <span class="ot">&lt;-</span> <span class="fu">log</span>(df<span class="sc">$</span>inc)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> loginc)) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Day"</span>, <span class="at">y =</span> <span class="st">"Log incidence"</span>) <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="r0_files/figure-html/unnamed-chunk-3-1.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(loginc <span class="sc">~</span> day, <span class="at">data =</span> df[<span class="dv">5</span><span class="sc">:</span><span class="dv">13</span>,])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = loginc ~ day, data = df[5:13, ])
+
+Coefficients:
+(Intercept)          day  
+    0.53464      0.09831  </code></pre>
+</div>
+</div>
 </section>
-<section id="step-2.-write-the-ngm-functions" class="level3" data-number="8.1.2">
-<h3 data-number="8.1.2" class="anchored" data-anchor-id="step-2.-write-the-ngm-functions"><span class="header-section-number">8.1.2</span> Step 2. Write the NGM functions</h3>
+<section id="section" class="level3" data-number="8.1.2">
+<h3 data-number="8.1.2" class="anchored" data-anchor-id="section"><span class="header-section-number">8.1.2</span> </h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="fl">0.09</span><span class="sc">*</span><span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.36</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>gt <span class="ot">&lt;-</span> <span class="fu">generation.time</span>(<span class="st">"gamma"</span>, <span class="fu">c</span>(<span class="dv">3</span>, <span class="fl">1.5</span>))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">est.R0.EG</span>(df<span class="sc">$</span>inc, gt, <span class="at">begin =</span> <span class="dv">5</span>, <span class="at">end =</span> <span class="dv">13</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Waiting for profiling to be done...</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reproduction number estimate using  Exponential Growth  method.
+R :  1.483549[ 0.9715841 , 2.227934 ]</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="simple-compartmental-models" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="simple-compartmental-models"><span class="header-section-number">8.2</span> Simple compartmental models</h2>
+<p>Consider a simple closed population SIR model.</p>
+<p><span class="math display">\[\begin{align} \frac{dS}{dt} &amp; = -\beta SI \\ \frac{dI}{dt} &amp; = \beta SI - \gamma I\\ \frac{dR}{dt} &amp; = \gamma I \end{align}\]</span></p>
+<p>Focusing on the <span class="math inline">\(I\)</span> equation:</p>
+<p><span class="math display">\[\frac{dI}{dt} = \beta SI - \gamma I = I (\beta S - \gamma)\]</span></p>
+<p>A disease spreads when:</p>
+<p><span class="math display">\[\begin{align} \frac{dI}{dt} &amp; &gt; 0 \\ \Leftrightarrow I (\beta S - \gamma) &amp; &gt; 0 \\ \Leftrightarrow \beta S - \gamma &amp; &gt; 0 \\ \Leftrightarrow \beta S &amp; &gt; \gamma \\ \Leftrightarrow \frac{\beta S}{\gamma} &amp; &gt; 1 \end{align}\]</span></p>
+<p>This leads to the definition of <span class="math inline">\(R_0\)</span>. By <a href="rnum.html#def-r0" class="quarto-xref">Definition&nbsp;<span>1</span></a>, <span class="math inline">\(R_0\)</span> is the <span class="math inline">\(R\)</span> in a fully susceptible population <span class="math inline">\(S_0\)</span>:</p>
+<p><span class="math display">\[R_0 = \frac{\beta S_0}{\gamma}\]</span></p>
+<p>Therefore:</p>
+<ul>
+<li><span class="math inline">\(R_0 &gt; 1\)</span> meaning that <span class="math inline">\(\frac{dI}{dt} &gt; 0\)</span>, then the disease will spread.</li>
+<li><span class="math inline">\(R_0 &lt; 1\)</span> meaning that <span class="math inline">\(\frac{dI}{dt} &lt; 0\)</span>, then no epidemic occurs.</li>
+</ul>
+<p>For more complex compartmental models, especially those with more infected compartments, as proposed by <span class="citation" data-cites="diekmann1990">(<a href="references.html#ref-diekmann1990" role="doc-biblioref">Diekmann et al., 1990</a>)</span> and <span class="citation" data-cites="vandendriessche2002">(<a href="references.html#ref-vandendriessche2002" role="doc-biblioref">Driessche &amp; Watmough, 2002</a>)</span>, <span class="math inline">\(R_0\)</span> can be determined using the next generation matrix <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span>.</p>
+</section>
+<section id="next-generation-matrix" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="next-generation-matrix"><span class="header-section-number">8.3</span> Next generation matrix</h2>
+<p><span class="math inline">\(R_0\)</span> is the maximum absolute eigenvalue (also called the spectral radius) of the next generation matrix (NGM) <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span>.</p>
+<p>Consider a SEIR model with equal birth and death rate <span class="math inline">\(\mu\)</span>.</p>
+<p><span class="math display">\[\begin{align} \frac{dS}{dt} &amp; = \mu (S + E + I + R) -\beta SI - \mu S \\ \frac{dE}{dt} &amp; = \beta SI - \sigma E - \mu E \\ \frac{dI}{dt} &amp; = \sigma E - \gamma I - \mu I \\ \frac{dR}{dt} &amp; = \gamma I - \mu R \end{align}\]</span></p>
+<p><strong>Step 1. Identify the infected compartments</strong></p>
+<p>For our SEIR model, the infected compartments are <span class="math inline">\(E\)</span> and <span class="math inline">\(I\)</span>.</p>
+<p><strong>Step 2. Write the NGM functions</strong></p>
 <ul>
 <li><span class="math inline">\(\mathcal{F}_i(x)\)</span>: is the rate of appearance of new infections in compartment <span class="math inline">\(i\)</span> <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span> (caused by contact).</li>
 <li><span class="math inline">\(\mathcal{V}_i(x)\)</span>: is the rate of other transitions between compartment <span class="math inline">\(i\)</span> and other infected compartments <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span> (caused by transition between compartments).</li>
@@ -406,15 +553,14 @@ window.Quarto = {
 <p>For our SEIR model, we would write <span class="math inline">\(\mathcal{F}\)</span> and <span class="math inline">\(\mathcal{V}\)</span> as follows:</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p><span class="math display">\[\mathcal{F} = \begin{bmatrix} \beta SI \\ 0 \end{bmatrix}\]</span></p>
-<p>In which <span class="math inline">\(\mathcal{F}\)</span> is a vector contains of <span class="math inline">\(\begin{bmatrix} \mathcal{F}_1 \\ \mathcal{F}_2 \end{bmatrix}\)</span>:</p>
+<p><span class="math display">\[\mathcal{F} = \begin{bmatrix} \beta SI \\ 0 \end{bmatrix}\]</span> <span class="math inline">\(\mathcal{F}\)</span> is a vector contains of <span class="math inline">\(\begin{bmatrix} \mathcal{F}_1 \\ \mathcal{F}_2 \end{bmatrix}\)</span>:</p>
 <ul>
 <li><span class="math inline">\(\mathcal{F}_1 = \beta SI\)</span>: the rate of new infections (caused by contact) in compartment <span class="math inline">\(E\)</span>.</li>
 <li><span class="math inline">\(\mathcal{F}_2 = 0\)</span>: as there is no new infections (caused by contact) in compartment <span class="math inline">\(I\)</span>.</li>
 </ul>
 </div><div class="column" style="width:50%;">
 <p><span class="math display">\[\mathcal{V} = \begin{bmatrix} \sigma E + \mu E \\ - \sigma E + \gamma I + \mu I \end{bmatrix}\]</span></p>
-<p>In which <span class="math inline">\(\mathcal{V}\)</span> is a vector contains of <span class="math inline">\(\begin{bmatrix} \mathcal{V}_1 \\ \mathcal{V}_2 \end{bmatrix}\)</span>:</p>
+<p><span class="math inline">\(\mathcal{V}\)</span> is a vector contains of <span class="math inline">\(\begin{bmatrix} \mathcal{V}_1 \\ \mathcal{V}_2 \end{bmatrix}\)</span>:</p>
 <ul>
 <li><span class="math inline">\(\mathcal{V}_1 = \sigma E + \mu E\)</span>: is the rate of other transitions to and from compartment <span class="math inline">\(E\)</span>.</li>
 <li><span class="math inline">\(\mathcal{V}_2 = - \sigma E + \gamma I + \mu I\)</span>: is the rate of other transitions to and from compartment <span class="math inline">\(I\)</span>.</li>
@@ -426,9 +572,7 @@ window.Quarto = {
 <p>Here we have:</p>
 <p><span class="math display">\[\frac{dE}{dt} = \mathcal{F}_1 - \mathcal{V}_1 = \beta SI - (\sigma E + \mu E)\]</span></p>
 <p><span class="math display">\[\frac{dI}{dt} = \mathcal{F}_2 - \mathcal{V}_2 = 0 - (- \sigma E + \gamma I + \mu I)\]</span></p>
-</section>
-<section id="step-3.-find-the-jacobian-matrix" class="level3" data-number="8.1.3">
-<h3 data-number="8.1.3" class="anchored" data-anchor-id="step-3.-find-the-jacobian-matrix"><span class="header-section-number">8.1.3</span> Step 3. Find the Jacobian matrix</h3>
+<p><strong>Step 3. Find the Jacobian matrix</strong></p>
 <p>Jacobian matrix <span class="math inline">\(F\)</span> for <span class="math inline">\(\mathcal{F}\)</span>, and <span class="math inline">\(V\)</span> for <span class="math inline">\(\mathcal{V}\)</span>. Jacobian matrix is a matrix contain all partial derivatives of a vector function.</p>
 <p><span class="math display">\[\begin{align} F &amp; = \begin{bmatrix} \frac{\partial \mathcal{F}_1}{\partial E} &amp; \frac{\partial \mathcal{F}_1}{\partial I} \\ \frac{\partial \mathcal{F}_2}{\partial E} &amp; \frac{\partial \mathcal{F}_2}{\partial I} \end{bmatrix} \\ &amp; = \begin{bmatrix} \frac{\partial [\beta SI]}{\partial E} &amp; \frac{\partial [\beta SI]}{\partial I} \\ \frac{\partial [0]}{\partial E} &amp; \frac{\partial [0]}{\partial I} \end{bmatrix} \\ &amp; = \begin{bmatrix} 0 &amp; \beta S \\ 0 &amp; 0 \end{bmatrix} \end{align}\]</span></p>
 <p>In which:</p>
@@ -437,29 +581,21 @@ window.Quarto = {
 <li><span class="math inline">\(\frac{\partial [\beta SI]}{\partial I} = \beta S\)</span>.</li>
 </ul>
 <p><span class="math display">\[\begin{align} V &amp; = \begin{bmatrix} \frac{\partial \mathcal{V}_1}{\partial E} &amp; \frac{\partial \mathcal{V}_1}{\partial I} \\ \frac{\partial \mathcal{V}_2}{\partial E} &amp; \frac{\partial \mathcal{V}_2}{\partial I} \end{bmatrix} \\ &amp; = \begin{bmatrix} \frac{\partial [\sigma E + \mu E]}{\partial E} &amp; \frac{\partial [\sigma E + \mu E]}{\partial I} \\ \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial E} &amp; \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial I} \end{bmatrix} \\ &amp; = \begin{bmatrix} \sigma + \mu &amp; 0 \\ - \sigma &amp; \gamma + \mu \end{bmatrix} \end{align}\]</span></p>
-</section>
-<section id="step-4.-compute-the-ngm" class="level3" data-number="8.1.4">
-<h3 data-number="8.1.4" class="anchored" data-anchor-id="step-4.-compute-the-ngm"><span class="header-section-number">8.1.4</span> Step 4. Compute the NGM</h3>
+<p><strong>Step 4. Compute the NGM</strong></p>
 <p>Use <a href="dict.html#def-inv-matrix" class="quarto-xref">Definition&nbsp;<span>A.3</span></a> to compute inverse matrix <span class="math inline">\(V^{-1}\)</span>:</p>
 <p><span class="math display">\[\begin{align} V^{-1} &amp; = \frac{1}{(\sigma + \mu)(\gamma + \mu)} \begin{bmatrix} \gamma + \mu &amp; - 0 \\ - \sigma &amp; \sigma + \mu \end{bmatrix} \\&amp; = \begin{bmatrix} \frac{1}{\sigma + \mu} &amp; 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{1}{\gamma + \mu} \end{bmatrix} \end{align}\]</span></p>
 <p><span class="math display">\[\begin{align} K &amp; = FV^{-1} \\ &amp; = \begin{bmatrix} 0 &amp; \beta S \\ 0 &amp; 0 \end{bmatrix} \begin{bmatrix} \frac{1}{\sigma + \mu} &amp; 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{1}{\gamma + \mu} \end{bmatrix} \\ &amp; = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{\beta S}{\gamma + \mu} \\ 0 &amp; 0 \end{bmatrix} \end{align}\]</span></p>
-</section>
-<section id="step-5.-compute-r_0" class="level3" data-number="8.1.5">
-<h3 data-number="8.1.5" class="anchored" data-anchor-id="step-5.-compute-r_0"><span class="header-section-number">8.1.5</span> Step 5. Compute <span class="math inline">\(R_0\)</span></h3>
-<p><span class="math inline">\(R_0\)</span> is the eigenvalues of the NGM.</p>
-<p><span class="math display">\[\begin{align} det(K - \lambda) &amp; = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda &amp; \frac{\beta S}{\gamma + \mu} \\ 0 &amp; 0 - \lambda \end{bmatrix} \\ &amp; = [\frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda][0 - \lambda] \end{align}\]</span></p>
-<p><span class="math display">\[R_0 = \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)}\]</span></p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-A simple example
+What is a next generation matrix?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Source: quantpie’s <a href="https://www.youtube.com/watch?v=xJ5mizenTII">video</a>.</p>
 <p>A population consists of two groups: young and old.</p>
@@ -475,21 +611,66 @@ A simple example
 </div>
 </div>
 </div>
-<p>For more complex compartmental models, especially those with more infected compartments <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span></p>
+<p><strong>Step 5. Compute</strong> <span class="math inline">\(R_0\)</span></p>
+<p><span class="math inline">\(R_0\)</span> is the eigenvalues of the NGM.</p>
+<p><span class="math display">\[\begin{align} det(K - \lambda) &amp; = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda &amp; \frac{\beta S}{\gamma + \mu} \\ 0 &amp; 0 - \lambda \end{bmatrix} \\ &amp; = [\frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda][0 - \lambda] \end{align}\]</span></p>
+<p><span class="math display">\[R_0 = \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)}\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Use NGM to compute <span class="math inline">\(R_0\)</span> for SIR model
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Consider a simple closed population SIR model.</p>
+<p><span class="math display">\[\begin{align} \frac{dS}{dt} &amp; = -\beta SI \\ \frac{dI}{dt} &amp; = \beta SI - \gamma I\\ \frac{dR}{dt} &amp; = \gamma I \end{align}\]</span></p>
+<p><strong>Step 1. Identify the infected compartments</strong></p>
+<p>For our SIR model, the infected compartment is <span class="math inline">\(I\)</span>.</p>
+<p><strong>Step 2. Write the NGM functions</strong></p>
+<p><span class="math display">\[\mathcal{F} = \beta SI\]</span></p>
+<p><span class="math display">\[\mathcal{V} = \gamma I\]</span></p>
+<p>Such that we have:</p>
+<p><span class="math display">\[\frac{dI}{dt} = \mathcal{F} - \mathcal{V} = \beta SI - \gamma I\]</span></p>
+<p><strong>Step 3. Find the Jacobian matrix</strong></p>
+<p><span class="math display">\[F = \frac{\partial \mathcal{F}}{\partial I} = \frac{\partial [\beta SI]}{\partial I} = \beta S\]</span></p>
+<p><span class="math display">\[V = \frac{\partial \mathcal{V}}{\partial I} = \frac{\partial [\gamma I]}{\partial I} = \gamma\]</span></p>
+<p><strong>Step 4 and 5. Compute the NGM and</strong> <span class="math inline">\(R_0\)</span></p>
+<p><span class="math display">\[V^{-1} = \gamma^{-1} = \frac{1}{\gamma}\]</span></p>
+<p><span class="math display">\[K = FV^{-1} = \frac{\beta S}{\gamma}\]</span></p>
+<p>Here we also have <span class="math inline">\(R_0\)</span>.</p>
+<p><span class="math display">\[R_0 = \frac{\beta S}{\gamma}\]</span></p>
+</div>
+</div>
+</div>
+</section>
+<section id="epidemic-final-size" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="epidemic-final-size"><span class="header-section-number">8.4</span> Epidemic final size</h2>
+<p>If there were no interventions or changes in behavior, the proportion of the population infected during the entire course of an epidemic would be approximately the non-zero solution of the equation:</p>
+<p>$$$$</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
 <div id="ref-chitnis2017" class="csl-entry" role="listitem">
 Chitnis, N. (2017). <em>Introduction to SEIR Models</em>.
 </div>
+<div id="ref-diekmann1990" class="csl-entry" role="listitem">
+Diekmann, O., Heesterbeek, J. A. P., &amp; Metz, J. A. J. (1990). On the definition and the computation of the basic reproduction ratio R0 in models for infectious diseases in heterogeneous populations. <em>Journal of Mathematical Biology</em>, <em>28</em>(4), 365–382. <a href="https://doi.org/10.1007/BF00178324">https://doi.org/10.1007/BF00178324</a>
+</div>
 <div id="ref-vandendriessche2017" class="csl-entry" role="listitem">
 Driessche, P. van den. (2017). Reproduction numbers of infectious disease models. <em>Infectious Disease Modelling</em>, <em>2</em>(3), 288–303. <a href="https://doi.org/10.1016/j.idm.2017.06.002">https://doi.org/10.1016/j.idm.2017.06.002</a>
+</div>
+<div id="ref-vandendriessche2002" class="csl-entry" role="listitem">
+Driessche, P. van den, &amp; Watmough, J. (2002). Reproduction numbers and sub-threshold endemic equilibria for compartmental models of disease transmission. <em>Mathematical Biosciences</em>, <em>180</em>(1), 29–48. <a href="https://doi.org/10.1016/S0025-5564(02)00108-6">https://doi.org/10.1016/S0025-5564(02)00108-6</a>
 </div>
 <div id="ref-jones2007" class="csl-entry" role="listitem">
 Jones, J. H. (2007). Notes on R0. <em>California: Department of Anthropological Sciences</em>, <em>323</em>, 1–19.
 </div>
 </div>
-</section>
 </section>
 
 </main> <!-- /main -->

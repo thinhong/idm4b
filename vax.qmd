@@ -1,1 +1,25 @@
 # Vaccination
+
+## Innate vs adaptive immune system
+
+## Prevent infection vs disease
+
+Some evidence showed that BCG vaccine can prevent both infection and disease [@pollard2021].
+
+- Infection: BCG-vaccinated children had a memory T-cell response to infection, as indicated by a positive interferon-$\gamma$ release assay.
+- Disease: BCG vaccination reduces the spread of *M. tuberculosis* bacteria in the blood, mediated by T-cell immunity.
+
+## Non-specific effects
+
+Measles disease casts a prolonged ‘shadow’ over the immune system, with depletion of existing immune memory, such that children who have had the disease have an increased risk of death from other causes over the next few years [@pollard2021].
+
+## Factors affecting vaccine protection
+
+- Maternal antibody levels
+- Prior antigen exposure
+- Age of vaccination
+- Vaccine schedule
+- Vaccine dose: intradermal vaccination has been shown to be immunogenic at much lower (fractional) doses than intramuscular vaccination for influenza, rabies and HBV vaccines [@pollard2021].
+
+
+

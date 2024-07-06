@@ -44,7 +44,7 @@ odin_mod <- odin({
   initial(R) <- R_init
   initial(CInc) <- CInc_init
   
-  beta <- if (t < t1) beta_1 else if (t >= t1 && t < t2) beta_2 else beta_3
+  beta <- if (t < t1) beta_1 else if (t >= t1 && t < t2) beta_2 else beta_1
   
   beta_1 <- user(0.002)
   beta_2 <- user(0.001)
@@ -60,8 +60,8 @@ odin_mod <- odin({
   t2 <- user(30)
 })
 
-seir_mod <- function(beta_1, beta_2, beta_3, t1, t2, sigma, gamma, S0, E0, I0, R0, times = 0:50) {
-  odin_run <- odin_mod$new(beta_1 = beta_1, beta_2 = beta_2, beta_3 = beta_3, t1 = t1, t2 = t2, sigma = sigma, gamma = gamma, S_init = S0, E_init = E0, I_init = I0, R_init = R0)
+seir_mod <- function(beta_1, beta_2, sigma, gamma, t1, t2, S0, E0, I0, R0, times = 0:50) {
+  odin_run <- odin_mod$new(beta_1 = beta_1, beta_2 = beta_2, sigma = sigma, gamma = gamma, t1 = t1, t2 = t2, S_init = S0, E_init = E0, I_init = I0, R_init = R0)
   
   # run the model
   out <- data.frame(odin_run$run(times))
@@ -75,27 +75,26 @@ seir_mod <- function(beta_1, beta_2, beta_3, t1, t2, sigma, gamma, S0, E0, I0, R
 ```
 
 ```{r}
-S0 <- 20000
+S0 <- 30000
 E0 <- 0
 I0 <- 1
 R0 <- 0
 
-mll <- function(beta_1, beta_2, beta_3, sigma, gamma, sd_inc) {
+mll <- function(beta_1, beta_2, sigma, gamma, t1, t2, sd_inc) {
   # Make sure that parameters are positive
   beta_1 <- exp(beta_1)
   beta_2 <- exp(beta_2)
-  beta_3 <- exp(beta_3)
   sigma <- exp(sigma)
   gamma <- exp(gamma)
   sd_inc <- exp(sd_inc)
   
-  pred <- seir_mod(beta_1 = beta_1, beta_2 = beta_2, beta_3 = beta_3, sigma = sigma, gamma = gamma, S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = 0:(length(df$inc) - 1))
+  pred <- seir_mod(beta_1 = beta_1, beta_2 = beta_2, sigma = sigma, gamma = gamma, t1 = t1, t2 = t2, S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = 0:(length(df$inc) - 1))
   pred <- pred$Inc
   # Return the negative log likelihood
   - sum(dnorm(x = df$inc, mean = pred, sd = sd_inc, log = T))
 }
 
-starting_param_val <- list(beta_1 = 0.003, beta_2 = 0.002, beta_3 = 0.003, sigma = 0.5, gamma = 0.5, sd_inc = 3)
+starting_param_val <- list(beta_1 = 0.003, beta_2 = 0.001, sigma = 0.5, gamma = 0.5, t1 = 10, t2 = 15, sd_inc = 3)
 
 estimates <- mle2(minuslogl = mll, start = lapply(starting_param_val, log), method = "Nelder-Mead")
 
@@ -109,7 +108,7 @@ MLE will fit a curve going in the middle of the two peaks.
 #| fig-width: 4
 #| fig-height: 2.5
 #| out-width: "100%"
-pred <- seir_mod(beta_1 = params[1], beta_2 = params[2], beta_3 = params[3], sigma = params[4], gamma = params[5], S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = df$day)
+pred <- seir_mod(beta_1 = params[1], beta_2 = params[2], sigma = params[3], gamma = params[4], t1 = params[5], t2 = params[6], S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = df$day)
 df_plot <- pred[,c("t", "Inc")]
 
 # Compute 95% confidence interval

@@ -1,6 +1,6 @@
-# Infectious disease modelling {.unnumbered}
+# Modelling {.unnumbered}
 
-## Modelling
+## What is a model?
 
 ![](img/mod/the-bull.jpg)
 

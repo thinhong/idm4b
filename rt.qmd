@@ -31,6 +31,36 @@ Looking back at @def-rt-inst, $R_t^i$ is the expected number of secondary infect
 
 The only parametric assumption required by this method is **the form of the generation interval**. The standard assumption is that $w_s$ follows a **discretized gamma distribution**, but any parametric or empirical discrete distribution also work [@gostic2020].
 
+::: {.callout-tip collapse="true"}
+
+## Proofs
+
+The renewal equation (also called the Euler-Lotka equation [@wallinga2006]) is a cornerstone of demographic theory and backbone of the $R_t$ estimators.
+
+$$b(t) = \int_{a = 0}^{\infty} b(t - a) n(a) da$$
+
+-   $b(t)$: the number of female offspring at time $t$.
+-   $b(t - a)$: the number of mothers of age $a$ at time $t$, which is equal to the number of female offspring at time $t - a$.
+-   $n(a)$: the birth ability of mothers of age $a$, scaled by the probability of surviving to age $a$.
+-   $\int_{a = 0}^{\infty}$: summing these female offspring over all possible mothers' ages, we obtain the total number of female offspring at time $t$ which is $b(t)$.
+
+This equation assume that the population displays exponential growth at a fixed growth rate and that the age distribution of the population does not change over time [@wallinga2006].
+
+To describe epidemic dynamics, the renewal equation is expressed in terms of $I(t)$.
+
+$$I(t) = R_0 S(t) \int_{s = 0}^{\infty} I(t - s) w_s ds$$
+
+-   $R_0 S(t) = R_t$: see @def-rt.
+-   $I(t - s)$: the number of individuals who became infected $s$ time points ago in the past.
+-   $w_s$: the infectivity profile, or the probability of how infectiousness are they still at time $t$ (which is $s$ time points after the date they got infected).
+-   $I(t - s) w_s$: we scale the number of individuals who in the past by how infectiousness are they still at time $t$.
+
+Now we transform the equation a bit, and we got something very similar to the Cori method (see @sec-cori).
+
+$$R_t = \frac{I(t)}{\int_{s = 0}^{\infty} I(t - s) w_s ds}$$
+
+:::
+
 ### When can we start estimating $R_t^i$?
 
 Cori et al. suggest starting estimating $R_t^i$ once those three criteria are fulfilled [@cori2013]:
@@ -79,29 +109,6 @@ $$R_j = \sum_i p_{ij}$$
 **Step 3**. Compute the case reproduction number at time $t$, it is the expected value of $R_j$ for all individuals infected at time $t$.
 
 $$R_t^c = \mathbb{E}(R_j)$$
-
-## Proofs
-
-The renewal equation is a cornerstone of demographic theory and backbone of the $R_t$ estimators.
-
-$$b(t) = \int_{a = 0}^{\infty} b(t - a) n(a) da$$
-
--   $b(t)$: the number of births at time $t$.
--   $b(t - a)$: the number of birth at time $t - a$, or the number of people of age $a$ at time $t$.
--   $n(a)$: the birth ability of people of age $a$, scaled by the probability of surviving to age $a$.
-
-To describe epidemic dynamics, the renewal equation is expressed in terms of $I(t)$.
-
-$$I(t) = R_0 S(t) \int_{s = 0}^{\infty} I(t - s) w_s ds$$
-
--   $R_0 S(t) = R_t$: see @def-rt.
--   $I(t - s)$: the number of individuals who became infected $s$ time points ago in the past.
--   $w_s$: the infectivity profile, or the probability of how infectiousness are they still at time $t$ (which is $s$ time points after the date they got infected).
--   $I(t - s) w_s$: we scale the number of individuals who in the past by how infectiousness are they still at time $t$.
-
-Now we transform the equation a bit, and we got something very similar to the Cori method (see @sec-cori).
-
-$$R_t = \frac{I(t)}{\int_{s = 0}^{\infty} I(t - s) w_s ds}$$
 
 ## Compare $R_t^i$ and $R_t^c$
 

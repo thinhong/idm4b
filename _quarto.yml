@@ -45,7 +45,6 @@ book:
   appendices:
     - dict.qmd
     - func.qmd
-    - surv.qmd
 
 bibliography: references.bib
 csl: apa.csl
