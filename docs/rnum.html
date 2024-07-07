@@ -395,6 +395,8 @@ window.Quarto = {
 <p><span class="theorem-title"><strong>Definition 1</strong></span> <span class="math inline">\(R_0\)</span> (pronounced /R naught/) is the average number of individuals infected by each infectious individual in a <strong>fully susceptible population</strong> <span class="citation" data-cites="vegvari2022">(<a href="references.html#ref-vegvari2022" role="doc-biblioref">Vegvari et al., 2022</a>)</span>. In short, <span class="math inline">\(R_0\)</span> is the <span class="math inline">\(R\)</span> in a fully susceptible population, the <strong>maximum</strong> <span class="math inline">\(R\)</span> in a population.</p>
 </div>
 <p>The basic reproduction number is sometimes called the <em>basic reproductive number</em> or <em>basic reproductive ratio</em> <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span>.</p>
+<p>Estimations of the R0 value are often calculated as a function of 3 primary parameters <span class="citation" data-cites="jones2007 chitnis2017">(<a href="references.html#ref-chitnis2017" role="doc-biblioref">Chitnis, 2017</a>; <a href="references.html#ref-jones2007" role="doc-biblioref">Jones, 2007</a>)</span>:</p>
+<p><span class="math display">\[R_0 = \begin{pmatrix} \text{Number of} \\ \text{contacts} \\ \text{per unit time} \end{pmatrix} \times \begin{pmatrix} \text{Probability of} \\ \text{transmission} \\ \text{per contact} \end{pmatrix} \times \begin{pmatrix} \text{Duration} \\ \text{of} \\ \text{infectious} \end{pmatrix}\]</span></p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -406,9 +408,10 @@ Cautions
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li><span class="math inline">\(R_0\)</span> is <strong>not a biological constant</strong> for a pathogen, a rate over time, or a measure of disease severity, and <span class="math inline">\(R_0\)</span> cannot be modified through vaccination campaigns <span class="citation" data-cites="delamater2019">(<a href="references.html#ref-delamater2019" role="doc-biblioref">Delamater et al., 2019</a>)</span>. In fact, more than 20 different <span class="math inline">\(R_0\)</span> values (range 5.4-18) were reported for measles in a variety of study areas and periods, and a review in 2017 identified feasible measles <span class="math inline">\(R_0\)</span> values of 3.7-203.3 <span class="citation" data-cites="delamater2019">(<a href="references.html#ref-delamater2019" role="doc-biblioref">Delamater et al., 2019</a>)</span>.</li>
+<li><span class="math inline">\(R_0\)</span> is <strong>not a biological constant</strong> for a pathogen, and <span class="math inline">\(R_0\)</span> cannot be modified through vaccination campaigns <span class="citation" data-cites="delamater2019">(<a href="references.html#ref-delamater2019" role="doc-biblioref">Delamater et al., 2019</a>)</span>. In fact, more than 20 different <span class="math inline">\(R_0\)</span> values (range 5.4-18) were reported for measles in a variety of study areas and periods, and a review in 2017 identified feasible measles <span class="math inline">\(R_0\)</span> values of 3.7-203.3 <span class="citation" data-cites="delamater2019">(<a href="references.html#ref-delamater2019" role="doc-biblioref">Delamater et al., 2019</a>)</span>.</li>
 <li><span class="math inline">\(R_0\)</span> estimates in the early phase may <strong>not</strong> be <strong>representative</strong> for the population <strong>if</strong> the group of <strong>initial transmitters is atypical</strong> <span class="citation" data-cites="vegvari2022">(<a href="references.html#ref-vegvari2022" role="doc-biblioref">Vegvari et al., 2022</a>)</span> (e.g.&nbsp;monkeypox).</li>
 <li><span class="math inline">\(R_0\)</span> may be <strong>incorrectly</strong> estimated <strong>if asymptomatic individuals are not counted</strong> or recognised, and their epidemiologically relevant <strong>behaviour differs</strong> from that of symptomatic individuals <span class="citation" data-cites="vegvari2022">(<a href="references.html#ref-vegvari2022" role="doc-biblioref">Vegvari et al., 2022</a>)</span>.</li>
+<li>For many vaccine-preventable diseases, <span class="math inline">\(R_0\)</span> values were calculated long ago in history. For example, measles <span class="math inline">\(R_0\)</span> values of 12-18 are based on data from 1912-1928 in the United States (<span class="math inline">\(R_0 = 12.5\)</span>) and 1944-1979 in England and Wales (<span class="math inline">\(R_0 = 13.7-18.0\)</span>). For pertussis, the original data sources are 1908-1917 in the United States (<span class="math inline">\(R_0 = 12.2\)</span>) and 1944-1979 in England and Wales (<span class="math inline">\(R_0 = 14.3-17.1\)</span>). Human contact patterns in the past are extremely unlikely to match present day epidemiological realities. However, historical <span class="math inline">\(R_0\)</span> values are so frequently cited that new <span class="math inline">\(R_0\)</span> values using modern data might be dismissed if they fall outside the old range. <strong>Public health decisions</strong> should be made <strong>using up-to-date <span class="math inline">\(R_0\)</span> values</strong> <span class="citation" data-cites="delamater2019">(<a href="references.html#ref-delamater2019" role="doc-biblioref">Delamater et al., 2019</a>)</span>.</li>
 </ul>
 </div>
 </div>
@@ -518,7 +521,7 @@ M_t &amp; = M_0 (1 + r)^t \end{align}\]</span></p>
 <p><span class="math display">\[\begin{align} C_0 R_0 &amp; = C_0 e^{rT_g} \\
 \Leftrightarrow R_0 &amp; = e^{rT_g} \end{align}\]</span></p>
 <p>We can prove that:</p>
-<p><span class="math display">\[R_0 = e^{rT_g} \approx 1 + rT_g \]</span></p>
+<p><span class="math display">\[R_0 = e^{rT_g} \approx 1 + rT_g\]</span></p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -546,6 +549,9 @@ Proof
 <div id="ref-bettencourt2008" class="csl-entry" role="listitem">
 Bettencourt, L. M. A., &amp; Ribeiro, R. M. (2008). Real Time Bayesian Estimation of the Epidemic Potential of Emerging Infectious Diseases. <em>PLOS ONE</em>, <em>3</em>(5), e2185. <a href="https://doi.org/10.1371/journal.pone.0002185">https://doi.org/10.1371/journal.pone.0002185</a>
 </div>
+<div id="ref-chitnis2017" class="csl-entry" role="listitem">
+Chitnis, N. (2017). <em>Introduction to SEIR Models</em>.
+</div>
 <div id="ref-cori2013" class="csl-entry" role="listitem">
 Cori, A., Ferguson, N. M., Fraser, C., &amp; Cauchemez, S. (2013). A new framework and software to estimate time-varying reproduction numbers during epidemics. <em>American Journal of Epidemiology</em>, <em>178</em>(9), 1505–1512. <a href="https://doi.org/10.1093/aje/kwt133">https://doi.org/10.1093/aje/kwt133</a>
 </div>
@@ -560,6 +566,9 @@ Gostic, K. M., McGough, L., Baskerville, E. B., Abbott, S., Joshi, K., Tedijanto
 </div>
 <div id="ref-green2022" class="csl-entry" role="listitem">
 Green, W. D., Ferguson, N. M., &amp; Cori, A. (2022). Inferring the reproduction number using the renewal equation in heterogeneous epidemics. <em>Journal of The Royal Society Interface</em>, <em>19</em>(188), 20210429. <a href="https://doi.org/10.1098/rsif.2021.0429">https://doi.org/10.1098/rsif.2021.0429</a>
+</div>
+<div id="ref-jones2007" class="csl-entry" role="listitem">
+Jones, J. H. (2007). Notes on R0. <em>California: Department of Anthropological Sciences</em>, <em>323</em>, 1–19.
 </div>
 <div id="ref-knight2020" class="csl-entry" role="listitem">
 Knight, J., &amp; Mishra, S. (2020). Estimating effective reproduction number using generation time versus serial interval, with application to covid-19 in the greater toronto area, canada. <em>Infectious Disease Modelling</em>, <em>5</em>, 889–896. <a href="https://doi.org/10.1016/j.idm.2020.10.009">https://doi.org/10.1016/j.idm.2020.10.009</a>

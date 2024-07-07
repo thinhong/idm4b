@@ -1,9 +1,5 @@
 # Estimating $R_0$
 
-Estimations of the R0 value are often calculated as a function of 3 primary parameters [@jones2007; @chitnis2017]:
-
-$$R_0 = \begin{pmatrix} \text{Number of} \\ \text{contacts} \\ \text{per unit time} \end{pmatrix} \times \begin{pmatrix} \text{Probability of} \\ \text{transmission} \\ \text{per contact} \end{pmatrix} \times \begin{pmatrix} \text{Duration} \\ \text{of} \\ \text{infectious} \end{pmatrix}$$
-
 ## Exponential growth rate
 
 Step 1. Find an estimate for the mean generation time $T_g$.
