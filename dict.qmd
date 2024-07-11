@@ -1,5 +1,9 @@
 # Dictionary
 
+::: {#def-closedform-sol}
+**Closed-form solution** (or closed form expression) is any formula that can be evaluated in a finite number of standard operations ([source](https://riskencyclopedia.com/articles/closed_form_solution/)).
+:::
+
 infection fatality ratio (IFR) and case fatality ratio (CFR) and serology data.
 
 ::: {#def-residual}

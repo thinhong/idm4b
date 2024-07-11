@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Infectious disease modelling for babies - 7&nbsp; Particle filter</title>
+<title>Infectious disease modelling for babies - Vaccination</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -30,8 +50,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./rnum.html" rel="next">
-<link href="./mle.html" rel="prev">
+<link href="./vep-sm.html" rel="next">
+<link href="./ftc.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -119,7 +139,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./calib.html">Calibration</a></li><li class="breadcrumb-item"><a href="./pomp.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Particle filter</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./vax.html">Vaccination</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -206,11 +226,11 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="./calib.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Calibration</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lse.html" class="sidebar-item-text sidebar-link">
@@ -225,7 +245,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pomp.html" class="sidebar-item-text sidebar-link active">
+  <a href="./pomp.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Particle filter</span></span></a>
   </div>
 </li>
@@ -273,13 +293,13 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./vax.html" class="sidebar-item-text sidebar-link">
+            <a href="./vax.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Vaccination</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./vep-sm.html" class="sidebar-item-text sidebar-link">
@@ -340,14 +360,29 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="3">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#vaccines" id="toc-vaccines" class="nav-link active" data-scroll-target="#vaccines">Vaccines</a>
+  <ul>
+  <li><a href="#definition" id="toc-definition" class="nav-link" data-scroll-target="#definition">Definition</a></li>
+  <li><a href="#classification" id="toc-classification" class="nav-link" data-scroll-target="#classification">Classification</a></li>
+  </ul></li>
+  <li><a href="#the-effect-of-vaccines" id="toc-the-effect-of-vaccines" class="nav-link" data-scroll-target="#the-effect-of-vaccines">The effect of vaccines</a></li>
+  <li><a href="#innate-vs-adaptive-immune-system" id="toc-innate-vs-adaptive-immune-system" class="nav-link" data-scroll-target="#innate-vs-adaptive-immune-system">Innate vs adaptive immune system</a></li>
+  <li><a href="#prevent-infection-vs-disease" id="toc-prevent-infection-vs-disease" class="nav-link" data-scroll-target="#prevent-infection-vs-disease">Prevent infection vs disease</a></li>
+  <li><a href="#non-specific-effects" id="toc-non-specific-effects" class="nav-link" data-scroll-target="#non-specific-effects">Non-specific effects</a></li>
+  <li><a href="#factors-affecting-vaccine-protection" id="toc-factors-affecting-vaccine-protection" class="nav-link" data-scroll-target="#factors-affecting-vaccine-protection">Factors affecting vaccine protection</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./calib.html">Calibration</a></li><li class="breadcrumb-item"><a href="./pomp.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Particle filter</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Particle filter</span></h1>
+<h1 class="title">Vaccination</h1>
 </div>
 
 
@@ -364,8 +399,110 @@ window.Quarto = {
 </header>
 
 
+<section id="vaccines" class="level2">
+<h2 class="anchored" data-anchor-id="vaccines">Vaccines</h2>
+<section id="definition" class="level3">
+<h3 class="anchored" data-anchor-id="definition">Definition</h3>
+<p>A vaccine is a biological product that can be used to safely induce an <strong>immune response</strong> that confers protection against infection and/or disease on subsequent exposure to a pathogen <span class="citation" data-cites="pollard2021">(<a href="references.html#ref-pollard2021" role="doc-biblioref">Pollard &amp; Bijker, 2021</a>)</span>.</p>
+</section>
+<section id="classification" class="level3">
+<h3 class="anchored" data-anchor-id="classification">Classification</h3>
+<p>Over the past few decades, new vaccine platforms have been developed including viral vectors, nucleic acid-based RNA and DNA vaccines, and virus-like particles. However, traditionally vaccines are classified as live or non-live:</p>
+<ol type="1">
+<li>Live:</li>
+</ol>
+<ul>
+<li><p>Are developed so that, in an immunocompetent host, they replicate sufficiently to produce a strong immune response, but not so much as to cause significant disease manifestations.</p></li>
+<li><p>Trade-off between strong immune response and avoid symptomatic disease, therefore some live attenuated vaccines require multiple doses and induce relatively short-lived immunity. For example, 5% of children will develop a rash and up to 15% fever after measles vaccination</p></li>
+<li><p>Potentially replicate in an uncontrolled manner in immuno-compromised individuals.</p></li>
+<li><p>Examples: measles, mumps, rubella and rotavirus, oral polio vaccine, the Mycobacterium bovis bacillus Calmette–Guérin (BCG) vaccine for TB and live attenuated influenza vaccine</p></li>
+</ul>
+<ol start="2" type="1">
+<li>Non-live: no risk to immunocompromised individuals (although may not confer protection in those with B cell or combined immunodeficiency).</li>
+</ol>
+<p>B cells</p>
+<ul>
+<li>Produce antibodies (<strong>humoral</strong> immunity).</li>
+</ul>
+<p>T cells</p>
+<ul>
+<li>Directly attack infected cells (<strong>cellular</strong> immunity).</li>
+</ul>
+<ol type="1">
+<li><p>Killer (cytotoxic):</p></li>
+<li><p>Helper: subtypes by profiles of cytokine production</p></li>
+</ol>
+</section>
+</section>
+<section id="the-effect-of-vaccines" class="level2">
+<h2 class="anchored" data-anchor-id="the-effect-of-vaccines">The effect of vaccines</h2>
+<div id="def-vec" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 1</strong></span> Efficacy is the <strong>percentage reduction</strong> in the <strong>disease rate</strong> (or <strong>infection risk</strong> <span class="citation" data-cites="shim2012">(<a href="references.html#ref-shim2012" role="doc-biblioref">Shim &amp; Galvani, 2012</a>)</span>) among vaccinated individuals compared to <strong>similar</strong> unvaccinated individuals <span class="citation" data-cites="verani2017">(<a href="references.html#ref-verani2017" role="doc-biblioref">Verani et al., 2017</a>)</span>.</p>
+</div>
+<div id="def-vet" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2</strong></span> Effectiveness is the <strong>percentage reduction</strong> in the <strong>disease rate</strong> (or <strong>infection risk</strong> <span class="citation" data-cites="shim2012">(<a href="references.html#ref-shim2012" role="doc-biblioref">Shim &amp; Galvani, 2012</a>)</span>) among vaccinated individuals compared to unvaccinated individuals, similar to efficacy, but in <strong>real-world</strong> conditions <span class="citation" data-cites="verani2017">(<a href="references.html#ref-verani2017" role="doc-biblioref">Verani et al., 2017</a>)</span>.</p>
+</div>
+<p>Vaccine effectiveness is categorized into 4 types:</p>
+<ol type="1">
+<li>Direct</li>
+<li>Indirect</li>
+<li>Total</li>
+<li>Overall</li>
+</ol>
+<div id="def-vi" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3</strong></span> Impact quantifies the reduction in <strong>disease rate</strong> (either percentage decline or absolute change in disease rate) at the <strong>population level</strong> after vaccine introduction. It is determined by: (1) vaccine effectiveness, (2) vaccine coverage and (3) herd immunity <span class="citation" data-cites="verani2017">(<a href="references.html#ref-verani2017" role="doc-biblioref">Verani et al., 2017</a>)</span>.</p>
+</div>
+<p>Let <span class="math inline">\(R_v\)</span> be the infection risk in the vaccinated group and <span class="math inline">\(R_u\)</span> be the infection risk in the unvaccinated group.</p>
+<p>The absolute reduction in infection risk due to vaccination is <span class="math inline">\(R_u - R_v\)</span>.</p>
+<p>Vaccine efficacy or effectiveness <span class="math inline">\(VE\)</span> is the <strong>percentage reduction</strong> in infection risk, so we divide the absolute reduction by the infection risk of the unvaccinated group.</p>
+<p><span class="math display">\[\begin{align} VE &amp;= \frac{R_u - R_v}{R_u} \\ &amp;= 1 - \frac{R_v}{R_u} \\ &amp;= 1 - \text{Relative risk} \end{align}\]</span></p>
+<p>Let have an example:</p>
+<p><img src="img/vax/trial.png" class="img-fluid"></p>
+<ul>
+<li>In the control group, the infection risk is <span class="math inline">\(\frac{4}{8}\)</span> as 4 out of 8 people are infected.</li>
+<li>In the vaccinated group, the infection risk is <span class="math inline">\(\frac{1}{8}\)</span> as 1 person is infected among 8 people.</li>
+</ul>
+<p><span class="math display">\[VE = \frac{\frac{4}{8} - \frac{1}{8}}{\frac{4}{8}} = \frac{4 - 1}{4} = \frac{3}{4} = 0.75\]</span></p>
+<p>While 4 people get infected without vaccination, only 1 would get infected if they were vaccinated. The vaccine can prevent 3 of these infections. So the vaccine efficacy is <span class="math inline">\(\frac{3}{4}\)</span> or 75%.</p>
+</section>
+<section id="innate-vs-adaptive-immune-system" class="level2">
+<h2 class="anchored" data-anchor-id="innate-vs-adaptive-immune-system">Innate vs adaptive immune system</h2>
+</section>
+<section id="prevent-infection-vs-disease" class="level2">
+<h2 class="anchored" data-anchor-id="prevent-infection-vs-disease">Prevent infection vs disease</h2>
+<p>Some evidence showed that BCG vaccine can prevent both infection and disease <span class="citation" data-cites="pollard2021">(<a href="references.html#ref-pollard2021" role="doc-biblioref">Pollard &amp; Bijker, 2021</a>)</span>.</p>
+<ul>
+<li>Infection: BCG-vaccinated children had a memory T-cell response to infection, as indicated by a positive interferon-<span class="math inline">\(\gamma\)</span> release assay.</li>
+<li>Disease: BCG vaccination reduces the spread of <em>M. tuberculosis</em> bacteria in the blood, mediated by T-cell immunity.</li>
+</ul>
+</section>
+<section id="non-specific-effects" class="level2">
+<h2 class="anchored" data-anchor-id="non-specific-effects">Non-specific effects</h2>
+<p>Measles disease casts a prolonged ‘shadow’ over the immune system, with depletion of existing immune memory, such that children who have had the disease have an increased risk of death from other causes over the next few years <span class="citation" data-cites="pollard2021">(<a href="references.html#ref-pollard2021" role="doc-biblioref">Pollard &amp; Bijker, 2021</a>)</span>.</p>
+</section>
+<section id="factors-affecting-vaccine-protection" class="level2">
+<h2 class="anchored" data-anchor-id="factors-affecting-vaccine-protection">Factors affecting vaccine protection</h2>
+<ul>
+<li>Maternal antibody levels</li>
+<li>Prior antigen exposure</li>
+<li>Age of vaccination</li>
+<li>Vaccine schedule</li>
+<li>Vaccine dose: intradermal vaccination has been shown to be immunogenic at much lower (fractional) doses than intramuscular vaccination for influenza, rabies and HBV vaccines <span class="citation" data-cites="pollard2021">(<a href="references.html#ref-pollard2021" role="doc-biblioref">Pollard &amp; Bijker, 2021</a>)</span>.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-pollard2021" class="csl-entry" role="listitem">
+Pollard, A. J., &amp; Bijker, E. M. (2021). A guide to vaccinology: from basic principles to new developments. <em>Nature Reviews Immunology</em>, <em>21</em>(2), 83–100. <a href="https://doi.org/10.1038/s41577-020-00479-7">https://doi.org/10.1038/s41577-020-00479-7</a>
+</div>
+<div id="ref-shim2012" class="csl-entry" role="listitem">
+Shim, E., &amp; Galvani, A. P. (2012). Distinguishing vaccine efficacy and effectiveness. <em>Vaccine</em>, <em>30</em>(47), 6700–6705. <a href="https://doi.org/10.1016/j.vaccine.2012.08.045">https://doi.org/10.1016/j.vaccine.2012.08.045</a>
+</div>
+<div id="ref-verani2017" class="csl-entry" role="listitem">
+Verani, J. R., Baqui, A. H., Broome, C. V., Cherian, T., Cohen, C., Farrar, J. L., Feikin, D. R., Groome, M. J., Hajjeh, R. A., Johnson, H. L., Madhi, S. A., Mulholland, K., O’Brien, K. L., Parashar, U. D., Patel, M. M., Rodrigues, L. C., Santosham, M., Scott, J. A., Smith, P. G., … Zell, E. R. (2017). Case-control vaccine effectiveness studies: Preparation, design, and enrollment of cases and controls. <em>Vaccine</em>, <em>35</em>(25), 3295–3302. <a href="https://doi.org/10.1016/j.vaccine.2017.04.037">https://doi.org/10.1016/j.vaccine.2017.04.037</a>
+</div>
+</div>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -783,13 +920,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <input type="hidden" id="giscus-alt-theme" value="dark">
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./mle.html" class="pagination-link" aria-label="Maximum likelihood estimation">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Maximum likelihood estimation</span></span>
+      <a href="./ftc.html" class="pagination-link" aria-label="Flattening the curve">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Flattening the curve</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./rnum.html" class="pagination-link" aria-label="Reproduction number">
-        <span class="nav-page-text">Reproduction number</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./vep-sm.html" class="pagination-link" aria-label="Screening method">
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Screening method</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -293,8 +293,8 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./rp.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Reports</span></a>
+            <a href="./vax.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vaccination</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -302,8 +302,25 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./vep-sm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Screening method</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./rp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Reports</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
       </ul>
@@ -316,13 +333,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false">
  <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./dict.html" class="sidebar-item-text sidebar-link">
@@ -349,6 +366,7 @@ window.Quarto = {
   <ul>
   <li><a href="#what-is-a-model" id="toc-what-is-a-model" class="nav-link active" data-scroll-target="#what-is-a-model">What is a model?</a></li>
   <li><a href="#there-is-no-perfect-model" id="toc-there-is-no-perfect-model" class="nav-link" data-scroll-target="#there-is-no-perfect-model">There is no perfect model</a></li>
+  <li><a href="#solving-a-model" id="toc-solving-a-model" class="nav-link" data-scroll-target="#solving-a-model">Solving a model</a></li>
   </ul>
 </nav>
     </div>
@@ -398,6 +416,22 @@ window.Quarto = {
 </ul>
 <p>Keeling M (2006) <em>State-of-science review: predictive and real-time epidemiological modelling</em>. London: Office of Science and Innovation <span class="citation" data-cites="keeling2006 christley2013">(<a href="references.html#ref-christley2013" role="doc-biblioref">Christley et al., 2013</a>; <a href="references.html#ref-keeling2006" role="doc-biblioref">Keeling, 2006</a>)</span>.</p>
 </blockquote>
+</section>
+<section id="solving-a-model" class="level2">
+<h2 class="anchored" data-anchor-id="solving-a-model">Solving a model</h2>
+<p>Solving a model means finding a function that satisfies the given conditions. Consider the Malthusian growth model as an example:</p>
+<p><span class="math display">\[\frac{dP}{dt} = rP\]</span></p>
+<ul>
+<li><span class="math inline">\(r\)</span>: the growth rate.</li>
+<li><span class="math inline">\(P\)</span>: the population size.</li>
+</ul>
+<p>Solving this model means to write a function of <span class="math inline">\(P\)</span> that satisfies the derivative. This model can be solved analytically by:</p>
+<p><span class="math display">\[\begin{align} \frac{dP}{dt} &amp; = rP \\
+\Leftrightarrow \frac{dP}{P} &amp; = rdt \\
+\Leftrightarrow \int \frac{dP}{P} &amp; = \int rdt \\
+\Leftrightarrow \log P &amp; = rt + C \\
+\Leftrightarrow P &amp; = e^{rt + C} \end{align}\]</span></p>
+<p>where <span class="math inline">\(C\)</span> is the constant of integration.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">

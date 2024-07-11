@@ -38,6 +38,9 @@ book:
     - part: intv.qmd
       chapters: 
         - ftc.qmd
+    - part: vax.qmd
+      chapters:
+        - vep-sm.qmd
     - part: rp.qmd
       chapters: 
         - rp-risk.qmd

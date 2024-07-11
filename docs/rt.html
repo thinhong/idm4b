@@ -331,8 +331,8 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./rp.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Reports</span></a>
+            <a href="./vax.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vaccination</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -340,8 +340,25 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./vep-sm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Screening method</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./rp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Reports</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
       </ul>
@@ -354,13 +371,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false">
  <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./dict.html" class="sidebar-item-text sidebar-link">
@@ -586,11 +603,7 @@ Important
 </blockquote>
 <section id="generation-interval" class="level3" data-number="9.4.1">
 <h3 data-number="9.4.1" class="anchored" data-anchor-id="generation-interval"><span class="header-section-number">9.4.1</span> Generation interval</h3>
-<div id="def-gen-int" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 9.3</strong></span> Generation interval is the time from the infection of a primary case to infection of the cases he/she generates <span class="citation" data-cites="cori2013">(<a href="references.html#ref-cori2013" role="doc-biblioref">Cori et al., 2013</a>)</span>.</p>
-</div>
-<p>If we match this to an SEIR model, the generation interval starts when the infector enters the E compartment (meaning they got infected). The latest time they can infect an infectee is at the end of their residence in the I compartment (they are infectious). Therefore, generation interval is the sum of residence times in compartments E and I <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
-<p>The mean generation interval <strong>decreases</strong> when susceptible persons are at risk of infectious contact from <strong>multiple sources</strong>. Because when a susceptible person has multiple potential infectors, there is a “race” to infect him/her in which only the first infectious contact leads to infection <span class="citation" data-cites="kenah2008">(<a href="references.html#ref-kenah2008" role="doc-biblioref">Kenah et al., 2008</a>)</span>.</p>
+<p>See <a href="r0.html#def-gen-int" class="quarto-xref">Definition&nbsp;<span>8.1</span></a> to recall the definition of generation interval.</p>
 <p><img src="img/rnum/mean-gen-int-bias.png" class="img-fluid"></p>
 <blockquote class="blockquote">
 <p>Biases from misspecification of the generation interval mean (A) or variance (B) <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
@@ -605,7 +618,7 @@ Important
 <section id="serial-interval" class="level3" data-number="9.4.2">
 <h3 data-number="9.4.2" class="anchored" data-anchor-id="serial-interval"><span class="header-section-number">9.4.2</span> Serial interval</h3>
 <div id="def-ser-int" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 9.4</strong></span> Serial interval is the time between symptom onset in an infector–infectee pair <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
+<p><span class="theorem-title"><strong>Definition 9.3</strong></span> Serial interval is the time between symptom onset in an infector–infectee pair <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
 </div>
 <p>Serial interval is more easily observed than generation interval and often used in its place. Although the serial and generation intervals are often conflated, there are important differences <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>:</p>
 <ul>
@@ -752,9 +765,6 @@ Cori, A., Ferguson, N. M., Fraser, C., &amp; Cauchemez, S. (2013). A new framewo
 </div>
 <div id="ref-gostic2020" class="csl-entry" role="listitem">
 Gostic, K. M., McGough, L., Baskerville, E. B., Abbott, S., Joshi, K., Tedijanto, C., Kahn, R., Niehus, R., Hay, J. A., Salazar, P. M. D., Hellewell, J., Meakin, S., Munday, J. D., Bosse, N. I., Sherrat, K., Thompson, R. N., White, L. F., Huisman, J. S., Scire, J., … Cobey, S. (2020). Practical considerations for measuring the effective reproductive number, Rt. <em>PLOS Computational Biology</em>, <em>16</em>(12), e1008409. <a href="https://doi.org/10.1371/journal.pcbi.1008409">https://doi.org/10.1371/journal.pcbi.1008409</a>
-</div>
-<div id="ref-kenah2008" class="csl-entry" role="listitem">
-Kenah, E., Lipsitch, M., &amp; Robins, J. M. (2008). Generation interval contraction and epidemic data analysis. <em>Mathematical Biosciences</em>, <em>213</em>(1), 71–79. <a href="https://doi.org/10.1016/j.mbs.2008.02.007">https://doi.org/10.1016/j.mbs.2008.02.007</a>
 </div>
 <div id="ref-sender2022" class="csl-entry" role="listitem">
 Sender, R., Bar-On, Y., Park, S. W., Noor, E., Dushoff, J., &amp; Milo, R. (2022). The unmitigated profile of COVID-19 infectiousness. <em>eLife</em>, <em>11</em>, e79134. <a href="https://doi.org/10.7554/eLife.79134">https://doi.org/10.7554/eLife.79134</a>

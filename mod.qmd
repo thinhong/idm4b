@@ -24,3 +24,23 @@ Models help us navigate and make decisions about complex situations by focusing 
 > -   Models will always be an approximation, and rare or unforeseen behavioural events can have a significant impact on the disease dynamics
 >
 > Keeling M (2006) *State-of-science review: predictive and real-time epidemiological modelling*. London: Office of Science and Innovation [@keeling2006; @christley2013].
+
+## Solving a model
+
+Solving a model means finding a function that satisfies the given conditions. Consider the Malthusian growth model as an example:
+
+$$\frac{dP}{dt} = rP$$
+
+-   $r$: the growth rate.
+-   $P$: the population size.
+
+Solving this model means to write a function of $P$ that satisfies the derivative. This model can be solved analytically by:
+
+$$\begin{align} \frac{dP}{dt} & = rP \\
+\Leftrightarrow \frac{dP}{P} & = rdt \\
+\Leftrightarrow \int \frac{dP}{P} & = \int rdt \\
+\Leftrightarrow \log P & = rt + C \\
+\Leftrightarrow P & = e^{rt + C} \end{align}$$
+
+where $C$ is the constant of integration.
+
