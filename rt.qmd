@@ -134,10 +134,6 @@ $R_t$ is a **value** in specific **time**, therefore there are 2 potential forms
 
 -   **Timeliness** (the time): Temporal inaccuracy that $R_t$ estimates may be leading or lagging the true date, has several possible causes and can be difficult to avoid.
 
-![](img/rnum/gen-ser-int.png)
-
-> Figure from Sender et al. [@sender2022].
-
 ### Generation interval
 
 See @def-gen-int to recall the definition of generation interval.
@@ -151,22 +147,6 @@ See @def-gen-int to recall the definition of generation interval.
 -   The effect of the mean generation interval is large when true $R_t$ further from 1. Therefore, **this bias may be greatest at the early epidemic**, when true $R_t$ is high, together with highly uncertain generation interval and limited data.
 
 Tools like `EpiEstim` and `EpiNow2` allow users to specify the prior variance of the mean and standard deviation. However, bear in mind that uncertainty around an incorrect generation interval only widen the 95% credible interval, but will not shift the estimates toward the truth and will not correct this bias.
-
-### Serial interval
-
-::: {#def-ser-int}
-Serial interval is the time between symptom onset in an infector–infectee pair [@gostic2020].
-:::
-
-Serial interval is more easily observed than generation interval and often used in its place. Although the serial and generation intervals are often conflated, there are important differences [@gostic2020]:
-
--   Serial interval and generation interval usually have the same mean, but different variances.
--   Serial interval can be negative (when the symptom onset of infector is later than infectee, such as in COVID-19), generation interval is always positive.
-
-The distributions of the serial interval and the generation interval are identical in these scenarios [@cori2013]:
-
--   For diseases such as influenza, SARS, measles, and smallpox, it is expected that infectiousness starts only around the time of symptom onset.
--   When the infectiousness profile after symptoms is independent of the incubation period.
 
 ### Delays
 

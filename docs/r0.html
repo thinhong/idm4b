@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Infectious disease modelling for babies - 8&nbsp; Estimating \(R_0\)</title>
+<title>Infectious disease modelling for babies - 10&nbsp; Estimating \(R_0\)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -85,7 +85,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./rt.html" rel="next">
-<link href="./rnum.html" rel="prev">
+<link href="./gen-int.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -178,7 +178,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./rnum.html">Reproduction number</a></li><li class="breadcrumb-item"><a href="./r0.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./rnum.html">Reproduction number</a></li><li class="breadcrumb-item"><a href="./r0.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -284,8 +284,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./mcmc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">MCMC</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./pomp.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Particle filter</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Particle filter</span></span></a>
   </div>
 </li>
       </ul>
@@ -301,14 +307,20 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./gen-int.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Generation interval</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./r0.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rt.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></span></a>
   </div>
 </li>
       </ul>
@@ -325,7 +337,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ftc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Flattening the curve</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Flattening the curve</span></span></a>
   </div>
 </li>
       </ul>
@@ -342,24 +354,28 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./vep-sm.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Screening method</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Screening method</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Health economics</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./rp.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Reports</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
       </ul>
@@ -372,13 +388,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">
  <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./dict.html" class="sidebar-item-text sidebar-link">
@@ -403,23 +419,24 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#contact-tracing" id="toc-contact-tracing" class="nav-link active" data-scroll-target="#contact-tracing"><span class="header-section-number">8.1</span> Contact tracing</a></li>
-  <li><a href="#exponential-growth-rate" id="toc-exponential-growth-rate" class="nav-link" data-scroll-target="#exponential-growth-rate"><span class="header-section-number">8.2</span> Exponential growth rate</a>
+  <li><a href="#contact-tracing" id="toc-contact-tracing" class="nav-link active" data-scroll-target="#contact-tracing"><span class="header-section-number">10.1</span> Contact tracing</a></li>
+  <li><a href="#population-level" id="toc-population-level" class="nav-link" data-scroll-target="#population-level"><span class="header-section-number">10.2</span> Population-level</a>
   <ul>
-  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">8.2.1</span> Code</a></li>
+  <li><a href="#exponential-growth-rate" id="toc-exponential-growth-rate" class="nav-link" data-scroll-target="#exponential-growth-rate"><span class="header-section-number">10.2.1</span> Exponential growth rate</a></li>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">10.2.2</span> Code</a></li>
+  <li><a href="#simple-compartmental-models" id="toc-simple-compartmental-models" class="nav-link" data-scroll-target="#simple-compartmental-models"><span class="header-section-number">10.2.3</span> Simple compartmental models</a></li>
+  <li><a href="#next-generation-matrix" id="toc-next-generation-matrix" class="nav-link" data-scroll-target="#next-generation-matrix"><span class="header-section-number">10.2.4</span> Next generation matrix</a></li>
   </ul></li>
-  <li><a href="#simple-compartmental-models" id="toc-simple-compartmental-models" class="nav-link" data-scroll-target="#simple-compartmental-models"><span class="header-section-number">8.3</span> Simple compartmental models</a></li>
-  <li><a href="#next-generation-matrix" id="toc-next-generation-matrix" class="nav-link" data-scroll-target="#next-generation-matrix"><span class="header-section-number">8.4</span> Next generation matrix</a></li>
-  <li><a href="#epidemic-final-size" id="toc-epidemic-final-size" class="nav-link" data-scroll-target="#epidemic-final-size"><span class="header-section-number">8.5</span> Epidemic final size</a></li>
+  <li><a href="#epidemic-final-size" id="toc-epidemic-final-size" class="nav-link" data-scroll-target="#epidemic-final-size"><span class="header-section-number">10.3</span> Epidemic final size</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./rnum.html">Reproduction number</a></li><li class="breadcrumb-item"><a href="./r0.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./rnum.html">Reproduction number</a></li><li class="breadcrumb-item"><a href="./r0.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></h1>
+<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></h1>
 </div>
 
 
@@ -436,7 +453,7 @@ window.Quarto = {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-simple callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -447,7 +464,7 @@ Preparation
 </div>
 <div class="callout-body-container callout-body">
 <p>Download COVID-19 incidence data here:</p>
-<p><a href="#dnldts896" onclick="fetch('data:text/csv;base64,77u/ZGF5LGluYw0KMSwxDQoyLDMNCjMsMg0KNCwyDQo1LDMNCjYsMQ0KNyw0DQo4LDEyDQo5LDYNCjEwLDE4DQoxMSwxNA0KMTIsMjINCjEzLDUzDQoxNCw5Mg0KMTUsMTgzDQoxNiwxNjUNCjE3LDEzNg0KMTgsMTQ5DQoxOSwxNjUNCjIwLDIzNA0KMjEsMzEwDQoyMiwzNTYNCjIzLDMzMw0KMjQsNDI2DQoyNSwzNTENCjI2LDQzNw0KMjcsNjg5DQoyOCw2MzYNCjI5LDc1OA0KMzAsNzY2DQozMSw4MjENCjMyLDU3Nw0KMzMsNTk0DQozNCw4NjgNCjM1LDkzNg0KMzYsOTc5DQozNywxMDcxDQozOCw5ODQNCjM5LDc2NQ0KNDAsNjM0DQo0MSw4NjENCjQyLDk1Mw0KNDMsODc1DQo0NCw3OTgNCjQ1LDYxOQ0KNDYsNTE4DQo0Nyw1MDANCjQ4LDYwMw0KNDksNjU5DQo=').then(res => res.blob()).then(blob => {
+<p><a href="#dnldts40748" onclick="fetch('data:text/csv;base64,77u/ZGF5LGluYw0KMSwxDQoyLDMNCjMsMg0KNCwyDQo1LDMNCjYsMQ0KNyw0DQo4LDEyDQo5LDYNCjEwLDE4DQoxMSwxNA0KMTIsMjINCjEzLDUzDQoxNCw5Mg0KMTUsMTgzDQoxNiwxNjUNCjE3LDEzNg0KMTgsMTQ5DQoxOSwxNjUNCjIwLDIzNA0KMjEsMzEwDQoyMiwzNTYNCjIzLDMzMw0KMjQsNDI2DQoyNSwzNTENCjI2LDQzNw0KMjcsNjg5DQoyOCw2MzYNCjI5LDc1OA0KMzAsNzY2DQozMSw4MjENCjMyLDU3Nw0KMzMsNTk0DQozNCw4NjgNCjM1LDkzNg0KMzYsOTc5DQozNywxMDcxDQozOCw5ODQNCjM5LDc2NQ0KNDAsNjM0DQo0MSw4NjENCjQyLDk1Mw0KNDMsODc1DQo0NCw3OTgNCjQ1LDYxOQ0KNDYsNTE4DQo0Nyw1MDANCjQ4LDYwMw0KNDksNjU5DQo=').then(res => res.blob()).then(blob => {
       const downloadURL = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -455,7 +472,7 @@ Preparation
       a.download = 'covid_uk.csv'; a.click();
       window.URL.revokeObjectURL(downloadURL);
       document.body.removeChild(a);
-        });"><button class="btn btn-light downloadthis  " id="dnldts896"><i class="bi bi-download"></i> covid_uk.csv </button></a></p>
+        });"><button class="btn btn-light downloadthis  " id="dnldts40748"><i class="bi bi-download"></i> covid_uk.csv </button></a></p>
 </div>
 </div>
 <p>There are 2 approaches to estimating <span class="math inline">\(R_0\)</span>, depending on the type of data available:</p>
@@ -470,8 +487,8 @@ Preparation
 <li>Population-level predictions based upon an ODE model that use the <span class="math inline">\(R_0\)</span> value from contact tracing as a threshold parameter may be inaccurate. Only an <strong>epidemic threshold</strong> (from population-level modelling) can be used to design <strong>control strategies</strong> <span class="citation" data-cites="breban2007">(<a href="references.html#ref-breban2007" role="doc-biblioref">Breban et al., 2007</a>)</span>.</li>
 <li><span class="math inline">\(R_0\)</span> value from contact tracing is useful in conjunction with population-level epidemic data to understand the possible <strong>transmission mechanisms</strong> of the epidemic at the individual-level.</li>
 </ul>
-<section id="contact-tracing" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="contact-tracing"><span class="header-section-number">8.1</span> Contact tracing</h2>
+<section id="contact-tracing" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="contact-tracing"><span class="header-section-number">10.1</span> Contact tracing</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="img/rnum/contact-tracing.png" class="img-fluid figure-img"></p>
@@ -480,13 +497,10 @@ Preparation
 </div>
 <p>This approach is based upon the definition of <span class="math inline">\(R_0\)</span>. Once an individual is diagnosed, his/her contacts are traced and tested. <span class="math inline">\(R_0\)</span> is then computed by averaging over the number of secondary cases of many diagnosed individuals <span class="citation" data-cites="breban2007">(<a href="references.html#ref-breban2007" role="doc-biblioref">Breban et al., 2007</a>)</span>.</p>
 </section>
-<section id="exponential-growth-rate" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="exponential-growth-rate"><span class="header-section-number">8.2</span> Exponential growth rate</h2>
-<div id="def-gen-int" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 8.1</strong></span> Generation interval is the time from the infection of a primary case to infection of the cases he/she generates <span class="citation" data-cites="cori2013">(<a href="references.html#ref-cori2013" role="doc-biblioref">Cori et al., 2013</a>)</span>.</p>
-</div>
-<p>If we match this to an SEIR model, the generation interval starts when the infector enters the E compartment (meaning they got infected). The latest time they can infect an infectee is at the end of their residence in the I compartment (they are infectious). Therefore, generation interval is the sum of residence times in compartments E and I <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
-<p>The mean generation interval <strong>decreases</strong> when susceptible persons are at risk of infectious contact from <strong>multiple sources</strong>. Because when a susceptible person has multiple potential infectors, there is a “race” to infect him/her in which only the first infectious contact leads to infection <span class="citation" data-cites="kenah2008">(<a href="references.html#ref-kenah2008" role="doc-biblioref">Kenah et al., 2008</a>)</span>.</p>
+<section id="population-level" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="population-level"><span class="header-section-number">10.2</span> Population-level</h2>
+<section id="exponential-growth-rate" class="level3" data-number="10.2.1">
+<h3 data-number="10.2.1" class="anchored" data-anchor-id="exponential-growth-rate"><span class="header-section-number">10.2.1</span> Exponential growth rate</h3>
 <p>Step 1. Find an estimate for the mean generation time <span class="math inline">\(T_g\)</span>.</p>
 <p>Step 2. Identify the exponential phase of the epidemic curve: the period of which <span class="math inline">\(\log(\text{incidence})\)</span> is linear.</p>
 <p>Step 3. Estimate the growth rate <span class="math inline">\(r\)</span> for that phase by finding the slope from the linear regression on the <span class="math inline">\(\log(\text{incidence})\)</span>.</p>
@@ -528,8 +542,9 @@ Proof
 <li><span class="math inline">\(D\)</span> is the mean duration of the infectiousness.</li>
 <li><span class="math inline">\(L\)</span> is the mean duration of latency.</li>
 </ul>
-<section id="code" class="level3" data-number="8.2.1">
-<h3 data-number="8.2.1" class="anchored" data-anchor-id="code"><span class="header-section-number">8.2.1</span> Code</h3>
+</section>
+<section id="code" class="level3" data-number="10.2.2">
+<h3 data-number="10.2.2" class="anchored" data-anchor-id="code"><span class="header-section-number">10.2.2</span> Code</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -679,9 +694,8 @@ R :  3.949484[ 3.716905 , 4.198451 ]</code></pre>
 </div>
 </div>
 </section>
-</section>
-<section id="simple-compartmental-models" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="simple-compartmental-models"><span class="header-section-number">8.3</span> Simple compartmental models</h2>
+<section id="simple-compartmental-models" class="level3" data-number="10.2.3">
+<h3 data-number="10.2.3" class="anchored" data-anchor-id="simple-compartmental-models"><span class="header-section-number">10.2.3</span> Simple compartmental models</h3>
 <p>Consider a simple closed population SIR model.</p>
 <p><span class="math display">\[\begin{align} \frac{dS}{dt} &amp; = -\beta SI \\ \frac{dI}{dt} &amp; = \beta SI - \gamma I\\ \frac{dR}{dt} &amp; = \gamma I \end{align}\]</span></p>
 <p>Focusing on the <span class="math inline">\(I\)</span> equation:</p>
@@ -697,8 +711,8 @@ R :  3.949484[ 3.716905 , 4.198451 ]</code></pre>
 </ul>
 <p>For more complex compartmental models, especially those with more infected compartments, as proposed by <span class="citation" data-cites="diekmann1990">(<a href="references.html#ref-diekmann1990" role="doc-biblioref">Diekmann et al., 1990</a>)</span> and <span class="citation" data-cites="vandendriessche2002">(<a href="references.html#ref-vandendriessche2002" role="doc-biblioref">Driessche &amp; Watmough, 2002</a>)</span>, <span class="math inline">\(R_0\)</span> can be determined using the next generation matrix <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span>.</p>
 </section>
-<section id="next-generation-matrix" class="level2" data-number="8.4">
-<h2 data-number="8.4" class="anchored" data-anchor-id="next-generation-matrix"><span class="header-section-number">8.4</span> Next generation matrix</h2>
+<section id="next-generation-matrix" class="level3" data-number="10.2.4">
+<h3 data-number="10.2.4" class="anchored" data-anchor-id="next-generation-matrix"><span class="header-section-number">10.2.4</span> Next generation matrix</h3>
 <p><span class="math inline">\(R_0\)</span> is the maximum absolute eigenvalue (also called the spectral radius) of the next generation matrix (NGM) <span class="citation" data-cites="vandendriessche2017">(<a href="references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span>.</p>
 <p>Consider an SEIR model with equal birth and death rate <span class="math inline">\(\mu\)</span>.</p>
 <p><span class="math display">\[\begin{align} \frac{dS}{dt} &amp; = \mu (S + E + I + R) -\beta SI - \mu S \\ \frac{dE}{dt} &amp; = \beta SI - \sigma E - \mu E \\ \frac{dI}{dt} &amp; = \sigma E - \gamma I - \mu I \\ \frac{dR}{dt} &amp; = \gamma I - \mu R \end{align}\]</span></p>
@@ -741,7 +755,7 @@ R :  3.949484[ 3.716905 , 4.198451 ]</code></pre>
 </ul>
 <p><span class="math display">\[\begin{align} V &amp; = \begin{bmatrix} \frac{\partial \mathcal{V}_1}{\partial E} &amp; \frac{\partial \mathcal{V}_1}{\partial I} \\ \frac{\partial \mathcal{V}_2}{\partial E} &amp; \frac{\partial \mathcal{V}_2}{\partial I} \end{bmatrix} \\ &amp; = \begin{bmatrix} \frac{\partial [\sigma E + \mu E]}{\partial E} &amp; \frac{\partial [\sigma E + \mu E]}{\partial I} \\ \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial E} &amp; \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial I} \end{bmatrix} \\ &amp; = \begin{bmatrix} \sigma + \mu &amp; 0 \\ - \sigma &amp; \gamma + \mu \end{bmatrix} \end{align}\]</span></p>
 <p><strong>Step 4. Compute the NGM</strong></p>
-<p>Use <a href="dict.html#def-inv-matrix" class="quarto-xref">Definition&nbsp;<span>A.4</span></a> to compute inverse matrix <span class="math inline">\(V^{-1}\)</span>:</p>
+<p>Use <a href="dict.html#def-inv-matrix" class="quarto-xref">Definition&nbsp;<span>A.5</span></a> to compute inverse matrix <span class="math inline">\(V^{-1}\)</span>:</p>
 <p><span class="math display">\[\begin{align} V^{-1} &amp; = \frac{1}{(\sigma + \mu)(\gamma + \mu)} \begin{bmatrix} \gamma + \mu &amp; - 0 \\ - \sigma &amp; \sigma + \mu \end{bmatrix} \\&amp; = \begin{bmatrix} \frac{1}{\sigma + \mu} &amp; 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{1}{\gamma + \mu} \end{bmatrix} \end{align}\]</span></p>
 <p><span class="math display">\[\begin{align} K &amp; = FV^{-1} \\ &amp; = \begin{bmatrix} 0 &amp; \beta S \\ 0 &amp; 0 \end{bmatrix} \begin{bmatrix} \frac{1}{\sigma + \mu} &amp; 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{1}{\gamma + \mu} \end{bmatrix} \\ &amp; = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{\beta S}{\gamma + \mu} \\ 0 &amp; 0 \end{bmatrix} \end{align}\]</span></p>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -807,8 +821,9 @@ Use NGM to compute <span class="math inline">\(R_0\)</span> for SIR model
 </div>
 </div>
 </section>
-<section id="epidemic-final-size" class="level2" data-number="8.5">
-<h2 data-number="8.5" class="anchored" data-anchor-id="epidemic-final-size"><span class="header-section-number">8.5</span> Epidemic final size</h2>
+</section>
+<section id="epidemic-final-size" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="epidemic-final-size"><span class="header-section-number">10.3</span> Epidemic final size</h2>
 <p>If there were no interventions or changes in behavior, the proportion of the population infected during the entire course of an epidemic would be approximately the non-zero solution of the equation:</p>
 <p>$$$$</p>
 
@@ -820,9 +835,6 @@ Bradshaw, W. J., Alley, E. C., Huggins, J. H., Lloyd, A. L., &amp; Esvelt, K. M.
 <div id="ref-breban2007" class="csl-entry" role="listitem">
 Breban, R., Vardavas, R., &amp; Blower, S. (2007). Theory versus Data: How to Calculate R0? <em>PLOS ONE</em>, <em>2</em>(3), e282. <a href="https://doi.org/10.1371/journal.pone.0000282">https://doi.org/10.1371/journal.pone.0000282</a>
 </div>
-<div id="ref-cori2013" class="csl-entry" role="listitem">
-Cori, A., Ferguson, N. M., Fraser, C., &amp; Cauchemez, S. (2013). A new framework and software to estimate time-varying reproduction numbers during epidemics. <em>American Journal of Epidemiology</em>, <em>178</em>(9), 1505–1512. <a href="https://doi.org/10.1093/aje/kwt133">https://doi.org/10.1093/aje/kwt133</a>
-</div>
 <div id="ref-diekmann1990" class="csl-entry" role="listitem">
 Diekmann, O., Heesterbeek, J. A. P., &amp; Metz, J. A. J. (1990). On the definition and the computation of the basic reproduction ratio R0 in models for infectious diseases in heterogeneous populations. <em>Journal of Mathematical Biology</em>, <em>28</em>(4), 365–382. <a href="https://doi.org/10.1007/BF00178324">https://doi.org/10.1007/BF00178324</a>
 </div>
@@ -831,12 +843,6 @@ Driessche, P. van den. (2017). Reproduction numbers of infectious disease models
 </div>
 <div id="ref-vandendriessche2002" class="csl-entry" role="listitem">
 Driessche, P. van den, &amp; Watmough, J. (2002). Reproduction numbers and sub-threshold endemic equilibria for compartmental models of disease transmission. <em>Mathematical Biosciences</em>, <em>180</em>(1), 29–48. <a href="https://doi.org/10.1016/S0025-5564(02)00108-6">https://doi.org/10.1016/S0025-5564(02)00108-6</a>
-</div>
-<div id="ref-gostic2020" class="csl-entry" role="listitem">
-Gostic, K. M., McGough, L., Baskerville, E. B., Abbott, S., Joshi, K., Tedijanto, C., Kahn, R., Niehus, R., Hay, J. A., Salazar, P. M. D., Hellewell, J., Meakin, S., Munday, J. D., Bosse, N. I., Sherrat, K., Thompson, R. N., White, L. F., Huisman, J. S., Scire, J., … Cobey, S. (2020). Practical considerations for measuring the effective reproductive number, Rt. <em>PLOS Computational Biology</em>, <em>16</em>(12), e1008409. <a href="https://doi.org/10.1371/journal.pcbi.1008409">https://doi.org/10.1371/journal.pcbi.1008409</a>
-</div>
-<div id="ref-kenah2008" class="csl-entry" role="listitem">
-Kenah, E., Lipsitch, M., &amp; Robins, J. M. (2008). Generation interval contraction and epidemic data analysis. <em>Mathematical Biosciences</em>, <em>213</em>(1), 71–79. <a href="https://doi.org/10.1016/j.mbs.2008.02.007">https://doi.org/10.1016/j.mbs.2008.02.007</a>
 </div>
 <div id="ref-pandit2020" class="csl-entry" role="listitem">
 Pandit, J. J. (2020). Managing the R0 of COVID-19: mathematics fights back. <em>Anaesthesia</em>, <em>75</em>(12), 1643–1647. <a href="https://doi.org/10.1111/anae.15151">https://doi.org/10.1111/anae.15151</a>
@@ -1260,13 +1266,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <input type="hidden" id="giscus-alt-theme" value="dark">
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./rnum.html" class="pagination-link" aria-label="Reproduction number">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Reproduction number</span>
+      <a href="./gen-int.html" class="pagination-link" aria-label="Generation interval">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Generation interval</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./rt.html" class="pagination-link" aria-label="Estimating $R_t$">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

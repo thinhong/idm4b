@@ -1,0 +1,66 @@
+# MCMC
+
+Suppose that we have an iid (see @def-iid) incubation periods dataset of $n$ samples $y = (y_1, y_2, \cdots, y_n)$. We assume these data are independent draws from a Gamma distribution with shape $\alpha$ and rate $\beta$.
+
+::: {.callout-note collapse="true"}
+
+## pdf of Gamma distribution
+
+A random variable $x$ that is gamma-distributed with shape $\alpha$ and rate $\beta$ has this pdf:
+
+$$f(x | \alpha, \beta) = \frac{\beta^{\alpha}}{\Gamma(\alpha)} x^{\alpha - 1} e^{-\beta x}$$
+
+$f(x | \alpha, \beta)$ or sometimes written as $f(x; \alpha, \beta)$ ([Wikipedia](https://en.wikipedia.org/wiki/Gamma_distribution)) reads as: ***probability density of random variable $x$ given that we know parameters $\alpha$ and $\beta$***.
+
+:::
+
+Step 1. Write the **likelihood function** of the dataset.
+
+Likelihood of a data point is $f(y_1| \alpha, \beta)$.
+
+Likelihood of the dataset is:
+
+$$\begin{align}
+f(y| \alpha, \beta) &= f(y_1| \alpha, \beta) \times f(y_2| \alpha, \beta) \times \cdots \times f(y_n| \alpha, \beta) \\
+&= \prod_{i = 1}^{n} \frac{\beta^{\alpha}}{\Gamma(\alpha)} y_i^{\alpha - 1} e^{-\beta y_i} \\
+&= \frac{\beta^{n\alpha}}{\Gamma(\alpha)^n} \prod_{i = 1}^{n} y_i^{\alpha - 1} e^{-\beta y_i}
+\end{align}$$
+
+Step 2. Assign **prior distributions** to the parameters of interest.
+
+Both shape $\alpha$ and rate $\beta$ are positive so a natural to distribution to represent our prior beliefs them is a Gamma distribution. We will also assume that a *priori* (i.e. before we see the data) that $\alpha$ and $\beta$ are independent.
+
+$$\alpha \sim \text{Gamma}(\lambda_\alpha, \nu_\alpha)$$
+
+The pdf of $\alpha$ is:
+
+$$f(\alpha| \lambda_\alpha, \nu_\alpha) = \frac{\nu_\alpha^{\lambda_\alpha}}{\Gamma(\lambda_\alpha)} \alpha^{\lambda_\alpha - 1} e^{-\nu_\alpha \alpha}$$
+
+Because $\frac{\nu_\alpha^{\lambda_\alpha}}{\Gamma(\lambda_\alpha)}$ does not depends on $\alpha$.
+
+$$\begin{align} 
+f(\alpha| \lambda_\alpha, \nu_\alpha) &= \frac{\nu_\alpha^{\lambda_\alpha}}{\Gamma(\lambda_\alpha)} \alpha^{\lambda_\alpha - 1} e^{-\nu_\alpha \alpha} \\
+&\propto \alpha^{\lambda_\alpha - 1} e^{-\nu_\alpha \alpha} \end{align}$$
+
+Similarly:
+
+$$\beta \sim \text{Gamma}(\lambda_\beta, \nu_\beta)$$
+
+$$\begin{align} 
+f(\beta| \lambda_\beta, \nu_\beta) &= \frac{\nu_\beta^{\lambda_\beta}}{\Gamma(\lambda_\beta)} \beta^{\lambda_\beta - 1} e^{-\nu_\beta \beta} \\
+&\propto \beta^{\lambda_\beta - 1} e^{-\nu_\beta \beta} \end{align}$$
+
+Step 3. Write the **joint posterior distribution**.
+
+$$\begin{align}
+f(\alpha, \beta | y) &\propto f(y| \alpha, \beta) \times f(\alpha) \times f(\beta) \\
+&= f(y| \alpha, \beta) \times f(\alpha| \lambda_\alpha, \nu_\alpha) \times f(\beta| \lambda_\beta, \nu_\beta) \\
+&= \frac{\beta^{n\alpha}}{\Gamma(\alpha)^n} \prod_{i = 1}^{n} y_i^{\alpha - 1} e^{-\beta y_i} \times \alpha^{\lambda_\alpha - 1} e^{-\nu_\alpha \alpha} \times \beta^{\lambda_\beta - 1} e^{-\nu_\beta \beta}
+\end{align}$$
+
+Step 4. Derive the **full conditionals**.
+
+The full conditional 
+
+
+

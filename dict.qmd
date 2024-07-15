@@ -1,5 +1,9 @@
 # Dictionary
 
+::: {#def-iid}
+iid (**independent** and **identically distributed** random variables): each random variable has the **same probability distribution** as the others and **all** are **mutually independent**.
+:::
+
 ::: {#def-closedform-sol}
 **Closed-form solution** (or closed form expression) is any formula that can be evaluated in a finite number of standard operations ([source](https://riskencyclopedia.com/articles/closed_form_solution/)).
 :::

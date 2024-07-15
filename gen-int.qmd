@@ -1,0 +1,144 @@
+# Generation interval
+
+::: {.callout-note}
+
+## Preparation
+
+Install the following packages.
+
+```{r, eval=FALSE}
+install.packages(c("lubridate", "ggplot2", "epitrix"))
+install.packages("epiparameter", repos = c("https://epiverse-trace.r-universe.dev", "https://cloud.r-project.org"))
+```
+
+We will use a fictional Ebola outbreak linelist from [The Epidemiologist R Handbook](https://epirhandbook.com/new_pages/data_used.html).
+
+{{< downloadthis data/ebola_si.csv dname="ebola_si" label="ebola_si.csv" type=light >}}
+
+:::
+
+## Definition
+
+::: {.callout-tip appearance="simple"}
+::: {#def-gen-int}
+Generation interval is the time from the **infection** of a primary case to infection of the cases he/she generates [@cori2013].
+:::
+:::
+
+If we match this to an SEIR model, the generation interval starts when the infector enters the E compartment (meaning they got infected). The latest time they can infect an infectee is at the end of their residence in the I compartment (they are infectious). Therefore, generation interval is the sum of residence times in compartments E and I [@gostic2020].
+
+The mean generation interval **decreases** when susceptible persons are at risk of infectious contact from **multiple sources**. Because when a susceptible person has multiple potential infectors, there is a "race" to infect him/her in which only the first infectious contact leads to infection [@kenah2008].
+
+## Serial interval
+
+::: {.callout-tip appearance="simple"}
+::: {#def-ser-int}
+Serial interval is the time between **symptom onset** in an infector–infectee pair [@gostic2020].
+:::
+:::
+
+![Figure from [@sender2022].](img/rnum/gen-ser-int.png)
+
+Serial interval is more easily observed than generation interval and often used in its place. Although the serial and generation intervals are often conflated, there are important differences [@gostic2020]:
+
+-   Serial interval and generation interval usually have the same mean, but different variances.
+-   Serial interval can be negative (when the symptom onset of infector is later than infectee, such as in COVID-19), generation interval is always positive.
+
+The distributions of the serial interval and the generation interval are identical in these scenarios [@cori2013]:
+
+-   For diseases such as influenza, SARS, measles, and smallpox, it is expected that infectiousness starts only around the time of symptom onset.
+-   When the infectiousness profile after symptoms is independent of the incubation period.
+
+## Estimating serial interval distribution
+
+```{r, warning=FALSE, message=F}
+library(lubridate)
+library(ggplot2)
+library(epitrix)
+```
+
+Read and clean the data
+
+```{r}
+df <- read.csv("data/ebola_si.csv")
+# Convert date_onset to date type
+df$date_onset <- dmy(df$date_onset)
+head(df)
+```
+
+In this data, we know who infected whom, and the date of symptom onset. To estimate the serial intervals, we need the time between symptom onset of each infector–infectee pair. Now let transform the original data to something like this:
+
+| Infectee | Infector | Infectee's date of onset | Infector's date of onset | Time between onset |
+|----------|----------|--------------------------|--------------------------|--------------------|
+
+```{r}
+# Get pairs of infector-infectee
+tmp <- data.frame(infectee = df$case_id, infector = df$infector, infectee_onset = df$date_onset)
+
+# Now let find the infector's date of onset
+onset <- data.frame(case_id = df$case_id, date_onset = df$date_onset)
+tmp <- merge(tmp, onset, by.x = "infector", by.y = "case_id", all.x = T)
+colnames(tmp)[4] <- "infector_onset"
+
+# Compute the time between onset
+tmp$si <- as.numeric(difftime(tmp$infectee_onset, tmp$infector_onset, unit = "days"))
+
+# Remove NA rows
+tmp <- tmp[!is.na(tmp$si),]
+head(tmp)
+```
+
+We use function `fit_disc_gamma()` from package `epitrix` to fit a discretised gamma distribution to these serial intervals.
+
+```{r}
+si_fit <- fit_disc_gamma(tmp$si)
+si_fit
+```
+
+We can plot this gamma distribution to compare with the observed serial intervals data.
+
+```{r}
+#| fig-width: 4
+#| fig-height: 2.5
+#| out-width: "100%"
+si_distr <- data.frame(x = 0:max(tmp$si), y = dgamma(0:max(tmp$si), shape = si_fit$distribution$parameters$shape, scale = si_fit$distribution$parameters$scale))
+
+# Scale the density to compare with serial intervals histogram
+si_distr$y <- 4300 * si_distr$y
+
+ggplot(tmp, aes(x = si)) +
+  geom_histogram(bins = 50, color = "white", fill = "blue", alpha = 0.4) +
+  geom_line(data = si_distr, aes(x = x, y = y)) +
+  labs(x = "Serial intervals", y = NULL) +
+  theme_minimal()
+```
+
+## Searching for serial interval distribution
+
+```{r, warning=F, message=F}
+library(epiparameter)
+```
+
+Step 1. Load the database.
+
+```{r}
+epi_dist_db <- epidist_db()
+```
+
+Step 2. To see a full list of the diseases and distributions, use the `parameter_tbl()` function.
+
+```{r}
+dt <- parameter_tbl(multi_epidist = epi_dist_db)
+dt
+```
+
+Step 3. Get the parameter of the disease you want.
+
+```{r}
+ebola_si <- epidist_db(
+  disease = "Ebola",
+  epi_dist = "serial interval"
+)
+ebola_si
+```
+

@@ -1,6 +1,6 @@
 # Estimating $R_0$
 
-::: callout-note
+::: {.callout-note appearance="simple"}
 ## Preparation
 
 Download COVID-19 incidence data here:
@@ -27,15 +27,9 @@ The 2 approaches may produce very different numbers because:
 
 This approach is based upon the definition of $R_0$. Once an individual is diagnosed, his/her contacts are traced and tested. $R_0$ is then computed by averaging over the number of secondary cases of many diagnosed individuals [@breban2007].
 
-## Exponential growth rate
+## Population-level
 
-::: {#def-gen-int}
-Generation interval is the time from the infection of a primary case to infection of the cases he/she generates [@cori2013].
-:::
-
-If we match this to an SEIR model, the generation interval starts when the infector enters the E compartment (meaning they got infected). The latest time they can infect an infectee is at the end of their residence in the I compartment (they are infectious). Therefore, generation interval is the sum of residence times in compartments E and I [@gostic2020].
-
-The mean generation interval **decreases** when susceptible persons are at risk of infectious contact from **multiple sources**. Because when a susceptible person has multiple potential infectors, there is a "race" to infect him/her in which only the first infectious contact leads to infection [@kenah2008].
+### Exponential growth rate
 
 Step 1. Find an estimate for the mean generation time $T_g$.
 
@@ -59,7 +53,7 @@ Therefore $r$ is the slope from the linear regression on the $\log(\text{inciden
 
 Step 4. Given the exponential growth rate $r$ and the $T_g$, calculate the basic reproduction number:
 
-- Discrete generation:
+-   Discrete generation:
 
 $$R_0 = e^{rT_g}$$
 
@@ -73,8 +67,8 @@ $$R_0 \approx (1 + rD)(1 + rL) = \left( 1 + \frac{r}{\gamma} \right) \left( 1 + 
 
 In which:
 
-- $D$ is the mean duration of the infectiousness.
-- $L$ is the mean duration of latency.
+-   $D$ is the mean duration of the infectiousness.
+-   $L$ is the mean duration of latency.
 
 ### Code
 
@@ -161,14 +155,12 @@ SIR model: $R_0 \approx 1 + rD$
 ```
 
 ::: callout-note
-
 $R_0$ estimates are affected by the mean, variance and shape of the generation time distribution.
 
-- A larger mean $T_g$ leads to larger $R_0$.
-- For the 2 models with the same mean but different distributions $T_g$, $R_0$ estimates are different:
-  - Discrete generation assumes a uniform $T_g$.
-  - SIR model assumes an exponential $T_g$.
-
+-   A larger mean $T_g$ leads to larger $R_0$.
+-   For the 2 models with the same mean but different distributions $T_g$, $R_0$ estimates are different:
+    -   Discrete generation assumes a uniform $T_g$.
+    -   SIR model assumes an exponential $T_g$.
 :::
 
 Package `R0` provide a ready-to-use function `est.R0.EG()` to estimate $R_0$ using exponential growth rate method. We can define different shape of $T_g$, let try a $\Gamma(6.6, 4)$:
@@ -188,7 +180,7 @@ Now compute $R_0$:
 est.R0.EG(df$inc, gt, begin = 1, end = 21)
 ```
 
-## Simple compartmental models
+### Simple compartmental models
 
 Consider a simple closed population SIR model.
 
@@ -213,7 +205,7 @@ Therefore:
 
 For more complex compartmental models, especially those with more infected compartments, as proposed by [@diekmann1990] and [@vandendriessche2002], $R_0$ can be determined using the next generation matrix [@vandendriessche2017].
 
-## Next generation matrix
+### Next generation matrix
 
 $R_0$ is the maximum absolute eigenvalue (also called the spectral radius) of the next generation matrix (NGM) [@vandendriessche2017].
 

@@ -30,9 +30,11 @@ book:
       chapters: 
         - lse.qmd
         - mle.qmd
+        - mcmc.qmd
         - pomp.qmd
     - part: rnum.qmd
       chapters:
+        - gen-int.qmd
         - r0.qmd
         - rt.qmd
     - part: intv.qmd
@@ -41,6 +43,7 @@ book:
     - part: vax.qmd
       chapters:
         - vep-sm.qmd
+    - part: he.qmd
     - part: rp.qmd
       chapters: 
         - rp-risk.qmd
