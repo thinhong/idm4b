@@ -1,0 +1,95 @@
+# Model vaccination
+
+## Vaccine effects
+
+### Prevent infection
+
+Vaccine prevents the pathogen from establishing an infection in the body. A vaccinated person is less likely to get infected.
+
+![](img/vax/prv-inf.svg)
+
+To model the effect of a vaccine preventing infection, you modify the force of infection.
+
+### Prevent severe disease
+
+Vaccine reduces the severity of the disease if the vaccinated person does get infected. A vaccinated individual still get infected but experiences a much milder form of the disease.
+
+![](img/vax/prv-dis.svg)
+
+### Prevent transmission
+
+Vaccine reduces the ability of a vaccinated individual, who becomes infected, to transmit the pathogen to others. A vaccinated person still get infected, still get sick, but they are less likely to spread the disease to others.
+
+![](img/vax/prv-trans.svg)
+
+Reduces the transmission rate $\beta_v$ for infected vaccinated individuals.
+
+### Mixed effects
+
+The effect of imperfect vaccines is often a mix of the three.
+
+![](img/vax/prv-mix.svg)
+
+## Imperfect protections
+
+What is meant by a vaccine with effectiveness of 80% protection against a specific clinical endpoint? The mechanism of vaccine action is typically modelled in two ways:
+
+### All-or-nothing model
+
+::: {.callout-note type="simple"}
+::: {#def-aon-mod}
+**All-or-nothing** (AoN, also called the **polarized** [@park2023]) model assumes that **among vaccinated** individuals, a **proportion** $VE_P$ are **completely protected**, while **the remaining fraction** $1 - VE_P$ remains **completely unprotected** [@zachreson2023; @park2023].
+:::
+:::
+
+An effectiveness of 80% here implies that among vaccinated people, 80% are completely protected, and 20% receive no protection [@worldhealthorganization2013].
+
+Assumming a standard SIR model, vaccine protects against **infection** with vaccine effectiveness $VE_P$, $\rho$ represents the vaccination rate:
+
+-   Among the susceptible $S$, $\rho S$ are vaccinated.
+-   Among those $\rho S$ who are vaccinated, $\rho VE_P S$ are completely protected and go directly to $R_v$, the remaining is $\rho (1 - VE_P) S$.
+-   The remaining $\rho (1 - VE_P) S$ are completely unprotected, and will be infected with force of infection $\lambda(t)$ just like those who are unvaccinated.
+
+![All-or-nothing vaccination model [@park2023]](img/vax/aon-mod.svg){#fig-aon-mod}
+
+$$\begin{align}
+\frac{dS}{dt} &= -\lambda(t) S - \rho S \\
+\frac{dI}{dt} &= \lambda(t) S - \gamma I \\
+\frac{dR}{dt} &= \gamma I \\
+\frac{dS_v}{dt} &= \rho (1 - VE_P) S - \lambda(t) S_v \\
+\frac{dI_v}{dt} &= \lambda(t) S_v - \gamma I_v \\
+\frac{dR_v}{dt} &= \rho VE_P S + \gamma I_v
+\end{align}$$
+
+### Leaky model
+
+**Leaky** model assumes that **all vaccinated** individuals **are partially protected** [@zachreson2023]. An effectiveness of 80% here implies that all vaccinated people have the endpoint of interest reduced by 80% compared to non-vaccinees.
+
+The assumption that no vaccinated people is totally or permanently protected implies one or both of the following [@worldhealthorganization2013]:
+
+-   No amount (titre) of the immune marker is totally protective or, if it is, no individual can maintain that titre for a long period (because of waning or transient immunosuppression)
+-   The degree of protection is a function of the level of the immune marker - the simplest explanation being that protection is a function of both the level of the immune marker and the challenge dose.
+
+Assumming a standard SIR model, vaccine protects against **infection** with vaccine effectiveness $VE_L$, $\rho$ represents the vaccination rate.
+
+-   Among susceptible $S$, $\rho S$ are vaccinated.
+-   Among those $\rho S$ who are vaccinated, force of infection $\lambda(t)$ is reduced by a factor of $1 - VE_L$.
+
+![Leaky vaccination model [@park2023]](img/vax/leaky-mod.svg){#fig-leaky-mod}
+
+$$\begin{align}
+\frac{dS}{dt} &= -\lambda(t) S - \rho S \\
+\frac{dI}{dt} &= \lambda(t) S - \gamma I \\
+\frac{dR}{dt} &= \gamma I \\
+\frac{dS_v}{dt} &= \rho S - (1 - VE_L) \lambda(t) S_v \\
+\frac{dI_v}{dt} &= (1 - VE_L) \lambda(t) S_v - \gamma I_v \\
+\frac{dR_v}{dt} &= \gamma I_v
+\end{align}$$
+
+## Multiple doses
+
+When a vaccine has multiple doses such as measles, . DynaMICE model adjusted @def-aon-mod to
+
+![](img/vax/dynamice.svg)
+
+## Code

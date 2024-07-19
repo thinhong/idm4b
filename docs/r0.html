@@ -86,6 +86,7 @@ div.csl-indent {
 <meta name="quarto:offset" content="./">
 <link href="./rt.html" rel="next">
 <link href="./gen-int.html" rel="prev">
+<link href="./logo-icon.svg" rel="icon" type="image/svg+xml">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -255,8 +256,8 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./sir-sto.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SIR</span></span></a>
+  <a href="./seir-sto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SEIR</span></span></a>
   </div>
 </li>
       </ul>
@@ -353,8 +354,14 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./vep-sm.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Screening method</span></span></a>
+  <a href="./vax-perf.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Vaccine performance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./vax-mod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Model vaccination</span></span></a>
   </div>
 </li>
       </ul>
@@ -375,7 +382,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
       </ul>
@@ -464,7 +471,7 @@ Preparation
 </div>
 <div class="callout-body-container callout-body">
 <p>Download COVID-19 incidence data here:</p>
-<p><a href="#dnldts40748" onclick="fetch('data:text/csv;base64,77u/ZGF5LGluYw0KMSwxDQoyLDMNCjMsMg0KNCwyDQo1LDMNCjYsMQ0KNyw0DQo4LDEyDQo5LDYNCjEwLDE4DQoxMSwxNA0KMTIsMjINCjEzLDUzDQoxNCw5Mg0KMTUsMTgzDQoxNiwxNjUNCjE3LDEzNg0KMTgsMTQ5DQoxOSwxNjUNCjIwLDIzNA0KMjEsMzEwDQoyMiwzNTYNCjIzLDMzMw0KMjQsNDI2DQoyNSwzNTENCjI2LDQzNw0KMjcsNjg5DQoyOCw2MzYNCjI5LDc1OA0KMzAsNzY2DQozMSw4MjENCjMyLDU3Nw0KMzMsNTk0DQozNCw4NjgNCjM1LDkzNg0KMzYsOTc5DQozNywxMDcxDQozOCw5ODQNCjM5LDc2NQ0KNDAsNjM0DQo0MSw4NjENCjQyLDk1Mw0KNDMsODc1DQo0NCw3OTgNCjQ1LDYxOQ0KNDYsNTE4DQo0Nyw1MDANCjQ4LDYwMw0KNDksNjU5DQo=').then(res => res.blob()).then(blob => {
+<p><a href="#dnldts60318" onclick="fetch('data:text/csv;base64,77u/ZGF5LGluYw0KMSwxDQoyLDMNCjMsMg0KNCwyDQo1LDMNCjYsMQ0KNyw0DQo4LDEyDQo5LDYNCjEwLDE4DQoxMSwxNA0KMTIsMjINCjEzLDUzDQoxNCw5Mg0KMTUsMTgzDQoxNiwxNjUNCjE3LDEzNg0KMTgsMTQ5DQoxOSwxNjUNCjIwLDIzNA0KMjEsMzEwDQoyMiwzNTYNCjIzLDMzMw0KMjQsNDI2DQoyNSwzNTENCjI2LDQzNw0KMjcsNjg5DQoyOCw2MzYNCjI5LDc1OA0KMzAsNzY2DQozMSw4MjENCjMyLDU3Nw0KMzMsNTk0DQozNCw4NjgNCjM1LDkzNg0KMzYsOTc5DQozNywxMDcxDQozOCw5ODQNCjM5LDc2NQ0KNDAsNjM0DQo0MSw4NjENCjQyLDk1Mw0KNDMsODc1DQo0NCw3OTgNCjQ1LDYxOQ0KNDYsNTE4DQo0Nyw1MDANCjQ4LDYwMw0KNDksNjU5DQo=').then(res => res.blob()).then(blob => {
       const downloadURL = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -472,7 +479,7 @@ Preparation
       a.download = 'covid_uk.csv'; a.click();
       window.URL.revokeObjectURL(downloadURL);
       document.body.removeChild(a);
-        });"><button class="btn btn-light downloadthis  " id="dnldts40748"><i class="bi bi-download"></i> covid_uk.csv </button></a></p>
+        });"><button class="btn btn-light downloadthis  " id="dnldts60318"><i class="bi bi-download"></i> covid_uk.csv </button></a></p>
 </div>
 </div>
 <p>There are 2 approaches to estimating <span class="math inline">\(R_0\)</span>, depending on the type of data available:</p>

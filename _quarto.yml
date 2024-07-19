@@ -6,6 +6,7 @@ execute:
   freeze: auto
 
 book:
+  favicon: logo-icon.svg
   google-analytics: "G-X391ZN63GG"
   title: "Infectious disease modelling for babies"
   author:
@@ -25,7 +26,7 @@ book:
         - tsir.qmd
     - part: sto.qmd
       chapters: 
-        - sir-sto.qmd
+        - seir-sto.qmd
     - part: calib.qmd
       chapters: 
         - lse.qmd
@@ -42,7 +43,8 @@ book:
         - ftc.qmd
     - part: vax.qmd
       chapters:
-        - vep-sm.qmd
+        - vax-perf.qmd
+        - vax-mod.qmd
     - part: he.qmd
     - part: rp.qmd
       chapters: 

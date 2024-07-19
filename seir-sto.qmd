@@ -1,0 +1,44 @@
+# SEIR
+
+```{r}
+library(SimInf)
+```
+
+
+
+```{r}
+n <- 1000
+u0 <- data.frame(S = rep(99, n), E = rep(0, n), I = rep(5, n), R = rep(0, n))
+
+seir_t <- SEIR(u0 = u0, tspan = 1:150, beta = 0.003 * 99, epsilon = 0.033, gamma = 0.077)
+res_t <- run(seir_t)
+plot(res_t)
+```
+
+```{r}
+transitions <- c("S -> beta * S * I -> E",
+                 "E -> epsilon * E -> I",
+                 "I -> gamma * I -> R")
+compartments <- c("S", "E", "I", "R")
+
+mod <- mparse(transitions = transitions,
+              compartments = compartments,
+              gdata = c(beta = 0.003, epsilon = 0.033, gamma = 0.077),
+              u0 = u0,
+              tspan = 1:150)
+res <- run(mod)
+plot(res)
+```
+
+## Vaccination
+
+```{r}
+transitions <- c("S -> beta * S * I -> E",
+                 "E -> epsilon * E -> I",
+                 "I -> gamma * I -> R")
+compartments <- c("S", "E", "I", "R")
+
+
+```
+
+

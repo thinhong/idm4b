@@ -1,0 +1,21 @@
+{
+  "hash": "86b8143bd819f467354d3eb26fb781ec",
+  "result": {
+    "engine": "knitr",
+    "markdown": "# Screening method\n\n1. We have data of all or **a random sample** of disease **cases** over a given period in a population, from which we know the proportion vaccinated ($PCV$) of these cases.\n\n2. We also know the proportion of the **population** vaccinated ($PPV$).\n\nThen the vaccine effectiveness ($VE$) is calculated as:\n\n$$\\begin{align} VE &= 1 - \\frac{\\frac{PCV}{1 - PCV}}{\\frac{PPV}{1 - PPV}} = 1 - \\frac{PCV}{1 - PCV} \\times \\frac{1 - PPV}{PPV} \\\\\n&= \\frac{PPV(1 - PCV) - PCV(1 - PPV)}{PPV(1 - PCV)} \\\\\n&= \\frac{PPV - PPV \\times PCV - PCV + PCV \\times PPV}{PPV(1 - PCV)} \\\\\n&= \\frac{PPV - PCV}{PPV(1 - PCV)} \\end{align}$$\n\nIn which:\n\n- $\\frac{PCV}{1 - PCV}$ is the odd of vaccination in disease cases group.\n- $\\frac{PPV}{1 - PPV}$ is the odd of vaccination in the population.\n- $\\frac{\\frac{PCV}{1 - PCV}}{\\frac{PPV}{1 - PPV}} = \\frac{PCV}{1 - PCV} \\times \\frac{1 - PPV}{PPV}$ is the odds ratio of vaccination between 2 groups (cases vs population).\n\n\n::: {.cell}\n\n```{.r .cell-code}\nbirth_cohort <- c(1980:1986)\ncases <- c(82, 98, 180, 177, 112, 140, 151)\nvac <- c(5, 9, 28, 37, 22, 27, 27)\ncov <- c(70, 70.9, 76, 81, 83.7, 84.5, 83.1)\ndf <- data.frame(birth_cohort, cases, vac, cov)\ndf\n```\n\n::: {.cell-output-display}\n`````{=html}\n<div data-pagedtable=\"false\">\n  <script data-pagedtable-source type=\"application/json\">\n{\"columns\":[{\"label\":[\"birth_cohort\"],\"name\":[1],\"type\":[\"int\"],\"align\":[\"right\"]},{\"label\":[\"cases\"],\"name\":[2],\"type\":[\"dbl\"],\"align\":[\"right\"]},{\"label\":[\"vac\"],\"name\":[3],\"type\":[\"dbl\"],\"align\":[\"right\"]},{\"label\":[\"cov\"],\"name\":[4],\"type\":[\"dbl\"],\"align\":[\"right\"]}],\"data\":[{\"1\":\"1980\",\"2\":\"82\",\"3\":\"5\",\"4\":\"70.0\"},{\"1\":\"1981\",\"2\":\"98\",\"3\":\"9\",\"4\":\"70.9\"},{\"1\":\"1982\",\"2\":\"180\",\"3\":\"28\",\"4\":\"76.0\"},{\"1\":\"1983\",\"2\":\"177\",\"3\":\"37\",\"4\":\"81.0\"},{\"1\":\"1984\",\"2\":\"112\",\"3\":\"22\",\"4\":\"83.7\"},{\"1\":\"1985\",\"2\":\"140\",\"3\":\"27\",\"4\":\"84.5\"},{\"1\":\"1986\",\"2\":\"151\",\"3\":\"27\",\"4\":\"83.1\"}],\"options\":{\"columns\":{\"min\":{},\"max\":[10]},\"rows\":{\"min\":[10],\"max\":[10]},\"pages\":{}}}\n  </script>\n</div>\n`````\n:::\n\n```{.r .cell-code}\ndf$pcv <- df$vac/df$cases\ndf$ppv <- df$cov / 100\ndf$rr <- (df$pcv / (1 - df$pcv)) / (df$ppv / (1 - df$ppv))\nlm(rr ~ birth_cohort, data = df)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n\nCall:\nlm(formula = rr ~ birth_cohort, data = df)\n\nCoefficients:\n (Intercept)  birth_cohort  \n   -3.029905      0.001551  \n```\n\n\n:::\n\n```{.r .cell-code}\n1 - exp(-3.029905)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 0.9516798\n```\n\n\n:::\n:::\n",
+    "supporting": [
+      "vep-sm_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<link href=\"site_libs/pagedtable-1.1/css/pagedtable.css\" rel=\"stylesheet\" />\n<script src=\"site_libs/pagedtable-1.1/js/pagedtable.js\"></script>\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

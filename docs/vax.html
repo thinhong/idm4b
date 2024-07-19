@@ -50,8 +50,9 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./vep-sm.html" rel="next">
+<link href="./vax-perf.html" rel="next">
 <link href="./ftc.html" rel="prev">
+<link href="./logo-icon.svg" rel="icon" type="image/svg+xml">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -216,8 +217,8 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./sir-sto.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SIR</span></span></a>
+  <a href="./seir-sto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SEIR</span></span></a>
   </div>
 </li>
       </ul>
@@ -314,8 +315,14 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./vep-sm.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Screening method</span></span></a>
+  <a href="./vax-perf.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Vaccine performance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./vax-mod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Model vaccination</span></span></a>
   </div>
 </li>
       </ul>
@@ -336,7 +343,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
       </ul>
@@ -385,7 +392,6 @@ window.Quarto = {
   <li><a href="#definition" id="toc-definition" class="nav-link" data-scroll-target="#definition">Definition</a></li>
   <li><a href="#classification" id="toc-classification" class="nav-link" data-scroll-target="#classification">Classification</a></li>
   </ul></li>
-  <li><a href="#the-effect-of-vaccines" id="toc-the-effect-of-vaccines" class="nav-link" data-scroll-target="#the-effect-of-vaccines">The effect of vaccines</a></li>
   <li><a href="#innate-vs-adaptive-immune-system" id="toc-innate-vs-adaptive-immune-system" class="nav-link" data-scroll-target="#innate-vs-adaptive-immune-system">Innate vs adaptive immune system</a></li>
   <li><a href="#prevent-infection-vs-disease" id="toc-prevent-infection-vs-disease" class="nav-link" data-scroll-target="#prevent-infection-vs-disease">Prevent infection vs disease</a></li>
   <li><a href="#non-specific-effects" id="toc-non-specific-effects" class="nav-link" data-scroll-target="#non-specific-effects">Non-specific effects</a></li>
@@ -450,37 +456,6 @@ window.Quarto = {
 </ol>
 </section>
 </section>
-<section id="the-effect-of-vaccines" class="level2">
-<h2 class="anchored" data-anchor-id="the-effect-of-vaccines">The effect of vaccines</h2>
-<div id="def-vec" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 1</strong></span> Efficacy is the <strong>percentage reduction</strong> in the <strong>disease rate</strong> (or <strong>infection risk</strong> <span class="citation" data-cites="shim2012">(<a href="references.html#ref-shim2012" role="doc-biblioref">Shim &amp; Galvani, 2012</a>)</span>) among vaccinated individuals compared to <strong>similar</strong> unvaccinated individuals <span class="citation" data-cites="verani2017">(<a href="references.html#ref-verani2017" role="doc-biblioref">Verani et al., 2017</a>)</span>.</p>
-</div>
-<div id="def-vet" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 2</strong></span> Effectiveness is the <strong>percentage reduction</strong> in the <strong>disease rate</strong> (or <strong>infection risk</strong> <span class="citation" data-cites="shim2012">(<a href="references.html#ref-shim2012" role="doc-biblioref">Shim &amp; Galvani, 2012</a>)</span>) among vaccinated individuals compared to unvaccinated individuals, similar to efficacy, but in <strong>real-world</strong> conditions <span class="citation" data-cites="verani2017">(<a href="references.html#ref-verani2017" role="doc-biblioref">Verani et al., 2017</a>)</span>.</p>
-</div>
-<p>Vaccine effectiveness is categorized into 4 types:</p>
-<ol type="1">
-<li>Direct</li>
-<li>Indirect</li>
-<li>Total</li>
-<li>Overall</li>
-</ol>
-<div id="def-vi" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 3</strong></span> Impact quantifies the reduction in <strong>disease rate</strong> (either percentage decline or absolute change in disease rate) at the <strong>population level</strong> after vaccine introduction. It is determined by: (1) vaccine effectiveness, (2) vaccine coverage and (3) herd immunity <span class="citation" data-cites="verani2017">(<a href="references.html#ref-verani2017" role="doc-biblioref">Verani et al., 2017</a>)</span>.</p>
-</div>
-<p>Let <span class="math inline">\(R_v\)</span> be the infection risk in the vaccinated group and <span class="math inline">\(R_u\)</span> be the infection risk in the unvaccinated group.</p>
-<p>The absolute reduction in infection risk due to vaccination is <span class="math inline">\(R_u - R_v\)</span>.</p>
-<p>Vaccine efficacy or effectiveness <span class="math inline">\(VE\)</span> is the <strong>percentage reduction</strong> in infection risk, so we divide the absolute reduction by the infection risk of the unvaccinated group.</p>
-<p><span class="math display">\[\begin{align} VE &amp;= \frac{R_u - R_v}{R_u} \\ &amp;= 1 - \frac{R_v}{R_u} \\ &amp;= 1 - \text{Relative risk} \end{align}\]</span></p>
-<p>Let have an example:</p>
-<p><img src="img/vax/trial.png" class="img-fluid"></p>
-<ul>
-<li>In the control group, the infection risk is <span class="math inline">\(\frac{4}{8}\)</span> as 4 out of 8 people are infected.</li>
-<li>In the vaccinated group, the infection risk is <span class="math inline">\(\frac{1}{8}\)</span> as 1 person is infected among 8 people.</li>
-</ul>
-<p><span class="math display">\[VE = \frac{\frac{4}{8} - \frac{1}{8}}{\frac{4}{8}} = \frac{4 - 1}{4} = \frac{3}{4} = 0.75\]</span></p>
-<p>While 4 people get infected without vaccination, only 1 would get infected if they were vaccinated. The vaccine can prevent 3 of these infections. So the vaccine efficacy is <span class="math inline">\(\frac{3}{4}\)</span> or 75%.</p>
-</section>
 <section id="innate-vs-adaptive-immune-system" class="level2">
 <h2 class="anchored" data-anchor-id="innate-vs-adaptive-immune-system">Innate vs adaptive immune system</h2>
 </section>
@@ -510,12 +485,6 @@ window.Quarto = {
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
 <div id="ref-pollard2021" class="csl-entry" role="listitem">
 Pollard, A. J., &amp; Bijker, E. M. (2021). A guide to vaccinology: from basic principles to new developments. <em>Nature Reviews Immunology</em>, <em>21</em>(2), 83–100. <a href="https://doi.org/10.1038/s41577-020-00479-7">https://doi.org/10.1038/s41577-020-00479-7</a>
-</div>
-<div id="ref-shim2012" class="csl-entry" role="listitem">
-Shim, E., &amp; Galvani, A. P. (2012). Distinguishing vaccine efficacy and effectiveness. <em>Vaccine</em>, <em>30</em>(47), 6700–6705. <a href="https://doi.org/10.1016/j.vaccine.2012.08.045">https://doi.org/10.1016/j.vaccine.2012.08.045</a>
-</div>
-<div id="ref-verani2017" class="csl-entry" role="listitem">
-Verani, J. R., Baqui, A. H., Broome, C. V., Cherian, T., Cohen, C., Farrar, J. L., Feikin, D. R., Groome, M. J., Hajjeh, R. A., Johnson, H. L., Madhi, S. A., Mulholland, K., O’Brien, K. L., Parashar, U. D., Patel, M. M., Rodrigues, L. C., Santosham, M., Scott, J. A., Smith, P. G., … Zell, E. R. (2017). Case-control vaccine effectiveness studies: Preparation, design, and enrollment of cases and controls. <em>Vaccine</em>, <em>35</em>(25), 3295–3302. <a href="https://doi.org/10.1016/j.vaccine.2017.04.037">https://doi.org/10.1016/j.vaccine.2017.04.037</a>
 </div>
 </div>
 </section>
@@ -941,8 +910,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./vep-sm.html" class="pagination-link" aria-label="Screening method">
-        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Screening method</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./vax-perf.html" class="pagination-link" aria-label="Vaccine performance">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Vaccine performance</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

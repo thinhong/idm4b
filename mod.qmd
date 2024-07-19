@@ -25,6 +25,24 @@ Models help us navigate and make decisions about complex situations by focusing 
 >
 > Keeling M (2006) *State-of-science review: predictive and real-time epidemiological modelling*. London: Office of Science and Innovation [@keeling2006; @christley2013].
 
+## Types of model
+
+### Static vs dynamic
+
+A **static** model is one where **time does not affect** its operation. Time may be present but does not influence the model's structure or function [@smith2023]. In infectious disease modelling, static model assumes that the force of infection is constant or changes only as a function of age and other individual characteristics (**not time**) [@handbook2023].
+
+A **dynamic** model is one where **time is essential** to its operation. The model cannot function without representing time [@smith2023]. In infectious disease modelling, dynamic model assumes that the force of infection can vary throughout the course of **time** and as a function of population interactions, often in non-linear ways [@handbook2023].
+
+### Dynamic continuous-change vs discrete-change
+
+**Dynamic models** use **state variables** to describe the system's status at any point in time. If the state variables can change **continuously over continuous time**, then the model has continuous-change aspects. 
+
+### Deterministic vs stochastic
+
+A **deterministic** model assumes that there is **no randomness**, and the system can be fully described by a defined set of equations and parameters. **Each run** of the deterministic model **always** generates the **same result** [@handbook2023].
+
+A **stochastic** model assumes events occur **randomly**, affecting single parameters or multiple components within the system. **Each run** of a stochastic model generates **different results**. Therefore, stochastic models must be run for hundreds or thousands of iterations to explore the full range of possible outcomes [@handbook2023].
+
 ## Solving a model
 
 Solving a model means finding a function that satisfies the given conditions. Consider the Malthusian growth model as an example:
@@ -43,4 +61,3 @@ $$\begin{align} \frac{dP}{dt} & = rP \\
 \Leftrightarrow P & = e^{rt + C} \end{align}$$
 
 where $C$ is the constant of integration.
-

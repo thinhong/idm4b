@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Infectious disease modelling for babies - 4&nbsp; SIR</title>
+<title>Infectious disease modelling for babies - 14&nbsp; Model vaccination</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -30,8 +50,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./calib.html" rel="next">
-<link href="./sto.html" rel="prev">
+<link href="./he.html" rel="next">
+<link href="./vax-perf.html" rel="prev">
+<link href="./logo-icon.svg" rel="icon" type="image/svg+xml">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -119,7 +140,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./sto.html">Stochastic models</a></li><li class="breadcrumb-item"><a href="./sir-sto.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SIR</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./vax.html">Vaccination</a></li><li class="breadcrumb-item"><a href="./vax-mod.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Model vaccination</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -189,15 +210,15 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="./sto.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Stochastic models</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./sir-sto.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SIR</span></span></a>
+  <a href="./seir-sto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SEIR</span></span></a>
   </div>
 </li>
       </ul>
@@ -287,15 +308,21 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="./vax.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Vaccination</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./vep-sm.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Screening method</span></span></a>
+  <a href="./vax-perf.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Vaccine performance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./vax-mod.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Model vaccination</span></span></a>
   </div>
 </li>
       </ul>
@@ -316,7 +343,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
       </ul>
@@ -356,14 +383,33 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="3">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#vaccine-effects" id="toc-vaccine-effects" class="nav-link active" data-scroll-target="#vaccine-effects"><span class="header-section-number">14.1</span> Vaccine effects</a>
+  <ul>
+  <li><a href="#prevent-infection" id="toc-prevent-infection" class="nav-link" data-scroll-target="#prevent-infection"><span class="header-section-number">14.1.1</span> Prevent infection</a></li>
+  <li><a href="#prevent-severe-disease" id="toc-prevent-severe-disease" class="nav-link" data-scroll-target="#prevent-severe-disease"><span class="header-section-number">14.1.2</span> Prevent severe disease</a></li>
+  <li><a href="#prevent-transmission" id="toc-prevent-transmission" class="nav-link" data-scroll-target="#prevent-transmission"><span class="header-section-number">14.1.3</span> Prevent transmission</a></li>
+  <li><a href="#mixed-effects" id="toc-mixed-effects" class="nav-link" data-scroll-target="#mixed-effects"><span class="header-section-number">14.1.4</span> Mixed effects</a></li>
+  </ul></li>
+  <li><a href="#imperfect-protections" id="toc-imperfect-protections" class="nav-link" data-scroll-target="#imperfect-protections"><span class="header-section-number">14.2</span> Imperfect protections</a>
+  <ul>
+  <li><a href="#all-or-nothing-model" id="toc-all-or-nothing-model" class="nav-link" data-scroll-target="#all-or-nothing-model"><span class="header-section-number">14.2.1</span> All-or-nothing model</a></li>
+  <li><a href="#leaky-model" id="toc-leaky-model" class="nav-link" data-scroll-target="#leaky-model"><span class="header-section-number">14.2.2</span> Leaky model</a></li>
+  </ul></li>
+  <li><a href="#multiple-doses" id="toc-multiple-doses" class="nav-link" data-scroll-target="#multiple-doses"><span class="header-section-number">14.3</span> Multiple doses</a></li>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">14.4</span> Code</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./sto.html">Stochastic models</a></li><li class="breadcrumb-item"><a href="./sir-sto.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SIR</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./vax.html">Vaccination</a></li><li class="breadcrumb-item"><a href="./vax-mod.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Model vaccination</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SIR</span></h1>
+<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Model vaccination</span></h1>
 </div>
 
 
@@ -380,8 +426,131 @@ window.Quarto = {
 </header>
 
 
+<section id="vaccine-effects" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="vaccine-effects"><span class="header-section-number">14.1</span> Vaccine effects</h2>
+<section id="prevent-infection" class="level3" data-number="14.1.1">
+<h3 data-number="14.1.1" class="anchored" data-anchor-id="prevent-infection"><span class="header-section-number">14.1.1</span> Prevent infection</h3>
+<p>Vaccine prevents the pathogen from establishing an infection in the body. A vaccinated person is less likely to get infected.</p>
+<p><img src="img/vax/prv-inf.svg" class="img-fluid"></p>
+<p>To model the effect of a vaccine preventing infection, you modify the force of infection.</p>
+</section>
+<section id="prevent-severe-disease" class="level3" data-number="14.1.2">
+<h3 data-number="14.1.2" class="anchored" data-anchor-id="prevent-severe-disease"><span class="header-section-number">14.1.2</span> Prevent severe disease</h3>
+<p>Vaccine reduces the severity of the disease if the vaccinated person does get infected. A vaccinated individual still get infected but experiences a much milder form of the disease.</p>
+<p><img src="img/vax/prv-dis.svg" class="img-fluid"></p>
+</section>
+<section id="prevent-transmission" class="level3" data-number="14.1.3">
+<h3 data-number="14.1.3" class="anchored" data-anchor-id="prevent-transmission"><span class="header-section-number">14.1.3</span> Prevent transmission</h3>
+<p>Vaccine reduces the ability of a vaccinated individual, who becomes infected, to transmit the pathogen to others. A vaccinated person still get infected, still get sick, but they are less likely to spread the disease to others.</p>
+<p><img src="img/vax/prv-trans.svg" class="img-fluid"></p>
+<p>Reduces the transmission rate <span class="math inline">\(\beta_v\)</span> for infected vaccinated individuals.</p>
+</section>
+<section id="mixed-effects" class="level3" data-number="14.1.4">
+<h3 data-number="14.1.4" class="anchored" data-anchor-id="mixed-effects"><span class="header-section-number">14.1.4</span> Mixed effects</h3>
+<p>The effect of imperfect vaccines is often a mix of the three.</p>
+<p><img src="img/vax/prv-mix.svg" class="img-fluid"></p>
+</section>
+</section>
+<section id="imperfect-protections" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="imperfect-protections"><span class="header-section-number">14.2</span> Imperfect protections</h2>
+<p>What is meant by a vaccine with effectiveness of 80% protection against a specific clinical endpoint? The mechanism of vaccine action is typically modelled in two ways:</p>
+<section id="all-or-nothing-model" class="level3" data-number="14.2.1">
+<h3 data-number="14.2.1" class="anchored" data-anchor-id="all-or-nothing-model"><span class="header-section-number">14.2.1</span> All-or-nothing model</h3>
+<div class="callout callout-style-default callout-note callout-titled" type="simple">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div id="def-aon-mod" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 14.1</strong></span> <strong>All-or-nothing</strong> (AoN, also called the <strong>polarized</strong> <span class="citation" data-cites="park2023">(<a href="references.html#ref-park2023" role="doc-biblioref">Park et al., 2023</a>)</span>) model assumes that <strong>among vaccinated</strong> individuals, a <strong>proportion</strong> <span class="math inline">\(VE_P\)</span> are <strong>completely protected</strong>, while <strong>the remaining fraction</strong> <span class="math inline">\(1 - VE_P\)</span> remains <strong>completely unprotected</strong> <span class="citation" data-cites="zachreson2023 park2023">(<a href="references.html#ref-park2023" role="doc-biblioref">Park et al., 2023</a>; <a href="references.html#ref-zachreson2023" role="doc-biblioref">Zachreson et al., 2023</a>)</span>.</p>
+</div>
+</div>
+</div>
+<p>An effectiveness of 80% here implies that among vaccinated people, 80% are completely protected, and 20% receive no protection <span class="citation" data-cites="worldhealthorganization2013">(<a href="references.html#ref-worldhealthorganization2013" role="doc-biblioref">World Health Organization, 2013</a>)</span>.</p>
+<p>Assumming a standard SIR model, vaccine protects against <strong>infection</strong> with vaccine effectiveness <span class="math inline">\(VE_P\)</span>, <span class="math inline">\(\rho\)</span> represents the vaccination rate:</p>
+<ul>
+<li>Among the susceptible <span class="math inline">\(S\)</span>, <span class="math inline">\(\rho S\)</span> are vaccinated.</li>
+<li>Among those <span class="math inline">\(\rho S\)</span> who are vaccinated, <span class="math inline">\(\rho VE_P S\)</span> are completely protected and go directly to <span class="math inline">\(R_v\)</span>, the remaining is <span class="math inline">\(\rho (1 - VE_P) S\)</span>.</li>
+<li>The remaining <span class="math inline">\(\rho (1 - VE_P) S\)</span> are completely unprotected, and will be infected with force of infection <span class="math inline">\(\lambda(t)\)</span> just like those who are unvaccinated.</li>
+</ul>
+<div id="fig-aon-mod" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-aon-mod-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="img/vax/aon-mod.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-aon-mod-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14.1: All-or-nothing vaccination model <span class="citation" data-cites="park2023">(<a href="references.html#ref-park2023" role="doc-biblioref">Park et al., 2023</a>)</span>
+</figcaption>
+</figure>
+</div>
+<p><span class="math display">\[\begin{align}
+\frac{dS}{dt} &amp;= -\lambda(t) S - \rho S \\
+\frac{dI}{dt} &amp;= \lambda(t) S - \gamma I \\
+\frac{dR}{dt} &amp;= \gamma I \\
+\frac{dS_v}{dt} &amp;= \rho (1 - VE_P) S - \lambda(t) S_v \\
+\frac{dI_v}{dt} &amp;= \lambda(t) S_v - \gamma I_v \\
+\frac{dR_v}{dt} &amp;= \rho VE_P S + \gamma I_v
+\end{align}\]</span></p>
+</section>
+<section id="leaky-model" class="level3" data-number="14.2.2">
+<h3 data-number="14.2.2" class="anchored" data-anchor-id="leaky-model"><span class="header-section-number">14.2.2</span> Leaky model</h3>
+<p><strong>Leaky</strong> model assumes that <strong>all vaccinated</strong> individuals <strong>are partially protected</strong> <span class="citation" data-cites="zachreson2023">(<a href="references.html#ref-zachreson2023" role="doc-biblioref">Zachreson et al., 2023</a>)</span>. An effectiveness of 80% here implies that all vaccinated people have the endpoint of interest reduced by 80% compared to non-vaccinees.</p>
+<p>The assumption that no vaccinated people is totally or permanently protected implies one or both of the following <span class="citation" data-cites="worldhealthorganization2013">(<a href="references.html#ref-worldhealthorganization2013" role="doc-biblioref">World Health Organization, 2013</a>)</span>:</p>
+<ul>
+<li>No amount (titre) of the immune marker is totally protective or, if it is, no individual can maintain that titre for a long period (because of waning or transient immunosuppression)</li>
+<li>The degree of protection is a function of the level of the immune marker - the simplest explanation being that protection is a function of both the level of the immune marker and the challenge dose.</li>
+</ul>
+<p>Assumming a standard SIR model, vaccine protects against <strong>infection</strong> with vaccine effectiveness <span class="math inline">\(VE_L\)</span>, <span class="math inline">\(\rho\)</span> represents the vaccination rate.</p>
+<ul>
+<li>Among susceptible <span class="math inline">\(S\)</span>, <span class="math inline">\(\rho S\)</span> are vaccinated.</li>
+<li>Among those <span class="math inline">\(\rho S\)</span> who are vaccinated, force of infection <span class="math inline">\(\lambda(t)\)</span> is reduced by a factor of <span class="math inline">\(1 - VE_L\)</span>.</li>
+</ul>
+<div id="fig-leaky-mod" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-leaky-mod-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="img/vax/leaky-mod.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-leaky-mod-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14.2: Leaky vaccination model <span class="citation" data-cites="park2023">(<a href="references.html#ref-park2023" role="doc-biblioref">Park et al., 2023</a>)</span>
+</figcaption>
+</figure>
+</div>
+<p><span class="math display">\[\begin{align}
+\frac{dS}{dt} &amp;= -\lambda(t) S - \rho S \\
+\frac{dI}{dt} &amp;= \lambda(t) S - \gamma I \\
+\frac{dR}{dt} &amp;= \gamma I \\
+\frac{dS_v}{dt} &amp;= \rho S - (1 - VE_L) \lambda(t) S_v \\
+\frac{dI_v}{dt} &amp;= (1 - VE_L) \lambda(t) S_v - \gamma I_v \\
+\frac{dR_v}{dt} &amp;= \gamma I_v
+\end{align}\]</span></p>
+</section>
+</section>
+<section id="multiple-doses" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="multiple-doses"><span class="header-section-number">14.3</span> Multiple doses</h2>
+<p>When a vaccine has multiple doses such as measles, . DynaMICE model adjusted <a href="#def-aon-mod" class="quarto-xref">Definition&nbsp;<span>14.1</span></a> to</p>
+<p><img src="img/vax/dynamice.svg" class="img-fluid"></p>
+</section>
+<section id="code" class="level2" data-number="14.4">
+<h2 data-number="14.4" class="anchored" data-anchor-id="code"><span class="header-section-number">14.4</span> Code</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-park2023" class="csl-entry" role="listitem">
+Park, S. W., Li, M., Metcalf, C. J. E., Grenfell, B. T., &amp; Dushoff, J. (2023). Immune boosting bridges leaky and polarized vaccination models. <em>medRxiv</em>. <a href="https://doi.org/10.1101/2023.07.14.23292670">https://doi.org/10.1101/2023.07.14.23292670</a>
+</div>
+<div id="ref-worldhealthorganization2013" class="csl-entry" role="listitem">
+World Health Organization. (2013). <em>Correlates of vaccine-induced protection: Methods and implications</em>.
+</div>
+<div id="ref-zachreson2023" class="csl-entry" role="listitem">
+Zachreson, C., Tobin, R., Szanyi, J., Walker, C., Cromer, D., Shearer, F. M., Conway, E., Ryan, G., Cheng, A., McCaw, J. M., &amp; Geard, N. (2023). Individual variation in vaccine immune response can produce bimodal distributions of protection. <em>Vaccine</em>, <em>41</em>(45), 6630–6636. <a href="https://doi.org/10.1016/j.vaccine.2023.09.025">https://doi.org/10.1016/j.vaccine.2023.09.025</a>
+</div>
+</div>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -799,13 +968,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <input type="hidden" id="giscus-alt-theme" value="dark">
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./sto.html" class="pagination-link" aria-label="Stochastic models">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Stochastic models</span>
+      <a href="./vax-perf.html" class="pagination-link" aria-label="Vaccine performance">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Vaccine performance</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./calib.html" class="pagination-link" aria-label="Calibration">
-        <span class="nav-page-text">Calibration</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./he.html" class="pagination-link" aria-label="Health economics">
+        <span class="nav-page-text">Health economics</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

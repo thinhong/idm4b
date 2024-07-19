@@ -1,5 +1,7 @@
 # Preface {.unnumbered}
 
+Last modified: {{< now "%B %d, %Y" >}}.
+
 This book brings together everything I have learned about infectious disease modelling during my PhD journey. Special thanks to my idol, [Dr. James Hay](https://uk.linkedin.com/in/james-a-hay), who once gave these genius advice:
 
 > "Read and learn now - it will be harder later on."
@@ -35,9 +37,10 @@ The content of this book has been shaped by the materials I have read and the co
 |                                                                                                 |                                                                                                                                                                   |                                                                                                                                                                                      |
 |                                                                                                 | Modelling interventions and Health economic evaluation: Asst/Prof. Kiesha Prem; Asst/Prof. Hannah Clapham; Asst/Prof. Swapnil Mishra; Asst/Prof. Thitiya Theparod |                                                                                                                                                                                      |
 +-------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+: {tbl-colwidths="[30, 40, 30]" .hover}
 
 I would also like to acknowledge the following materials, which the authors kindly provided in response to my inquiries about these subjects:
 
-- Workshop: Modeling Rabies Outbreak and Control, by Dr. Phrutsamon Wongnak.
+-   Workshop: Modeling Rabies Outbreak and Control, by Dr. Phrutsamon Wongnak.
 
 If you enjoyed this book or found any mistakes, please leave a comment below. Your feedback means a lot!

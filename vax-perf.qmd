@@ -1,0 +1,80 @@
+# Vaccine performance
+
+## Vaccine efficacy
+
+::: {#def-vec}
+Efficacy is the **percentage reduction** in the **disease rate** (or **infection risk** [@shim2012]) among vaccinated individuals compared to **similar** unvaccinated individuals [@verani2017].
+:::
+
+## Vaccine effectiveness
+
+::: {#def-vet}
+Effectiveness is the **percentage reduction** in the **disease rate** (or **infection risk** [@shim2012]) among vaccinated individuals compared to unvaccinated individuals, similar to efficacy, but in **real-world** conditions [@verani2017].
+:::
+
+Vaccine effectiveness is categorized into 4 types:
+
+1.  Direct
+2.  Indirect
+3.  Total
+4.  Overall
+
+Let $R_v$ be the infection risk in the vaccinated group and $R_u$ be the infection risk in the unvaccinated group.
+
+The absolute reduction in infection risk due to vaccination is $R_u - R_v$.
+
+Vaccine efficacy or effectiveness $VE$ is the **percentage reduction** in infection risk, so we divide the absolute reduction by the infection risk of the unvaccinated group.
+
+$$\begin{align} VE &= \frac{R_u - R_v}{R_u} \\ &= 1 - \frac{R_v}{R_u} \\ &= 1 - \text{Relative risk} \end{align}$$
+
+Let have an example:
+
+![](img/vax/trial.png)
+
+-   In the control group, the infection risk is $\frac{4}{8}$ as 4 out of 8 people are infected.
+-   In the vaccinated group, the infection risk is $\frac{1}{8}$ as 1 person is infected among 8 people.
+
+$$VE = \frac{\frac{4}{8} - \frac{1}{8}}{\frac{4}{8}} = \frac{4 - 1}{4} = \frac{3}{4} = 0.75$$
+
+While 4 people get infected without vaccination, only 1 would get infected if they were vaccinated. The vaccine can prevent 3 of these infections. So the vaccine efficacy is $\frac{3}{4}$ or 75%.
+
+## Measure vaccine effectiveness
+
+### Screening method
+
+1. We have data of all or **a random sample** of disease **cases** over a given period in a population, from which we know the proportion vaccinated ($PCV$) of these cases.
+
+2. We also know the proportion of the **population** vaccinated ($PPV$).
+
+Then the vaccine effectiveness ($VE$) is calculated as:
+
+$$\begin{align} VE &= 1 - \frac{\frac{PCV}{1 - PCV}}{\frac{PPV}{1 - PPV}} = 1 - \frac{PCV}{1 - PCV} \times \frac{1 - PPV}{PPV} \\
+&= \frac{PPV(1 - PCV) - PCV(1 - PPV)}{PPV(1 - PCV)} \\
+&= \frac{PPV - PPV \times PCV - PCV + PCV \times PPV}{PPV(1 - PCV)} \\
+&= \frac{PPV - PCV}{PPV(1 - PCV)} \end{align}$$
+
+In which:
+
+- $\frac{PCV}{1 - PCV}$ is the odd of vaccination in disease cases group.
+- $\frac{PPV}{1 - PPV}$ is the odd of vaccination in the population.
+- $\frac{\frac{PCV}{1 - PCV}}{\frac{PPV}{1 - PPV}} = \frac{PCV}{1 - PCV} \times \frac{1 - PPV}{PPV}$ is the odds ratio of vaccination between 2 groups (cases vs population).
+
+```{r}
+birth_cohort <- c(1980:1986)
+cases <- c(82, 98, 180, 177, 112, 140, 151)
+vac <- c(5, 9, 28, 37, 22, 27, 27)
+cov <- c(70, 70.9, 76, 81, 83.7, 84.5, 83.1)
+df <- data.frame(birth_cohort, cases, vac, cov)
+df
+df$pcv <- df$vac/df$cases
+df$ppv <- df$cov / 100
+df$rr <- (df$pcv / (1 - df$pcv)) / (df$ppv / (1 - df$ppv))
+lm(rr ~ birth_cohort, data = df)
+1 - exp(-3.029905)
+```
+
+## Vaccine impact
+
+::: {#def-vi}
+Impact quantifies the reduction in **disease rate** (either percentage decline or absolute change in disease rate) at the **population level** after vaccine introduction. It is determined by: (1) vaccine effectiveness, (2) vaccine coverage and (3) herd immunity [@verani2017].
+:::

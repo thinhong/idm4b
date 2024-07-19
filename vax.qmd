@@ -34,46 +34,6 @@ T cells
 
 2.  Helper: subtypes by profiles of cytokine production
 
-## The effect of vaccines
-
-::: {#def-vec}
-Efficacy is the **percentage reduction** in the **disease rate** (or **infection risk** [@shim2012]) among vaccinated individuals compared to **similar** unvaccinated individuals [@verani2017].
-:::
-
-::: {#def-vet}
-Effectiveness is the **percentage reduction** in the **disease rate** (or **infection risk** [@shim2012]) among vaccinated individuals compared to unvaccinated individuals, similar to efficacy, but in **real-world** conditions [@verani2017].
-:::
-
-Vaccine effectiveness is categorized into 4 types:
-
-1.  Direct
-2.  Indirect
-3.  Total
-4.  Overall
-
-::: {#def-vi}
-Impact quantifies the reduction in **disease rate** (either percentage decline or absolute change in disease rate) at the **population level** after vaccine introduction. It is determined by: (1) vaccine effectiveness, (2) vaccine coverage and (3) herd immunity [@verani2017].
-:::
-
-Let $R_v$ be the infection risk in the vaccinated group and $R_u$ be the infection risk in the unvaccinated group.
-
-The absolute reduction in infection risk due to vaccination is $R_u - R_v$.
-
-Vaccine efficacy or effectiveness $VE$ is the **percentage reduction** in infection risk, so we divide the absolute reduction by the infection risk of the unvaccinated group.
-
-$$\begin{align} VE &= \frac{R_u - R_v}{R_u} \\ &= 1 - \frac{R_v}{R_u} \\ &= 1 - \text{Relative risk} \end{align}$$
-
-Let have an example:
-
-![](img/vax/trial.png)
-
--   In the control group, the infection risk is $\frac{4}{8}$ as 4 out of 8 people are infected.
--   In the vaccinated group, the infection risk is $\frac{1}{8}$ as 1 person is infected among 8 people.
-
-$$VE = \frac{\frac{4}{8} - \frac{1}{8}}{\frac{4}{8}} = \frac{4 - 1}{4} = \frac{3}{4} = 0.75$$
-
-While 4 people get infected without vaccination, only 1 would get infected if they were vaccinated. The vaccine can prevent 3 of these infections. So the vaccine efficacy is $\frac{3}{4}$ or 75%.
-
 ## Innate vs adaptive immune system
 
 ## Prevent infection vs disease

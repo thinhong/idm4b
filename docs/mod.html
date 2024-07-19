@@ -52,6 +52,7 @@ div.csl-indent {
 <meta name="quarto:offset" content="./">
 <link href="./det.html" rel="next">
 <link href="./index.html" rel="prev">
+<link href="./logo-icon.svg" rel="icon" type="image/svg+xml">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -216,8 +217,8 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./sir-sto.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SIR</span></span></a>
+  <a href="./seir-sto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SEIR</span></span></a>
   </div>
 </li>
       </ul>
@@ -314,8 +315,14 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./vep-sm.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Screening method</span></span></a>
+  <a href="./vax-perf.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Vaccine performance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./vax-mod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Model vaccination</span></span></a>
   </div>
 </li>
       </ul>
@@ -336,7 +343,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
       </ul>
@@ -382,6 +389,12 @@ window.Quarto = {
   <ul>
   <li><a href="#what-is-a-model" id="toc-what-is-a-model" class="nav-link active" data-scroll-target="#what-is-a-model">What is a model?</a></li>
   <li><a href="#there-is-no-perfect-model" id="toc-there-is-no-perfect-model" class="nav-link" data-scroll-target="#there-is-no-perfect-model">There is no perfect model</a></li>
+  <li><a href="#types-of-model" id="toc-types-of-model" class="nav-link" data-scroll-target="#types-of-model">Types of model</a>
+  <ul>
+  <li><a href="#static-vs-dynamic" id="toc-static-vs-dynamic" class="nav-link" data-scroll-target="#static-vs-dynamic">Static vs dynamic</a></li>
+  <li><a href="#dynamic-continuous-change-vs-discrete-change" id="toc-dynamic-continuous-change-vs-discrete-change" class="nav-link" data-scroll-target="#dynamic-continuous-change-vs-discrete-change">Dynamic continuous-change vs discrete-change</a></li>
+  <li><a href="#deterministic-vs-stochastic" id="toc-deterministic-vs-stochastic" class="nav-link" data-scroll-target="#deterministic-vs-stochastic">Deterministic vs stochastic</a></li>
+  </ul></li>
   <li><a href="#solving-a-model" id="toc-solving-a-model" class="nav-link" data-scroll-target="#solving-a-model">Solving a model</a></li>
   </ul>
 </nav>
@@ -433,6 +446,23 @@ window.Quarto = {
 <p>Keeling M (2006) <em>State-of-science review: predictive and real-time epidemiological modelling</em>. London: Office of Science and Innovation <span class="citation" data-cites="keeling2006 christley2013">(<a href="references.html#ref-christley2013" role="doc-biblioref">Christley et al., 2013</a>; <a href="references.html#ref-keeling2006" role="doc-biblioref">Keeling, 2006</a>)</span>.</p>
 </blockquote>
 </section>
+<section id="types-of-model" class="level2">
+<h2 class="anchored" data-anchor-id="types-of-model">Types of model</h2>
+<section id="static-vs-dynamic" class="level3">
+<h3 class="anchored" data-anchor-id="static-vs-dynamic">Static vs dynamic</h3>
+<p>A <strong>static</strong> model is one where <strong>time does not affect</strong> its operation. Time may be present but does not influence the model’s structure or function <span class="citation" data-cites="smith2023">(<a href="references.html#ref-smith2023" role="doc-biblioref">Smith &amp; Sturrock, 2023</a>)</span>. In infectious disease modelling, static model assumes that the force of infection is constant or changes only as a function of age and other individual characteristics (<strong>not time</strong>) <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>.</p>
+<p>A <strong>dynamic</strong> model is one where <strong>time is essential</strong> to its operation. The model cannot function without representing time <span class="citation" data-cites="smith2023">(<a href="references.html#ref-smith2023" role="doc-biblioref">Smith &amp; Sturrock, 2023</a>)</span>. In infectious disease modelling, dynamic model assumes that the force of infection can vary throughout the course of <strong>time</strong> and as a function of population interactions, often in non-linear ways <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>.</p>
+</section>
+<section id="dynamic-continuous-change-vs-discrete-change" class="level3">
+<h3 class="anchored" data-anchor-id="dynamic-continuous-change-vs-discrete-change">Dynamic continuous-change vs discrete-change</h3>
+<p><strong>Dynamic models</strong> use <strong>state variables</strong> to describe the system’s status at any point in time. If the state variables can change <strong>continuously over continuous time</strong>, then the model has continuous-change aspects.</p>
+</section>
+<section id="deterministic-vs-stochastic" class="level3">
+<h3 class="anchored" data-anchor-id="deterministic-vs-stochastic">Deterministic vs stochastic</h3>
+<p>A <strong>deterministic</strong> model assumes that there is <strong>no randomness</strong>, and the system can be fully described by a defined set of equations and parameters. <strong>Each run</strong> of the deterministic model <strong>always</strong> generates the <strong>same result</strong> <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>.</p>
+<p>A <strong>stochastic</strong> model assumes events occur <strong>randomly</strong>, affecting single parameters or multiple components within the system. <strong>Each run</strong> of a stochastic model generates <strong>different results</strong>. Therefore, stochastic models must be run for hundreds or thousands of iterations to explore the full range of possible outcomes <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>.</p>
+</section>
+</section>
 <section id="solving-a-model" class="level2">
 <h2 class="anchored" data-anchor-id="solving-a-model">Solving a model</h2>
 <p>Solving a model means finding a function that satisfies the given conditions. Consider the Malthusian growth model as an example:</p>
@@ -451,11 +481,17 @@ window.Quarto = {
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-handbook2023" class="csl-entry" role="listitem">
+Bishai, D., Brenzel, L., &amp; Padula, W. (Eds.). (2023). <em>Handbook of applied health economics in vaccines</em>. Oxford University Press. <a href="https://doi.org/10.1093/oso/9780192896087.001.0001">https://doi.org/10.1093/oso/9780192896087.001.0001</a>
+</div>
 <div id="ref-christley2013" class="csl-entry" role="listitem">
 Christley, R. M., Mort, M., Wynne, B., Wastling, J. M., Heathwaite, A. L., Pickup, R., Austin, Z., &amp; Latham, S. M. (2013). <span>“</span>Wrong, but Useful<span>”</span>: Negotiating Uncertainty in Infectious Disease Modelling. <em>PLOS ONE</em>, <em>8</em>(10), e76277. <a href="https://doi.org/10.1371/journal.pone.0076277">https://doi.org/10.1371/journal.pone.0076277</a>
 </div>
 <div id="ref-keeling2006" class="csl-entry" role="listitem">
 Keeling, M. J. (2006). <em>State-of-science review: Predictive and real-time epidemiological modelling. S9</em>. DTI.
+</div>
+<div id="ref-smith2023" class="csl-entry" role="listitem">
+Smith, J. S., &amp; Sturrock, D. T. (2023). <em>Simio and simulation - modeling, analysis, applications - 6th edition</em>. <a href="https://textbook.simio.com/SASMAA6/">https://textbook.simio.com/SASMAA6/</a>
 </div>
 <div id="ref-vynnycky2010" class="csl-entry" role="listitem">
 Vynnycky, E., &amp; White, R. (2010). <em>An Introduction to Infectious Disease Modelling</em>. OUP Oxford.
