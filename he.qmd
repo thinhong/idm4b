@@ -7,11 +7,12 @@
 **Full** economic evaluations: compare **both** the **costs and consequences** of the intervention to a **comparator**. There are 3 most popular types of full economic evaluations, the key difference lies in how they express the **consequences** [@turner2021]:
 
 | Type               | Costs | Consequences                                                             |
-|-------------------------|-----------------|------------------------------|
+|-------------------------|------------------|-----------------------------|
 | Cost-effectiveness | \$    | A single natural unit (life-years gained, cases averted, cases detected) |
 | Cost-utility       | \$    | QALYs, DALYs                                                             |
 | Cost-benefit       | \$    | \$                                                                       |
-: {tbl-colwidths="[30,20,50]"}
+
+: {tbl-colwidths="\[30,20,50\]"}
 
 ::: callout-note
 -   Cost-utility is sometimes considered as a special type of cost-effectiveness.
@@ -20,6 +21,30 @@
 
 ## Measuring costs
 
+### Discounting and inflation
+
+Discounting is a mathematical procedure for adjusting future costs and outcomes of health-care interventions to "present value" [@severens2004]. Discounting is based on the concept of "positive time preference", meaning that people prefers to benefit sooner rather than later [@severens2004].
+
+Imagine you can choose between getting (A) \$1000 today or (B) \$1000 in 5 years. Most people would prefer option A because having \$1000 today allows you to use it immediately or invest it. The value of \$1000 today is greater than \$1000 in 5 years due to the opportunity to earn interest or invest it.
+
+Now imagine you can choose between getting \$500 today or \$1000 in 10 years. To make a fair comparison, you need to adjust the future benefits to their present value. Let's say the discount rate $D$ is 5%. The formula for present value (PV) is:
+
+$$PV = \frac{M}{(1 + D)^t}$$
+
+For a benefit in the 10th year:
+
+$$PV = \frac{1000}{(1 + 0.05)^{10}} \approx 613.91$$
+
+So $1000 in the 10th year is worth about $614 in today's dollars.
+
+Discounting should not be confused with adjusting for inflation. Both are needed. The inflation adjustment reflects the change in purchasing power of currency (e.g., adjusting past costs to current values). Discounting reflects the loss in value when there is a delay in obtaining an item of value (e.g., adjusting for future value).
+
+Discounting: This is about the idea that a dollar today is worth more than a dollar in the future. It reflects our preference for receiving benefits or money sooner rather than later. It’s used to adjust future costs or benefits to their present value.
+
+Inflation: This is about how the general price level of goods and services increases over time. Inflation means that money loses its purchasing power, so what $1 buys today might cost more in the future.
+
 ## Measuring consequences
 
-## QALY
+### QALY
+
+

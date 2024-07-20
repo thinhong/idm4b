@@ -401,9 +401,14 @@ window.Quarto = {
    
   <ul>
   <li><a href="#types-of-health-economic-analyses" id="toc-types-of-health-economic-analyses" class="nav-link active" data-scroll-target="#types-of-health-economic-analyses">Types of health economic analyses</a></li>
-  <li><a href="#measuring-costs" id="toc-measuring-costs" class="nav-link" data-scroll-target="#measuring-costs">Measuring costs</a></li>
-  <li><a href="#measuring-consequences" id="toc-measuring-consequences" class="nav-link" data-scroll-target="#measuring-consequences">Measuring consequences</a></li>
+  <li><a href="#measuring-costs" id="toc-measuring-costs" class="nav-link" data-scroll-target="#measuring-costs">Measuring costs</a>
+  <ul>
+  <li><a href="#discounting-and-inflation" id="toc-discounting-and-inflation" class="nav-link" data-scroll-target="#discounting-and-inflation">Discounting and inflation</a></li>
+  </ul></li>
+  <li><a href="#measuring-consequences" id="toc-measuring-consequences" class="nav-link" data-scroll-target="#measuring-consequences">Measuring consequences</a>
+  <ul>
   <li><a href="#qaly" id="toc-qaly" class="nav-link" data-scroll-target="#qaly">QALY</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -483,19 +488,35 @@ Note
 </section>
 <section id="measuring-costs" class="level2">
 <h2 class="anchored" data-anchor-id="measuring-costs">Measuring costs</h2>
+<section id="discounting-and-inflation" class="level3">
+<h3 class="anchored" data-anchor-id="discounting-and-inflation">Discounting and inflation</h3>
+<p>Discounting is a mathematical procedure for adjusting future costs and outcomes of health-care interventions to “present value” <span class="citation" data-cites="severens2004">(<a href="references.html#ref-severens2004" role="doc-biblioref">Severens &amp; Milne, 2004</a>)</span>. Discounting is based on the concept of “positive time preference”, meaning that people prefers to benefit sooner rather than later <span class="citation" data-cites="severens2004">(<a href="references.html#ref-severens2004" role="doc-biblioref">Severens &amp; Milne, 2004</a>)</span>.</p>
+<p>Imagine you can choose between getting (A) $1000 today or (B) $1000 in 5 years. Most people would prefer option A because having $1000 today allows you to use it immediately or invest it. The value of $1000 today is greater than $1000 in 5 years due to the opportunity to earn interest or invest it.</p>
+<p>Now imagine you can choose between getting $500 today or $1000 in 10 years. To make a fair comparison, you need to adjust the future benefits to their present value. Let’s say the discount rate <span class="math inline">\(D\)</span> is 5%. The formula for present value (PV) is:</p>
+<p><span class="math display">\[PV = \frac{M}{(1 + D)^t}\]</span></p>
+<p>For a benefit in the 10th year:</p>
+<p><span class="math display">\[PV = \frac{1000}{(1 + 0.05)^{10}} \approx 613.91\]</span></p>
+<p>So $1000 in the 10th year is worth about $614 in today’s dollars.</p>
+<p>Discounting should not be confused with adjusting for inflation. Both are needed. The inflation adjustment reflects the change in purchasing power of currency (e.g., adjusting past costs to current values). Discounting reflects the loss in value when there is a delay in obtaining an item of value (e.g., adjusting for future value).</p>
+<p>Discounting: This is about the idea that a dollar today is worth more than a dollar in the future. It reflects our preference for receiving benefits or money sooner rather than later. It’s used to adjust future costs or benefits to their present value.</p>
+<p>Inflation: This is about how the general price level of goods and services increases over time. Inflation means that money loses its purchasing power, so what $1 buys today might cost more in the future.</p>
+</section>
 </section>
 <section id="measuring-consequences" class="level2">
 <h2 class="anchored" data-anchor-id="measuring-consequences">Measuring consequences</h2>
-</section>
-<section id="qaly" class="level2">
-<h2 class="anchored" data-anchor-id="qaly">QALY</h2>
+<section id="qaly" class="level3">
+<h3 class="anchored" data-anchor-id="qaly">QALY</h3>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-severens2004" class="csl-entry" role="listitem">
+Severens, J. L., &amp; Milne, R. J. (2004). Discounting Health Outcomes in Economic Evaluation: The Ongoing Debate. <em>Value in Health</em>, <em>7</em>(4), 397–401. <a href="https://doi.org/10.1111/j.1524-4733.2004.74002.x">https://doi.org/10.1111/j.1524-4733.2004.74002.x</a>
+</div>
 <div id="ref-turner2021" class="csl-entry" role="listitem">
 Turner, H. C., Archer, R. A., Downey, L. E., Isaranuwatchai, W., Chalkidou, K., Jit, M., &amp; Teerawattananon, Y. (2021). An introduction to the main types of economic evaluations used for informing priority setting and resource allocation in healthcare: Key features, uses, and limitations. <em>Frontiers in Public Health</em>, <em>9</em>. <a href="https://www.frontiersin.org/articles/10.3389/fpubh.2021.722927">https://www.frontiersin.org/articles/10.3389/fpubh.2021.722927</a>
 </div>
 </div>
+</section>
 </section>
 
 </main> <!-- /main -->

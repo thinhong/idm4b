@@ -106,9 +106,11 @@ This step is to create **specific** criteria tables from the generic criteria ta
 
 This step is to collect **evidence** on the selected factors and specified elements determined in Step 2, rate the evidence quality, and put them in the EtR framework. It is **the most labour-intensive** part.
 
+Evidence may be obtained from literature (published or unpublished), statistical data, surveillance records, experiences from countries that have already implemented the intervention, documents/publications and/or recommendations from WHO, WHO SAGE, Regional Immunization Technical Advisory Groups such as the European Technical Advisory Group of Experts on Immunization or other NITAGs.
+
 Criterion 2 "**Benefits and harms** of the intervention" is extremely important, therefore:
 
--   Some NITAGs conduct systematic review for it.
+-   Some NITAGs conduct systematic review, which is very time and resource consuming and should only be done if necessary capacities are available.
 -   Use GRADE quality assessments to assess the evidence **quality**, which is the **confidence** level in how close the reported effects in the evidence are to the true effects.
 
 Lower quality data does not prevent recommendations, but the limitations should be clearly outlined.
