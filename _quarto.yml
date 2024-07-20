@@ -46,6 +46,8 @@ book:
         - vax-perf.qmd
         - vax-mod.qmd
     - part: he.qmd
+      chapters:
+        - he-etr.qmd
     - part: rp.qmd
       chapters: 
         - rp-risk.qmd

@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Thinh Ong">
-<meta name="dcterms.date" content="2024-05-22">
 
-<title>Infectious disease modelling for babies</title>
+<title>Infectious disease modelling for babies - 15&nbsp; EtR Process</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -32,7 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./mod.html" rel="next">
+<link href="./rp.html" rel="next">
+<link href="./he.html" rel="prev">
 <link href="./logo-icon.svg" rel="icon" type="image/svg+xml">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -43,6 +42,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -112,7 +114,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating">
+<body class="nav-sidebar floating slimcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -121,7 +123,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./he.html">Health economics</a></li><li class="breadcrumb-item"><a href="./he-etr.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">EtR Process</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -148,7 +150,7 @@ window.Quarto = {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
@@ -312,14 +314,14 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="./he.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Health economics</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./he-etr.html" class="sidebar-item-text sidebar-link">
+  <a href="./he-etr.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">EtR Process</span></span></a>
   </div>
 </li>
@@ -381,35 +383,33 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#prerequisite-step" id="toc-prerequisite-step" class="nav-link" data-scroll-target="#prerequisite-step">Prerequisite step</a>
+  <ul>
+  <li><a href="#generic-criteria-tables" id="toc-generic-criteria-tables" class="nav-link" data-scroll-target="#generic-criteria-tables">Generic criteria tables</a></li>
+  <li><a href="#etr-framework" id="toc-etr-framework" class="nav-link" data-scroll-target="#etr-framework">EtR framework</a></li>
+  </ul></li>
+  <li><a href="#the-policy-question" id="toc-the-policy-question" class="nav-link" data-scroll-target="#the-policy-question"><span class="header-section-number">15.1</span> The policy question</a></li>
+  <li><a href="#the-elements-to-consider" id="toc-the-elements-to-consider" class="nav-link" data-scroll-target="#the-elements-to-consider"><span class="header-section-number">15.2</span> The elements to consider</a></li>
+  <li><a href="#the-evidence" id="toc-the-evidence" class="nav-link" data-scroll-target="#the-evidence"><span class="header-section-number">15.3</span> The evidence</a></li>
+  <li><a href="#the-recommendation" id="toc-the-recommendation" class="nav-link" data-scroll-target="#the-recommendation"><span class="header-section-number">15.4</span> The recommendation</a></li>
+  <li><a href="#excercise" id="toc-excercise" class="nav-link" data-scroll-target="#excercise">Excercise</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./he.html">Health economics</a></li><li class="breadcrumb-item"><a href="./he-etr.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">EtR Process</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Infectious disease modelling for babies</h1>
+<h1 class="title"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">EtR Process</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p><a href="https://drthinhong.com/">Thinh Ong</a> <a href="https://orcid.org/0000-0001-6772-9291" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">May 22, 2024</p>
-    </div>
-  </div>
   
     
   </div>
@@ -419,68 +419,329 @@ window.Quarto = {
 </header>
 
 
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
-<p>Last modified: July 20, 2024.</p>
-<p>This book brings together everything I have learned about infectious disease modelling during my PhD journey. Special thanks to my idol, <a href="https://uk.linkedin.com/in/james-a-hay">Dr.&nbsp;James Hay</a>, who once gave these genius advice:</p>
-<blockquote class="blockquote">
-<p>“Read and learn now - it will be harder later on.”</p>
-<p>“Spent a lot of time writing well-documented, generalisable code that didn’t necessarily turn into publications at the time. I now use that code <strong>all of the time</strong>.”</p>
-<p>Dr.&nbsp;James Hay’s inspiring talk at the MIDSEA ECR April 2024 Meeting.</p>
-</blockquote>
-<p>These words encouraged me to read and learn more, and to ensure every detail was carefully documented. In this book, you (and my future self) will find:</p>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Acknowledgement
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This chapter is based on a lecture given by Asst Prof.&nbsp;Kiesha Prem at MIDSEA Summer School 2024, for which I am deeply grateful.</p>
+</div>
+</div>
+<section id="overview" class="level2 unnumbered page-columns page-full">
+<h2 class="unnumbered anchored" data-anchor-id="overview">Overview</h2>
+
+<div class="no-row-height column-margin column-container"><div class="">
+<p><a href="img/he/who-etr.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="img/he/who-etr.svg" class="img-fluid"></a></p>
+</div></div><p>Health economics is closely linked to policy. Understanding how policies are made (in a proper way) helps us design studies that can contribute to policy-making. It is also useful to put yourself in the role of policy makers to consider how your research can best benefit the public.</p>
+<p>Evidence to Recommendation Process (EtR Process) is a systematic, standardized decision-making process used by national immunization technical advisory groups (NITAGs) for the development of evidence-based <strong>recommendations</strong> for <strong>immunization policy</strong>. EtR Process is composed of four steps:</p>
+<ol type="1">
+<li>The policy question</li>
+<li>The elements to consider</li>
+<li>The evidence</li>
+<li>The recommendation</li>
+</ol>
+<p>Steps 1, 2 and 3 should be conducted by the NITAG Secretariat or a working group. In step 4, all NITAG members should be involved.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Click here for a summary of all steps
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><a href="img/he/etr-steps.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="img/he/etr-steps.svg" class="img-fluid"></a></p>
+</div>
+</div>
+</div>
+</section>
+<section id="prerequisite-step" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="prerequisite-step">Prerequisite step</h2>
+<p>When using the EtR Process for the first time, a <strong>prerequisite step</strong> should be conducted by <strong>the whole NITAG</strong> to develop 2 tools:</p>
 <ul>
-<li>Methodologies for mathematical models of infectious diseases.</li>
-<li>A dictionary of jargon with cited definitions.</li>
-<li>Step-by-step guides for writing infectious disease reports, following the Center for Disease Control and Prevention report format: data, workflow, analyses, and inference.</li>
+<li>Generic criteria tables</li>
+<li>EtR framework</li>
 </ul>
-<p>The content of this book is based on the materials I digested during my PhD, with specific articles and readings cited throughout the text. I am deeply grateful to my PhD supervisors, Dr.&nbsp;Marc Choisy, A/Prof.&nbsp;Louise Thwaites, Dr.&nbsp;Hugo Turner, for their caring, inspiring, and enthusiastic guidance. My most heartfelt thanks also go to my mentors, A/Prof.&nbsp;Le Van Tan, Prof.&nbsp;Wirichada Pan-Ngum, Asst Prof.&nbsp;Kiesha Prem and Dr.&nbsp;Leigh Jones, for always nurturing and guiding me towards the best path.</p>
-<p>I would like to acknowledge the following educational experiences:</p>
-<table class="table-hover caption-top table">
+<p>Noted that this step <strong>only</strong> needs to be conducted <strong>once</strong>.</p>
+<section id="generic-criteria-tables" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="generic-criteria-tables">Generic criteria tables</h3>
+<p>Generic criteria tables comprise <strong>7 tables</strong> that contain <strong>all issues</strong> relevant for <strong>any</strong> immunization policy <strong>question</strong>, <strong>unspecific</strong> to any particular disease or vaccine. Each table links a <strong>criterion</strong> with many factors. Each <strong>factor</strong> then has many elements, each representing a type of evidence needed for for NITAG consideration.</p>
+<table class="caption-top table">
 <colgroup>
+<col style="width: 20%">
 <col style="width: 30%">
-<col style="width: 40%">
-<col style="width: 30%">
+<col style="width: 50%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Course</th>
-<th>Lecturers</th>
-<th>Institutions</th>
+<th>Criterion</th>
+<th>Factor</th>
+<th>Element</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Modelling Infectious Diseases in South East Asia (MIDSEA) Summer School (2024)</td>
-<td><p>Modelling Master Class: Prof.&nbsp;Alex Cook; Prof.&nbsp;Jomar Fajardo Rabajante; Prof.&nbsp;Wirichada Pan-Ngum</p>
-<p>Modelling interventions and Health economic evaluation: Asst/Prof.&nbsp;Kiesha Prem; Asst/Prof.&nbsp;Hannah Clapham; Asst/Prof.&nbsp;Swapnil Mishra; Asst/Prof.&nbsp;Thitiya Theparod</p></td>
-<td>National University of Singapore; Mahidol Oxford Research Unit; Oxford University Clinical Research Unit; University of the Philippines; De La Salle Manila; Mahasarakham University</td>
-</tr>
-<tr class="even">
-<td>Summer Institute in Statistics and Modeling in Infectious Diseases (SISMID) (2023)</td>
-<td><p>Stochastic Epidemic Models with Inference: Prof.&nbsp;Tom Britton; Prof.&nbsp;Ira M Longini</p>
-<p>MCMC I: Prof.&nbsp;M. Elizabeth Halloran; Prof.&nbsp;Volodymyr Minin; Prof.&nbsp;Kari Auranen</p>
-<p>MCMC II: Prof.&nbsp;Philip O’Neill; Prof.&nbsp;Theodore Kypraios</p>
-<p>Simulation-Based Inference for Epidemiological Dynamics: Prof.&nbsp;Aaron King; Prof.&nbsp;Edward Ionides</p></td>
-<td>University of Washington</td>
-</tr>
-<tr class="odd">
-<td>Introduction to mathematical models of the Epidemiology &amp; Control of Infectious Diseases (2022)</td>
-<td>Prof.&nbsp;Azra Ghani; Prof.&nbsp;Alex Cook; Dr.&nbsp;Lilith Whittles; Dr.&nbsp;Clare McCormack; Dr.&nbsp;Tara Mangal; Dr.&nbsp;Juliette Unwin</td>
-<td>Imperial College London; Nanyang Technological University</td>
-</tr>
-<tr class="even">
-<td>Mathematical Modelling for Vaccine-preventable Diseases (2022)</td>
-<td>Prof.&nbsp;Caroline Trotter; Prof.&nbsp;Julia Gog; Prof.&nbsp;Nik Cunniffe; Prof.&nbsp;Thumbi Mwanga; A/Prof.&nbsp;Andrew Conlan; Dr.&nbsp;Cerian Webb; Dr.&nbsp;Katy Gaythorpe; Dr.&nbsp;Matt Castle</td>
-<td>Vaccine Impact Modelling Consortium; University of Cambridge</td>
+<td>Problem</td>
+<td>Burden/epidemiology of disease</td>
+<td><p>Frequency of the disease (incidence, prevalence)</p>
+<p>Severity of the disease (mortality, morbidity)</p></td>
 </tr>
 </tbody>
 </table>
-<p>Many thanks to the authors who kindly shared materials in response to my inquiries on these topics:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Click here to see the criteria, their factors and elements
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div>
+
+</div>
+<div class="quarto-layout-panel" data-layout="[1, 1]">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="img/he/gen-tbl-crit.svg" class="lightbox" data-gallery="gen-tbl"><img src="img/he/gen-tbl-crit.svg" class="img-fluid"></a></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="img/he/gen-tbl-elm.svg" class="lightbox" data-gallery="gen-tbl"><img src="img/he/gen-tbl-elm.svg" class="img-fluid"></a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="etr-framework" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="etr-framework">EtR framework</h3>
+<p>EtR framework is a structured document that shows the <strong>logical progression</strong> from the evidence to the decision. EtR framework has 3 main sections:</p>
+<ol type="1">
+<li>Introduction: presents the policy question.</li>
+<li>Criteria: presents 7 criteria, factors and elements from the generic criteria tables, with evidence and notes.</li>
+<li>Draft NITAG recommendation: presents the draft NITAG decision.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Click here for a sample EtR framework
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><a href="img/he/etr-frw.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="img/he/etr-frw.svg" class="img-fluid"></a></p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="the-policy-question" class="level2" data-number="15.1">
+<h2 data-number="15.1" class="anchored" data-anchor-id="the-policy-question"><span class="header-section-number">15.1</span> The policy question</h2>
+<p>An initial policy question can be either raised by the Ministry of Health to NITAG, or by NITAG itself. The initial policy question is usually rather broad, for example:</p>
 <ul>
-<li>Workshop: Modeling Rabies Outbreak and Control (2023), by Dr.&nbsp;Phrutsamon Wongnak.</li>
+<li>Should vaccine X be introduced in a routine vaccination programme?</li>
+<li>Should the schedule of vaccine X be reviewed?</li>
 </ul>
-<p>If you enjoyed this book or found any mistakes, please leave a comment below. Your feedback means a lot!</p>
+<p>This step is to <strong>revise</strong> the broad question into a <strong>structured</strong> policy question that detailed enough to guide the collection of evidence. A structured policy question should has:</p>
+<ul>
+<li><strong>Intervention</strong>: The vaccine formulation, dosage and schedule.</li>
+<li><strong>Population</strong>: The population targeted to receive the vaccine and/or will be affected by it.</li>
+<li><strong>Goal</strong> of intervention: The outcome of interest, could be measurable (e.g.&nbsp;reduction of a certain disease) or not.</li>
+<li><strong>Comparison</strong>: If compares a new intervention to an existing one.</li>
+<li><strong>Options</strong>: If several options are available (e.g.&nbsp;different vaccine formulations, dosages or schedules).</li>
+</ul>
+</section>
+<section id="the-elements-to-consider" class="level2" data-number="15.2">
+<h2 data-number="15.2" class="anchored" data-anchor-id="the-elements-to-consider"><span class="header-section-number">15.2</span> The elements to consider</h2>
+<p>This step is to create <strong>specific</strong> criteria tables from the generic criteria tables. It includes 2 steps:</p>
+<ul>
+<li><strong>Make the elements specific</strong>: Specify the disease, intervention and population of interest for all elements in the generic criteria tables.</li>
+<li><strong>Select the factors and specified elements</strong> relevant for the policy question: After specifying the elements, pick the relevant factors and specified elements, and place them in the EtR framework.</li>
+</ul>
+</section>
+<section id="the-evidence" class="level2" data-number="15.3">
+<h2 data-number="15.3" class="anchored" data-anchor-id="the-evidence"><span class="header-section-number">15.3</span> The evidence</h2>
+<p>This step is to collect <strong>evidence</strong> on the selected factors and specified elements determined in Step 2, rate the evidence quality, and put them in the EtR framework. It is <strong>the most labour-intensive</strong> part.</p>
+<p>Criterion 2 “<strong>Benefits and harms</strong> of the intervention” is extremely important, therefore:</p>
+<ul>
+<li>Some NITAGs conduct systematic review for it.</li>
+<li>Use GRADE quality assessments to assess the evidence <strong>quality</strong>, which is the <strong>confidence</strong> level in how close the reported effects in the evidence are to the true effects.</li>
+</ul>
+<p>Lower quality data does not prevent recommendations, but the limitations should be clearly outlined.</p>
+</section>
+<section id="the-recommendation" class="level2" data-number="15.4">
+<h2 data-number="15.4" class="anchored" data-anchor-id="the-recommendation"><span class="header-section-number">15.4</span> The recommendation</h2>
+<p>In this step, the Secretariat or working group draft NITAG <strong>decision</strong> and <strong>recommendation</strong>, and present to all NITAG members. The whole NITAG should discuss and agree on a final NITAG decision and recommendation.</p>
+<p><img src="img/he/etr-rec.svg" class="nolightbox img-fluid"></p>
+</section>
+<section id="excercise" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="excercise">Excercise</h2>
+<p><strong>Step 1. The policy question</strong></p>
+<p>Should flu vaccine be introduced in a routine vaccination programme?</p>
+<p>Make a structured policy question that include:</p>
+<ul>
+<li>Intervention</li>
+<li>Population</li>
+<li>Goal</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sample answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Intervention</strong>: Influenza vaccine VaxiGrip Tetra, single dose of 0.5 mL.</p>
+<p><strong>Population</strong>:</p>
+<ul>
+<li>In PH (relatively younger population, median = 25 years old)</li>
+<li>People with high contacts with animals</li>
+<li>Vets, slaughterhouse workers, farmers, retailers</li>
+<li>Young (aged 6 months to 4 years)</li>
+<li>Old (aged 55 years old and above)</li>
+<li>Pregnant women</li>
+<li>Immunocompromised</li>
+</ul>
+<p><strong>Goal</strong>:</p>
+<ul>
+<li>Preventing spillover infections (animals to human with new variants, which may cause pandemic)</li>
+<li>Reducing hospitalization rate and mortality rate</li>
+<li>Preventing infection</li>
+<li>Reduced severe cases needing of hospitalization</li>
+<li>Protecting others</li>
+<li>Maximise vaccine coverage</li>
+</ul>
+</div>
+</div>
+</div>
+<p><strong>Step 2. The elements to consider</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 40%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Criterion</th>
+<th>Factor</th>
+<th>How will you collect this evidence?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Problem</td>
+<td>Burden/epidemiology of disease</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Benefits and Harms</td>
+<td><p>How substantial are the desired anticipated effects?</p>
+<p>Do the desirable effect outweigh the undesirable effects?</p></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Values</td>
+<td>Does the target population feel that the desirable effect is large relative to the undesirable effects?</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Resource use</td>
+<td>Is the intervention a reasonable and efficient use of resources?</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Equity</td>
+<td>What would be the impact of the intervention on health equity?</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sample answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 40%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Criterion</th>
+<th>Factor</th>
+<th>How will you collect this evidence?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Problem</td>
+<td>Burden/epidemiology of disease</td>
+<td><p>Hospitalization rate</p>
+<p>Mortality rate</p></td>
+</tr>
+<tr class="even">
+<td>Benefits and Harms</td>
+<td><p>How substantial are the desired anticipated effects?</p>
+<p>Do the desirable effect outweigh the undesirable effects?</p></td>
+<td><p>Hospitalisations pre- and post-vaccination</p>
+<p>Presence of adverse events (AEs) and severe adverse events (SAEs)</p></td>
+</tr>
+<tr class="odd">
+<td>Values</td>
+<td>Does the target population feel that the desirable effect is large relative to the undesirable effects?</td>
+<td><p>Survey the target population</p>
+<p>Focus group discussions with the target groups</p>
+<p>Key informant interviews</p></td>
+</tr>
+<tr class="even">
+<td>Resource use</td>
+<td>Is the intervention a reasonable and efficient use of resources?</td>
+<td><p>Operational research (i.e., resource allocation)</p>
+<p>Health service modelling</p>
+<p>Supply and Demand Forecasting</p></td>
+</tr>
+<tr class="odd">
+<td>Equity</td>
+<td>What would be the impact of the intervention on health equity?</td>
+<td><p>Use modelling to evaluate the impact and the cost-effectiveness of the influenza vaccination programmes stratified by the different target groups</p>
+<p>ECEA or DCEA</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
 
 
 </section>
@@ -901,14 +1162,42 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <input type="hidden" id="giscus-alt-theme" value="dark">
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./he.html" class="pagination-link" aria-label="Health economics">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Health economics</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./mod.html" class="pagination-link" aria-label="Modelling">
-        <span class="nav-page-text">Modelling</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./rp.html" class="pagination-link" aria-label="Reports">
+        <span class="nav-page-text">Reports</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","closeEffect":"zoom","loop":false,"descPosition":"bottom","selector":".lightbox"});
+window.onload = () => {
+  lightboxQuarto.on('slide_before_load', (data) => {
+    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+    const href = trigger.getAttribute('href');
+    if (href !== null) {
+      const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+      if (imgEl !== null) {
+        const srcAttr = imgEl.getAttribute("src");
+        if (srcAttr && srcAttr.startsWith("data:")) {
+          slideConfig.href = srcAttr;
+        }
+      }
+    } 
+  });
+
+  lightboxQuarto.on('slide_after_load', (data) => {
+    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+    if (window.Quarto?.typesetMath) {
+      window.Quarto.typesetMath(slideNode);
+    }
+  });
+
+};
+          </script>
 
 
 

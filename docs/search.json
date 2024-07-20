@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Infectious disease modelling for babies",
     "section": "",
-    "text": "Preface\nLast modified: July 20, 2024.\nThis book brings together everything I have learned about infectious disease modelling during my PhD journey. Special thanks to my idol, Dr. James Hay, who once gave these genius advice:\n\n“Read and learn now - it will be harder later on.”\n“Spent a lot of time writing well-documented, generalisable code that didn’t necessarily turn into publications at the time. I now use that code all of the time.”\nDr. James Hay’s inspiring talk at the MIDSEA ECR April 2024 Meeting.\n\nThese words encouraged me to read and learn more, and to ensure every detail was carefully documented. In this book, you (and my future self) will find:\n\nA dictionary of jargon with cited definitions.\nMethodologies for mathematical models of infectious diseases.\nStep-by-step guides for writing infectious disease reports, following the Center for Disease Control and Prevention report format: data, workflow, analyses, and inference.\n\nThe content of this book has been shaped by the materials I have read and the courses I have attended, with specific articles and readings cited throughout the text. I would like to acknowledge the following educational experiences:\n\n\n\n\n\n\n\n\nCourse\nLecturers\nInstitutions\n\n\n\n\nMathematical Modelling for Vaccine-preventable Diseases (2022)\nProf. Caroline Trotter; Prof. Julia Gog; Prof. Nik Cunniffe; Prof. Thumbi Mwanga; A/Prof. Andrew Conlan; Dr. Cerian Webb; Dr. Katy Gaythorpe; Dr. Matt Castle\nVaccine Impact Modelling Consortium; University of Cambridge\n\n\nIntroduction to mathematical models of the Epidemiology & Control of Infectious Diseases (2022)\nProf. Azra Ghani; Prof. Alex Cook; Dr. Lilith Whittles; Dr. Clare McCormack; Dr. Tara Mangal; Dr. Juliette Unwin\nImperial College London; Nanyang Technological University\n\n\nSummer Institute in Statistics and Modeling in Infectious Diseases (SISMID) (2023)\nStochastic Epidemic Models with Inference: Prof. Tom Britton; Prof. Ira M Longini\nMCMC I: Prof. M. Elizabeth Halloran; Prof. Volodymyr Minin; Prof. Kari Auranen\nMCMC II: Prof. Philip O’Neill; Prof. Theodore Kypraios\nSimulation-Based Inference for Epidemiological Dynamics: Prof. Aaron King; Prof. Edward Ionides\nUniversity of Washington\n\n\nModelling Infectious Diseases in South East Asia (MIDSEA) Summer School (2024)\nModelling Master Class: Prof. Alex Cook; Prof. Jomar Fajardo Rabajante; Prof. Wirichada Pan Ngum\nModelling interventions and Health economic evaluation: Asst/Prof. Kiesha Prem; Asst/Prof. Hannah Clapham; Asst/Prof. Swapnil Mishra; Asst/Prof. Thitiya Theparod\nNational University of Singapore; Mahidol Oxford Research Unit; Oxford University Clinical Research Unit; University of the Philippines; De La Salle Manila; Mahasarakham University\n\n\n\nI would also like to acknowledge the following materials, which the authors kindly provided in response to my inquiries about these subjects:\n\nWorkshop: Modeling Rabies Outbreak and Control, by Dr. Phrutsamon Wongnak.\n\nIf you enjoyed this book or found any mistakes, please leave a comment below. Your feedback means a lot!",
+    "text": "Preface\nLast modified: July 20, 2024.\nThis book brings together everything I have learned about infectious disease modelling during my PhD journey. Special thanks to my idol, Dr. James Hay, who once gave these genius advice:\n\n“Read and learn now - it will be harder later on.”\n“Spent a lot of time writing well-documented, generalisable code that didn’t necessarily turn into publications at the time. I now use that code all of the time.”\nDr. James Hay’s inspiring talk at the MIDSEA ECR April 2024 Meeting.\n\nThese words encouraged me to read and learn more, and to ensure every detail was carefully documented. In this book, you (and my future self) will find:\n\nMethodologies for mathematical models of infectious diseases.\nA dictionary of jargon with cited definitions.\nStep-by-step guides for writing infectious disease reports, following the Center for Disease Control and Prevention report format: data, workflow, analyses, and inference.\n\nThe content of this book is based on the materials I digested during my PhD, with specific articles and readings cited throughout the text. I am deeply grateful to my PhD supervisors, Dr. Marc Choisy, A/Prof. Louise Thwaites, Dr. Hugo Turner, for their caring, inspiring, and enthusiastic guidance. My most heartfelt thanks also go to my mentors, A/Prof. Le Van Tan, Prof. Wirichada Pan-Ngum, Asst Prof. Kiesha Prem and Dr. Leigh Jones, for always nurturing and guiding me towards the best path.\nI would like to acknowledge the following educational experiences:\n\n\n\n\n\n\n\n\nCourse\nLecturers\nInstitutions\n\n\n\n\nModelling Infectious Diseases in South East Asia (MIDSEA) Summer School (2024)\nModelling Master Class: Prof. Alex Cook; Prof. Jomar Fajardo Rabajante; Prof. Wirichada Pan-Ngum\nModelling interventions and Health economic evaluation: Asst/Prof. Kiesha Prem; Asst/Prof. Hannah Clapham; Asst/Prof. Swapnil Mishra; Asst/Prof. Thitiya Theparod\nNational University of Singapore; Mahidol Oxford Research Unit; Oxford University Clinical Research Unit; University of the Philippines; De La Salle Manila; Mahasarakham University\n\n\nSummer Institute in Statistics and Modeling in Infectious Diseases (SISMID) (2023)\nStochastic Epidemic Models with Inference: Prof. Tom Britton; Prof. Ira M Longini\nMCMC I: Prof. M. Elizabeth Halloran; Prof. Volodymyr Minin; Prof. Kari Auranen\nMCMC II: Prof. Philip O’Neill; Prof. Theodore Kypraios\nSimulation-Based Inference for Epidemiological Dynamics: Prof. Aaron King; Prof. Edward Ionides\nUniversity of Washington\n\n\nIntroduction to mathematical models of the Epidemiology & Control of Infectious Diseases (2022)\nProf. Azra Ghani; Prof. Alex Cook; Dr. Lilith Whittles; Dr. Clare McCormack; Dr. Tara Mangal; Dr. Juliette Unwin\nImperial College London; Nanyang Technological University\n\n\nMathematical Modelling for Vaccine-preventable Diseases (2022)\nProf. Caroline Trotter; Prof. Julia Gog; Prof. Nik Cunniffe; Prof. Thumbi Mwanga; A/Prof. Andrew Conlan; Dr. Cerian Webb; Dr. Katy Gaythorpe; Dr. Matt Castle\nVaccine Impact Modelling Consortium; University of Cambridge\n\n\n\nMany thanks to the authors who kindly shared materials in response to my inquiries on these topics:\n\nWorkshop: Modeling Rabies Outbreak and Control (2023), by Dr. Phrutsamon Wongnak.\n\nIf you enjoyed this book or found any mistakes, please leave a comment below. Your feedback means a lot!",
     "crumbs": [
       "Preface"
     ]
@@ -800,6 +800,16 @@
     ]
   },
   {
+    "objectID": "he.html#measuring-consequences",
+    "href": "he.html#measuring-consequences",
+    "title": "Health economics",
+    "section": "Measuring consequences",
+    "text": "Measuring consequences",
+    "crumbs": [
+      "Health economics"
+    ]
+  },
+  {
     "objectID": "he.html#qaly",
     "href": "he.html#qaly",
     "title": "Health economics",
@@ -810,25 +820,113 @@
     ]
   },
   {
+    "objectID": "he-etr.html",
+    "href": "he-etr.html",
+    "title": "15  EtR Process",
+    "section": "",
+    "text": "Overview\nHealth economics is closely linked to policy. Understanding how policies are made (in a proper way) helps us design studies that can contribute to policy-making. It is also useful to put yourself in the role of policy makers to consider how your research can best benefit the public.\nEvidence to Recommendation Process (EtR Process) is a systematic, standardized decision-making process used by national immunization technical advisory groups (NITAGs) for the development of evidence-based recommendations for immunization policy. EtR Process is composed of four steps:\nSteps 1, 2 and 3 should be conducted by the NITAG Secretariat or a working group. In step 4, all NITAG members should be involved.",
+    "crumbs": [
+      "Health economics",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>EtR Process</span>"
+    ]
+  },
+  {
+    "objectID": "he-etr.html#overview",
+    "href": "he-etr.html#overview",
+    "title": "15  EtR Process",
+    "section": "",
+    "text": "The policy question\nThe elements to consider\nThe evidence\nThe recommendation\n\n\n\n\n\n\n\n\nClick here for a summary of all steps",
+    "crumbs": [
+      "Health economics",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>EtR Process</span>"
+    ]
+  },
+  {
+    "objectID": "he-etr.html#prerequisite-step",
+    "href": "he-etr.html#prerequisite-step",
+    "title": "15  EtR Process",
+    "section": "Prerequisite step",
+    "text": "Prerequisite step\nWhen using the EtR Process for the first time, a prerequisite step should be conducted by the whole NITAG to develop 2 tools:\n\nGeneric criteria tables\nEtR framework\n\nNoted that this step only needs to be conducted once.\n\nGeneric criteria tables\nGeneric criteria tables comprise 7 tables that contain all issues relevant for any immunization policy question, unspecific to any particular disease or vaccine. Each table links a criterion with many factors. Each factor then has many elements, each representing a type of evidence needed for for NITAG consideration.\n\n\n\n\n\n\n\n\nCriterion\nFactor\nElement\n\n\n\n\nProblem\nBurden/epidemiology of disease\nFrequency of the disease (incidence, prevalence)\nSeverity of the disease (mortality, morbidity)\n\n\n\n\n\n\n\n\n\nClick here to see the criteria, their factors and elements\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEtR framework\nEtR framework is a structured document that shows the logical progression from the evidence to the decision. EtR framework has 3 main sections:\n\nIntroduction: presents the policy question.\nCriteria: presents 7 criteria, factors and elements from the generic criteria tables, with evidence and notes.\nDraft NITAG recommendation: presents the draft NITAG decision.\n\n\n\n\n\n\n\nClick here for a sample EtR framework",
+    "crumbs": [
+      "Health economics",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>EtR Process</span>"
+    ]
+  },
+  {
+    "objectID": "he-etr.html#the-policy-question",
+    "href": "he-etr.html#the-policy-question",
+    "title": "15  EtR Process",
+    "section": "15.1 The policy question",
+    "text": "15.1 The policy question\nAn initial policy question can be either raised by the Ministry of Health to NITAG, or by NITAG itself. The initial policy question is usually rather broad, for example:\n\nShould vaccine X be introduced in a routine vaccination programme?\nShould the schedule of vaccine X be reviewed?\n\nThis step is to revise the broad question into a structured policy question that detailed enough to guide the collection of evidence. A structured policy question should has:\n\nIntervention: The vaccine formulation, dosage and schedule.\nPopulation: The population targeted to receive the vaccine and/or will be affected by it.\nGoal of intervention: The outcome of interest, could be measurable (e.g. reduction of a certain disease) or not.\nComparison: If compares a new intervention to an existing one.\nOptions: If several options are available (e.g. different vaccine formulations, dosages or schedules).",
+    "crumbs": [
+      "Health economics",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>EtR Process</span>"
+    ]
+  },
+  {
+    "objectID": "he-etr.html#the-elements-to-consider",
+    "href": "he-etr.html#the-elements-to-consider",
+    "title": "15  EtR Process",
+    "section": "15.2 The elements to consider",
+    "text": "15.2 The elements to consider\nThis step is to create specific criteria tables from the generic criteria tables. It includes 2 steps:\n\nMake the elements specific: Specify the disease, intervention and population of interest for all elements in the generic criteria tables.\nSelect the factors and specified elements relevant for the policy question: After specifying the elements, pick the relevant factors and specified elements, and place them in the EtR framework.",
+    "crumbs": [
+      "Health economics",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>EtR Process</span>"
+    ]
+  },
+  {
+    "objectID": "he-etr.html#the-evidence",
+    "href": "he-etr.html#the-evidence",
+    "title": "15  EtR Process",
+    "section": "15.3 The evidence",
+    "text": "15.3 The evidence\nThis step is to collect evidence on the selected factors and specified elements determined in Step 2, rate the evidence quality, and put them in the EtR framework. It is the most labour-intensive part.\nCriterion 2 “Benefits and harms of the intervention” is extremely important, therefore:\n\nSome NITAGs conduct systematic review for it.\nUse GRADE quality assessments to assess the evidence quality, which is the confidence level in how close the reported effects in the evidence are to the true effects.\n\nLower quality data does not prevent recommendations, but the limitations should be clearly outlined.",
+    "crumbs": [
+      "Health economics",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>EtR Process</span>"
+    ]
+  },
+  {
+    "objectID": "he-etr.html#the-recommendation",
+    "href": "he-etr.html#the-recommendation",
+    "title": "15  EtR Process",
+    "section": "15.4 The recommendation",
+    "text": "15.4 The recommendation\nIn this step, the Secretariat or working group draft NITAG decision and recommendation, and present to all NITAG members. The whole NITAG should discuss and agree on a final NITAG decision and recommendation.",
+    "crumbs": [
+      "Health economics",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>EtR Process</span>"
+    ]
+  },
+  {
+    "objectID": "he-etr.html#excercise",
+    "href": "he-etr.html#excercise",
+    "title": "15  EtR Process",
+    "section": "Excercise",
+    "text": "Excercise\nStep 1. The policy question\nShould flu vaccine be introduced in a routine vaccination programme?\nMake a structured policy question that include:\n\nIntervention\nPopulation\nGoal\n\n\n\n\n\n\n\nSample answer\n\n\n\n\n\nIntervention: Influenza vaccine VaxiGrip Tetra, single dose of 0.5 mL.\nPopulation:\n\nIn PH (relatively younger population, median = 25 years old)\nPeople with high contacts with animals\nVets, slaughterhouse workers, farmers, retailers\nYoung (aged 6 months to 4 years)\nOld (aged 55 years old and above)\nPregnant women\nImmunocompromised\n\nGoal:\n\nPreventing spillover infections (animals to human with new variants, which may cause pandemic)\nReducing hospitalization rate and mortality rate\nPreventing infection\nReduced severe cases needing of hospitalization\nProtecting others\nMaximise vaccine coverage\n\n\n\n\nStep 2. The elements to consider\n\n\n\n\n\n\n\n\nCriterion\nFactor\nHow will you collect this evidence?\n\n\n\n\nProblem\nBurden/epidemiology of disease\n\n\n\nBenefits and Harms\nHow substantial are the desired anticipated effects?\nDo the desirable effect outweigh the undesirable effects?\n\n\n\nValues\nDoes the target population feel that the desirable effect is large relative to the undesirable effects?\n\n\n\nResource use\nIs the intervention a reasonable and efficient use of resources?\n\n\n\nEquity\nWhat would be the impact of the intervention on health equity?\n\n\n\n\n\n\n\n\n\n\nSample answer\n\n\n\n\n\n\n\n\n\n\n\n\n\nCriterion\nFactor\nHow will you collect this evidence?\n\n\n\n\nProblem\nBurden/epidemiology of disease\nHospitalization rate\nMortality rate\n\n\nBenefits and Harms\nHow substantial are the desired anticipated effects?\nDo the desirable effect outweigh the undesirable effects?\nHospitalisations pre- and post-vaccination\nPresence of adverse events (AEs) and severe adverse events (SAEs)\n\n\nValues\nDoes the target population feel that the desirable effect is large relative to the undesirable effects?\nSurvey the target population\nFocus group discussions with the target groups\nKey informant interviews\n\n\nResource use\nIs the intervention a reasonable and efficient use of resources?\nOperational research (i.e., resource allocation)\nHealth service modelling\nSupply and Demand Forecasting\n\n\nEquity\nWhat would be the impact of the intervention on health equity?\nUse modelling to evaluate the impact and the cost-effectiveness of the influenza vaccination programmes stratified by the different target groups\nECEA or DCEA",
+    "crumbs": [
+      "Health economics",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>EtR Process</span>"
+    ]
+  },
+  {
     "objectID": "rp-risk.html",
     "href": "rp-risk.html",
-    "title": "15  Risk assessment report",
+    "title": "16  Risk assessment report",
     "section": "",
-    "text": "15.1 Examples\nRisk assessment for measles resurgence in the UK\nRapid risk assessment: Measles in Canada, public health implications in 2024",
+    "text": "16.1 Examples\nRisk assessment for measles resurgence in the UK\nRapid risk assessment: Measles in Canada, public health implications in 2024",
     "crumbs": [
       "Reports",
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Risk assessment report</span>"
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Risk assessment report</span>"
     ]
   },
   {
     "objectID": "rp-risk.html#data",
     "href": "rp-risk.html#data",
-    "title": "15  Risk assessment report",
-    "section": "15.2 Data",
-    "text": "15.2 Data\n\nHistorical case notification of past outbreaks 2014 and 2019 Date of onset + date of birth (or age)\nCurrent level of susceptibility in HCMC:\n\n\nSerology\nVaccine registry\nBirth rates\n\n\nConnectivity between Phu Quoc and HCMC: Flight data / boat data?\n\nP = 1 – (1 / (R0 * s))^m",
+    "title": "16  Risk assessment report",
+    "section": "16.2 Data",
+    "text": "16.2 Data\n\nHistorical case notification of past outbreaks 2014 and 2019 Date of onset + date of birth (or age)\nCurrent level of susceptibility in HCMC:\n\n\nSerology\nVaccine registry\nBirth rates\n\n\nConnectivity between Phu Quoc and HCMC: Flight data / boat data?\n\nP = 1 – (1 / (R0 * s))^m",
     "crumbs": [
       "Reports",
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Risk assessment report</span>"
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Risk assessment report</span>"
     ]
   },
   {

@@ -367,8 +367,21 @@ window.Quarto = {
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Health economics</span></span>
+      <div class="sidebar-item-container"> 
+            <a href="./he.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Health economics</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./he-etr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">EtR Process</span></span></a>
+  </div>
+</li>
+      </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
@@ -382,7 +395,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
       </ul>
@@ -464,7 +477,7 @@ Preparation
 </div>
 <div class="callout-body-container callout-body">
 <p>Download influenza incidence data here:</p>
-<p><a href="#dnldts7132" onclick="fetch('data:text/csv;base64,ZGF5LGluYw0KMCwwDQoxLDENCjIsMQ0KMywwDQo0LDINCjUsNQ0KNiwzDQo3LDMNCjgsMw0KOSw2DQoxMCwyDQoxMSw1DQoxMiw5DQoxMywxMw0KMTQsMTINCjE1LDEzDQoxNiwxMQ0KMTcsMTINCjE4LDYNCjE5LDYNCjIwLDYNCjIxLDMNCjIyLDENCjIzLDANCjI0LDINCjI1LDANCjI2LDANCjI3LDANCjI4LDANCjI5LDINCjMwLDANCjMxLDINCjMyLDANCjMzLDANCjM0LDANCjM1LDANCjM2LDANCjM3LDANCjM4LDANCjM5LDANCjQwLDANCjQxLDANCjQyLDANCjQzLDANCjQ0LDANCjQ1LDANCjQ2LDANCjQ3LDANCjQ4LDANCjQ5LDANCjUwLDANCg==').then(res => res.blob()).then(blob => {
+<p><a href="#dnldts63199" onclick="fetch('data:text/csv;base64,ZGF5LGluYw0KMCwwDQoxLDENCjIsMQ0KMywwDQo0LDINCjUsNQ0KNiwzDQo3LDMNCjgsMw0KOSw2DQoxMCwyDQoxMSw1DQoxMiw5DQoxMywxMw0KMTQsMTINCjE1LDEzDQoxNiwxMQ0KMTcsMTINCjE4LDYNCjE5LDYNCjIwLDYNCjIxLDMNCjIyLDENCjIzLDANCjI0LDINCjI1LDANCjI2LDANCjI3LDANCjI4LDANCjI5LDINCjMwLDANCjMxLDINCjMyLDANCjMzLDANCjM0LDANCjM1LDANCjM2LDANCjM3LDANCjM4LDANCjM5LDANCjQwLDANCjQxLDANCjQyLDANCjQzLDANCjQ0LDANCjQ1LDANCjQ2LDANCjQ3LDANCjQ4LDANCjQ5LDANCjUwLDANCg==').then(res => res.blob()).then(blob => {
       const downloadURL = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -472,7 +485,7 @@ Preparation
       a.download = 'flu_inc.csv'; a.click();
       window.URL.revokeObjectURL(downloadURL);
       document.body.removeChild(a);
-        });"><button class="btn btn-light downloadthis  " id="dnldts7132"><i class="bi bi-download"></i> flu_inc.csv </button></a></p>
+        });"><button class="btn btn-light downloadthis  " id="dnldts63199"><i class="bi bi-download"></i> flu_inc.csv </button></a></p>
 </div>
 </div>
 <section id="methods" class="level2" data-number="6.1">
