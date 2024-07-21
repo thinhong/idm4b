@@ -125,7 +125,7 @@ In this step, the Secretariat or working group draft NITAG **decision** and **re
 
 **Step 1. The policy question**
 
-Should flu vaccine be introduced in a routine vaccination programme?
+> Should flu vaccine be introduced in a routine vaccination programme?
 
 Make a structured policy question that include:
 

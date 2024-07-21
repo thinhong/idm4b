@@ -1,13 +1,23 @@
+---
+lightbox: true
+---
+
 # Health economics
 
-## Types of health economic analyses
+::: {.callout-note appearance="simple"}
+# Acknowledgement
+
+This chapter is based on the teachings of my PhD supervisor, Dr. Hugo Turner, and a lecture given by Asst Prof. Kiesha Prem at MIDSEA Summer School 2024, for which I am deeply grateful.
+:::
+
+## Types of analyses
 
 **Partial** economic evaluations: studies that either **only** examine **cost or consequences**, or examine both costs and consequences but for only one intervention (**without a comparator**). This analysis **cannot** guide decision-making [@turner2021].
 
 **Full** economic evaluations: compare **both** the **costs and consequences** of the intervention to a **comparator**. There are 3 most popular types of full economic evaluations, the key difference lies in how they express the **consequences** [@turner2021]:
 
 | Type               | Costs | Consequences                                                             |
-|-------------------------|------------------|-----------------------------|
+|-------------------------|-------------------|-----------------------------|
 | Cost-effectiveness | \$    | A single natural unit (life-years gained, cases averted, cases detected) |
 | Cost-utility       | \$    | QALYs, DALYs                                                             |
 | Cost-benefit       | \$    | \$                                                                       |
@@ -35,16 +45,50 @@ For a benefit in the 10th year:
 
 $$PV = \frac{1000}{(1 + 0.05)^{10}} \approx 613.91$$
 
-So $1000 in the 10th year is worth about $614 in today's dollars.
+So \$1000 in the 10th year is worth about \$614 in today's dollars.
 
 Discounting should not be confused with adjusting for inflation. Both are needed. The inflation adjustment reflects the change in purchasing power of currency (e.g., adjusting past costs to current values). Discounting reflects the loss in value when there is a delay in obtaining an item of value (e.g., adjusting for future value).
 
 Discounting: This is about the idea that a dollar today is worth more than a dollar in the future. It reflects our preference for receiving benefits or money sooner rather than later. It’s used to adjust future costs or benefits to their present value.
 
-Inflation: This is about how the general price level of goods and services increases over time. Inflation means that money loses its purchasing power, so what $1 buys today might cost more in the future.
+Inflation: This is about how the general price level of goods and services increases over time. Inflation means that money loses its purchasing power, so what \$1 buys today might cost more in the future.
 
 ## Measuring consequences
 
-### QALY
+### Models in health economics
 
+![Asst Prof. Kiesha Prem's lecture at MIDSEA Summer School 2024.](img/he/he-mod-choice.svg)
 
+#### Proportionate outcomes model
+
+Also known as "decision tree" although exact definitions differ. Group flows divided into proportional outcomes over a single time period, and the force of infection is static over time.
+
+#### Markov model
+
+group flows recalculated at regular time steps
+
+#### Compartmental dynamic model
+
+group flows recalculated at regular time steps + feedback and interactions. The force of infection is dynamic.
+
+![](img/he/he-mod.svg)
+
+#### Agent-based (individual-based) model
+
+Individual-based model could be dynamic or static.
+
+![](img/he/he-abm.jpg)
+
+### Utility
+
+Utility of health states are expressed on a scale from 0 to 1, where 0 represents the utility of being "dead" and 1 represents the utility of "perfect health" [@prieto2003].
+
+#### QALY
+
+The quality-adjusted life year (QALY) measure "years lived in perfect health". One year in perfect health equals 1 QALY (1 Year $\times$ 1 Utility = 1 QALY). A year lived in less than perfect health is worth less than 1 QALY [@prieto2003].
+
+$$\text{QALY} = \sum_{i = 0}^{\text{lifetime}} \text{Year} \times \text{Utility}$$
+
+For example, 0.5 years in perfect health equals 0.5 QALYs (0.5 years $\times$ 1 Utility), the same as 1 year with a utility of 0.5 (1 year $\times$ 0.5 Utility) [@prieto2003]. The area under the curve equates to the total QALY value [@whitehead2010].
+
+![Asst Prof. Kiesha Prem's lecture at MIDSEA Summer School 2024.](img/he/qaly.svg)

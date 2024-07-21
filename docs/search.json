@@ -774,7 +774,7 @@
     "href": "he.html",
     "title": "Health economics",
     "section": "",
-    "text": "Types of health economic analyses\nPartial economic evaluations: studies that either only examine cost or consequences, or examine both costs and consequences but for only one intervention (without a comparator). This analysis cannot guide decision-making (Turner et al., 2021).\nFull economic evaluations: compare both the costs and consequences of the intervention to a comparator. There are 3 most popular types of full economic evaluations, the key difference lies in how they express the consequences (Turner et al., 2021):",
+    "text": "Types of analyses\nPartial economic evaluations: studies that either only examine cost or consequences, or examine both costs and consequences but for only one intervention (without a comparator). This analysis cannot guide decision-making (Turner et al., 2021).\nFull economic evaluations: compare both the costs and consequences of the intervention to a comparator. There are 3 most popular types of full economic evaluations, the key difference lies in how they express the consequences (Turner et al., 2021):",
     "crumbs": [
       "Health economics"
     ]
@@ -783,8 +783,8 @@
     "objectID": "he.html#types-of-health-economic-analyses",
     "href": "he.html#types-of-health-economic-analyses",
     "title": "Health economics",
-    "section": "",
-    "text": "Type\nCosts\nConsequences\n\n\n\n\nCost-effectiveness\n$\nA single natural unit (life-years gained, cases averted, cases detected)\n\n\nCost-utility\n$\nQALYs, DALYs\n\n\nCost-benefit\n$\n$\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\nCost-utility is sometimes considered as a special type of cost-effectiveness.\nThere are 2 more types of full economic evaluations: cost-minimisation and cost-consequence, but they are less commonly used.",
+    "section": "Types of health economic analyses",
+    "text": "Types of health economic analyses\nPartial economic evaluations: studies that either only examine cost or consequences, or examine both costs and consequences but for only one intervention (without a comparator). This analysis cannot guide decision-making (Turner et al., 2021).\nFull economic evaluations: compare both the costs and consequences of the intervention to a comparator. There are 3 most popular types of full economic evaluations, the key difference lies in how they express the consequences (Turner et al., 2021):\n\n\n\n\n\n\n\n\nType\nCosts\nConsequences\n\n\n\n\nCost-effectiveness\n$\nA single natural unit (life-years gained, cases averted, cases detected)\n\n\nCost-utility\n$\nQALYs, DALYs\n\n\nCost-benefit\n$\n$\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\nCost-utility is sometimes considered as a special type of cost-effectiveness.\nThere are 2 more types of full economic evaluations: cost-minimisation and cost-consequence, but they are less commonly used.",
     "crumbs": [
       "Health economics"
     ]
@@ -804,7 +804,7 @@
     "href": "he.html#measuring-consequences",
     "title": "Health economics",
     "section": "Measuring consequences",
-    "text": "Measuring consequences\n\nQALY\n\n\n\n\nSeverens, J. L., & Milne, R. J. (2004). Discounting Health Outcomes in Economic Evaluation: The Ongoing Debate. Value in Health, 7(4), 397–401. https://doi.org/10.1111/j.1524-4733.2004.74002.x\n\n\nTurner, H. C., Archer, R. A., Downey, L. E., Isaranuwatchai, W., Chalkidou, K., Jit, M., & Teerawattananon, Y. (2021). An introduction to the main types of economic evaluations used for informing priority setting and resource allocation in healthcare: Key features, uses, and limitations. Frontiers in Public Health, 9. https://www.frontiersin.org/articles/10.3389/fpubh.2021.722927",
+    "text": "Measuring consequences\n\nModels in health economics\n\n\n\nAsst Prof. Kiesha Prem’s lecture at MIDSEA Summer School 2024.\n\n\n\nProportionate outcomes model\nAlso known as “decision tree” although exact definitions differ. Group flows divided into proportional outcomes over a single time period, and the force of infection is static over time.\n\n\nMarkov model\ngroup flows recalculated at regular time steps\n\n\nCompartmental dynamic model\ngroup flows recalculated at regular time steps + feedback and interactions. The force of infection is dynamic.\n\n\n\nAgent-based (individual-based) model\nIndividual-based model could be dynamic or static.\n\n\n\n\nUtility\nUtility of health states are expressed on a scale from 0 to 1, where 0 represents the utility of being “dead” and 1 represents the utility of “perfect health” (Prieto & Sacristán, 2003).\n\nQALY\nThe quality-adjusted life year (QALY) measure “years lived in perfect health”. One year in perfect health equals 1 QALY (1 Year \\(\\times\\) 1 Utility = 1 QALY). A year lived in less than perfect health is worth less than 1 QALY (Prieto & Sacristán, 2003).\n\\[\\text{QALY} = \\sum_{i = 0}^{\\text{lifetime}} \\text{Year} \\times \\text{Utility}\\]\nFor example, 0.5 years in perfect health equals 0.5 QALYs (0.5 years \\(\\times\\) 1 Utility), the same as 1 year with a utility of 0.5 (1 year \\(\\times\\) 0.5 Utility) (Prieto & Sacristán, 2003). The area under the curve equates to the total QALY value (Whitehead & Ali, 2010).\n\n\n\nAsst Prof. Kiesha Prem’s lecture at MIDSEA Summer School 2024.\n\n\n\n\n\nAsst Prof. Kiesha Prem’s lecture at MIDSEA Summer School 2024.\nAsst Prof. Kiesha Prem’s lecture at MIDSEA Summer School 2024.\n\n\n\nPrieto, L., & Sacristán, J. A. (2003). Problems and solutions in calculating quality-adjusted life years (QALYs). Health and Quality of Life Outcomes, 1(1), 80. https://doi.org/10.1186/1477-7525-1-80\n\n\nSeverens, J. L., & Milne, R. J. (2004). Discounting Health Outcomes in Economic Evaluation: The Ongoing Debate. Value in Health, 7(4), 397–401. https://doi.org/10.1111/j.1524-4733.2004.74002.x\n\n\nTurner, H. C., Archer, R. A., Downey, L. E., Isaranuwatchai, W., Chalkidou, K., Jit, M., & Teerawattananon, Y. (2021). An introduction to the main types of economic evaluations used for informing priority setting and resource allocation in healthcare: Key features, uses, and limitations. Frontiers in Public Health, 9. https://www.frontiersin.org/articles/10.3389/fpubh.2021.722927\n\n\nWhitehead, S. J., & Ali, S. (2010). Health outcomes in economic evaluation: The QALY and utilities. British Medical Bulletin, 96(1), 5–21. https://doi.org/10.1093/bmb/ldq033",
     "crumbs": [
       "Health economics"
     ]
@@ -901,7 +901,7 @@
     "href": "he-etr.html#excercise",
     "title": "15  EtR Process",
     "section": "Excercise",
-    "text": "Excercise\nStep 1. The policy question\nShould flu vaccine be introduced in a routine vaccination programme?\nMake a structured policy question that include:\n\nIntervention\nPopulation\nGoal\n\n\n\n\n\n\n\nSample answer\n\n\n\n\n\nIntervention: Influenza vaccine VaxiGrip Tetra, single dose of 0.5 mL.\nPopulation:\n\nIn PH (relatively younger population, median = 25 years old)\nPeople with high contacts with animals\nVets, slaughterhouse workers, farmers, retailers\nYoung (aged 6 months to 4 years)\nOld (aged 55 years old and above)\nPregnant women\nImmunocompromised\n\nGoal:\n\nPreventing spillover infections (animals to human with new variants, which may cause pandemic)\nReducing hospitalization rate and mortality rate\nPreventing infection\nReduced severe cases needing of hospitalization\nProtecting others\nMaximise vaccine coverage\n\n\n\n\nStep 2. The elements to consider\n\n\n\n\n\n\n\n\nCriterion\nFactor\nHow will you collect this evidence?\n\n\n\n\nProblem\nBurden/epidemiology of disease\n\n\n\nBenefits and Harms\nHow substantial are the desired anticipated effects?\nDo the desirable effect outweigh the undesirable effects?\n\n\n\nValues\nDoes the target population feel that the desirable effect is large relative to the undesirable effects?\n\n\n\nResource use\nIs the intervention a reasonable and efficient use of resources?\n\n\n\nEquity\nWhat would be the impact of the intervention on health equity?\n\n\n\n\n\n\n\n\n\n\nSample answer\n\n\n\n\n\n\n\n\n\n\n\n\n\nCriterion\nFactor\nHow will you collect this evidence?\n\n\n\n\nProblem\nBurden/epidemiology of disease\nHospitalization rate\nMortality rate\n\n\nBenefits and Harms\nHow substantial are the desired anticipated effects?\nDo the desirable effect outweigh the undesirable effects?\nHospitalisations pre- and post-vaccination\nPresence of adverse events (AEs) and severe adverse events (SAEs)\n\n\nValues\nDoes the target population feel that the desirable effect is large relative to the undesirable effects?\nSurvey the target population\nFocus group discussions with the target groups\nKey informant interviews\n\n\nResource use\nIs the intervention a reasonable and efficient use of resources?\nOperational research (i.e., resource allocation)\nHealth service modelling\nSupply and Demand Forecasting\n\n\nEquity\nWhat would be the impact of the intervention on health equity?\nUse modelling to evaluate the impact and the cost-effectiveness of the influenza vaccination programmes stratified by the different target groups\nECEA or DCEA",
+    "text": "Excercise\nStep 1. The policy question\n\nShould flu vaccine be introduced in a routine vaccination programme?\n\nMake a structured policy question that include:\n\nIntervention\nPopulation\nGoal\n\n\n\n\n\n\n\nSample answer\n\n\n\n\n\nIntervention: Influenza vaccine VaxiGrip Tetra, single dose of 0.5 mL.\nPopulation:\n\nIn PH (relatively younger population, median = 25 years old)\nPeople with high contacts with animals\nVets, slaughterhouse workers, farmers, retailers\nYoung (aged 6 months to 4 years)\nOld (aged 55 years old and above)\nPregnant women\nImmunocompromised\n\nGoal:\n\nPreventing spillover infections (animals to human with new variants, which may cause pandemic)\nReducing hospitalization rate and mortality rate\nPreventing infection\nReduced severe cases needing of hospitalization\nProtecting others\nMaximise vaccine coverage\n\n\n\n\nStep 2. The elements to consider\n\n\n\n\n\n\n\n\nCriterion\nFactor\nHow will you collect this evidence?\n\n\n\n\nProblem\nBurden/epidemiology of disease\n\n\n\nBenefits and Harms\nHow substantial are the desired anticipated effects?\nDo the desirable effect outweigh the undesirable effects?\n\n\n\nValues\nDoes the target population feel that the desirable effect is large relative to the undesirable effects?\n\n\n\nResource use\nIs the intervention a reasonable and efficient use of resources?\n\n\n\nEquity\nWhat would be the impact of the intervention on health equity?\n\n\n\n\n\n\n\n\n\n\nSample answer\n\n\n\n\n\n\n\n\n\n\n\n\n\nCriterion\nFactor\nHow will you collect this evidence?\n\n\n\n\nProblem\nBurden/epidemiology of disease\nHospitalization rate\nMortality rate\n\n\nBenefits and Harms\nHow substantial are the desired anticipated effects?\nDo the desirable effect outweigh the undesirable effects?\nHospitalisations pre- and post-vaccination\nPresence of adverse events (AEs) and severe adverse events (SAEs)\n\n\nValues\nDoes the target population feel that the desirable effect is large relative to the undesirable effects?\nSurvey the target population\nFocus group discussions with the target groups\nKey informant interviews\n\n\nResource use\nIs the intervention a reasonable and efficient use of resources?\nOperational research (i.e., resource allocation)\nHealth service modelling\nSupply and Demand Forecasting\n\n\nEquity\nWhat would be the impact of the intervention on health equity?\nUse modelling to evaluate the impact and the cost-effectiveness of the influenza vaccination programmes stratified by the different target groups\nECEA or DCEA",
     "crumbs": [
       "Health economics",
       "<span class='chapter-number'>15</span>  <span class='chapter-title'>EtR Process</span>"
@@ -959,6 +959,36 @@
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>B</span>  <span class='chapter-title'>Useful functions</span>"
+    ]
+  },
+  {
+    "objectID": "he.html#types-of-model-in-health-economics",
+    "href": "he.html#types-of-model-in-health-economics",
+    "title": "Health economics",
+    "section": "",
+    "text": "Proportionate outcomes model\nAlso known as “decision tree” although exact definitions differ. Group flows divided into proportional outcomes over a single time period, and the force of infection is static over time.\n\n\n\nMarkov model\ngroup flows recalculated at regular time steps\n\n\nCompartmental dynamic model\ngroup flows recalculated at regular time steps + feedback and interactions. The force of infection is dynamic.\n\n\nAgent-based (individual-based) model",
+    "crumbs": [
+      "Health economics"
+    ]
+  },
+  {
+    "objectID": "he.html#models-in-health-economics",
+    "href": "he.html#models-in-health-economics",
+    "title": "Health economics",
+    "section": "",
+    "text": "Proportionate outcomes model\nAlso known as “decision tree” although exact definitions differ. Group flows divided into proportional outcomes over a single time period, and the force of infection is static over time.\n\n\nMarkov model\ngroup flows recalculated at regular time steps\n\n\nCompartmental dynamic model\ngroup flows recalculated at regular time steps + feedback and interactions. The force of infection is dynamic.\n\n\n\nAgent-based (individual-based) model\nIndividual-based model could be dynamic or static.",
+    "crumbs": [
+      "Health economics"
+    ]
+  },
+  {
+    "objectID": "he.html#types-of-analyses",
+    "href": "he.html#types-of-analyses",
+    "title": "Health economics",
+    "section": "",
+    "text": "Type\nCosts\nConsequences\n\n\n\n\nCost-effectiveness\n$\nA single natural unit (life-years gained, cases averted, cases detected)\n\n\nCost-utility\n$\nQALYs, DALYs\n\n\nCost-benefit\n$\n$\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\nCost-utility is sometimes considered as a special type of cost-effectiveness.\nThere are 2 more types of full economic evaluations: cost-minimisation and cost-consequence, but they are less commonly used.",
+    "crumbs": [
+      "Health economics"
     ]
   }
 ]

@@ -62,6 +62,9 @@ div.csl-indent {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -400,14 +403,24 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#types-of-health-economic-analyses" id="toc-types-of-health-economic-analyses" class="nav-link active" data-scroll-target="#types-of-health-economic-analyses">Types of health economic analyses</a></li>
+  <li><a href="#types-of-analyses" id="toc-types-of-analyses" class="nav-link active" data-scroll-target="#types-of-analyses">Types of analyses</a></li>
   <li><a href="#measuring-costs" id="toc-measuring-costs" class="nav-link" data-scroll-target="#measuring-costs">Measuring costs</a>
   <ul>
   <li><a href="#discounting-and-inflation" id="toc-discounting-and-inflation" class="nav-link" data-scroll-target="#discounting-and-inflation">Discounting and inflation</a></li>
   </ul></li>
   <li><a href="#measuring-consequences" id="toc-measuring-consequences" class="nav-link" data-scroll-target="#measuring-consequences">Measuring consequences</a>
   <ul>
+  <li><a href="#models-in-health-economics" id="toc-models-in-health-economics" class="nav-link" data-scroll-target="#models-in-health-economics">Models in health economics</a>
+  <ul>
+  <li><a href="#proportionate-outcomes-model" id="toc-proportionate-outcomes-model" class="nav-link" data-scroll-target="#proportionate-outcomes-model">Proportionate outcomes model</a></li>
+  <li><a href="#markov-model" id="toc-markov-model" class="nav-link" data-scroll-target="#markov-model">Markov model</a></li>
+  <li><a href="#compartmental-dynamic-model" id="toc-compartmental-dynamic-model" class="nav-link" data-scroll-target="#compartmental-dynamic-model">Compartmental dynamic model</a></li>
+  <li><a href="#agent-based-individual-based-model" id="toc-agent-based-individual-based-model" class="nav-link" data-scroll-target="#agent-based-individual-based-model">Agent-based (individual-based) model</a></li>
+  </ul></li>
+  <li><a href="#utility" id="toc-utility" class="nav-link" data-scroll-target="#utility">Utility</a>
+  <ul>
   <li><a href="#qaly" id="toc-qaly" class="nav-link" data-scroll-target="#qaly">QALY</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -434,8 +447,21 @@ window.Quarto = {
 </header>
 
 
-<section id="types-of-health-economic-analyses" class="level2">
-<h2 class="anchored" data-anchor-id="types-of-health-economic-analyses">Types of health economic analyses</h2>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Acknowledgement
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This chapter is based on the teachings of my PhD supervisor, Dr.&nbsp;Hugo Turner, and a lecture given by Asst Prof.&nbsp;Kiesha Prem at MIDSEA Summer School 2024, for which I am deeply grateful.</p>
+</div>
+</div>
+<section id="types-of-analyses" class="level2">
+<h2 class="anchored" data-anchor-id="types-of-analyses">Types of analyses</h2>
 <p><strong>Partial</strong> economic evaluations: studies that either <strong>only</strong> examine <strong>cost or consequences</strong>, or examine both costs and consequences but for only one intervention (<strong>without a comparator</strong>). This analysis <strong>cannot</strong> guide decision-making <span class="citation" data-cites="turner2021">(<a href="references.html#ref-turner2021" role="doc-biblioref">Turner et al., 2021</a>)</span>.</p>
 <p><strong>Full</strong> economic evaluations: compare <strong>both</strong> the <strong>costs and consequences</strong> of the intervention to a <strong>comparator</strong>. There are 3 most popular types of full economic evaluations, the key difference lies in how they express the <strong>consequences</strong> <span class="citation" data-cites="turner2021">(<a href="references.html#ref-turner2021" role="doc-biblioref">Turner et al., 2021</a>)</span>:</p>
 <table class="caption-top table">
@@ -504,18 +530,68 @@ Note
 </section>
 <section id="measuring-consequences" class="level2">
 <h2 class="anchored" data-anchor-id="measuring-consequences">Measuring consequences</h2>
-<section id="qaly" class="level3">
-<h3 class="anchored" data-anchor-id="qaly">QALY</h3>
+<section id="models-in-health-economics" class="level3">
+<h3 class="anchored" data-anchor-id="models-in-health-economics">Models in health economics</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="img/he/he-mod-choice.svg" class="lightbox" data-glightbox="description: .lightbox-desc-1" data-gallery="quarto-lightbox-gallery-1" title="Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."><img src="img/he/he-mod-choice.svg" class="img-fluid figure-img" alt="Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."></a></p>
+<figcaption>Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024.</figcaption>
+</figure>
+</div>
+<section id="proportionate-outcomes-model" class="level4">
+<h4 class="anchored" data-anchor-id="proportionate-outcomes-model">Proportionate outcomes model</h4>
+<p>Also known as “decision tree” although exact definitions differ. Group flows divided into proportional outcomes over a single time period, and the force of infection is static over time.</p>
+</section>
+<section id="markov-model" class="level4">
+<h4 class="anchored" data-anchor-id="markov-model">Markov model</h4>
+<p>group flows recalculated at regular time steps</p>
+</section>
+<section id="compartmental-dynamic-model" class="level4">
+<h4 class="anchored" data-anchor-id="compartmental-dynamic-model">Compartmental dynamic model</h4>
+<p>group flows recalculated at regular time steps + feedback and interactions. The force of infection is dynamic.</p>
+<p><a href="img/he/he-mod.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="img/he/he-mod.svg" class="img-fluid"></a></p>
+</section>
+<section id="agent-based-individual-based-model" class="level4">
+<h4 class="anchored" data-anchor-id="agent-based-individual-based-model">Agent-based (individual-based) model</h4>
+<p>Individual-based model could be dynamic or static.</p>
+<p><a href="img/he/he-abm.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="img/he/he-abm.jpg" class="img-fluid"></a></p>
+</section>
+</section>
+<section id="utility" class="level3">
+<h3 class="anchored" data-anchor-id="utility">Utility</h3>
+<p>Utility of health states are expressed on a scale from 0 to 1, where 0 represents the utility of being “dead” and 1 represents the utility of “perfect health” <span class="citation" data-cites="prieto2003">(<a href="references.html#ref-prieto2003" role="doc-biblioref">Prieto &amp; Sacristán, 2003</a>)</span>.</p>
+<section id="qaly" class="level4">
+<h4 class="anchored" data-anchor-id="qaly">QALY</h4>
+<p>The quality-adjusted life year (QALY) measure “years lived in perfect health”. One year in perfect health equals 1 QALY (1 Year <span class="math inline">\(\times\)</span> 1 Utility = 1 QALY). A year lived in less than perfect health is worth less than 1 QALY <span class="citation" data-cites="prieto2003">(<a href="references.html#ref-prieto2003" role="doc-biblioref">Prieto &amp; Sacristán, 2003</a>)</span>.</p>
+<p><span class="math display">\[\text{QALY} = \sum_{i = 0}^{\text{lifetime}} \text{Year} \times \text{Utility}\]</span></p>
+<p>For example, 0.5 years in perfect health equals 0.5 QALYs (0.5 years <span class="math inline">\(\times\)</span> 1 Utility), the same as 1 year with a utility of 0.5 (1 year <span class="math inline">\(\times\)</span> 0.5 Utility) <span class="citation" data-cites="prieto2003">(<a href="references.html#ref-prieto2003" role="doc-biblioref">Prieto &amp; Sacristán, 2003</a>)</span>. The area under the curve equates to the total QALY value <span class="citation" data-cites="whitehead2010">(<a href="references.html#ref-whitehead2010" role="doc-biblioref">Whitehead &amp; Ali, 2010</a>)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="img/he/qaly.svg" class="lightbox" data-glightbox="description: .lightbox-desc-4" data-gallery="quarto-lightbox-gallery-4" title="Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."><img src="img/he/qaly.svg" class="img-fluid figure-img" alt="Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."></a></p>
+<figcaption>Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024.</figcaption>
+</figure>
+</div>
 
 
+<div class="hidden" aria-hidden="true">
+<span class="glightbox-desc lightbox-desc-1">Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024.</span>
+<span class="glightbox-desc lightbox-desc-4">Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024.</span>
+</div>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-prieto2003" class="csl-entry" role="listitem">
+Prieto, L., &amp; Sacristán, J. A. (2003). Problems and solutions in calculating quality-adjusted life years (QALYs). <em>Health and Quality of Life Outcomes</em>, <em>1</em>(1), 80. <a href="https://doi.org/10.1186/1477-7525-1-80">https://doi.org/10.1186/1477-7525-1-80</a>
+</div>
 <div id="ref-severens2004" class="csl-entry" role="listitem">
 Severens, J. L., &amp; Milne, R. J. (2004). Discounting Health Outcomes in Economic Evaluation: The Ongoing Debate. <em>Value in Health</em>, <em>7</em>(4), 397–401. <a href="https://doi.org/10.1111/j.1524-4733.2004.74002.x">https://doi.org/10.1111/j.1524-4733.2004.74002.x</a>
 </div>
 <div id="ref-turner2021" class="csl-entry" role="listitem">
 Turner, H. C., Archer, R. A., Downey, L. E., Isaranuwatchai, W., Chalkidou, K., Jit, M., &amp; Teerawattananon, Y. (2021). An introduction to the main types of economic evaluations used for informing priority setting and resource allocation in healthcare: Key features, uses, and limitations. <em>Frontiers in Public Health</em>, <em>9</em>. <a href="https://www.frontiersin.org/articles/10.3389/fpubh.2021.722927">https://www.frontiersin.org/articles/10.3389/fpubh.2021.722927</a>
 </div>
+<div id="ref-whitehead2010" class="csl-entry" role="listitem">
+Whitehead, S. J., &amp; Ali, S. (2010). Health outcomes in economic evaluation: The QALY and utilities. <em>British Medical Bulletin</em>, <em>96</em>(1), 5–21. <a href="https://doi.org/10.1093/bmb/ldq033">https://doi.org/10.1093/bmb/ldq033</a>
 </div>
+</div>
+</section>
 </section>
 </section>
 
@@ -946,6 +1022,31 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"loop":false,"selector":".lightbox","descPosition":"bottom","openEffect":"zoom","closeEffect":"zoom"});
+window.onload = () => {
+  lightboxQuarto.on('slide_before_load', (data) => {
+    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+    const href = trigger.getAttribute('href');
+    if (href !== null) {
+      const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+      if (imgEl !== null) {
+        const srcAttr = imgEl.getAttribute("src");
+        if (srcAttr && srcAttr.startsWith("data:")) {
+          slideConfig.href = srcAttr;
+        }
+      }
+    } 
+  });
+
+  lightboxQuarto.on('slide_after_load', (data) => {
+    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+    if (window.Quarto?.typesetMath) {
+      window.Quarto.typesetMath(slideNode);
+    }
+  });
+
+};
+          </script>
 
 
 
