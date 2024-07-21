@@ -37,9 +37,7 @@ What is meant by a vaccine with effectiveness of 80% protection against a specif
 ### All-or-nothing model
 
 ::: {.callout-note type="simple"}
-::: {#def-aon-mod}
 **All-or-nothing** (AoN, also called the **polarized** [@park2023]) model assumes that **among vaccinated** individuals, a **proportion** $VE_P$ are **completely protected**, while **the remaining fraction** $1 - VE_P$ remains **completely unprotected** [@zachreson2023; @park2023].
-:::
 :::
 
 An effectiveness of 80% here implies that among vaccinated people, 80% are completely protected, and 20% receive no protection [@worldhealthorganization2013].
@@ -63,7 +61,9 @@ $$\begin{align}
 
 ### Leaky model
 
+::: {.callout-note type="simple"}
 **Leaky** model assumes that **all vaccinated** individuals **are partially protected** [@zachreson2023]. An effectiveness of 80% here implies that all vaccinated people have the endpoint of interest reduced by 80% compared to non-vaccinees.
+:::
 
 The assumption that no vaccinated people is totally or permanently protected implies one or both of the following [@worldhealthorganization2013]:
 
@@ -88,7 +88,7 @@ $$\begin{align}
 
 ## Multiple doses
 
-When a vaccine has multiple doses such as measles, . DynaMICE model adjusted @def-aon-mod to
+Some vaccines require multiple, like measles (2 doses) or rotavirus (2 doses). Below is the DynaMICE model [@verguet2015] for the 2-dose measles vaccine, assuming AoN effectiveness as in @fig-aon-mod for both doses.
 
 ![](img/vax/dynamice.svg)
 

@@ -479,9 +479,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<div id="def-aon-mod" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 14.1</strong></span> <strong>All-or-nothing</strong> (AoN, also called the <strong>polarized</strong> <span class="citation" data-cites="park2023">(<a href="references.html#ref-park2023" role="doc-biblioref">Park et al., 2023</a>)</span>) model assumes that <strong>among vaccinated</strong> individuals, a <strong>proportion</strong> <span class="math inline">\(VE_P\)</span> are <strong>completely protected</strong>, while <strong>the remaining fraction</strong> <span class="math inline">\(1 - VE_P\)</span> remains <strong>completely unprotected</strong> <span class="citation" data-cites="zachreson2023 park2023">(<a href="references.html#ref-park2023" role="doc-biblioref">Park et al., 2023</a>; <a href="references.html#ref-zachreson2023" role="doc-biblioref">Zachreson et al., 2023</a>)</span>.</p>
-</div>
+<p><strong>All-or-nothing</strong> (AoN, also called the <strong>polarized</strong> <span class="citation" data-cites="park2023">(<a href="references.html#ref-park2023" role="doc-biblioref">Park et al., 2023</a>)</span>) model assumes that <strong>among vaccinated</strong> individuals, a <strong>proportion</strong> <span class="math inline">\(VE_P\)</span> are <strong>completely protected</strong>, while <strong>the remaining fraction</strong> <span class="math inline">\(1 - VE_P\)</span> remains <strong>completely unprotected</strong> <span class="citation" data-cites="zachreson2023 park2023">(<a href="references.html#ref-park2023" role="doc-biblioref">Park et al., 2023</a>; <a href="references.html#ref-zachreson2023" role="doc-biblioref">Zachreson et al., 2023</a>)</span>.</p>
 </div>
 </div>
 <p>An effectiveness of 80% here implies that among vaccinated people, 80% are completely protected, and 20% receive no protection <span class="citation" data-cites="worldhealthorganization2013">(<a href="references.html#ref-worldhealthorganization2013" role="doc-biblioref">World Health Organization, 2013</a>)</span>.</p>
@@ -512,7 +510,19 @@ Figure&nbsp;14.1: All-or-nothing vaccination model <span class="citation" data-c
 </section>
 <section id="leaky-model" class="level3" data-number="14.2.2">
 <h3 data-number="14.2.2" class="anchored" data-anchor-id="leaky-model"><span class="header-section-number">14.2.2</span> Leaky model</h3>
+<div class="callout callout-style-default callout-note callout-titled" type="simple">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p><strong>Leaky</strong> model assumes that <strong>all vaccinated</strong> individuals <strong>are partially protected</strong> <span class="citation" data-cites="zachreson2023">(<a href="references.html#ref-zachreson2023" role="doc-biblioref">Zachreson et al., 2023</a>)</span>. An effectiveness of 80% here implies that all vaccinated people have the endpoint of interest reduced by 80% compared to non-vaccinees.</p>
+</div>
+</div>
 <p>The assumption that no vaccinated people is totally or permanently protected implies one or both of the following <span class="citation" data-cites="worldhealthorganization2013">(<a href="references.html#ref-worldhealthorganization2013" role="doc-biblioref">World Health Organization, 2013</a>)</span>:</p>
 <ul>
 <li>No amount (titre) of the immune marker is totally protective or, if it is, no individual can maintain that titre for a long period (because of waning or transient immunosuppression)</li>
@@ -545,7 +555,7 @@ Figure&nbsp;14.2: Leaky vaccination model <span class="citation" data-cites="par
 </section>
 <section id="multiple-doses" class="level2" data-number="14.3">
 <h2 data-number="14.3" class="anchored" data-anchor-id="multiple-doses"><span class="header-section-number">14.3</span> Multiple doses</h2>
-<p>When a vaccine has multiple doses such as measles, . DynaMICE model adjusted <a href="#def-aon-mod" class="quarto-xref">Definition&nbsp;<span>14.1</span></a> to</p>
+<p>Some vaccines require multiple, like measles (2 doses) or rotavirus (2 doses). Below is the DynaMICE model <span class="citation" data-cites="verguet2015">(<a href="references.html#ref-verguet2015" role="doc-biblioref">Verguet et al., 2015</a>)</span> for the 2-dose measles vaccine, assuming AoN effectiveness as in <a href="#fig-aon-mod" class="quarto-xref">Figure&nbsp;<span>14.1</span></a> for both doses.</p>
 <p><img src="img/vax/dynamice.svg" class="img-fluid"></p>
 </section>
 <section id="code" class="level2" data-number="14.4">
@@ -555,6 +565,9 @@ Figure&nbsp;14.2: Leaky vaccination model <span class="citation" data-cites="par
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
 <div id="ref-park2023" class="csl-entry" role="listitem">
 Park, S. W., Li, M., Metcalf, C. J. E., Grenfell, B. T., &amp; Dushoff, J. (2023). Immune boosting bridges leaky and polarized vaccination models. <em>medRxiv</em>. <a href="https://doi.org/10.1101/2023.07.14.23292670">https://doi.org/10.1101/2023.07.14.23292670</a>
+</div>
+<div id="ref-verguet2015" class="csl-entry" role="listitem">
+Verguet, S., Johri, M., Morris, S. K., Gauvreau, C. L., Jha, P., &amp; Jit, M. (2015). Controlling measles using supplemental immunization activities: A mathematical model to inform optimal policy. <em>Vaccine</em>, <em>33</em>(10), 1291–1296. <a href="https://doi.org/10.1016/j.vaccine.2014.11.050">https://doi.org/10.1016/j.vaccine.2014.11.050</a>
 </div>
 <div id="ref-worldhealthorganization2013" class="csl-entry" role="listitem">
 World Health Organization. (2013). <em>Correlates of vaccine-induced protection: Methods and implications</em>.
