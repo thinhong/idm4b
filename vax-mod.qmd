@@ -57,7 +57,7 @@ What is meant by a vaccine with effectiveness of 80% protection against a specif
 ### All-or-nothing model
 
 ::: {.callout-tip appearance="simple"}
-**All-or-nothing** (AoN, also called the **polarized** [@park2023], or **take** model) model assumes that **among vaccinated** individuals, a **proportion** $VE_P$ are **completely protected**, while **the remaining fraction** $1 - VE_P$ remains **completely unprotected** [@zachreson2023; @park2023].
+**All-or-nothing** (AoN, also called the **polarized** [@park2023], or **take**) model assumes that **among vaccinated** individuals, a **proportion** $VE_P$ are **completely protected**, while **the remaining fraction** $1 - VE_P$ remains **completely unprotected** [@zachreson2023; @park2023].
 :::
 
 An effectiveness of 80% here implies that among vaccinated people, 80% are completely protected, and 20% receive no protection [@worldhealthorganization2013].
