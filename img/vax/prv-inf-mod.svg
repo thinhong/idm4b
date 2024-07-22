@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1280"
+   height="400"
+   overflow="hidden"
+   version="1.1"
+   id="svg38"
+   sodipodi:docname="prv-inf-mod.svg"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs42" />
+  <sodipodi:namedview
+     id="namedview40"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="1.1929687"
+     inkscape:cx="585.93323"
+     inkscape:cy="360.44533"
+     inkscape:window-width="3440"
+     inkscape:window-height="1334"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg38" />
+  <rect
+     style="fill:#ffffff;stroke-width:0.753662"
+     id="rect123"
+     width="1280"
+     height="400"
+     x="0"
+     y="0" />
+  <path
+     d="m 206,68.7135 c 0,-8.008 6.492,-14.5 14.5,-14.5 h 108 c 8.008,0 14.5,6.492 14.5,14.5 v 58 c 0,8.008 -6.492,14.5 -14.5,14.5 h -108 c -8.008,0 -14.5,-6.492 -14.5,-14.5 z"
+     stroke="#042433"
+     stroke-width="3"
+     stroke-miterlimit="8"
+     fill="none"
+     fill-rule="evenodd"
+     id="path4" />
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="48px"
+     id="text6"
+     x="256.06702"
+     y="113.7135">𝑆</text>
+  <path
+     d="m 572,68.7135 c 0,-8.008 6.492,-14.5 14.5,-14.5 h 108 c 8.008,0 14.5,6.492 14.5,14.5 v 58 c 0,8.008 -6.492,14.5 -14.5,14.5 h -108 c -8.008,0 -14.5,-6.492 -14.5,-14.5 z"
+     stroke="#042433"
+     stroke-width="3"
+     stroke-miterlimit="8"
+     fill="none"
+     fill-rule="evenodd"
+     id="path8" />
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="48px"
+     id="text10"
+     x="624.94702"
+     y="113.7135">𝐼</text>
+  <path
+     d="m 937,68.7135 c 0,-8.008 6.492,-14.5 14.5,-14.5 h 108 c 8.01,0 14.5,6.492 14.5,14.5 v 58 c 0,8.008 -6.49,14.5 -14.5,14.5 h -108 c -8.008,0 -14.5,-6.492 -14.5,-14.5 z"
+     stroke="#042433"
+     stroke-width="3"
+     stroke-miterlimit="8"
+     fill="none"
+     fill-rule="evenodd"
+     id="path12" />
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="48px"
+     id="text14"
+     x="984.34601"
+     y="113.7135">𝑅</text>
+  <path
+     d="m 206,288.7135 c 0,-8.008 6.492,-14.5 14.5,-14.5 h 108 c 8.008,0 14.5,6.492 14.5,14.5 v 58 c 0,8.008 -6.492,14.5 -14.5,14.5 h -108 c -8.008,0 -14.5,-6.492 -14.5,-14.5 z"
+     stroke="#042433"
+     stroke-width="3"
+     stroke-miterlimit="8"
+     fill="none"
+     fill-rule="evenodd"
+     id="path16" />
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="48px"
+     id="text18"
+     x="253.44099"
+     y="333.7135">𝑉</text>
+  <path
+     d="m 342.5,95.7135 h 218.589 v 4 H 342.5 Z m 216.59,-4 12,6 -12,6 z"
+     id="path20" />
+  <path
+     d="m 708.5,95.7135 h 218.589 v 4 H 708.5 Z m 216.589,-4 12,6 -12,6 z"
+     id="path22" />
+  <path
+     d="m 272.5,140.7135 -10e-5,122.621 h 4 l 10e-5,-122.621 z m -4.0001,120.621 6,12 6,-12 z"
+     id="path24" />
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="48px"
+     id="text26"
+     x="809.20502"
+     y="73.713501">𝛾</text>
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="48px"
+     id="text28"
+     x="414.03299"
+     y="73.713501">𝜆</text>
+  <path
+     d="m 481.303,37.2865 c 4.562,1.203 8.066,3.801 10.511,7.793 2.446,3.992 3.668,8.809 3.668,14.449 0,5.657 -1.218,10.473 -3.656,14.449 -2.437,3.977 -5.945,6.567 -10.523,7.77 l -0.563,-1.805 c 3.609,-1.203 6.293,-3.578 8.051,-7.125 1.758,-3.547 2.637,-8.054 2.637,-13.523 0,-5.281 -0.875,-9.668 -2.625,-13.16 -1.75,-3.492 -4.461,-5.84 -8.133,-7.043 z m -23.219,0 0.633,1.805 c -3.656,1.203 -6.363,3.551 -8.121,7.043 -1.758,3.492 -2.637,7.879 -2.637,13.16 0,5.469 0.879,9.976 2.637,13.523 1.758,3.547 4.441,5.922 8.051,7.125 l -0.563,1.805 c -4.578,-1.203 -8.086,-3.793 -10.523,-7.77 -2.438,-3.976 -3.656,-8.792 -3.656,-14.449 0,-5.64 1.222,-10.457 3.668,-14.449 2.445,-3.992 5.949,-6.59 10.511,-7.793 z"
+     fill-rule="evenodd"
+     id="path30" />
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="48px"
+     id="text32"
+     x="459.60599"
+     y="73.713501">𝑡</text>
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="48px"
+     id="text34"
+     x="225.93401"
+     y="215.7135">𝜌</text>
+</svg>

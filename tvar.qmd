@@ -102,8 +102,6 @@ params <- exp(coef(estimates))
 params
 ```
 
-MLE will fit a curve going in the middle of the two peaks.
-
 ```{r}
 #| fig-width: 4
 #| fig-height: 2.5

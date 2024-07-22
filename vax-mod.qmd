@@ -1,5 +1,17 @@
 # Model vaccination
 
+::: {.callout-note appearance="simple"}
+# Acknowledgement
+
+This chapter is based on the teachings of my PhD supervisor, Dr. Marc Choisy, and a lecture given by Asst Prof. Hannah Clapham at MIDSEA Summer School 2024, for which I am deeply grateful.
+:::
+
+To model vaccination, we need to decide 2 things:
+
+1. What is the vaccine effect? Does it protect against infection, severe disease, transmission, or a combination?
+
+2. How do we model the vaccine effectiveness?
+
 ## Vaccine effects
 
 ### Prevent infection
@@ -8,7 +20,11 @@ Vaccine prevents the pathogen from establishing an infection in the body. A vacc
 
 ![](img/vax/prv-inf.svg)
 
-To model the effect of a vaccine preventing infection, you modify the force of infection.
+Assuming a perfect vaccine against infection, the model can be designed like this:
+
+![](img/vax/prv-inf-mod.svg)
+
+Vaccinated people $V$ remain uninfected in their lifetime and do not participate in disease transmission.
 
 ### Prevent severe disease
 
@@ -22,7 +38,11 @@ Vaccine reduces the ability of a vaccinated individual, who becomes infected, to
 
 ![](img/vax/prv-trans.svg)
 
-Reduces the transmission rate $\beta_v$ for infected vaccinated individuals.
+Assuming a perfect vaccine against transmission, the model can be designed like this:
+
+![](img/vax/prv-trans-mod.svg)
+
+$I$ being the only source of infection that contributes to the force of infection. Vaccinated people $S_v$ still get infected and become $I_v$, but they do not transmit the disease.
 
 ### Mixed effects
 
@@ -36,11 +56,13 @@ What is meant by a vaccine with effectiveness of 80% protection against a specif
 
 ### All-or-nothing model
 
-::: {.callout-note type="simple"}
+::: {.callout-tip appearance="simple"}
 **All-or-nothing** (AoN, also called the **polarized** [@park2023]) model assumes that **among vaccinated** individuals, a **proportion** $VE_P$ are **completely protected**, while **the remaining fraction** $1 - VE_P$ remains **completely unprotected** [@zachreson2023; @park2023].
 :::
 
 An effectiveness of 80% here implies that among vaccinated people, 80% are completely protected, and 20% receive no protection [@worldhealthorganization2013].
+
+![](img/vax/aon.svg)
 
 Assumming a standard SIR model, vaccine protects against **infection** with vaccine effectiveness $VE_P$, $\rho$ represents the vaccination rate:
 
@@ -61,9 +83,13 @@ $$\begin{align}
 
 ### Leaky model
 
-::: {.callout-note type="simple"}
-**Leaky** model assumes that **all vaccinated** individuals **are partially protected** [@zachreson2023]. An effectiveness of 80% here implies that all vaccinated people have the endpoint of interest reduced by 80% compared to non-vaccinees.
+::: {.callout-tip appearance="simple"}
+**Leaky** model assumes that **all vaccinated** individuals **are partially protected** [@zachreson2023].
 :::
+
+An effectiveness of 80% here implies that all vaccinated people have the endpoint of interest reduced by 80% compared to non-vaccinees.
+
+![](img/vax/leaky.svg)
 
 The assumption that no vaccinated people is totally or permanently protected implies one or both of the following [@worldhealthorganization2013]:
 
@@ -88,8 +114,75 @@ $$\begin{align}
 
 ## Multiple doses
 
-Some vaccines require multiple, like measles (2 doses) or rotavirus (2 doses). Below is the DynaMICE model [@verguet2015] for the 2-dose measles vaccine, assuming AoN effectiveness as in @fig-aon-mod for both doses.
+Some vaccines require multiple doses, like measles (2 doses) or rotavirus (2 doses), with varying effectiveness per dose. Below is the DynaMICE model [@verguet2015] for the 2-dose measles vaccine, assuming AoN effectiveness as in @fig-aon-mod for both doses.
 
 ![](img/vax/dynamice.svg)
 
 ## Code
+
+### A perfect vaccine against infection
+
+```{r, warning=FALSE, message=FALSE}
+library(odin)
+library(tidyr)
+library(ggplot2)
+```
+
+![](img/vax/prv-inf-mod.svg)
+
+```{r, results=FALSE, message=FALSE}
+pfvac_ode <- odin({
+  # Derivatives
+  deriv(S) <- -beta * S * I - rho * S
+  deriv(I) <- beta * S * I - gamma * I
+  deriv(R) <- gamma * I
+  deriv(V) <- rho * S
+  
+  # Initial conditions
+  initial(S) <- N_init - I_init
+  initial(I) <- I_init
+  initial(R) <- R_init
+  initial(V) <- V_init
+  
+  # Parameters and initial values
+  beta <- user(8.77e-8)
+  gamma <- user(0.2)
+  rho <- user(0.005)
+  N_init <- user(5700000)
+  I_init <- user(1)
+  R_init <- user(0)
+  V_init <- user(0)
+})
+```
+
+```{r}
+# Initialize model
+pfvac_mod <- pfvac_ode$new()
+# How long to run
+times <- seq(0,300)
+# Run the model
+pred <- data.frame(pfvac_mod$run(times))
+```
+
+```{r}
+#| code-fold: true
+#| fig-width: 4
+#| fig-height: 3
+#| out-width: "100%"
+df_plot <- pivot_longer(pred, cols = S:V, names_to = "comp", values_to = "n")
+
+ggplot(df_plot, aes(x = t, y = n, color = comp)) +
+  geom_line(linewidth = 1.2) +
+  scale_color_brewer(palette = "PuOr", breaks = c("S", "I", "R", "V")) +
+  labs(color = NULL, y = NULL, x = "Time") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+
+### AoN model against infection
+
+
+
+### Leaky model against infection
+
