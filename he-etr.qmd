@@ -44,7 +44,7 @@ Noted that this step **only** needs to be conducted **once**.
 
 ### Generic criteria tables {.unnumbered}
 
-Generic criteria tables comprise **7 tables** that contain **all issues** relevant for **any** immunization policy **question**, **unspecific** to any particular disease or vaccine. Each table links a **criterion** with many factors. Each **factor** then has many elements, each representing a type of evidence needed for for NITAG consideration.
+Generic criteria tables comprise **7 tables** that contain **all issues** relevant for **any** immunization policy **question**, **unspecific** to any particular disease or vaccine. Each table links a **criterion** with many factors. Each **factor** then has many **elements**, each representing a type of evidence needed for for NITAG consideration.
 
 +--------------+--------------------------------+--------------------------------------------------+
 | Criterion    | Factor                         | Element                                          |
