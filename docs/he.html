@@ -404,29 +404,31 @@ window.Quarto = {
    
   <ul>
   <li><a href="#types-of-analyses" id="toc-types-of-analyses" class="nav-link active" data-scroll-target="#types-of-analyses">Types of analyses</a></li>
-  <li><a href="#measuring-costs" id="toc-measuring-costs" class="nav-link" data-scroll-target="#measuring-costs">Measuring costs</a>
-  <ul>
-  <li><a href="#discounting-and-inflation" id="toc-discounting-and-inflation" class="nav-link" data-scroll-target="#discounting-and-inflation">Discounting and inflation</a></li>
-  </ul></li>
-  <li><a href="#measuring-consequences" id="toc-measuring-consequences" class="nav-link" data-scroll-target="#measuring-consequences">Measuring consequences</a>
-  <ul>
   <li><a href="#models-in-health-economics" id="toc-models-in-health-economics" class="nav-link" data-scroll-target="#models-in-health-economics">Models in health economics</a>
   <ul>
   <li><a href="#proportionate-outcomes-model" id="toc-proportionate-outcomes-model" class="nav-link" data-scroll-target="#proportionate-outcomes-model">Proportionate outcomes model</a></li>
   <li><a href="#markov-model" id="toc-markov-model" class="nav-link" data-scroll-target="#markov-model">Markov model</a></li>
   <li><a href="#compartmental-dynamic-model" id="toc-compartmental-dynamic-model" class="nav-link" data-scroll-target="#compartmental-dynamic-model">Compartmental dynamic model</a></li>
-  <li><a href="#agent-based-individual-based-model" id="toc-agent-based-individual-based-model" class="nav-link" data-scroll-target="#agent-based-individual-based-model">Agent-based (individual-based) model</a></li>
+  <li><a href="#individual-based-model" id="toc-individual-based-model" class="nav-link" data-scroll-target="#individual-based-model">Individual-based model</a></li>
+  <li><a href="#choice-of-model" id="toc-choice-of-model" class="nav-link" data-scroll-target="#choice-of-model">Choice of model</a></li>
   </ul></li>
+  <li><a href="#measuring-consequences" id="toc-measuring-consequences" class="nav-link" data-scroll-target="#measuring-consequences">Measuring consequences</a>
+  <ul>
   <li><a href="#utility" id="toc-utility" class="nav-link" data-scroll-target="#utility">Utility</a>
   <ul>
   <li><a href="#qaly" id="toc-qaly" class="nav-link" data-scroll-target="#qaly">QALY</a></li>
   </ul></li>
   </ul></li>
+  <li><a href="#measuring-costs" id="toc-measuring-costs" class="nav-link" data-scroll-target="#measuring-costs">Measuring costs</a>
+  <ul>
+  <li><a href="#perspectives" id="toc-perspectives" class="nav-link" data-scroll-target="#perspectives">Perspectives</a></li>
+  <li><a href="#discounting-vs-inflation" id="toc-discounting-vs-inflation" class="nav-link" data-scroll-target="#discounting-vs-inflation">Discounting vs inflation</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -457,9 +459,11 @@ Acknowledgement
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This chapter is based on the teachings of my PhD supervisor, Dr.&nbsp;Hugo Turner, and a lecture given by Asst Prof.&nbsp;Kiesha Prem at MIDSEA Summer School 2024, for which I am deeply grateful.</p>
+<p>I am deeply grateful to Dr.&nbsp;Hugo Turner and Asst Prof.&nbsp;Kiesha Prem for their invaluable support and guidance throughout the writing of this chapter.</p>
 </div>
 </div>
+<p>Health economics focuses on how to <strong>allocate</strong> healthcare <strong>resources efficiently</strong> to <strong>maximize health outcomes</strong> with limited resources <span class="citation" data-cites="goeree2013">(<a href="references.html#ref-goeree2013" role="doc-biblioref">Goeree &amp; Diaby, 2013</a>)</span>. Health economics is used to support <strong>decision-making</strong> in situations where we must choose between different options. For example, given the current budget, should we buy HPV vaccines or COVID-19 vaccines?</p>
+<p>Health economics emphasizes <strong>opportunity costs</strong>, which are the <strong>benefits sacrificed</strong> when choosing one option over another. For example, the opportunity cost of purchasing COVID-19 vaccines is the potential benefits lost from not buying HPV vaccines.</p>
 <section id="types-of-analyses" class="level2">
 <h2 class="anchored" data-anchor-id="types-of-analyses">Types of analyses</h2>
 <p><strong>Partial</strong> economic evaluations: studies that either <strong>only</strong> examine <strong>cost or consequences</strong>, or examine both costs and consequences but for only one intervention (<strong>without a comparator</strong>). This analysis <strong>cannot</strong> guide decision-making <span class="citation" data-cites="turner2021">(<a href="references.html#ref-turner2021" role="doc-biblioref">Turner et al., 2021</a>)</span>.</p>
@@ -512,51 +516,177 @@ Note
 </div>
 </div>
 </section>
-<section id="measuring-costs" class="level2">
-<h2 class="anchored" data-anchor-id="measuring-costs">Measuring costs</h2>
-<section id="discounting-and-inflation" class="level3">
-<h3 class="anchored" data-anchor-id="discounting-and-inflation">Discounting and inflation</h3>
-<p>Discounting is a mathematical procedure for adjusting future costs and outcomes of health-care interventions to “present value” <span class="citation" data-cites="severens2004">(<a href="references.html#ref-severens2004" role="doc-biblioref">Severens &amp; Milne, 2004</a>)</span>. Discounting is based on the concept of “positive time preference”, meaning that people prefers to benefit sooner rather than later <span class="citation" data-cites="severens2004">(<a href="references.html#ref-severens2004" role="doc-biblioref">Severens &amp; Milne, 2004</a>)</span>.</p>
-<p>Imagine you can choose between getting (A) $1000 today or (B) $1000 in 5 years. Most people would prefer option A because having $1000 today allows you to use it immediately or invest it. The value of $1000 today is greater than $1000 in 5 years due to the opportunity to earn interest or invest it.</p>
-<p>Now imagine you can choose between getting $500 today or $1000 in 10 years. To make a fair comparison, you need to adjust the future benefits to their present value. Let’s say the discount rate <span class="math inline">\(D\)</span> is 5%. The formula for present value (PV) is:</p>
-<p><span class="math display">\[PV = \frac{M}{(1 + D)^t}\]</span></p>
-<p>For a benefit in the 10th year:</p>
-<p><span class="math display">\[PV = \frac{1000}{(1 + 0.05)^{10}} \approx 613.91\]</span></p>
-<p>So $1000 in the 10th year is worth about $614 in today’s dollars.</p>
-<p>Discounting should not be confused with adjusting for inflation. Both are needed. The inflation adjustment reflects the change in purchasing power of currency (e.g., adjusting past costs to current values). Discounting reflects the loss in value when there is a delay in obtaining an item of value (e.g., adjusting for future value).</p>
-<p>Discounting: This is about the idea that a dollar today is worth more than a dollar in the future. It reflects our preference for receiving benefits or money sooner rather than later. It’s used to adjust future costs or benefits to their present value.</p>
-<p>Inflation: This is about how the general price level of goods and services increases over time. Inflation means that money loses its purchasing power, so what $1 buys today might cost more in the future.</p>
+<section id="models-in-health-economics" class="level2">
+<h2 class="anchored" data-anchor-id="models-in-health-economics">Models in health economics</h2>
+<section id="proportionate-outcomes-model" class="level3">
+<h3 class="anchored" data-anchor-id="proportionate-outcomes-model">Proportionate outcomes model</h3>
+<p>Also known as <strong>decision tree</strong> although exact definitions differ. Group flows divided into proportional outcomes over a single time period <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>.</p>
+<p>All decision trees have 3 key components <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>:</p>
+<ul>
+<li><strong>Decision nodes</strong>: where different comparators are compared.</li>
+<li><strong>Chance nodes</strong>: where potential outcomes are weighted by their probabilities.</li>
+<li><strong>Terminal nodes</strong>: endpoints of pathways, where costs and effectiveness calculated.</li>
+</ul>
+<div id="fig-he-dtree" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-he-dtree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/he/he-dtree.svg" class="lightbox" data-glightbox="description: .lightbox-desc-1" data-gallery="quarto-lightbox-gallery-1"><img src="img/he/he-dtree.svg" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-he-dtree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Decision tree, adapted from <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>
+</figcaption>
+</figure>
+</div>
+<p>We have to specify a <strong>fixed time horizon</strong> represents the period over which probabilities and outcomes are considered <span class="citation" data-cites="kuntz2013">(<a href="references.html#ref-kuntz2013" role="doc-biblioref">Kuntz et al., 2013</a>)</span>. If a decision tree uses a 50-year time horizon, the probabilities of outcomes are based on what could occur within those 50 years.</p>
+<ul>
+<li>Decision nodes (or the comparators) are either “No vaccine” or “Vaccine” available.</li>
+<li>Chance nodes (or outcomes and their probabilities), are the nodes branch out from Decision nodes.</li>
+<li>Terminal nodes (or the endpoints for costs and effectiveness) are “No infection”, “Recovered”, and “Death”.</li>
+</ul>
+</section>
+<section id="markov-model" class="level3">
+<h3 class="anchored" data-anchor-id="markov-model">Markov model</h3>
+<p>A Markov model is a <strong>repeated</strong> decision tree <span class="citation" data-cites="heeg2008">(<a href="references.html#ref-heeg2008" role="doc-biblioref">Heeg et al., 2008</a>)</span>. The core elements of a Markov model are <strong>health states</strong> and <strong>transition</strong> <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>:</p>
+<ul>
+<li><p><strong>Health states</strong> represent different conditions such as being healthy, sick, disease stages, or vaccinated. States must be mutually exclusive (a person can’t be in two states at once) and exhaustive (cover all relevant conditions).</p></li>
+<li><p><strong>Transition</strong> is the probability (ranges between 0 and 1) of moving from one state to another.</p></li>
+</ul>
+<p>Markov models are used for problems that involve risk over time, or when the timing of events is important <span class="citation" data-cites="kuntz2013">(<a href="references.html#ref-kuntz2013" role="doc-biblioref">Kuntz et al., 2013</a>)</span>. We can use a Markov model to represent the endpoints shown in the decision tree <a href="#fig-he-dtree" class="quarto-xref">Figure&nbsp;<span>1</span></a>.</p>
+<div id="fig-he-markov" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-he-markov-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/he/he-markov.svg" class="lightbox" data-glightbox="description: .lightbox-desc-2" data-gallery="quarto-lightbox-gallery-2"><img src="img/he/he-markov.svg" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-he-markov-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Markov model, adapted from <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>
+</figcaption>
+</figure>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 15%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: left;"><strong>S</strong></th>
+<th style="text-align: left;"><strong>V</strong></th>
+<th style="text-align: left;"><strong>I</strong></th>
+<th style="text-align: left;"><strong>R</strong></th>
+<th style="text-align: left;"><strong>D</strong></th>
+<th style="text-align: left;"><strong>Check</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Susceptible (S)</strong></td>
+<td style="text-align: left;">0.198</td>
+<td style="text-align: left;">0.100</td>
+<td style="text-align: left;">0.700</td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.002</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+<tr class="even">
+<td><strong>Vaccinated (V)</strong></td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.998</td>
+<td style="text-align: left;">0.000045</td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.002</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+<tr class="odd">
+<td><strong>Infected (I)</strong></td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.129</td>
+<td style="text-align: left;">0.865</td>
+<td style="text-align: left;">0.006</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+<tr class="even">
+<td><strong>Recovered (R)</strong></td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.998</td>
+<td style="text-align: left;">0.002</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+<tr class="odd">
+<td><strong>Deaths (D)</strong></td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">1.000</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+</tbody>
+</table>
+<p>The key disadvantage of a Markov model is its <strong>memoryless property</strong> or <strong>Markov assumption</strong>, which assumes that transitions between health states depend only on the current state, not on the past history or duration spent in a state <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>.</p>
+</section>
+<section id="compartmental-dynamic-model" class="level3">
+<h3 class="anchored" data-anchor-id="compartmental-dynamic-model">Compartmental dynamic model</h3>
+<p>Static models (decision tree, Markov model) assumes that the force of infection is constant or changes only as a function of age and other individual characteristics. Dynamic model assumes that the <strong>force of infection</strong> can <strong>vary</strong> throughout the course of <strong>time</strong> and as a function of population <strong>interactions</strong>. Dynamic models are preferable for modeling the impact of a vaccine when considerations of herd immunity <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>.</p>
+<p>We can adjust the Markov model <a href="#fig-he-markov" class="quarto-xref">Figure&nbsp;<span>2</span></a> to become a compartmental dynamic model by specifying that the force of infection varies over time.</p>
+<div id="fig-he-comp" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-he-comp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/he/he-comp.svg" class="lightbox" data-glightbox="description: .lightbox-desc-3" data-gallery="quarto-lightbox-gallery-3"><img src="img/he/he-comp.svg" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-he-comp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Compartmental dynamic model, adapted from <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="individual-based-model" class="level3">
+<h3 class="anchored" data-anchor-id="individual-based-model">Individual-based model</h3>
+<p>Individual-based model, also called <strong>microsimulation</strong> model, simulates one individual at a time which is called first-order Monte Carlo simulation. This is done by repeatedly sampling from probability distributions a large number of times to understand the average and spread of potential results. The disadvantage is that they are time-consuming, as they require sometimes the simulation of millions of individuals to obtain stable estimates <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>.</p>
+<p><a href="img/he/he-abm.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="img/he/he-abm.jpg" class="img-fluid"></a></p>
+</section>
+<section id="choice-of-model" class="level3">
+<h3 class="anchored" data-anchor-id="choice-of-model">Choice of model</h3>
+<p>The most difficult decision in model building is “How complex should the model be?” <span class="citation" data-cites="hilborn1997">(<a href="references.html#ref-hilborn1997" role="doc-biblioref">Hilborn &amp; Mangel, 1997</a>)</span>. Most modellers agree on 2 basic rules for choosing a model:</p>
+<ol type="1">
+<li>Let the data tell you <span class="citation" data-cites="hilborn1997">(<a href="references.html#ref-hilborn1997" role="doc-biblioref">Hilborn &amp; Mangel, 1997</a>)</span>.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="img/he/he-mod-choice.svg" class="lightbox" data-glightbox="description: .lightbox-desc-5" data-gallery="quarto-lightbox-gallery-5" title="Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."><img src="img/he/he-mod-choice.svg" class="img-fluid figure-img" alt="Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."></a></p>
+<figcaption>Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024.</figcaption>
+</figure>
+</div>
+<p>Simpler models need less data to estimate parameters but might overlook important system components. In contrast, complex models can capture more details but we may not have sufficient data to determine the parameters <span class="citation" data-cites="hilborn1997">(<a href="references.html#ref-hilborn1997" role="doc-biblioref">Hilborn &amp; Mangel, 1997</a>)</span>.</p>
+<ol start="2" type="1">
+<li>The use of the model <span class="citation" data-cites="hilborn1997">(<a href="references.html#ref-hilborn1997" role="doc-biblioref">Hilborn &amp; Mangel, 1997</a>)</span>.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="img/he/he-mod.svg" class="lightbox" data-glightbox="description: .lightbox-desc-6" data-gallery="quarto-lightbox-gallery-6" title="Adapted from Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."><img src="img/he/he-mod.svg" class="img-fluid figure-img" alt="Adapted from Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."></a></p>
+<figcaption>Adapted from Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024.</figcaption>
+</figure>
+</div>
+<p>Simple models are useful if their assumptions are reasonable. For accurate predictions, a “wrong” but simpler model can do better than the “right” but complex model when parameters are estimated <span class="citation" data-cites="hilborn1997">(<a href="references.html#ref-hilborn1997" role="doc-biblioref">Hilborn &amp; Mangel, 1997</a>)</span>. However, a complex model provides a better representation of uncertainty <span class="citation" data-cites="hilborn1997">(<a href="references.html#ref-hilborn1997" role="doc-biblioref">Hilborn &amp; Mangel, 1997</a>)</span>.</p>
+<p>Given the close connection between health economics and policy, guidelines are available for every step of the process. Be sure to read and follow these guidelines when conducting your analysis. Below is guidance on choosing between static and dynamic models.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="img/he/he-mod-choice-guideline.svg" class="lightbox" data-glightbox="description: .lightbox-desc-7" data-gallery="quarto-lightbox-gallery-7" title="How the choice of a static model, static model with approximation for herd immunity or dynamic model could be made [@jit2011]"><img src="img/he/he-mod-choice-guideline.svg" class="img-fluid figure-img" alt="How the choice of a static model, static model with approximation for herd immunity or dynamic model could be made (Jit &amp; Brisson, 2011)"></a></p>
+<figcaption>How the choice of a static model, static model with approximation for herd immunity or dynamic model could be made <span class="citation" data-cites="jit2011">(<a href="references.html#ref-jit2011" role="doc-biblioref">Jit &amp; Brisson, 2011</a>)</span></figcaption>
+</figure>
+</div>
 </section>
 </section>
 <section id="measuring-consequences" class="level2">
 <h2 class="anchored" data-anchor-id="measuring-consequences">Measuring consequences</h2>
-<section id="models-in-health-economics" class="level3">
-<h3 class="anchored" data-anchor-id="models-in-health-economics">Models in health economics</h3>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="img/he/he-mod-choice.svg" class="lightbox" data-glightbox="description: .lightbox-desc-1" data-gallery="quarto-lightbox-gallery-1" title="Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."><img src="img/he/he-mod-choice.svg" class="img-fluid figure-img" alt="Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."></a></p>
-<figcaption>Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024.</figcaption>
-</figure>
-</div>
-<section id="proportionate-outcomes-model" class="level4">
-<h4 class="anchored" data-anchor-id="proportionate-outcomes-model">Proportionate outcomes model</h4>
-<p>Also known as “decision tree” although exact definitions differ. Group flows divided into proportional outcomes over a single time period, and the force of infection is static over time.</p>
-</section>
-<section id="markov-model" class="level4">
-<h4 class="anchored" data-anchor-id="markov-model">Markov model</h4>
-<p>group flows recalculated at regular time steps</p>
-</section>
-<section id="compartmental-dynamic-model" class="level4">
-<h4 class="anchored" data-anchor-id="compartmental-dynamic-model">Compartmental dynamic model</h4>
-<p>group flows recalculated at regular time steps + feedback and interactions. The force of infection is dynamic.</p>
-<p><a href="img/he/he-mod.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="img/he/he-mod.svg" class="img-fluid"></a></p>
-</section>
-<section id="agent-based-individual-based-model" class="level4">
-<h4 class="anchored" data-anchor-id="agent-based-individual-based-model">Agent-based (individual-based) model</h4>
-<p>Individual-based model could be dynamic or static.</p>
-<p><a href="img/he/he-abm.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="img/he/he-abm.jpg" class="img-fluid"></a></p>
-</section>
-</section>
 <section id="utility" class="level3">
 <h3 class="anchored" data-anchor-id="utility">Utility</h3>
 <p>Utility of health states are expressed on a scale from 0 to 1, where 0 represents the utility of being “dead” and 1 represents the utility of “perfect health” <span class="citation" data-cites="prieto2003">(<a href="references.html#ref-prieto2003" role="doc-biblioref">Prieto &amp; Sacristán, 2003</a>)</span>.</p>
@@ -567,22 +697,151 @@ Note
 <p>For example, 0.5 years in perfect health equals 0.5 QALYs (0.5 years <span class="math inline">\(\times\)</span> 1 Utility), the same as 1 year with a utility of 0.5 (1 year <span class="math inline">\(\times\)</span> 0.5 Utility) <span class="citation" data-cites="prieto2003">(<a href="references.html#ref-prieto2003" role="doc-biblioref">Prieto &amp; Sacristán, 2003</a>)</span>. The area under the curve equates to the total QALY value <span class="citation" data-cites="whitehead2010">(<a href="references.html#ref-whitehead2010" role="doc-biblioref">Whitehead &amp; Ali, 2010</a>)</span>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="img/he/qaly.svg" class="lightbox" data-glightbox="description: .lightbox-desc-4" data-gallery="quarto-lightbox-gallery-4" title="Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."><img src="img/he/qaly.svg" class="img-fluid figure-img" alt="Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."></a></p>
+<p><a href="img/he/qaly.svg" class="lightbox" data-glightbox="description: .lightbox-desc-8" data-gallery="quarto-lightbox-gallery-8" title="Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."><img src="img/he/qaly.svg" class="img-fluid figure-img" alt="Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."></a></p>
 <figcaption>Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024.</figcaption>
 </figure>
 </div>
+</section>
+</section>
+</section>
+<section id="measuring-costs" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="measuring-costs">Measuring costs</h2>
+<section id="perspectives" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="perspectives">Perspectives</h3>
+<div class="column-page">
+<table class="caption-top table">
+<caption>Overview of the perspectives included costs <span class="citation" data-cites="sittimart2024">(<a href="references.html#ref-sittimart2024" role="doc-biblioref">Sittimart et al., 2024</a>)</span></caption>
+<colgroup>
+<col style="width: 30%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Costs</th>
+<th>Health care payer</th>
+<th>Health care providers</th>
+<th>Healthcare sector</th>
+<th>Health system</th>
+<th>Patient/ household</th>
+<th>Societal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Direct medical costs paid by health care payer/providers</td>
+<td>Y (only payer)</td>
+<td>Y (both payer + provider)</td>
+<td>Y</td>
+<td>Y</td>
+<td></td>
+<td>Y</td>
+</tr>
+<tr class="even">
+<td>Direct medical costs paid by patients (i.e., out-of-pocket)</td>
+<td></td>
+<td></td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr class="odd">
+<td>Direct non-medical costs incurred by patients (travel, food, and accommodation)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr class="even">
+<td>Productivity costs (e.g., monetized productivity</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>Varies</td>
+<td>Varies</td>
+</tr>
+<tr class="odd">
+<td>Non-health sector costs (e.g., spillover impacts affecting other sectors such as education, criminal justice, etc.)</td>
+<td></td>
+<td></td>
+<td></td>
+<td>Y*</td>
+<td></td>
+<td>Y*</td>
+</tr>
+<tr class="even">
+<td>Total</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="discounting-vs-inflation" class="level3">
+<h3 class="anchored" data-anchor-id="discounting-vs-inflation">Discounting vs inflation</h3>
+<p>Discounting is needed if a longer time horizon than 1-2 years is being considered. For most health economic evaluations, guidelines recommend a discount rate of 3% (high-income countries) to 5% (low- and middle-income countries) <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>.</p>
+<p>Discounting is adjusting future costs and outcomes of health-care interventions to “present value” <span class="citation" data-cites="severens2004">(<a href="references.html#ref-severens2004" role="doc-biblioref">Severens &amp; Milne, 2004</a>)</span>. Discounting is based on the concept of “positive time preference”, meaning that people prefers to benefit sooner rather than later <span class="citation" data-cites="severens2004">(<a href="references.html#ref-severens2004" role="doc-biblioref">Severens &amp; Milne, 2004</a>)</span>.</p>
+<p><span class="math display">\[\text{Present value} = \frac{\text{Future value}}{(1 + \text{annual discount rate})^\text{n years}}\]</span></p>
+<p>Imagine you can choose between getting (A) $1000 today or (B) $1000 in 5 years. Most people prefer option A because having $1000 today allows you to use it immediately or invest it. The value of $1000 today is greater than $1000 in 5 years due to the opportunity to earn interest or invest it.</p>
+<p>Now imagine you can choose between getting $500 today or $1000 in 10 years. To make a fair comparison, you need to adjust the future value to present value. Let’s say the discount rate is 5%. How much does $1000 in 10 years worth today?</p>
+<p><span class="math display">\[\text{Present value} = \frac{1000}{(1 + 0.05)^{10}} \approx 613.91\]</span></p>
+<p>So $1000 in 10 years is worth about $614 in today’s dollars.</p>
+<p>Discounting should not be confused with adjusting for inflation. <strong>Both are needed</strong>. Discounting reflects the loss in value when there is a delay in obtaining an item of value (e.g., adjusting for future value). The inflation adjustment reflects the change in purchasing power of currency (e.g., adjusting past costs to current values).</p>
+<ul>
+<li><p>Discounting: This is about the idea that a dollar today is worth more than a dollar in the future. It reflects our preference for receiving benefits or money sooner rather than later. It’s used to adjust future costs or benefits to their present value.</p></li>
+<li><p>Inflation: This is about how the general price level of goods and services increases over time. Inflation means that money loses its purchasing power, so what $1 buys today might cost more in the future.</p></li>
+</ul>
 
 
 <div class="hidden" aria-hidden="true">
-<span class="glightbox-desc lightbox-desc-1">Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024.</span>
-<span class="glightbox-desc lightbox-desc-4">Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024.</span>
+<span class="glightbox-desc lightbox-desc-1">Figure&nbsp;1: Decision tree, adapted from <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span></span>
+<span class="glightbox-desc lightbox-desc-2">Figure&nbsp;2: Markov model, adapted from <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span></span>
+<span class="glightbox-desc lightbox-desc-3">Figure&nbsp;3: Compartmental dynamic model, adapted from <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span></span>
+<span class="glightbox-desc lightbox-desc-5">Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024.</span>
+<span class="glightbox-desc lightbox-desc-6">Adapted from Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024.</span>
+<span class="glightbox-desc lightbox-desc-7">How the choice of a static model, static model with approximation for herd immunity or dynamic model could be made <span class="citation" data-cites="jit2011">(<a href="references.html#ref-jit2011" role="doc-biblioref">Jit &amp; Brisson, 2011</a>)</span></span>
+<span class="glightbox-desc lightbox-desc-8">Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024.</span>
 </div>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-handbook2023" class="csl-entry" role="listitem">
+Bishai, D., Brenzel, L., &amp; Padula, W. (Eds.). (2023). <em>Handbook of applied health economics in vaccines</em>. Oxford University Press. <a href="https://doi.org/10.1093/oso/9780192896087.001.0001">https://doi.org/10.1093/oso/9780192896087.001.0001</a>
+</div>
+<div id="ref-goeree2013" class="csl-entry" role="listitem">
+Goeree, R., &amp; Diaby, V. (2013). Introduction to health economics and decision-making: Is economics relevant for the frontline clinician? <em>Best Practice &amp; Research Clinical Gastroenterology</em>, <em>27</em>(6), 831–844. <a href="https://doi.org/10.1016/j.bpg.2013.08.016">https://doi.org/10.1016/j.bpg.2013.08.016</a>
+</div>
+<div id="ref-heeg2008" class="csl-entry" role="listitem">
+Heeg, B. M. S., Damen, J., Buskens, E., Caleo, S., Charro, F. de, &amp; Hout, B. A. van. (2008). Modelling Approaches. <em>PharmacoEconomics</em>, <em>26</em>(8), 633–648. <a href="https://doi.org/10.2165/00019053-200826080-00002">https://doi.org/10.2165/00019053-200826080-00002</a>
+</div>
+<div id="ref-hilborn1997" class="csl-entry" role="listitem">
+Hilborn, R., &amp; Mangel, M. (1997). <em>The ecological detective: Confronting models with data</em>. Princeton University Press. <a href="https://www.jstor.org/stable/j.ctt24hqnx">https://www.jstor.org/stable/j.ctt24hqnx</a>
+</div>
+<div id="ref-jit2011" class="csl-entry" role="listitem">
+Jit, M., &amp; Brisson, M. (2011). Modelling the Epidemiology of Infectious Diseases for Decision Analysis. <em>PharmacoEconomics</em>, <em>29</em>(5), 371–386. <a href="https://doi.org/10.2165/11539960-000000000-00000">https://doi.org/10.2165/11539960-000000000-00000</a>
+</div>
+<div id="ref-kuntz2013" class="csl-entry" role="listitem">
+Kuntz, K., Sainfort, F., Butler, M., Taylor, B., Kulasingam, S., Gregory, S., Mann, E., Anderson, J. M., &amp; Kane, R. L. (2013). <em>Decision and Simulation Modeling Alongside Systematic Reviews</em>. Agency for Healthcare Research; Quality (US). <a href="https://www.ncbi.nlm.nih.gov/books/NBK127478/">https://www.ncbi.nlm.nih.gov/books/NBK127478/</a>
+</div>
 <div id="ref-prieto2003" class="csl-entry" role="listitem">
 Prieto, L., &amp; Sacristán, J. A. (2003). Problems and solutions in calculating quality-adjusted life years (QALYs). <em>Health and Quality of Life Outcomes</em>, <em>1</em>(1), 80. <a href="https://doi.org/10.1186/1477-7525-1-80">https://doi.org/10.1186/1477-7525-1-80</a>
 </div>
 <div id="ref-severens2004" class="csl-entry" role="listitem">
 Severens, J. L., &amp; Milne, R. J. (2004). Discounting Health Outcomes in Economic Evaluation: The Ongoing Debate. <em>Value in Health</em>, <em>7</em>(4), 397–401. <a href="https://doi.org/10.1111/j.1524-4733.2004.74002.x">https://doi.org/10.1111/j.1524-4733.2004.74002.x</a>
+</div>
+<div id="ref-sittimart2024" class="csl-entry" role="listitem">
+Sittimart, M., Rattanavipapong, W., Mirelman, A. J., Hung, T. M., Dabak, S., Downey, L. E., Jit, M., Teerawattananon, Y., &amp; Turner, H. C. (2024). An overview of the perspectives used in health economic evaluations. <em>Cost Effectiveness and Resource Allocation</em>, <em>22</em>(1), 41. <a href="https://doi.org/10.1186/s12962-024-00552-1">https://doi.org/10.1186/s12962-024-00552-1</a>
 </div>
 <div id="ref-turner2021" class="csl-entry" role="listitem">
 Turner, H. C., Archer, R. A., Downey, L. E., Isaranuwatchai, W., Chalkidou, K., Jit, M., &amp; Teerawattananon, Y. (2021). An introduction to the main types of economic evaluations used for informing priority setting and resource allocation in healthcare: Key features, uses, and limitations. <em>Frontiers in Public Health</em>, <em>9</em>. <a href="https://www.frontiersin.org/articles/10.3389/fpubh.2021.722927">https://www.frontiersin.org/articles/10.3389/fpubh.2021.722927</a>
@@ -591,7 +850,6 @@ Turner, H. C., Archer, R. A., Downey, L. E., Isaranuwatchai, W., Chalkidou, K., 
 Whitehead, S. J., &amp; Ali, S. (2010). Health outcomes in economic evaluation: The QALY and utilities. <em>British Medical Bulletin</em>, <em>96</em>(1), 5–21. <a href="https://doi.org/10.1093/bmb/ldq033">https://doi.org/10.1093/bmb/ldq033</a>
 </div>
 </div>
-</section>
 </section>
 </section>
 
@@ -1022,7 +1280,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","selector":".lightbox","openEffect":"zoom","loop":false,"descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"loop":false,"selector":".lightbox","descPosition":"bottom","openEffect":"zoom","closeEffect":"zoom"});
 window.onload = () => {
   lightboxQuarto.on('slide_before_load', (data) => {
     const { slideIndex, slideNode, slideConfig, player, trigger } = data;

@@ -43,6 +43,10 @@ A **deterministic** model assumes that there is **no randomness**, and the syste
 
 A **stochastic** model assumes events occur **randomly**, affecting single parameters or multiple components within the system. **Each run** of a stochastic model generates **different results**. Therefore, stochastic models must be run for hundreds or thousands of iterations to explore the full range of possible outcomes [@handbook2023].
 
+### Population-based vs individual-based
+
+Agent-based model simulating the actions and interactions of autonomous agents with their own behavioral rules [@handbook2023].
+
 ## Solving a model
 
 Solving a model means finding a function that satisfies the given conditions. Consider the Malthusian growth model as an example:

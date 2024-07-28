@@ -7,8 +7,12 @@ lightbox: true
 ::: {.callout-note appearance="simple"}
 # Acknowledgement
 
-This chapter is based on the teachings of my PhD supervisor, Dr. Hugo Turner, and a lecture given by Asst Prof. Kiesha Prem at MIDSEA Summer School 2024, for which I am deeply grateful.
+I am deeply grateful to Dr. Hugo Turner and Asst Prof. Kiesha Prem for their invaluable support and guidance throughout the writing of this chapter.
 :::
+
+Health economics focuses on how to **allocate** healthcare **resources efficiently** to **maximize health outcomes** with limited resources [@goeree2013]. Health economics is used to support **decision-making** in situations where we must choose between different options. For example, given the current budget, should we buy HPV vaccines or COVID-19 vaccines?
+
+Health economics emphasizes **opportunity costs**, which are the **benefits sacrificed** when choosing one option over another. For example, the opportunity cost of purchasing COVID-19 vaccines is the potential benefits lost from not buying HPV vaccines.
 
 ## Types of analyses
 
@@ -17,7 +21,7 @@ This chapter is based on the teachings of my PhD supervisor, Dr. Hugo Turner, an
 **Full** economic evaluations: compare **both** the **costs and consequences** of the intervention to a **comparator**. There are 3 most popular types of full economic evaluations, the key difference lies in how they express the **consequences** [@turner2021]:
 
 | Type               | Costs | Consequences                                                             |
-|-------------------------|-------------------|-----------------------------|
+|-------------------|-------------------|----------------------------------|
 | Cost-effectiveness | \$    | A single natural unit (life-years gained, cases averted, cases detected) |
 | Cost-utility       | \$    | QALYs, DALYs                                                             |
 | Cost-benefit       | \$    | \$                                                                       |
@@ -29,55 +33,85 @@ This chapter is based on the teachings of my PhD supervisor, Dr. Hugo Turner, an
 -   There are 2 more types of full economic evaluations: cost-minimisation and cost-consequence, but they are less commonly used.
 :::
 
-## Measuring costs
+## Models in health economics
 
-### Discounting and inflation
+### Proportionate outcomes model
 
-Discounting is a mathematical procedure for adjusting future costs and outcomes of health-care interventions to "present value" [@severens2004]. Discounting is based on the concept of "positive time preference", meaning that people prefers to benefit sooner rather than later [@severens2004].
+Also known as **decision tree** although exact definitions differ. Group flows divided into proportional outcomes over a single time period [@handbook2023].
 
-Imagine you can choose between getting (A) \$1000 today or (B) \$1000 in 5 years. Most people would prefer option A because having \$1000 today allows you to use it immediately or invest it. The value of \$1000 today is greater than \$1000 in 5 years due to the opportunity to earn interest or invest it.
+All decision trees have 3 key components [@handbook2023]:
 
-Now imagine you can choose between getting \$500 today or \$1000 in 10 years. To make a fair comparison, you need to adjust the future benefits to their present value. Let's say the discount rate $D$ is 5%. The formula for present value (PV) is:
+-   **Decision nodes**: where different comparators are compared.
+-   **Chance nodes**: where potential outcomes are weighted by their probabilities.
+-   **Terminal nodes**: endpoints of pathways, where costs and effectiveness calculated.
 
-$$PV = \frac{M}{(1 + D)^t}$$
+![Decision tree, adapted from [@handbook2023]](img/he/he-dtree.svg){#fig-he-dtree}
 
-For a benefit in the 10th year:
+We have to specify a **fixed time horizon** represents the period over which probabilities and outcomes are considered [@kuntz2013]. If a decision tree uses a 50-year time horizon, the probabilities of outcomes are based on what could occur within those 50 years.
 
-$$PV = \frac{1000}{(1 + 0.05)^{10}} \approx 613.91$$
+-   Decision nodes (or the comparators) are either "No vaccine" or "Vaccine" available.
+-   Chance nodes (or outcomes and their probabilities), are the nodes branch out from Decision nodes.
+-   Terminal nodes (or the endpoints for costs and effectiveness) are "No infection", "Recovered", and "Death".
 
-So \$1000 in the 10th year is worth about \$614 in today's dollars.
+### Markov model
 
-Discounting should not be confused with adjusting for inflation. Both are needed. The inflation adjustment reflects the change in purchasing power of currency (e.g., adjusting past costs to current values). Discounting reflects the loss in value when there is a delay in obtaining an item of value (e.g., adjusting for future value).
+A Markov model is a **repeated** decision tree [@heeg2008]. The core elements of a Markov model are **health states** and **transition** [@handbook2023]:
 
-Discounting: This is about the idea that a dollar today is worth more than a dollar in the future. It reflects our preference for receiving benefits or money sooner rather than later. It’s used to adjust future costs or benefits to their present value.
+-   **Health states** represent different conditions such as being healthy, sick, disease stages, or vaccinated. States must be mutually exclusive (a person can't be in two states at once) and exhaustive (cover all relevant conditions).
 
-Inflation: This is about how the general price level of goods and services increases over time. Inflation means that money loses its purchasing power, so what \$1 buys today might cost more in the future.
+-   **Transition** is the probability (ranges between 0 and 1) of moving from one state to another.
 
-## Measuring consequences
+Markov models are used for problems that involve risk over time, or when the timing of events is important [@kuntz2013]. We can use a Markov model to represent the endpoints shown in the decision tree @fig-he-dtree.
 
-### Models in health economics
+![Markov model, adapted from [@handbook2023]](img/he/he-markov.svg){#fig-he-markov}
+
+|                     | **S** | **V** | **I**    | **R** | **D** | **Check** |
+|---------------------|:------|:------|:---------|:------|:------|:----------|
+| **Susceptible (S)** | 0.198 | 0.100 | 0.700    | 0.000 | 0.002 | 1.000     |
+| **Vaccinated (V)**  | 0.000 | 0.998 | 0.000045 | 0.000 | 0.002 | 1.000     |
+| **Infected (I)**    | 0.000 | 0.000 | 0.129    | 0.865 | 0.006 | 1.000     |
+| **Recovered (R)**   | 0.000 | 0.000 | 0.000    | 0.998 | 0.002 | 1.000     |
+| **Deaths (D)**      | 0.000 | 0.000 | 0.000    | 0.000 | 1.000 | 1.000     |
+
+: {tbl-colwidths="\[30,10,10,15,10,10,15\]"}
+
+The key disadvantage of a Markov model is its **memoryless property** or **Markov assumption**, which assumes that transitions between health states depend only on the current state, not on the past history or duration spent in a state [@handbook2023].
+
+### Compartmental dynamic model
+
+Static models (decision tree, Markov model) assumes that the force of infection is constant or changes only as a function of age and other individual characteristics. Dynamic model assumes that the **force of infection** can **vary** throughout the course of **time** and as a function of population **interactions**. Dynamic models are preferable for modeling the impact of a vaccine when considerations of herd immunity [@handbook2023].
+
+We can adjust the Markov model @fig-he-markov to become a compartmental dynamic model by specifying that the force of infection varies over time.
+
+![Compartmental dynamic model, adapted from [@handbook2023]](img/he/he-comp.svg){#fig-he-comp}
+
+### Individual-based model
+
+Individual-based model, also called **microsimulation** model, simulates one individual at a time which is called first-order Monte Carlo simulation. This is done by repeatedly sampling from probability distributions a large number of times to understand the average and spread of potential results. The disadvantage is that they are time-consuming, as they require sometimes the simulation of millions of individuals to obtain stable estimates [@handbook2023].
+
+![](img/he/he-abm.jpg)
+
+### Choice of model
+
+The most difficult decision in model building is "How complex should the model be?" [@hilborn1997]. Most modellers agree on 2 basic rules for choosing a model:
+
+1.  Let the data tell you [@hilborn1997].
 
 ![Asst Prof. Kiesha Prem's lecture at MIDSEA Summer School 2024.](img/he/he-mod-choice.svg)
 
-#### Proportionate outcomes model
+Simpler models need less data to estimate parameters but might overlook important system components. In contrast, complex models can capture more details but we may not have sufficient data to determine the parameters [@hilborn1997].
 
-Also known as "decision tree" although exact definitions differ. Group flows divided into proportional outcomes over a single time period, and the force of infection is static over time.
+2.  The use of the model [@hilborn1997].
 
-#### Markov model
+![Adapted from Asst Prof. Kiesha Prem's lecture at MIDSEA Summer School 2024.](img/he/he-mod.svg)
 
-group flows recalculated at regular time steps
+Simple models are useful if their assumptions are reasonable. For accurate predictions, a "wrong" but simpler model can do better than the "right" but complex model when parameters are estimated [@hilborn1997]. However, a complex model provides a better representation of uncertainty [@hilborn1997].
 
-#### Compartmental dynamic model
+Given the close connection between health economics and policy, guidelines are available for every step of the process. Be sure to read and follow these guidelines when conducting your analysis. Below is guidance on choosing between static and dynamic models.
 
-group flows recalculated at regular time steps + feedback and interactions. The force of infection is dynamic.
+![How the choice of a static model, static model with approximation for herd immunity or dynamic model could be made [@jit2011]](img/he/he-mod-choice-guideline.svg)
 
-![](img/he/he-mod.svg)
-
-#### Agent-based (individual-based) model
-
-Individual-based model could be dynamic or static.
-
-![](img/he/he-abm.jpg)
+## Measuring consequences
 
 ### Utility
 
@@ -92,3 +126,42 @@ $$\text{QALY} = \sum_{i = 0}^{\text{lifetime}} \text{Year} \times \text{Utility}
 For example, 0.5 years in perfect health equals 0.5 QALYs (0.5 years $\times$ 1 Utility), the same as 1 year with a utility of 0.5 (1 year $\times$ 0.5 Utility) [@prieto2003]. The area under the curve equates to the total QALY value [@whitehead2010].
 
 ![Asst Prof. Kiesha Prem's lecture at MIDSEA Summer School 2024.](img/he/qaly.svg)
+
+## Measuring costs
+
+### Perspectives
+
+::: column-page
+| Costs                                                                                                               | Health care payer | Health care providers     | Healthcare sector | Health system | Patient/ household | Societal |
+|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
+| Direct medical costs paid by health care payer/providers                                                            | Y (only payer)    | Y (both payer + provider) | Y                 | Y             |                    | Y        |
+| Direct medical costs paid by patients (i.e., out-of-pocket)                                                         |                   |                           | Y                 | Y             | Y                  | Y        |
+| Direct non-medical costs incurred by patients (travel, food, and accommodation)                                     |                   |                           |                   |               | Y                  | Y        |
+| Productivity costs (e.g., monetized productivity                                                                    |                   |                           |                   |               | Varies             | Varies   |
+| Non-health sector costs (e.g., spillover impacts affecting other sectors such as education, criminal justice, etc.) |                   |                           |                   | Y\*           |                    | Y\*      |
+| Total                                                                                                               | 1                 | 1                         | 2                 | 2             | 3                  | 5        |
+
+: Overview of the perspectives included costs [@sittimart2024] {tbl-colwidths="\[30,15,15,10,10,10,10\]"}
+:::
+
+### Discounting vs inflation
+
+Discounting is needed if a longer time horizon than 1-2 years is being considered. For most health economic evaluations, guidelines recommend a discount rate of 3% (high-income countries) to 5% (low- and middle-income countries) [@handbook2023].
+
+Discounting is adjusting future costs and outcomes of health-care interventions to "present value" [@severens2004]. Discounting is based on the concept of "positive time preference", meaning that people prefers to benefit sooner rather than later [@severens2004].
+
+$$\text{Present value} = \frac{\text{Future value}}{(1 + \text{annual discount rate})^\text{n years}}$$
+
+Imagine you can choose between getting (A) \$1000 today or (B) \$1000 in 5 years. Most people prefer option A because having \$1000 today allows you to use it immediately or invest it. The value of \$1000 today is greater than \$1000 in 5 years due to the opportunity to earn interest or invest it.
+
+Now imagine you can choose between getting \$500 today or \$1000 in 10 years. To make a fair comparison, you need to adjust the future value to present value. Let's say the discount rate is 5%. How much does \$1000 in 10 years worth today?
+
+$$\text{Present value} = \frac{1000}{(1 + 0.05)^{10}} \approx 613.91$$
+
+So \$1000 in 10 years is worth about \$614 in today's dollars.
+
+Discounting should not be confused with adjusting for inflation. **Both are needed**. Discounting reflects the loss in value when there is a delay in obtaining an item of value (e.g., adjusting for future value). The inflation adjustment reflects the change in purchasing power of currency (e.g., adjusting past costs to current values).
+
+-   Discounting: This is about the idea that a dollar today is worth more than a dollar in the future. It reflects our preference for receiving benefits or money sooner rather than later. It’s used to adjust future costs or benefits to their present value.
+
+-   Inflation: This is about how the general price level of goods and services increases over time. Inflation means that money loses its purchasing power, so what \$1 buys today might cost more in the future.
