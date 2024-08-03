@@ -41,8 +41,7 @@ book:
     - part: intv.qmd
       chapters: 
         - ftc.qmd
-    - part: vax.qmd
-      chapters:
+        - vax.qmd
         - vax-perf.qmd
         - vax-mod.qmd
     - part: he.qmd

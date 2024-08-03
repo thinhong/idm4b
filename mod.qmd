@@ -27,6 +27,15 @@ Models help us navigate and make decisions about complex situations by focusing 
 
 ## Types of model
 
+Models can be classified based on the following attributes [@kim2008]:
+
+1. **Time dynamics**: main features change over time (dynamic) or remain constant (static).
+2. **Randomness**: Any changes in the model occur randomly (stochastic or probabilistic) or follow pre-specified rules (deterministic).
+3. **Behavior**: the population's behaviour is simulated using aggregate variables (population averages) or individual behaviors (individual-based).
+4. **Time representation**: events occur at discrete intervals (discrete) or on a continuum (continuous).
+5. **Population entry**: allows individuals to enter or exit the model (open) or not (closed).
+6. **Equation structure**: the model is expressed in equations that are functions of linearly linked parameters (linear) or not (non-linear).
+
 ### Static vs dynamic
 
 A **static** model is one where **time does not affect** its operation. Time may be present but does not influence the model's structure or function [@smith2023]. In infectious disease modelling, static model assumes that the force of infection is constant or changes only as a function of age and other individual characteristics (**not time**) [@handbook2023].
@@ -45,7 +54,15 @@ A **stochastic** model assumes events occur **randomly**, affecting single param
 
 ### Population-based vs individual-based
 
-Agent-based model simulating the actions and interactions of autonomous agents with their own behavioral rules [@handbook2023].
+In **population-based** (**aggregate** or population **average**) models, individuals are assigned to cohorts (or compartments) and move across different states based on parameter values at the aggregate level (averages of individuals belonging to a compartment or the entire population). The model records the number of individuals in each compartment over time [@kim2008].
+
+Individual-based (or **microsimulation** - see @def-micsim) models keep track of each individual's behaviour. Individual-based models may or may not allow for interactions among individuals. If simulated individuals do not interact, the model is static. If they interact with others or the environment, it is dynamic [@kim2008].
+
+Dynamic individual-based models have 3 subtypes [@kim2008]:
+
+1. **Individual-level Markov models**: extend static microsimulation model based with a Markov structure to allow interactions among individuals.
+2. **Discrete-event simulations (DES)**: sample the time to the next event and describes the life history of individuals progressing with various events over time, this type of model is originated from industrial engineering.
+3. **Agent-based models**: one of the most flexible modelling techniques, model each agent one by one and allow agents (e.g. individuals) to act and interact autonomously with their own behavioural rules [@handbook2023].
 
 ## Solving a model
 

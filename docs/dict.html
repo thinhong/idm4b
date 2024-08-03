@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -282,27 +302,22 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Flattening the curve</span></span></a>
   </div>
 </li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="./vax.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Vaccination</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./vax.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Vaccination</span></span></a>
+  </div>
+</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./vax-perf.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Vaccine performance</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Vaccine performance</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./vax-mod.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Model vaccination</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Model vaccination</span></span></a>
   </div>
 </li>
       </ul>
@@ -311,15 +326,15 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="./he.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Health economics</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./he-etr.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">EtR Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">EtR Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -328,15 +343,15 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="./rp.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Reports</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
       </ul>
@@ -349,13 +364,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true">
  <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./dict.html" class="sidebar-item-text sidebar-link active">
@@ -400,18 +415,22 @@ window.Quarto = {
 </header>
 
 
+<p>Tractable: can be solved <a href="https://en.wikipedia.org/wiki/Tractable">(source)</a></p>
+<div id="def-micsim" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition A.1</strong></span> Microsimulation: an analysis in which individual instantiations of a system - such as a patient’s lifetime or the course of an epidemic - are generated using a random process to ‘draw’ from probability distributions a large number of times, in order to examine the central tendency and possibly the distribution of outcomes <span class="citation" data-cites="kim2008">(<a href="references.html#ref-kim2008" role="doc-biblioref">Kim &amp; Goldie, 2008</a>)</span>.</p>
+</div>
 <div id="def-iid" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.1</strong></span> iid (<strong>independent</strong> and <strong>identically distributed</strong> random variables): each random variable has the <strong>same probability distribution</strong> as the others and <strong>all</strong> are <strong>mutually independent</strong>.</p>
+<p><span class="theorem-title"><strong>Definition A.2</strong></span> iid (<strong>independent</strong> and <strong>identically distributed</strong> random variables): each random variable has the <strong>same probability distribution</strong> as the others and <strong>all</strong> are <strong>mutually independent</strong>.</p>
 </div>
 <div id="def-closedform-sol" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.2</strong></span> <strong>Closed-form solution</strong> (or closed form expression) is any formula that can be evaluated in a finite number of standard operations (<a href="https://riskencyclopedia.com/articles/closed_form_solution/">source</a>).</p>
+<p><span class="theorem-title"><strong>Definition A.3</strong></span> <strong>Closed-form solution</strong> (or closed form expression) is any formula that can be evaluated in a finite number of standard operations (<a href="https://riskencyclopedia.com/articles/closed_form_solution/">source</a>).</p>
 </div>
 <p>infection fatality ratio (IFR) and case fatality ratio (CFR) and serology data.</p>
 <div id="def-residual" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.3</strong></span> <strong>Residual</strong>: is the difference between the observed value and the <strong>estimated</strong> value.</p>
+<p><span class="theorem-title"><strong>Definition A.4</strong></span> <strong>Residual</strong>: is the difference between the observed value and the <strong>estimated</strong> value.</p>
 </div>
 <div id="def-error" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.4</strong></span> <strong>Error</strong>: is the deviation of the observed value from the <strong>true</strong> value.</p>
+<p><span class="theorem-title"><strong>Definition A.5</strong></span> <strong>Error</strong>: is the deviation of the observed value from the <strong>true</strong> value.</p>
 </div>
 <p>Matrix and linear transformation:</p>
 <ul>
@@ -437,11 +456,16 @@ Visualisation of linear transformation
 <p>Eigenvector (<span class="math inline">\(\vec{v}\)</span>):</p>
 <p>Eigenvalue (<span class="math inline">\(\lambda\)</span>):</p>
 <div id="def-inv-matrix" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.5</strong></span> Inverse matrix:</p>
+<p><span class="theorem-title"><strong>Definition A.6</strong></span> Inverse matrix:</p>
 <p><span class="math display">\[\begin{bmatrix} a &amp; b \\ c &amp; d \end{bmatrix}^{-1} = \frac{1}{ad - bc} \begin{bmatrix} d &amp; -b \\ -c &amp; a \end{bmatrix}\]</span></p>
 </div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-kim2008" class="csl-entry" role="listitem">
+Kim, S.-Y., &amp; Goldie, S. J. (2008). Cost-Effectiveness Analyses of Vaccination Programmes. <em>PharmacoEconomics</em>, <em>26</em>(3), 191–215. <a href="https://doi.org/10.2165/00019053-200826030-00004">https://doi.org/10.2165/00019053-200826030-00004</a>
+</div>
+</div>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

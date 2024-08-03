@@ -1,5 +1,11 @@
 # Dictionary
 
+Tractable: can be solved [(source)](https://en.wikipedia.org/wiki/Tractable)
+
+::: {#def-micsim}
+Microsimulation: an analysis in which individual instantiations of a system - such as a patient's lifetime or the course of an epidemic - are generated using a random process to 'draw' from probability distributions a large number of times, in order to examine the central tendency and possibly the distribution of outcomes [@kim2008].
+:::
+
 ::: {#def-iid}
 iid (**independent** and **identically distributed** random variables): each random variable has the **same probability distribution** as the others and **all** are **mutually independent**.
 :::
@@ -20,17 +26,16 @@ infection fatality ratio (IFR) and case fatality ratio (CFR) and serology data.
 
 Matrix and linear transformation:
 
-- Linear transformation is a function (transformation = function) that take in a vector and spit out a vector.
-- Lines remain lines, and origin remains fixed.
+-   Linear transformation is a function (transformation = function) that take in a vector and spit out a vector.
+-   Lines remain lines, and origin remains fixed.
 
 ::: {.callout-note collapse="true"}
 ## Visualisation of linear transformation
+
 ![](img/dict/litrans.webp)
 :::
 
 Eigenvector ($\vec{v}$):
-
-
 
 Eigenvalue ($\lambda$):
 
@@ -39,4 +44,3 @@ Inverse matrix:
 
 $$\begin{bmatrix} a & b \\ c & d \end{bmatrix}^{-1} = \frac{1}{ad - bc} \begin{bmatrix} d & -b \\ -c & a \end{bmatrix}$$
 :::
-

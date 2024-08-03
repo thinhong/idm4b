@@ -1,2 +1,9 @@
 # Interventions
 
+## Interventions that can be modelled
+
+- Vaccination: Transmission models are needed to capture nonlinear effects of vaccination, resulting from the potential of vaccines to protect not only directly vaccinated individuals but also their contacts.
+- Screening: Identifies infected individuals for early treatment, preventing disease progression and further transmission. Models should include transmission dynamics if early detection affects transmissibility.
+- Social distancing: Planned responses to large outbreaks such as isolation of suspected cases, school closures, travel restrictions and cancellation of mass gatherings (football matches). Their benefit depends crucially on interaction frequency and types among different age groups and settings (families, workplaces, schools).
+- Post-exposure treatment. Chemotreatment options such as antimicrobials, can use static models unless they affect an individual’s transmissibility or a transmittable characteristic of the infection.
+- Culling: For animal and plant diseases, culling reduces host populations by removing infected and at-risk healthy livestock. Models assess the trade-off between reduced transmission and the loss of animals or plants.

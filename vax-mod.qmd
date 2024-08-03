@@ -20,7 +20,7 @@ Vaccine prevents the pathogen from establishing an infection in the body. A vacc
 
 ![](img/vax/prv-inf.svg)
 
-Assuming a perfect vaccine against infection, the model can be designed like this:
+Assuming a perfect vaccine against infection, the model can be designed as follows:
 
 ![](img/vax/prv-inf-mod.svg)
 
@@ -32,23 +32,23 @@ Vaccine reduces the severity of the disease if the vaccinated person does get in
 
 ![](img/vax/prv-dis.svg)
 
+Assuming a perfect vaccine against severe disease, the model can be designed as follows:
+
+![](img/vax/prv-dis-mod.svg)
+
+The infected population is split into a proportion of $p_s$ for severe cases and $1 - p_s$ for mild cases. Vaccinated people $S_v$ still get infected, but will only experience mild disease.
+
 ### Prevent transmission
 
 Vaccine reduces the ability of a vaccinated individual, who becomes infected, to transmit the pathogen to others. A vaccinated person still get infected, still get sick, but they are less likely to spread the disease to others.
 
 ![](img/vax/prv-trans.svg)
 
-Assuming a perfect vaccine against transmission, the model can be designed like this:
+Assuming a perfect vaccine against transmission, the model can be designed as follows:
 
 ![](img/vax/prv-trans-mod.svg)
 
 $I$ being the only source of infection that contributes to the force of infection. Vaccinated people $S_v$ still get infected and become $I_v$, but they do not transmit the disease.
-
-### Mixed effects
-
-The effect of imperfect vaccines is often a mix of the three.
-
-![](img/vax/prv-mix.svg)
 
 ## Imperfect protections
 
@@ -111,6 +111,20 @@ $$\begin{align}
 \frac{dI_v}{dt} &= (1 - VE_L) \lambda(t) S_v - \gamma I_v \\
 \frac{dR_v}{dt} &= \gamma I_v
 \end{align}$$
+
+## Mixed effects
+
+Imperfect vaccines often have a combination of effects: they can protect against infection, severe disease, and transmission at the same time.
+
+![](img/vax/prv-mix.svg)
+
+Assuming a vaccine with leaky effectiveness $VE_L$ against infection and severe disease, the model can be designed as follows:
+
+![](img/vax/prv-inf-dis-mod.svg)
+
+-   Among susceptible $S$, $\rho S$ are vaccinated.
+-   Among those $\rho S$ who are vaccinated, force of infection $\lambda(t)$ is reduced by a factor of $1 - VE_L$.
+-   Vaccine reduces the proportion of severe disease from $p_s$ to $p_s'$.
 
 ## Multiple doses
 
