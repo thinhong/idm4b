@@ -1,5 +1,11 @@
 # Simulate line list
 
+::: {.callout-note appearance="simple"}
+Download the simulated data here:
+
+{{< downloadthis data/linelist.rds dname="linelist" label="linelist.rds" type=light >}}
+:::
+
 ```{r, warning=FALSE, message=FALSE}
 library(simulist)
 library(epiparameter)
@@ -88,6 +94,11 @@ p1$district <- districts[p1$district]
 sampling_space <- round(rnorm(10000, mean = 15, sd = 5))
 p2$district <- sample(sampling_space[sampling_space >= 1 & sampling_space <= 22], nrow(p2))
 p2$district <- districts[p2$district]
+
+p1$outbreak <- "1st outbreak"
+p2$outbreak <- "2nd outbreak"
+
+df <- rbind(p1, p2)
 ```
 
 Let see the spatial distribution of the first and second peak.
@@ -102,11 +113,6 @@ mapdt <- readRDS(map_p)
 mapdt <- mapdt[,c(1,3)]
 colnames(mapdt) <- c("district", "geom")
 mapdt$district <- stringi::stri_trans_general(mapdt$district, "latin-ascii")
-
-p1$outbreak <- "1st outbreak"
-p2$outbreak <- "2nd outbreak"
-
-df <- rbind(p1, p2)
 
 df_plot <- df |> 
   count(outbreak, district) |> 
