@@ -447,7 +447,7 @@ window.Quarto = {
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Set the distribition for all parameters</p>
+<p>Set the distribution for all parameters.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>contact_distribution <span class="ot">&lt;-</span> epiparameter<span class="sc">::</span><span class="fu">epidist</span>(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">disease =</span> <span class="st">"COVID-19"</span>, </span>
@@ -516,7 +516,7 @@ Returning data early with 1249 cases and 2417 total contacts (including cases).<
 </div>
 <p>Add the district of residence.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 22 districts in HCMC, </span></span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 22 districts in HCMC</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>districts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Cu Chi"</span>, <span class="st">"Hoc Mon"</span>, <span class="st">"Quan 12"</span>, <span class="st">"Go Vap"</span>, <span class="st">"Binh Chanh"</span>, <span class="st">"Binh Tan"</span>, <span class="st">"Tan Phu"</span>, <span class="st">"Tan Binh"</span>, <span class="st">"Phu Nhuan"</span>, <span class="st">"Binh Thanh"</span>, <span class="st">"Thu Duc"</span>, <span class="st">"Quan 6"</span>, <span class="st">"Quan 11"</span>, <span class="st">"Quan 10"</span>, <span class="st">"Quan 3"</span>, <span class="st">"Quan 1"</span>, <span class="st">"Quan 5"</span>, <span class="st">"Can Gio"</span>, <span class="st">"Nha Be"</span>, <span class="st">"Quan 4"</span>, <span class="st">"Quan 8"</span>, <span class="st">"Quan 7"</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Let have the first peak in the west, the second peak in the south</span></span>

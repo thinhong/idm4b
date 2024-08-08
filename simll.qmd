@@ -10,7 +10,7 @@ library(ggplot2)
 library(sf)
 ```
 
-Set the distribition for all parameters
+Set the distribution for all parameters.
 
 ```{r, warning=FALSE, message=FALSE}
 contact_distribution <- epiparameter::epidist(
@@ -77,7 +77,7 @@ p2 <- sim_linelist(
 Add the district of residence.
 
 ```{r}
-# 22 districts in HCMC, 
+# 22 districts in HCMC
 districts <- c("Cu Chi", "Hoc Mon", "Quan 12", "Go Vap", "Binh Chanh", "Binh Tan", "Tan Phu", "Tan Binh", "Phu Nhuan", "Binh Thanh", "Thu Duc", "Quan 6", "Quan 11", "Quan 10", "Quan 3", "Quan 1", "Quan 5", "Can Gio", "Nha Be", "Quan 4", "Quan 8", "Quan 7")
 
 # Let have the first peak in the west, the second peak in the south
