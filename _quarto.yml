@@ -54,6 +54,7 @@ book:
   appendices:
     - dict.qmd
     - func.qmd
+    - simll.qmd
 
 bibliography: references.bib
 csl: apa.csl
