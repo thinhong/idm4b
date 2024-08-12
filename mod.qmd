@@ -31,7 +31,7 @@ Models can be classified based on the following attributes [@kim2008]:
 
 1. **Time dynamics**: main features change over time (dynamic) or remain constant (static).
 2. **Randomness**: Any changes in the model occur randomly (stochastic or probabilistic) or follow pre-specified rules (deterministic).
-3. **Behavior**: the population's behaviour is simulated using aggregate variables (population averages) or individual behaviors (individual-based).
+3. **Behavior representation**: the population's behaviour is simulated using aggregate variables (population averages) or individual behaviors (individual-based).
 4. **Time representation**: events occur at discrete intervals (discrete) or on a continuum (continuous).
 5. **Population entry**: allows individuals to enter or exit the model (open) or not (closed).
 6. **Equation structure**: the model is expressed in equations that are functions of linearly linked parameters (linear) or not (non-linear).

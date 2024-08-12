@@ -499,7 +499,7 @@ Acknowledgement
 <p>To model vaccination, we need to decide 2 things:</p>
 <ol type="1">
 <li><p>What is the vaccine effect? Does it protect against infection, severe disease, transmission, or a combination?</p></li>
-<li><p>How do we model the vaccine effectiveness?</p></li>
+<li><p>How do we model imperfect protection?</p></li>
 </ol>
 <section id="vaccine-effects" class="level2" data-number="15.1">
 <h2 data-number="15.1" class="anchored" data-anchor-id="vaccine-effects"><span class="header-section-number">15.1</span> Vaccine effects</h2>
@@ -510,6 +510,8 @@ Acknowledgement
 <p>Assuming a perfect vaccine against infection, the model can be designed as follows:</p>
 <p><img src="img/vax/prv-inf-mod.svg" class="img-fluid"></p>
 <p>Vaccinated people <span class="math inline">\(V\)</span> remain uninfected in their lifetime and do not participate in disease transmission.</p>
+<p>You can simplify this model by moving susceptible people to the <span class="math inline">\(R\)</span> compartment because they also do not participate in disease transmission.</p>
+<p><img src="img/vax/prv-inf-mod-2.svg" class="img-fluid"></p>
 </section>
 <section id="prevent-severe-disease" class="level3" data-number="15.1.2">
 <h3 data-number="15.1.2" class="anchored" data-anchor-id="prevent-severe-disease"><span class="header-section-number">15.1.2</span> Prevent severe disease</h3>

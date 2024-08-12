@@ -2,6 +2,8 @@
 
 ## Model
 
+![](img/det/sir.svg)
+
 $$\frac{dS}{dt} = -\beta SI = -\lambda S$$ {#eq-sir-ds}
 
 $$\frac{dI}{dt} = \beta SI - \gamma I = \lambda S - \gamma I$$ {#eq-sir-di}

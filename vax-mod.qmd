@@ -10,7 +10,7 @@ To model vaccination, we need to decide 2 things:
 
 1. What is the vaccine effect? Does it protect against infection, severe disease, transmission, or a combination?
 
-2. How do we model the vaccine effectiveness?
+2. How do we model imperfect protection?
 
 ## Vaccine effects
 
@@ -25,6 +25,10 @@ Assuming a perfect vaccine against infection, the model can be designed as follo
 ![](img/vax/prv-inf-mod.svg)
 
 Vaccinated people $V$ remain uninfected in their lifetime and do not participate in disease transmission.
+
+You can simplify this model by moving susceptible people to the $R$ compartment because they also do not participate in disease transmission.
+
+![](img/vax/prv-inf-mod-2.svg)
 
 ### Prevent severe disease
 

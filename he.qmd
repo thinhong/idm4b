@@ -87,7 +87,7 @@ We can adjust the Markov model @fig-he-markov to become a compartmental dynamic 
 
 ### Individual-based model
 
-Individual-based model, also called **microsimulation** model, simulates one individual at a time which is called first-order Monte Carlo simulation. This is done by repeatedly sampling from probability distributions a large number of times to understand the average and spread of potential results. The disadvantage is that they are time-consuming, as they require sometimes the simulation of millions of individuals to obtain stable estimates [@handbook2023].
+Individual-based model, also called **microsimulation** model, keeps track of each individual's behaviour [@kim2008]. This is done by repeatedly sampling from probability distributions a large number of times to understand the average and spread of potential results. The disadvantage is that they are time-consuming, as they require sometimes the simulation of millions of individuals to obtain stable estimates [@handbook2023].
 
 ![](img/he/he-abm.jpg)
 

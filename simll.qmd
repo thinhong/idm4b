@@ -154,6 +154,10 @@ ggplot(df_plot, aes(x = date_onset, y = n)) +
   theme_minimal()
 ```
 
+```{r}
+head(df)
+```
+
 ```{r, echo=FALSE, eval=FALSE}
 saveRDS(df, "data/linelist.rds")
 ```
