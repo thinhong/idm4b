@@ -440,8 +440,10 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#methods" id="toc-methods" class="nav-link active" data-scroll-target="#methods"><span class="header-section-number">6.1</span> Methods</a></li>
-  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">6.2</span> Code</a></li>
+  <li><a href="#likelihood" id="toc-likelihood" class="nav-link active" data-scroll-target="#likelihood"><span class="header-section-number">6.1</span> Likelihood</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods"><span class="header-section-number">6.2</span> Methods</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"><span class="header-section-number">6.3</span> </a></li>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">6.4</span> Code</a></li>
   </ul>
 </nav>
     </div>
@@ -478,7 +480,7 @@ Preparation
 </div>
 <div class="callout-body-container callout-body">
 <p>Download influenza incidence data here:</p>
-<p><a href="#dnldts49990" onclick="fetch('data:text/csv;base64,ZGF5LGluYw0KMCwwDQoxLDENCjIsMQ0KMywwDQo0LDINCjUsNQ0KNiwzDQo3LDMNCjgsMw0KOSw2DQoxMCwyDQoxMSw1DQoxMiw5DQoxMywxMw0KMTQsMTINCjE1LDEzDQoxNiwxMQ0KMTcsMTINCjE4LDYNCjE5LDYNCjIwLDYNCjIxLDMNCjIyLDENCjIzLDANCjI0LDINCjI1LDANCjI2LDANCjI3LDANCjI4LDANCjI5LDINCjMwLDANCjMxLDINCjMyLDANCjMzLDANCjM0LDANCjM1LDANCjM2LDANCjM3LDANCjM4LDANCjM5LDANCjQwLDANCjQxLDANCjQyLDANCjQzLDANCjQ0LDANCjQ1LDANCjQ2LDANCjQ3LDANCjQ4LDANCjQ5LDANCjUwLDANCg==').then(res => res.blob()).then(blob => {
+<p><a href="#dnldts26611" onclick="fetch('data:text/csv;base64,ZGF5LGluYw0KMCwwDQoxLDENCjIsMQ0KMywwDQo0LDINCjUsNQ0KNiwzDQo3LDMNCjgsMw0KOSw2DQoxMCwyDQoxMSw1DQoxMiw5DQoxMywxMw0KMTQsMTINCjE1LDEzDQoxNiwxMQ0KMTcsMTINCjE4LDYNCjE5LDYNCjIwLDYNCjIxLDMNCjIyLDENCjIzLDANCjI0LDINCjI1LDANCjI2LDANCjI3LDANCjI4LDANCjI5LDINCjMwLDANCjMxLDINCjMyLDANCjMzLDANCjM0LDANCjM1LDANCjM2LDANCjM3LDANCjM4LDANCjM5LDANCjQwLDANCjQxLDANCjQyLDANCjQzLDANCjQ0LDANCjQ1LDANCjQ2LDANCjQ3LDANCjQ4LDANCjQ5LDANCjUwLDANCg==').then(res => res.blob()).then(blob => {
       const downloadURL = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -486,30 +488,37 @@ Preparation
       a.download = 'flu_inc.csv'; a.click();
       window.URL.revokeObjectURL(downloadURL);
       document.body.removeChild(a);
-        });"><button class="btn btn-light downloadthis  " id="dnldts49990"><i class="bi bi-download"></i> flu_inc.csv </button></a></p>
+        });"><button class="btn btn-light downloadthis  " id="dnldts26611"><i class="bi bi-download"></i> flu_inc.csv </button></a></p>
 </div>
 </div>
-<section id="methods" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="methods"><span class="header-section-number">6.1</span> Methods</h2>
+<section id="likelihood" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="likelihood"><span class="header-section-number">6.1</span> Likelihood</h2>
+<p><span class="math display">\[\mathbb{L}(\theta | x) = \mathbb{P}(x | \theta)\]</span></p>
+</section>
+<section id="methods" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="methods"><span class="header-section-number">6.2</span> Methods</h2>
 <p>The maximum likelihood estimation follows 4 steps:</p>
 <ul>
 <li><strong>Step 1</strong>. Write down the likelihood function <span class="math inline">\(L(\theta)\)</span>. Likelihood function is a function of <span class="math inline">\(\theta\)</span>, which is the product of the <span class="math inline">\(n\)</span> mass/density function terms of the observed values <span class="math inline">\(y_i\)</span>.</li>
 </ul>
-<p><span class="math display">\[L(\theta) = \prod_{i = 1}^{n} f_Y(y_i| \theta)\]</span></p>
+<p><span class="math display">\[\mathbb{L}(\theta) = \prod_{i = 1}^{n} f_Y(y_i| \theta)\]</span></p>
 <ul>
 <li><strong>Step 2</strong>. Take the natural log of the likelihood <span class="math inline">\(log L(\theta)\)</span>, or log-likelihood. The production in likelihood now becomes the sum in log-likelihood. See <a href="calib.html#sec-calib-loglik" class="quarto-xref"><span>Section 2.2</span></a> for more details.</li>
 </ul>
-<p><span class="math display">\[log L(\theta) = \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]\]</span></p>
+<p><span class="math display">\[log \mathbb{L}(\theta) = \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]\]</span></p>
 <ul>
 <li><strong>Step 3</strong>. Take the negative log-likelihood <span class="math inline">\(- log L(\theta)\)</span>. Because optimizers work by minimizing a function, we have to work on negative log-likelihood. See <a href="calib.html#sec-calib-negloglik" class="quarto-xref"><span>Section 2.3</span></a> for more details.</li>
 </ul>
-<p><span class="math display">\[- log L(\theta) = - \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]\]</span></p>
+<p><span class="math display">\[- log \mathbb{L}(\theta) = - \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]\]</span></p>
 <ul>
-<li><strong>Step 4</strong>. The optimizer try different values of <span class="math inline">\(\theta\)</span> in the paramater space <span class="math inline">\(\Theta\)</span> for which negative log-likelihood <span class="math inline">\(- log L(\theta)\)</span> is minimized.</li>
+<li><strong>Step 4</strong>. The optimizer try different values of <span class="math inline">\(\theta\)</span> in the paramater space <span class="math inline">\(\Theta\)</span> for which negative log-likelihood <span class="math inline">\(- log \mathbb{L}(\theta)\)</span> is minimized.</li>
 </ul>
 </section>
-<section id="code" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="code"><span class="header-section-number">6.2</span> Code</h2>
+<section id="section" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="section"><span class="header-section-number">6.3</span> </h2>
+</section>
+<section id="code" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="code"><span class="header-section-number">6.4</span> Code</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(odin)</span>

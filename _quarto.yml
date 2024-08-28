@@ -28,7 +28,7 @@ book:
       chapters: 
         - seir-sto.qmd
     - part: calib.qmd
-      chapters: 
+      chapters:
         - lse.qmd
         - mle.qmd
         - mcmc.qmd

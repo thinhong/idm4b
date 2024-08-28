@@ -25,6 +25,8 @@ Generation interval is the time from the **infection** of a primary case to infe
 :::
 :::
 
+![](img/rnum/gen-int.svg)
+
 If we match this to an SEIR model, the generation interval starts when the infector enters the E compartment (meaning they got infected). The latest time they can infect an infectee is at the end of their residence in the I compartment (they are infectious). Therefore, generation interval is the sum of residence times in compartments E and I [@gostic2020].
 
 The mean generation interval **decreases** when susceptible persons are at risk of infectious contact from **multiple sources**. Because when a susceptible person has multiple potential infectors, there is a "race" to infect him/her in which only the first infectious contact leads to infection [@kenah2008].

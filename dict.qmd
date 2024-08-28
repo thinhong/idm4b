@@ -1,5 +1,7 @@
 # Dictionary
 
+Epidemic is "the occurrence of more cases of disease than expected in a given area or among a specific group of people over a particular period of time" (US-CDC) [@texier2016]. Epidemic is derived from the Greek *epi* and *demos* meaning "that which is upon the people", to describe the burden of some phenomenon on "the people" [@nelson2014].
+
 Tractable: can be solved [(source)](https://en.wikipedia.org/wiki/Tractable)
 
 ::: {#def-micsim}

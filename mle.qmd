@@ -10,23 +10,29 @@ Download influenza incidence data here:
 
 :::
 
+## Likelihood
+
+$$\mathbb{L}(\theta | x) = \mathbb{P}(x | \theta)$$
+
 ## Methods
 
 The maximum likelihood estimation follows 4 steps:
 
 - **Step 1**. Write down the likelihood function $L(\theta)$. Likelihood function is a function of $\theta$, which is the product of the $n$ mass/density function terms of the observed values $y_i$.
 
-$$L(\theta) = \prod_{i = 1}^{n} f_Y(y_i| \theta)$$
+$$\mathbb{L}(\theta) = \prod_{i = 1}^{n} f_Y(y_i| \theta)$$
 
 - **Step 2**. Take the natural log of the likelihood $log L(\theta)$, or log-likelihood. The production in likelihood now becomes the sum in log-likelihood. See @sec-calib-loglik for more details.
 
-$$log L(\theta) = \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]$$
+$$log \mathbb{L}(\theta) = \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]$$
 
 - **Step 3**. Take the negative log-likelihood $- log L(\theta)$. Because optimizers work by minimizing a function, we have to work on negative log-likelihood. See @sec-calib-negloglik for more details.
 
-$$- log L(\theta) = - \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]$$
+$$- log \mathbb{L}(\theta) = - \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]$$
 
-- **Step 4**. The optimizer try different values of $\theta$ in the paramater space $\Theta$ for which negative log-likelihood $- log L(\theta)$ is minimized.
+- **Step 4**. The optimizer try different values of $\theta$ in the paramater space $\Theta$ for which negative log-likelihood $- log \mathbb{L}(\theta)$ is minimized.
+
+## 
 
 ## Code
 
