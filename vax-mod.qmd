@@ -6,6 +6,20 @@
 This chapter is based on the teachings of my PhD supervisor, Dr. Marc Choisy, and a lecture given by Asst Prof. Hannah Clapham at MIDSEA Summer School 2024, for which I am deeply grateful.
 :::
 
+::: {.callout-note collapse="true"}
+
+# Slides
+
+```{=html}
+<div>
+<iframe class="slide-deck" style="height: 50vh; width: 100%;" src="slides/vax-mod.html"></iframe>
+</div>
+```
+
+[{{< fa expand size=fw >}} Full screen](slides/vax-mod.html){.btn .btn-outline-secondary role="button"}
+
+:::
+
 To model vaccination, we need to decide 2 things:
 
 1. What is the vaccine effect? Does it protect against infection, severe disease, transmission, or a combination?

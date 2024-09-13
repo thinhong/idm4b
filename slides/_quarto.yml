@@ -1,0 +1,9 @@
+project:
+  output-dir: ../docs/slides
+
+author: "Thinh Ong"
+bibliography: ../references.bib
+
+format: 
+  revealjs:
+    logo: ../../logo.svg

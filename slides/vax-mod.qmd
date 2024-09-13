@@ -1,0 +1,120 @@
+---
+title: "Model vaccination"
+format: 
+  revealjs:
+    footer: |
+      [Website](../vax-mod.html)
+---
+
+To model vaccination, we need to decide 2 things:
+
+1.  What is the vaccine effect? Does it protect against infection, severe disease, transmission, or a combination?
+
+2.  How do we model imperfect protection?
+
+# Vaccine effect
+
+## Prevent infection
+
+Vaccine prevents the pathogen from establishing an infection in the body. A vaccinated person is less likely to get infected.
+
+![](../img/vax/prv-inf.svg)
+
+## Prevent infection
+
+Assuming a perfect vaccine against infection, the model can be designed as follows:
+
+![](../img/vax/prv-inf-mod.svg)
+
+Vaccinated people $V$ remain uninfected in their lifetime and do not participate in disease transmission.
+
+## Prevent infection
+
+You can simplify this model by moving susceptible people to the $R$ compartment because they also do not participate in disease transmission.
+
+![](../img/vax/prv-inf-mod-2.svg)
+
+## Prevent severe disease
+
+A vaccinated individual still get infected but experiences a much milder form of the disease.
+
+![](../img/vax/prv-dis.svg)
+
+## Prevent severe disease
+
+Assuming a perfect vaccine against severe disease, the model can be designed as follows:
+
+![](../img/vax/prv-dis-mod.svg)
+
+## Prevent transmission
+
+A vaccinated person still get infected, still get sick, but they are less likely to spread the disease to others.
+
+![](../img/vax/prv-trans.svg)
+
+## Prevent transmission
+
+Assuming a perfect vaccine against transmission, the model can be designed as follows:
+
+![](../img/vax/prv-trans-mod.svg)
+
+$I$ being the only source of infection that contributes to the force of infection. Vaccinated people $S_v$ still get infected and become $I_v$, but they do not transmit the disease.
+
+# Imperfect protections
+
+What is meant by a vaccine with effectiveness of 80%?
+
+## All-or-nothing model
+
+::: {.callout-tip appearance="simple"}
+**All-or-nothing** (AoN, also called the **polarized** [@park2023], or **take**) model assumes that **among vaccinated** individuals, a **proportion** $VE_P$ are **completely protected**, while **the remaining fraction** $1 - VE_P$ remains **completely unprotected** [@zachreson2023; @park2023].
+:::
+
+An effectiveness of 80% here implies that among vaccinated people, 80% are completely protected, and 20% receive no protection [@worldhealthorganization2013].
+
+![](../img/vax/aon.svg)
+
+## All-or-nothing model
+
+![All-or-nothing vaccination model [@park2023]](../img/vax/aon-mod.svg){#fig-aon-mod}
+
+## Leaky model
+
+::: {.callout-tip appearance="simple"}
+**Leaky** (or **degree**) model assumes that **all vaccinated** individuals **are partially protected** [@zachreson2023].
+:::
+
+An effectiveness of 80% here implies that all vaccinated people have the endpoint of interest reduced by 80% compared to non-vaccinees.
+
+![](../img/vax/leaky.svg)
+
+## Leaky model
+
+The assumption that no vaccinated people is totally or permanently protected implies one or both of the following [@worldhealthorganization2013]:
+
+-   No amount (titre) of the immune marker is totally protective or, if it is, no individual can maintain that titre for a long period (because of waning or transient immunosuppression)
+-   The degree of protection is a function of the level of the immune marker - the simplest explanation being that protection is a function of both the level of the immune marker and the challenge dose.
+
+## Leaky model
+
+![Leaky vaccination model [@park2023]](../img/vax/leaky-mod.svg){#fig-leaky-mod}
+
+## Mixed effects
+
+Imperfect vaccines often have a combination of effects: they can protect against infection, severe disease, and transmission at the same time.
+
+![](../img/vax/prv-mix.svg)
+
+## Mixed effects
+
+Assuming a vaccine with leaky effectiveness $VE_L$ against infection and severe disease, the model can be designed as follows:
+
+![](../img/vax/prv-inf-dis-mod.svg)
+
+## Multiple doses
+
+Some vaccines require multiple doses. Below is the DynaMICE model [@verguet2015] for the 2-dose measles vaccine, assuming AoN effectiveness for both doses.
+
+![](../img/vax/dynamice.svg)
+
+## References
