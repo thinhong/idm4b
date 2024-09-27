@@ -1,0 +1,231 @@
+# $R_t$ in practice
+
+## Interpret $R_t$
+
+```{r}
+#| warning: false
+#| message: false
+library(dplyr)
+library(tidyr)
+library(zoo)
+library(data.table)
+library(ggplot2)
+library(EpiEstim)
+library(janitor)
+library(cowplot)
+library(lubridate)
+```
+
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 1.3
+#| out-width: "100%"
+ggplot() +
+  geom_rect(aes(
+    xmin = 0,
+    xmax = 10,
+    ymin = 0,
+    ymax = 1
+  ), fill = "#169873") +
+  geom_rect(aes(
+    xmin = 10,
+    xmax = 25,
+    ymin = 0,
+    ymax = 1
+  ), fill = "#EEFC57") +
+  geom_rect(aes(
+    xmin = 25,
+    xmax = 75,
+    ymin = 0,
+    ymax = 1
+  ), fill = "#FCD757") +
+  geom_rect(aes(
+    xmin = 75,
+    xmax = 90,
+    ymin = 0,
+    ymax = 1
+  ), fill = "#F2545B") +
+  geom_rect(aes(
+    xmin = 90,
+    xmax = 100,
+    ymin = 0,
+    ymax = 1
+  ), fill = "#5328FF") +
+  annotate("text",
+           x = 5,
+           y = 0.5,
+           label = "Declining",
+           size = 5.5,
+           fontface = 2,
+           family = "PT Sans Narrow") +
+  annotate("text",
+           x = 17.5,
+           y = 0.5,
+           label = "Likely declining",
+           size = 5.5,
+           fontface = 2,
+           family = "PT Sans Narrow") +
+  annotate("text",
+           x = 50,
+           y = 0.5,
+           label = "Uncertain trend or stable",
+           size = 5.5,
+           fontface = 2,
+           family = "PT Sans Narrow") +
+  annotate("text",
+           x = 82.5,
+           y = 0.5,
+           label = "Likely growing",
+           color = "white",
+           size = 5.5,
+           fontface = 2,
+           family = "PT Sans Narrow") +
+  annotate("text",
+           x = 95,
+           y = 0.5,
+           label = "Growing",
+           color = "white",
+           size = 5.5,
+           fontface = 2,
+           family = "PT Sans Narrow") +
+  scale_x_continuous(
+    breaks = c(0, 10, 25, 75, 90, 100),
+    expand = c(0, 0),
+    position = "top"
+  ) +
+  scale_y_continuous(limits = c(-0.5, 1), expand = c(0, 0)) +
+  labs(x = expression(paste(
+    "% credible interval distribution of ", R[t], " > 1", sep = ""
+  )), y = NULL) +
+  theme_classic() +
+  theme(
+    axis.text.y = element_blank(),
+    axis.line.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.margin = margin(5, 20, 5, 20),
+    axis.title.x = element_text(size = 17, family = "PT Sans Narrow"),
+    axis.text = element_text(size = 17, family = "PT Sans Narrow")
+  )
+```
+
+## $R_t$ with color code
+
+```{r}
+#| warning: false
+#| code-fold: true
+#| fig-width: 5
+#| fig-height: 3.5
+#| out-width: "100%"
+df <- readRDS("data/linelist.rds")
+df <- df |>
+  count(date_onset) |>
+  complete(date_onset = seq(date_onset[1], date_onset[length(date_onset)], by = "days"),
+           fill = list(n = 0))
+
+colnames(df) <- c("dates", "I")
+df <- df |>
+  filter(dates > ymd("2023-02-24"), dates < ymd("2023-06-23"))
+
+mod <- estimate_R(incid = df,
+                  method = "parametric_si",
+                  config = make_config(list(mean_si = 4.5, std_si = 1.3)))
+
+df_line <- mod$R
+df_line$dates <- mod$dates[df_line$t_end]
+df_line <- clean_names(df_line)
+df_line <- df_line |>
+  clean_names() |>
+  mutate(
+    b_posterior = std_r ^ 2 / mean_r,
+    a_posterior = mean_r / b_posterior,
+    pct = pgamma(
+      1,
+      shape = a_posterior,
+      scale = b_posterior,
+      lower.tail = F
+    ),
+    trend = case_when(
+      pct > 0.9 ~ "purple",
+      pct > 0.75 & pct <= 0.9 ~ "red",
+      pct > 0.25 & pct <= 0.75 ~ "orange",
+      pct > 0.1 & pct <= 0.25 ~ "yellow",
+      pct <= 0.1 ~ "green"
+    )
+  )
+df_line$trend <- factor(df_line$trend,
+                        levels = c("green", "yellow", "orange", "red", "purple"))
+
+df_ribbon <- df_line
+df_ribbon$group <- consecutive_id(df_ribbon$trend)
+df_ribbon <- head(do.call(rbind, by(df_ribbon, df_ribbon$group, rbind, NA)), -1)
+df_ribbon[, c("trend", "group")] <- lapply(df_ribbon[, c("trend", "group")], na.locf)
+df_ribbon[] <- lapply(df_ribbon, na.locf, fromLast = T)
+
+cols <- c(
+  "green" = "#169873",
+  "yellow" = "#DFDF11",
+  "orange" = "#FFA200",
+  "red" = "#F2545B",
+  "purple" = "#5328FF"
+)
+labs <- c(
+  "green" = "Declining",
+  "yellow" = "Likely declining",
+  "orange" = "Uncertain trend or stable",
+  "red" = "Likely growing",
+  "purple" = "Growing"
+)
+
+epi_plot <- ggplot(df, aes(x = dates, y = I)) +
+  geom_bar(stat = "identity", fill = "#AED2FF") +
+  scale_x_date(limits = c(min(df$dates) - 1, max(df$dates) + 1), expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  labs(x = NULL, y = "Incidence") +
+  theme_classic()
+
+rt_plot <- ggplot() +
+  geom_hline(yintercept = 1,
+             alpha = 0.5,
+             linetype = "dashed") +
+  geom_ribbon(
+    aes(
+      x = dates,
+      ymin = quantile_0_025_r,
+      ymax = quantile_0_975_r,
+      fill = trend,
+      group = group
+    ),
+    data = df_ribbon,
+    alpha = 0.3
+  ) +
+  geom_line(aes(
+    x = dates,
+    y = mean_r,
+    color = trend,
+    group = 1
+  ), data = df_line) +
+  scale_x_date(limits = c(min(df$dates) - 1, max(df$dates) + 1), expand = c(0, 0)) +
+  scale_color_manual(
+    values = cols,
+    labels = labs,
+    guide = guide_legend(nrow = 2, byrow = TRUE)
+  ) +
+  scale_fill_manual(
+    values = cols,
+    labels = labs,
+    guide = guide_legend(nrow = 2, byrow = TRUE)
+  ) +
+  labs(
+    x = "Date of onset",
+    y = expression(R[t]),
+    color = "Trend",
+    fill = "Trend"
+  ) +
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+plot_grid(epi_plot, rt_plot, nrow = 2, align = "v", rel_heights = c(0.4, 0.7))
+```
+

@@ -3,8 +3,10 @@ title: "Model vaccination"
 format: 
   revealjs:
     footer: |
-      [Website](../vax-mod.html)
+      [View book](../vax-mod.html)
 ---
+
+## 2 decisions
 
 To model vaccination, we need to decide 2 things:
 

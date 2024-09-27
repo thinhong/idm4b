@@ -16,7 +16,7 @@ These words encouraged me to read and learn more, and to ensure every detail was
 -   A dictionary of jargon with cited definitions.
 -   Step-by-step guides for writing infectious disease reports, following the Center for Disease Control and Prevention report format: data, workflow, analyses, and inference.
 
-The content of this book is based on the materials I digested during my PhD, with specific articles and readings cited throughout the text. I am deeply grateful to my PhD supervisors, Dr. Marc Choisy, A/Prof. Louise Thwaites, Dr. Hugo Turner, for their caring, inspiring, and enthusiastic guidance. My most heartfelt thanks also go to my mentors, A/Prof. Le Van Tan, Prof. Wirichada Pan-Ngum, Asst Prof. Kiesha Prem and Dr. Leigh Jones, for always nurturing and guiding me towards the best path.
+The content of this book is based on the materials I digested during my PhD, with specific articles and readings cited throughout the text. I am deeply grateful to my PhD supervisors, Dr. Marc Choisy, A/Prof. Louise Thwaites, Dr. Hugo Turner, for their caring, inspiring, and enthusiastic guidance. My most heartfelt thanks also go to my mentors, A/Prof. Le Van Tan, A/Prof. Wirichada Pan-Ngum, Asst Prof. Kiesha Prem, Dr. Phung Khanh Lam, and Dr. Leigh Jones, for always nurturing and guiding me towards the best path.
 
 I would like to acknowledge the following educational experiences:
 

@@ -38,6 +38,7 @@ book:
         - gen-int.qmd
         - r0.qmd
         - rt.qmd
+        - rt-prac.qmd
     - part: intv.qmd
       chapters: 
         - ftc.qmd

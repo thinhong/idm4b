@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Thinh Ong">
-<meta name="dcterms.date" content="2024-05-22">
 
-<title>Infectious disease modelling for babies</title>
+<title>Infectious disease modelling for babies - 12&nbsp; \(R_t\) in practice</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -32,7 +64,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./mod.html" rel="next">
+<link href="./intv.html" rel="next">
+<link href="./rt.html" rel="prev">
 <link href="./logo-icon.svg" rel="icon" type="image/svg+xml">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -79,6 +112,10 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-X391ZN63GG', { 'anonymize_ip': true});
 </script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -121,7 +158,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./rnum.html">Reproduction number</a></li><li class="breadcrumb-item"><a href="./rt-prac.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><span class="math inline">\(R_t\)</span> in practice</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -148,7 +185,7 @@ window.Quarto = {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
@@ -243,11 +280,11 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="./rnum.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Reproduction number</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./gen-int.html" class="sidebar-item-text sidebar-link">
@@ -268,7 +305,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./rt-prac.html" class="sidebar-item-text sidebar-link">
+  <a href="./rt-prac.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><span class="math inline">\(R_t\)</span> in practice</span></span></a>
   </div>
 </li>
@@ -388,35 +425,24 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
+  <li><a href="#interpret-r_t" id="toc-interpret-r_t" class="nav-link active" data-scroll-target="#interpret-r_t"><span class="header-section-number">12.1</span> Interpret <span class="math inline">\(R_t\)</span></a></li>
+  <li><a href="#r_t-with-color-code" id="toc-r_t-with-color-code" class="nav-link" data-scroll-target="#r_t-with-color-code"><span class="header-section-number">12.2</span> <span class="math inline">\(R_t\)</span> with color code</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./rnum.html">Reproduction number</a></li><li class="breadcrumb-item"><a href="./rt-prac.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><span class="math inline">\(R_t\)</span> in practice</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Infectious disease modelling for babies</h1>
+<h1 class="title"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><span class="math inline">\(R_t\)</span> in practice</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p><a href="https://drthinhong.com/">Thinh Ong</a> <a href="https://orcid.org/0000-0001-6772-9291" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">May 22, 2024</p>
-    </div>
-  </div>
   
     
   </div>
@@ -426,68 +452,152 @@ window.Quarto = {
 </header>
 
 
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
-<p>Last modified: September 26, 2024.</p>
-<p>This book brings together everything I have learned about infectious disease modelling during my PhD journey. Special thanks to my idol, <a href="https://uk.linkedin.com/in/james-a-hay">Dr.&nbsp;James Hay</a>, who once gave these genius advice:</p>
-<blockquote class="blockquote">
-<p>“Read and learn now - it will be harder later on.”</p>
-<p>“Spent a lot of time writing well-documented, generalisable code that didn’t necessarily turn into publications at the time. I now use that code <strong>all of the time</strong>.”</p>
-<p>Dr.&nbsp;James Hay’s inspiring talk at the MIDSEA ECR April 2024 Meeting.</p>
-</blockquote>
-<p>These words encouraged me to read and learn more, and to ensure every detail was carefully documented. In this book, you (and my future self) will find:</p>
-<ul>
-<li>Methodologies for mathematical models of infectious diseases.</li>
-<li>A dictionary of jargon with cited definitions.</li>
-<li>Step-by-step guides for writing infectious disease reports, following the Center for Disease Control and Prevention report format: data, workflow, analyses, and inference.</li>
-</ul>
-<p>The content of this book is based on the materials I digested during my PhD, with specific articles and readings cited throughout the text. I am deeply grateful to my PhD supervisors, Dr.&nbsp;Marc Choisy, A/Prof.&nbsp;Louise Thwaites, Dr.&nbsp;Hugo Turner, for their caring, inspiring, and enthusiastic guidance. My most heartfelt thanks also go to my mentors, A/Prof.&nbsp;Le Van Tan, A/Prof.&nbsp;Wirichada Pan-Ngum, Asst Prof.&nbsp;Kiesha Prem, Dr.&nbsp;Phung Khanh Lam, and Dr.&nbsp;Leigh Jones, for always nurturing and guiding me towards the best path.</p>
-<p>I would like to acknowledge the following educational experiences:</p>
-<table class="table-hover caption-top table">
-<colgroup>
-<col style="width: 30%">
-<col style="width: 40%">
-<col style="width: 30%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Course</th>
-<th>Lecturers</th>
-<th>Institutions</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Modelling Infectious Diseases in South East Asia (MIDSEA) Summer School (2024)</td>
-<td><p>Modelling Master Class: Prof.&nbsp;Alex Cook; Prof.&nbsp;Jomar Fajardo Rabajante; Prof.&nbsp;Wirichada Pan-Ngum</p>
-<p>Modelling interventions and Health economic evaluation: Asst/Prof.&nbsp;Kiesha Prem; Asst/Prof.&nbsp;Hannah Clapham; Asst/Prof.&nbsp;Swapnil Mishra; Asst/Prof.&nbsp;Thitiya Theparod</p></td>
-<td>National University of Singapore; Mahidol Oxford Research Unit; Oxford University Clinical Research Unit; University of the Philippines; De La Salle Manila; Mahasarakham University</td>
-</tr>
-<tr class="even">
-<td>Summer Institute in Statistics and Modeling in Infectious Diseases (SISMID) (2023)</td>
-<td><p>Stochastic Epidemic Models with Inference: Prof.&nbsp;Tom Britton; Prof.&nbsp;Ira M Longini</p>
-<p>MCMC I: Prof.&nbsp;M. Elizabeth Halloran; Prof.&nbsp;Volodymyr Minin; Prof.&nbsp;Kari Auranen</p>
-<p>MCMC II: Prof.&nbsp;Philip O’Neill; Prof.&nbsp;Theodore Kypraios</p>
-<p>Simulation-Based Inference for Epidemiological Dynamics: Prof.&nbsp;Aaron King; Prof.&nbsp;Edward Ionides</p></td>
-<td>University of Washington</td>
-</tr>
-<tr class="odd">
-<td>Introduction to mathematical models of the Epidemiology &amp; Control of Infectious Diseases (2022)</td>
-<td>Prof.&nbsp;Azra Ghani; Prof.&nbsp;Alex Cook; Dr.&nbsp;Lilith Whittles; Dr.&nbsp;Clare McCormack; Dr.&nbsp;Tara Mangal; Dr.&nbsp;Juliette Unwin</td>
-<td>Imperial College London; Nanyang Technological University</td>
-</tr>
-<tr class="even">
-<td>Mathematical Modelling for Vaccine-preventable Diseases (2022)</td>
-<td>Prof.&nbsp;Caroline Trotter; Prof.&nbsp;Julia Gog; Prof.&nbsp;Nik Cunniffe; Prof.&nbsp;Thumbi Mwanga; A/Prof.&nbsp;Andrew Conlan; Dr.&nbsp;Cerian Webb; Dr.&nbsp;Katy Gaythorpe; Dr.&nbsp;Matt Castle</td>
-<td>Vaccine Impact Modelling Consortium; University of Cambridge</td>
-</tr>
-</tbody>
-</table>
-<p>Many thanks to the authors who kindly shared materials in response to my inquiries on these topics:</p>
-<ul>
-<li>Workshop: Modeling Rabies Outbreak and Control (2023), by Dr.&nbsp;Phrutsamon Wongnak.</li>
-</ul>
-<p>If you enjoyed this book or found any mistakes, please leave a comment below. Your feedback means a lot!</p>
+<section id="interpret-r_t" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="interpret-r_t"><span class="header-section-number">12.1</span> Interpret <span class="math inline">\(R_t\)</span></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(zoo)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(EpiEstim)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="rt-prac_files/figure-html/unnamed-chunk-2-1.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="r_t-with-color-code" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="r_t-with-color-code"><span class="header-section-number">12.2</span> <span class="math inline">\(R_t\)</span> with color code</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/linelist.rds"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(date_onset) <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">complete</span>(<span class="at">date_onset =</span> <span class="fu">seq</span>(date_onset[<span class="dv">1</span>], date_onset[<span class="fu">length</span>(date_onset)], <span class="at">by =</span> <span class="st">"days"</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> <span class="fu">list</span>(<span class="at">n =</span> <span class="dv">0</span>))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"dates"</span>, <span class="st">"I"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dates <span class="sc">&gt;</span> <span class="fu">ymd</span>(<span class="st">"2023-02-24"</span>), dates <span class="sc">&lt;</span> <span class="fu">ymd</span>(<span class="st">"2023-06-23"</span>))</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">estimate_R</span>(<span class="at">incid =</span> df,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">"parametric_si"</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                  <span class="at">config =</span> <span class="fu">make_config</span>(<span class="fu">list</span>(<span class="at">mean_si =</span> <span class="fl">4.5</span>, <span class="at">std_si =</span> <span class="fl">1.3</span>)))</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>df_line <span class="ot">&lt;-</span> mod<span class="sc">$</span>R</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>df_line<span class="sc">$</span>dates <span class="ot">&lt;-</span> mod<span class="sc">$</span>dates[df_line<span class="sc">$</span>t_end]</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>df_line <span class="ot">&lt;-</span> <span class="fu">clean_names</span>(df_line)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>df_line <span class="ot">&lt;-</span> df_line <span class="sc">|&gt;</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">b_posterior =</span> std_r <span class="sc">^</span> <span class="dv">2</span> <span class="sc">/</span> mean_r,</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">a_posterior =</span> mean_r <span class="sc">/</span> b_posterior,</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">pct =</span> <span class="fu">pgamma</span>(</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>      <span class="dv">1</span>,</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">shape =</span> a_posterior,</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">scale =</span> b_posterior,</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">lower.tail =</span> F</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">trend =</span> <span class="fu">case_when</span>(</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>      pct <span class="sc">&gt;</span> <span class="fl">0.9</span> <span class="sc">~</span> <span class="st">"purple"</span>,</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>      pct <span class="sc">&gt;</span> <span class="fl">0.75</span> <span class="sc">&amp;</span> pct <span class="sc">&lt;=</span> <span class="fl">0.9</span> <span class="sc">~</span> <span class="st">"red"</span>,</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>      pct <span class="sc">&gt;</span> <span class="fl">0.25</span> <span class="sc">&amp;</span> pct <span class="sc">&lt;=</span> <span class="fl">0.75</span> <span class="sc">~</span> <span class="st">"orange"</span>,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>      pct <span class="sc">&gt;</span> <span class="fl">0.1</span> <span class="sc">&amp;</span> pct <span class="sc">&lt;=</span> <span class="fl">0.25</span> <span class="sc">~</span> <span class="st">"yellow"</span>,</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>      pct <span class="sc">&lt;=</span> <span class="fl">0.1</span> <span class="sc">~</span> <span class="st">"green"</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>df_line<span class="sc">$</span>trend <span class="ot">&lt;-</span> <span class="fu">factor</span>(df_line<span class="sc">$</span>trend,</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>                        <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"green"</span>, <span class="st">"yellow"</span>, <span class="st">"orange"</span>, <span class="st">"red"</span>, <span class="st">"purple"</span>))</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>df_ribbon <span class="ot">&lt;-</span> df_line</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>df_ribbon<span class="sc">$</span>group <span class="ot">&lt;-</span> <span class="fu">consecutive_id</span>(df_ribbon<span class="sc">$</span>trend)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>df_ribbon <span class="ot">&lt;-</span> <span class="fu">head</span>(<span class="fu">do.call</span>(rbind, <span class="fu">by</span>(df_ribbon, df_ribbon<span class="sc">$</span>group, rbind, <span class="cn">NA</span>)), <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>df_ribbon[, <span class="fu">c</span>(<span class="st">"trend"</span>, <span class="st">"group"</span>)] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(df_ribbon[, <span class="fu">c</span>(<span class="st">"trend"</span>, <span class="st">"group"</span>)], na.locf)</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>df_ribbon[] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(df_ribbon, na.locf, <span class="at">fromLast =</span> T)</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>  <span class="st">"green"</span> <span class="ot">=</span> <span class="st">"#169873"</span>,</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>  <span class="st">"yellow"</span> <span class="ot">=</span> <span class="st">"#DFDF11"</span>,</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  <span class="st">"orange"</span> <span class="ot">=</span> <span class="st">"#FFA200"</span>,</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>  <span class="st">"red"</span> <span class="ot">=</span> <span class="st">"#F2545B"</span>,</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>  <span class="st">"purple"</span> <span class="ot">=</span> <span class="st">"#5328FF"</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>labs <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>  <span class="st">"green"</span> <span class="ot">=</span> <span class="st">"Declining"</span>,</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>  <span class="st">"yellow"</span> <span class="ot">=</span> <span class="st">"Likely declining"</span>,</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>  <span class="st">"orange"</span> <span class="ot">=</span> <span class="st">"Uncertain trend or stable"</span>,</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>  <span class="st">"red"</span> <span class="ot">=</span> <span class="st">"Likely growing"</span>,</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>  <span class="st">"purple"</span> <span class="ot">=</span> <span class="st">"Growing"</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>epi_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> dates, <span class="at">y =</span> I)) <span class="sc">+</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"#AED2FF"</span>) <span class="sc">+</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="fu">min</span>(df<span class="sc">$</span>dates) <span class="sc">-</span> <span class="dv">1</span>, <span class="fu">max</span>(df<span class="sc">$</span>dates) <span class="sc">+</span> <span class="dv">1</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Incidence"</span>) <span class="sc">+</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>rt_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">1</span>,</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> dates,</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>      <span class="at">ymin =</span> quantile_0_025_r,</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>      <span class="at">ymax =</span> quantile_0_975_r,</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>      <span class="at">fill =</span> trend,</span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>      <span class="at">group =</span> group</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> df_ribbon,</span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.3</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> dates,</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> mean_r,</span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> trend,</span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>    <span class="at">group =</span> <span class="dv">1</span></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>  ), <span class="at">data =</span> df_line) <span class="sc">+</span></span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="fu">min</span>(df<span class="sc">$</span>dates) <span class="sc">-</span> <span class="dv">1</span>, <span class="fu">max</span>(df<span class="sc">$</span>dates) <span class="sc">+</span> <span class="dv">1</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> cols,</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> labs,</span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a>    <span class="at">guide =</span> <span class="fu">guide_legend</span>(<span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> cols,</span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> labs,</span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>    <span class="at">guide =</span> <span class="fu">guide_legend</span>(<span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Date of onset"</span>,</span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">expression</span>(R[t]),</span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Trend"</span>,</span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Trend"</span></span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_grid</span>(epi_plot, rt_plot, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">align =</span> <span class="st">"v"</span>, <span class="at">rel_heights =</span> <span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.7</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="rt-prac_files/figure-html/unnamed-chunk-3-1.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
 </section>
@@ -908,10 +1018,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <input type="hidden" id="giscus-alt-theme" value="dark">
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./rt.html" class="pagination-link" aria-label="Estimating $R_t$">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./mod.html" class="pagination-link" aria-label="Modelling">
-        <span class="nav-page-text">Modelling</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./intv.html" class="pagination-link" aria-label="Interventions">
+        <span class="nav-page-text">Interventions</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

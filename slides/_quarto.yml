@@ -6,4 +6,5 @@ bibliography: ../references.bib
 
 format: 
   revealjs:
+    theme: [default, theme.scss]
     logo: ../../logo.svg
