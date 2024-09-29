@@ -1,5 +1,13 @@
 # Vaccine performance
 
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+library(ggplot2)
+library(plotly)
+```
+
 ## Vaccine efficacy
 
 ::: {#def-vec}
@@ -71,6 +79,64 @@ df$ppv <- df$cov / 100
 df$rr <- (df$pcv / (1 - df$pcv)) / (df$ppv / (1 - df$ppv))
 lm(rr ~ birth_cohort, data = df)
 1 - exp(-3.029905)
+```
+
+### Sensitivity analysis
+
+```{r}
+ve_screening <- function(pcv, ppv) {
+  1 - (pcv / (1 - pcv)) / (ppv / (1 - ppv))
+}
+
+pcv <- seq(0.01, 0.99, 0.01)
+ppv <- seq(0.01, 0.999, 0.01)
+df <- expand.grid(pcv, ppv)
+colnames(df) <- c("pcv", "ppv")
+
+df$ve <- ve_screening(pcv = df$pcv, ppv = df$ppv)
+
+# 
+df <- df[df$ppv >= df$pcv,]
+```
+
+
+```{r}
+#| code-fold: true
+#| fig-width: 6
+#| fig-height: 4
+#| out-width: "100%"
+ggplot(df, aes(x = pcv, y = ppv, z = ve)) +
+  geom_contour_filled() +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  labs(x = "PCV", y = "PPV", fill = "Vaccine effectiveness") +
+  theme_classic()
+```
+
+
+```{r}
+#| code-fold: true
+plot_ly(
+  df,
+  x = ~ve,
+  y = ~pcv,
+  z = ~ppv,
+  intensity = ~ve,
+  type = "mesh3d",
+  hovertext = paste0(
+    "<b>ppv:</b> ",
+    df$ppv,
+    "<br>",
+    "<b>pcv:</b> ",
+    df$pcv,
+    "<br>",
+    "<b>ve</b> ",
+    df$ve,
+    "<br>"
+  ),
+  hoverinfo = "text",
+  showscale = F
+)
 ```
 
 ## Vaccine impact
