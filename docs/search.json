@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Infectious disease modelling for babies",
     "section": "",
-    "text": "Preface\nLast modified: September 29, 2024.\nThis book brings together everything I have learned about infectious disease modelling during my PhD journey. Special thanks to my idol, Dr. James Hay, who once gave these genius advice:\n\n“Read and learn now - it will be harder later on.”\n“Spent a lot of time writing well-documented, generalisable code that didn’t necessarily turn into publications at the time. I now use that code all of the time.”\nDr. James Hay’s inspiring talk at the MIDSEA ECR April 2024 Meeting.\n\nThese words encouraged me to read and learn more, and to ensure every detail was carefully documented. In this book, you (and my future self) will find:\n\nMethodologies for mathematical models of infectious diseases.\nA dictionary of jargon with cited definitions.\nStep-by-step guides for writing infectious disease reports, following the Center for Disease Control and Prevention report format: data, workflow, analyses, and inference.\n\nThe content of this book is based on the materials I digested during my PhD, with specific articles and readings cited throughout the text. I am deeply grateful to my PhD supervisors, Dr. Marc Choisy, A/Prof. Louise Thwaites, Dr. Hugo Turner, for their caring, inspiring, and enthusiastic guidance. My most heartfelt thanks also go to my mentors, A/Prof. Le Van Tan, A/Prof. Wirichada Pan-Ngum, Asst Prof. Kiesha Prem, Dr. Phung Khanh Lam, and Dr. Leigh Jones, for always nurturing and guiding me towards the best path.\nI would like to acknowledge the following educational experiences:\n\n\n\n\n\n\n\n\nCourse\nLecturers\nInstitutions\n\n\n\n\nModelling Infectious Diseases in South East Asia (MIDSEA) Summer School (2024)\nModelling Master Class: Prof. Alex Cook; Prof. Jomar Fajardo Rabajante; A/Prof. Wirichada Pan-Ngum\nModelling interventions and Health economic evaluation: Asst/Prof. Kiesha Prem; Asst/Prof. Hannah Clapham; Asst/Prof. Swapnil Mishra; Asst/Prof. Thitiya Theparod\nNational University of Singapore; Mahidol Oxford Research Unit; Oxford University Clinical Research Unit; University of the Philippines; De La Salle Manila; Mahasarakham University\n\n\nSummer Institute in Statistics and Modeling in Infectious Diseases (SISMID) (2023)\nStochastic Epidemic Models with Inference: Prof. Tom Britton; Prof. Ira M Longini\nMCMC I: Prof. M. Elizabeth Halloran; Prof. Volodymyr Minin; Prof. Kari Auranen\nMCMC II: Prof. Philip O’Neill; Prof. Theodore Kypraios\nSimulation-Based Inference for Epidemiological Dynamics: Prof. Aaron King; Prof. Edward Ionides\nUniversity of Washington\n\n\nIntroduction to mathematical models of the Epidemiology & Control of Infectious Diseases (2022)\nProf. Azra Ghani; Prof. Alex Cook; Dr. Lilith Whittles; Dr. Clare McCormack; Dr. Tara Mangal; Dr. Juliette Unwin\nImperial College London; Nanyang Technological University\n\n\nMathematical Modelling for Vaccine-preventable Diseases (2022)\nProf. Caroline Trotter; Prof. Julia Gog; Prof. Nik Cunniffe; Prof. Thumbi Mwanga; A/Prof. Andrew Conlan; Dr. Cerian Webb; Dr. Katy Gaythorpe; Dr. Matt Castle\nVaccine Impact Modelling Consortium; University of Cambridge\n\n\n\nMany thanks to the authors who kindly shared materials in response to my inquiries on these topics:\n\nWorkshop: Modeling Rabies Outbreak and Control (2023), by Dr. Phrutsamon Wongnak.\n\nIf you enjoyed this book or found any mistakes, please leave a comment below. Your feedback means a lot!",
+    "text": "Preface\nLast modified: September 30, 2024.\nThis book brings together everything I have learned about infectious disease modelling during my PhD journey. Special thanks to my idol, Dr. James Hay, who once gave these genius advice:\n\n“Read and learn now - it will be harder later on.”\n“Spent a lot of time writing well-documented, generalisable code that didn’t necessarily turn into publications at the time. I now use that code all of the time.”\nDr. James Hay’s inspiring talk at the MIDSEA ECR April 2024 Meeting.\n\nThese words encouraged me to read and learn more, and to ensure every detail was carefully documented. In this book, you (and my future self) will find:\n\nMethodologies for mathematical models of infectious diseases.\nA dictionary of jargon with cited definitions.\nStep-by-step guides for writing infectious disease reports, following the Center for Disease Control and Prevention report format: data, workflow, analyses, and inference.\n\nThe content of this book is based on the materials I digested during my PhD, with specific articles and readings cited throughout the text. I am deeply grateful to my PhD supervisors, Dr. Marc Choisy, A/Prof. Louise Thwaites, Dr. Hugo Turner, for their caring, inspiring, and enthusiastic guidance. My most heartfelt thanks also go to my mentors, A/Prof. Le Van Tan, A/Prof. Wirichada Pan-Ngum, Asst Prof. Kiesha Prem, Dr. Phung Khanh Lam, and Dr. Leigh Jones, for always nurturing and guiding me towards the best path.\nI would like to acknowledge the following educational experiences:\n\n\n\n\n\n\n\n\nCourse\nLecturers\nInstitutions\n\n\n\n\nModelling Infectious Diseases in South East Asia (MIDSEA) Summer School (2024)\nModelling Master Class: Prof. Alex Cook; Prof. Jomar Fajardo Rabajante; A/Prof. Wirichada Pan-Ngum\nModelling interventions and Health economic evaluation: Asst/Prof. Kiesha Prem; Asst/Prof. Hannah Clapham; Asst/Prof. Swapnil Mishra; Asst/Prof. Thitiya Theparod\nNational University of Singapore; Mahidol Oxford Research Unit; Oxford University Clinical Research Unit; University of the Philippines; De La Salle Manila; Mahasarakham University\n\n\nSummer Institute in Statistics and Modeling in Infectious Diseases (SISMID) (2023)\nStochastic Epidemic Models with Inference: Prof. Tom Britton; Prof. Ira M Longini\nMCMC I: Prof. M. Elizabeth Halloran; Prof. Volodymyr Minin; Prof. Kari Auranen\nMCMC II: Prof. Philip O’Neill; Prof. Theodore Kypraios\nSimulation-Based Inference for Epidemiological Dynamics: Prof. Aaron King; Prof. Edward Ionides\nUniversity of Washington\n\n\nIntroduction to mathematical models of the Epidemiology & Control of Infectious Diseases (2022)\nProf. Azra Ghani; Prof. Alex Cook; Dr. Lilith Whittles; Dr. Clare McCormack; Dr. Tara Mangal; Dr. Juliette Unwin\nImperial College London; Nanyang Technological University\n\n\nMathematical Modelling for Vaccine-preventable Diseases (2022)\nProf. Caroline Trotter; Prof. Julia Gog; Prof. Nik Cunniffe; Prof. Thumbi Mwanga; A/Prof. Andrew Conlan; Dr. Cerian Webb; Dr. Katy Gaythorpe; Dr. Matt Castle\nVaccine Impact Modelling Consortium; University of Cambridge\n\n\n\nMany thanks to the authors who kindly shared materials in response to my inquiries on these topics:\n\nWorkshop: Modeling Rabies Outbreak and Control (2023), by Dr. Phrutsamon Wongnak.\n\nIf you enjoyed this book or found any mistakes, please leave a comment below. Your feedback means a lot!",
     "crumbs": [
       "Preface"
     ]
@@ -352,6 +352,17 @@
     ]
   },
   {
+    "objectID": "mle.html#section",
+    "href": "mle.html#section",
+    "title": "6  Maximum likelihood estimation",
+    "section": "6.3 ",
+    "text": "6.3",
+    "crumbs": [
+      "Calibration",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Maximum likelihood estimation</span>"
+    ]
+  },
+  {
     "objectID": "mle.html#code",
     "href": "mle.html#code",
     "title": "6  Maximum likelihood estimation",
@@ -589,6 +600,28 @@
     ]
   },
   {
+    "objectID": "rt-prac.html",
+    "href": "rt-prac.html",
+    "title": "12  \\(R_t\\) in practice",
+    "section": "",
+    "text": "12.1 Interpret \\(R_t\\)\nlibrary(dplyr)\nlibrary(tidyr)\nlibrary(zoo)\nlibrary(data.table)\nlibrary(ggplot2)\nlibrary(EpiEstim)\nlibrary(janitor)\nlibrary(cowplot)\nlibrary(lubridate)",
+    "crumbs": [
+      "Reproduction number",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>$R_t$ in practice</span>"
+    ]
+  },
+  {
+    "objectID": "rt-prac.html#r_t-with-color-code",
+    "href": "rt-prac.html#r_t-with-color-code",
+    "title": "12  \\(R_t\\) in practice",
+    "section": "12.2 \\(R_t\\) with color code",
+    "text": "12.2 \\(R_t\\) with color code\n\n\nCode\ndf &lt;- readRDS(\"data/linelist.rds\")\ndf &lt;- df |&gt;\n  count(date_onset) |&gt;\n  complete(date_onset = seq(date_onset[1], date_onset[length(date_onset)], by = \"days\"),\n           fill = list(n = 0))\n\ncolnames(df) &lt;- c(\"dates\", \"I\")\ndf &lt;- df |&gt;\n  filter(dates &gt; ymd(\"2023-02-24\"), dates &lt; ymd(\"2023-06-23\"))\n\nmod &lt;- estimate_R(incid = df,\n                  method = \"parametric_si\",\n                  config = make_config(list(mean_si = 4.5, std_si = 1.3)))\n\ndf_line &lt;- mod$R\ndf_line$dates &lt;- mod$dates[df_line$t_end]\ndf_line &lt;- clean_names(df_line)\ndf_line &lt;- df_line |&gt;\n  clean_names() |&gt;\n  mutate(\n    b_posterior = std_r ^ 2 / mean_r,\n    a_posterior = mean_r / b_posterior,\n    pct = pgamma(\n      1,\n      shape = a_posterior,\n      scale = b_posterior,\n      lower.tail = F\n    ),\n    trend = case_when(\n      pct &gt; 0.9 ~ \"purple\",\n      pct &gt; 0.75 & pct &lt;= 0.9 ~ \"red\",\n      pct &gt; 0.25 & pct &lt;= 0.75 ~ \"orange\",\n      pct &gt; 0.1 & pct &lt;= 0.25 ~ \"yellow\",\n      pct &lt;= 0.1 ~ \"green\"\n    )\n  )\ndf_line$trend &lt;- factor(df_line$trend,\n                        levels = c(\"green\", \"yellow\", \"orange\", \"red\", \"purple\"))\n\ndf_ribbon &lt;- df_line\ndf_ribbon$group &lt;- consecutive_id(df_ribbon$trend)\ndf_ribbon &lt;- head(do.call(rbind, by(df_ribbon, df_ribbon$group, rbind, NA)), -1)\ndf_ribbon[, c(\"trend\", \"group\")] &lt;- lapply(df_ribbon[, c(\"trend\", \"group\")], na.locf)\ndf_ribbon[] &lt;- lapply(df_ribbon, na.locf, fromLast = T)\n\ncols &lt;- c(\n  \"green\" = \"#169873\",\n  \"yellow\" = \"#DFDF11\",\n  \"orange\" = \"#FFA200\",\n  \"red\" = \"#F2545B\",\n  \"purple\" = \"#5328FF\"\n)\nlabs &lt;- c(\n  \"green\" = \"Declining\",\n  \"yellow\" = \"Likely declining\",\n  \"orange\" = \"Uncertain trend or stable\",\n  \"red\" = \"Likely growing\",\n  \"purple\" = \"Growing\"\n)\n\nepi_plot &lt;- ggplot(df, aes(x = dates, y = I)) +\n  geom_bar(stat = \"identity\", fill = \"#AED2FF\") +\n  scale_x_date(limits = c(min(df$dates) - 1, max(df$dates) + 1), expand = c(0, 0)) +\n  scale_y_continuous(expand = c(0, 0)) +\n  labs(x = NULL, y = \"Incidence\") +\n  theme_classic()\n\nrt_plot &lt;- ggplot() +\n  geom_hline(yintercept = 1,\n             alpha = 0.5,\n             linetype = \"dashed\") +\n  geom_ribbon(\n    aes(\n      x = dates,\n      ymin = quantile_0_025_r,\n      ymax = quantile_0_975_r,\n      fill = trend,\n      group = group\n    ),\n    data = df_ribbon,\n    alpha = 0.3\n  ) +\n  geom_line(aes(\n    x = dates,\n    y = mean_r,\n    color = trend,\n    group = 1\n  ), data = df_line) +\n  scale_x_date(limits = c(min(df$dates) - 1, max(df$dates) + 1), expand = c(0, 0)) +\n  scale_color_manual(\n    values = cols,\n    labels = labs,\n    guide = guide_legend(nrow = 2, byrow = TRUE)\n  ) +\n  scale_fill_manual(\n    values = cols,\n    labels = labs,\n    guide = guide_legend(nrow = 2, byrow = TRUE)\n  ) +\n  labs(\n    x = \"Date of onset\",\n    y = expression(R[t]),\n    color = \"Trend\",\n    fill = \"Trend\"\n  ) +\n  theme_classic() +\n  theme(legend.position = \"bottom\")\n\nplot_grid(epi_plot, rt_plot, nrow = 2, align = \"v\", rel_heights = c(0.4, 0.7))",
+    "crumbs": [
+      "Reproduction number",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>$R_t$ in practice</span>"
+    ]
+  },
+  {
     "objectID": "intv.html",
     "href": "intv.html",
     "title": "Interventions",
@@ -611,78 +644,78 @@
   {
     "objectID": "ftc.html",
     "href": "ftc.html",
-    "title": "12  Flattening the curve",
+    "title": "13  Flattening the curve",
     "section": "",
-    "text": "12.1 Shock-intervention\nAssuming your intervention will effective immediately reduce the contacts by a constant factor.",
+    "text": "13.1 Shock-intervention\nAssuming your intervention will effective immediately reduce the contacts by a constant factor.",
     "crumbs": [
       "Interventions",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Flattening the curve</span>"
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Flattening the curve</span>"
     ]
   },
   {
     "objectID": "vax.html",
     "href": "vax.html",
-    "title": "13  Vaccination",
+    "title": "14  Vaccination",
     "section": "",
-    "text": "13.1 Vaccines",
+    "text": "14.1 Vaccines",
     "crumbs": [
       "Interventions",
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Vaccination</span>"
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Vaccination</span>"
     ]
   },
   {
     "objectID": "vax.html#vaccines",
     "href": "vax.html#vaccines",
-    "title": "13  Vaccination",
+    "title": "14  Vaccination",
     "section": "",
-    "text": "13.1.1 Definition\nA vaccine is a biological product that can be used to safely induce an immune response that confers protection against infection and/or disease on subsequent exposure to a pathogen (Pollard & Bijker, 2021).\n\n\n13.1.2 Classification\nOver the past few decades, new vaccine platforms have been developed including viral vectors, nucleic acid-based RNA and DNA vaccines, and virus-like particles. However, traditionally vaccines are classified as live or non-live:\n\nLive:\n\n\nAre developed so that, in an immunocompetent host, they replicate sufficiently to produce a strong immune response, but not so much as to cause significant disease manifestations.\nTrade-off between strong immune response and avoid symptomatic disease, therefore some live attenuated vaccines require multiple doses and induce relatively short-lived immunity. For example, 5% of children will develop a rash and up to 15% fever after measles vaccination\nPotentially replicate in an uncontrolled manner in immuno-compromised individuals.\nExamples: measles, mumps, rubella and rotavirus, oral polio vaccine, the Mycobacterium bovis bacillus Calmette–Guérin (BCG) vaccine for TB and live attenuated influenza vaccine\n\n\nNon-live: no risk to immunocompromised individuals (although may not confer protection in those with B cell or combined immunodeficiency).\n\nB cells\n\nProduce antibodies (humoral immunity).\n\nT cells\n\nDirectly attack infected cells (cellular immunity).\n\n\nKiller (cytotoxic):\nHelper: subtypes by profiles of cytokine production",
+    "text": "14.1.1 Definition\nA vaccine is a biological product that can be used to safely induce an immune response that confers protection against infection and/or disease on subsequent exposure to a pathogen (Pollard & Bijker, 2021).\n\n\n14.1.2 Classification\nOver the past few decades, new vaccine platforms have been developed including viral vectors, nucleic acid-based RNA and DNA vaccines, and virus-like particles. However, traditionally vaccines are classified as live or non-live:\n\nLive:\n\n\nAre developed so that, in an immunocompetent host, they replicate sufficiently to produce a strong immune response, but not so much as to cause significant disease manifestations.\nTrade-off between strong immune response and avoid symptomatic disease, therefore some live attenuated vaccines require multiple doses and induce relatively short-lived immunity. For example, 5% of children will develop a rash and up to 15% fever after measles vaccination\nPotentially replicate in an uncontrolled manner in immuno-compromised individuals.\nExamples: measles, mumps, rubella and rotavirus, oral polio vaccine, the Mycobacterium bovis bacillus Calmette–Guérin (BCG) vaccine for TB and live attenuated influenza vaccine\n\n\nNon-live: no risk to immunocompromised individuals (although may not confer protection in those with B cell or combined immunodeficiency).\n\nB cells\n\nProduce antibodies (humoral immunity).\n\nT cells\n\nDirectly attack infected cells (cellular immunity).\n\n\nKiller (cytotoxic):\nHelper: subtypes by profiles of cytokine production",
     "crumbs": [
       "Interventions",
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Vaccination</span>"
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Vaccination</span>"
     ]
   },
   {
     "objectID": "vax.html#innate-vs-adaptive-immune-system",
     "href": "vax.html#innate-vs-adaptive-immune-system",
-    "title": "13  Vaccination",
-    "section": "13.2 Innate vs adaptive immune system",
-    "text": "13.2 Innate vs adaptive immune system",
+    "title": "14  Vaccination",
+    "section": "14.2 Innate vs adaptive immune system",
+    "text": "14.2 Innate vs adaptive immune system",
     "crumbs": [
       "Interventions",
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Vaccination</span>"
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Vaccination</span>"
     ]
   },
   {
     "objectID": "vax.html#prevent-infection-vs-disease",
     "href": "vax.html#prevent-infection-vs-disease",
-    "title": "13  Vaccination",
-    "section": "13.3 Prevent infection vs disease",
-    "text": "13.3 Prevent infection vs disease\nSome evidence showed that BCG vaccine can prevent both infection and disease (Pollard & Bijker, 2021).\n\nInfection: BCG-vaccinated children had a memory T-cell response to infection, as indicated by a positive interferon-\\(\\gamma\\) release assay.\nDisease: BCG vaccination reduces the spread of M. tuberculosis bacteria in the blood, mediated by T-cell immunity.",
+    "title": "14  Vaccination",
+    "section": "14.3 Prevent infection vs disease",
+    "text": "14.3 Prevent infection vs disease\nSome evidence showed that BCG vaccine can prevent both infection and disease (Pollard & Bijker, 2021).\n\nInfection: BCG-vaccinated children had a memory T-cell response to infection, as indicated by a positive interferon-\\(\\gamma\\) release assay.\nDisease: BCG vaccination reduces the spread of M. tuberculosis bacteria in the blood, mediated by T-cell immunity.",
     "crumbs": [
       "Interventions",
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Vaccination</span>"
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Vaccination</span>"
     ]
   },
   {
     "objectID": "vax.html#non-specific-effects",
     "href": "vax.html#non-specific-effects",
-    "title": "13  Vaccination",
-    "section": "13.4 Non-specific effects",
-    "text": "13.4 Non-specific effects\nMeasles disease casts a prolonged ‘shadow’ over the immune system, with depletion of existing immune memory, such that children who have had the disease have an increased risk of death from other causes over the next few years (Pollard & Bijker, 2021).",
+    "title": "14  Vaccination",
+    "section": "14.4 Non-specific effects",
+    "text": "14.4 Non-specific effects\nMeasles disease casts a prolonged ‘shadow’ over the immune system, with depletion of existing immune memory, such that children who have had the disease have an increased risk of death from other causes over the next few years (Pollard & Bijker, 2021).",
     "crumbs": [
       "Interventions",
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Vaccination</span>"
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Vaccination</span>"
     ]
   },
   {
     "objectID": "vax.html#factors-affecting-vaccine-protection",
     "href": "vax.html#factors-affecting-vaccine-protection",
-    "title": "13  Vaccination",
-    "section": "13.5 Factors affecting vaccine protection",
-    "text": "13.5 Factors affecting vaccine protection\n\nMaternal antibody levels\nPrior antigen exposure\nAge of vaccination\nVaccine schedule\nVaccine dose: intradermal vaccination has been shown to be immunogenic at much lower (fractional) doses than intramuscular vaccination for influenza, rabies and HBV vaccines (Pollard & Bijker, 2021).\n\n\n\n\n\nPollard, A. J., & Bijker, E. M. (2021). A guide to vaccinology: from basic principles to new developments. Nature Reviews Immunology, 21(2), 83–100. https://doi.org/10.1038/s41577-020-00479-7",
+    "title": "14  Vaccination",
+    "section": "14.5 Factors affecting vaccine protection",
+    "text": "14.5 Factors affecting vaccine protection\n\nMaternal antibody levels\nPrior antigen exposure\nAge of vaccination\nVaccine schedule\nVaccine dose: intradermal vaccination has been shown to be immunogenic at much lower (fractional) doses than intramuscular vaccination for influenza, rabies and HBV vaccines (Pollard & Bijker, 2021).\n\n\n\n\n\nPollard, A. J., & Bijker, E. M. (2021). A guide to vaccinology: from basic principles to new developments. Nature Reviews Immunology, 21(2), 83–100. https://doi.org/10.1038/s41577-020-00479-7",
     "crumbs": [
       "Interventions",
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Vaccination</span>"
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Vaccination</span>"
     ]
   },
   {
@@ -743,67 +776,67 @@
   {
     "objectID": "vax-mod.html",
     "href": "vax-mod.html",
-    "title": "15  Model vaccination",
+    "title": "16  Model vaccination",
     "section": "",
-    "text": "15.1 Vaccine effects",
+    "text": "16.1 Vaccine effects",
     "crumbs": [
       "Interventions",
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Model vaccination</span>"
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Model vaccination</span>"
     ]
   },
   {
     "objectID": "vax-mod.html#vaccine-effects",
     "href": "vax-mod.html#vaccine-effects",
-    "title": "15  Model vaccination",
+    "title": "16  Model vaccination",
     "section": "",
-    "text": "15.1.1 Prevent infection\nVaccine prevents the pathogen from establishing an infection in the body. A vaccinated person is less likely to get infected.\n\nAssuming a perfect vaccine against infection, the model can be designed as follows:\n\nVaccinated people \\(V\\) remain uninfected in their lifetime and do not participate in disease transmission.\nYou can simplify this model by moving susceptible people to the \\(R\\) compartment because they also do not participate in disease transmission.\n\n\n\n15.1.2 Prevent severe disease\nVaccine reduces the severity of the disease if the vaccinated person does get infected. A vaccinated individual still get infected but experiences a much milder form of the disease.\n\nAssuming a perfect vaccine against severe disease, the model can be designed as follows:\n\nThe infected population is split into a proportion of \\(p_s\\) for severe cases and \\(1 - p_s\\) for mild cases. Vaccinated people \\(S_v\\) still get infected, but will only experience mild disease.\n\n\n15.1.3 Prevent transmission\nVaccine reduces the ability of a vaccinated individual, who becomes infected, to transmit the pathogen to others. A vaccinated person still get infected, still get sick, but they are less likely to spread the disease to others.\n\nAssuming a perfect vaccine against transmission, the model can be designed as follows:\n\n\\(I\\) being the only source of infection that contributes to the force of infection. Vaccinated people \\(S_v\\) still get infected and become \\(I_v\\), but they do not transmit the disease.",
+    "text": "16.1.1 Prevent infection\nVaccine prevents the pathogen from establishing an infection in the body. A vaccinated person is less likely to get infected.\n\nAssuming a perfect vaccine against infection, the model can be designed as follows:\n\nVaccinated people \\(V\\) remain uninfected in their lifetime and do not participate in disease transmission.\nYou can simplify this model by moving susceptible people to the \\(R\\) compartment because they also do not participate in disease transmission.\n\n\n\n16.1.2 Prevent severe disease\nVaccine reduces the severity of the disease if the vaccinated person does get infected. A vaccinated individual still get infected but experiences a much milder form of the disease.\n\nAssuming a perfect vaccine against severe disease, the model can be designed as follows:\n\nThe infected population is split into a proportion of \\(p_s\\) for severe cases and \\(1 - p_s\\) for mild cases. Vaccinated people \\(S_v\\) still get infected, but will only experience mild disease.\n\n\n16.1.3 Prevent transmission\nVaccine reduces the ability of a vaccinated individual, who becomes infected, to transmit the pathogen to others. A vaccinated person still get infected, still get sick, but they are less likely to spread the disease to others.\n\nAssuming a perfect vaccine against transmission, the model can be designed as follows:\n\n\\(I\\) being the only source of infection that contributes to the force of infection. Vaccinated people \\(S_v\\) still get infected and become \\(I_v\\), but they do not transmit the disease.",
     "crumbs": [
       "Interventions",
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Model vaccination</span>"
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Model vaccination</span>"
     ]
   },
   {
     "objectID": "vax-mod.html#imperfect-protections",
     "href": "vax-mod.html#imperfect-protections",
-    "title": "15  Model vaccination",
-    "section": "15.2 Imperfect protections",
-    "text": "15.2 Imperfect protections\nWhat is meant by a vaccine with effectiveness of 80% protection against a specific clinical endpoint? The mechanism of vaccine action is typically modelled in two ways:\n\n15.2.1 All-or-nothing model\n\n\n\n\n\n\nAll-or-nothing (AoN, also called the polarized (Park et al., 2023), or take) model assumes that among vaccinated individuals, a proportion \\(VE_P\\) are completely protected, while the remaining fraction \\(1 - VE_P\\) remains completely unprotected (Park et al., 2023; Zachreson et al., 2023).\n\n\n\nAn effectiveness of 80% here implies that among vaccinated people, 80% are completely protected, and 20% receive no protection (World Health Organization, 2013).\n\nAssumming a standard SIR model, vaccine protects against infection with vaccine effectiveness \\(VE_P\\), \\(\\rho\\) represents the vaccination rate:\n\nAmong the susceptible \\(S\\), \\(\\rho S\\) are vaccinated.\nAmong those \\(\\rho S\\) who are vaccinated, \\(\\rho VE_P S\\) are completely protected and go directly to \\(R_v\\), the remaining is \\(\\rho (1 - VE_P) S\\).\nThe remaining \\(\\rho (1 - VE_P) S\\) are completely unprotected, and will be infected with force of infection \\(\\lambda(t)\\) just like those who are unvaccinated.\n\n\n\n\n\n\n\nFigure 15.1: All-or-nothing vaccination model (Park et al., 2023)\n\n\n\n\\[\\begin{align}\n\\frac{dS}{dt} &= -\\lambda(t) S - \\rho S \\\\\n\\frac{dI}{dt} &= \\lambda(t) S - \\gamma I \\\\\n\\frac{dR}{dt} &= \\gamma I \\\\\n\\frac{dS_v}{dt} &= \\rho (1 - VE_P) S - \\lambda(t) S_v \\\\\n\\frac{dI_v}{dt} &= \\lambda(t) S_v - \\gamma I_v \\\\\n\\frac{dR_v}{dt} &= \\rho VE_P S + \\gamma I_v\n\\end{align}\\]\n\n\n15.2.2 Leaky model\n\n\n\n\n\n\nLeaky (or degree) model assumes that all vaccinated individuals are partially protected (Zachreson et al., 2023).\n\n\n\nAn effectiveness of 80% here implies that all vaccinated people have the endpoint of interest reduced by 80% compared to non-vaccinees.\n\nThe assumption that no vaccinated people is totally or permanently protected implies one or both of the following (World Health Organization, 2013):\n\nNo amount (titre) of the immune marker is totally protective or, if it is, no individual can maintain that titre for a long period (because of waning or transient immunosuppression)\nThe degree of protection is a function of the level of the immune marker - the simplest explanation being that protection is a function of both the level of the immune marker and the challenge dose.\n\nAssumming a standard SIR model, vaccine protects against infection with vaccine effectiveness \\(VE_L\\), \\(\\rho\\) represents the vaccination rate.\n\nAmong susceptible \\(S\\), \\(\\rho S\\) are vaccinated.\nAmong those \\(\\rho S\\) who are vaccinated, force of infection \\(\\lambda(t)\\) is reduced by a factor of \\(1 - VE_L\\).\n\n\n\n\n\n\n\nFigure 15.2: Leaky vaccination model (Park et al., 2023)\n\n\n\n\\[\\begin{align}\n\\frac{dS}{dt} &= -\\lambda(t) S - \\rho S \\\\\n\\frac{dI}{dt} &= \\lambda(t) S - \\gamma I \\\\\n\\frac{dR}{dt} &= \\gamma I \\\\\n\\frac{dS_v}{dt} &= \\rho S - (1 - VE_L) \\lambda(t) S_v \\\\\n\\frac{dI_v}{dt} &= (1 - VE_L) \\lambda(t) S_v - \\gamma I_v \\\\\n\\frac{dR_v}{dt} &= \\gamma I_v\n\\end{align}\\]",
+    "title": "16  Model vaccination",
+    "section": "16.2 Imperfect protections",
+    "text": "16.2 Imperfect protections\nWhat is meant by a vaccine with effectiveness of 80% protection against a specific clinical endpoint? The mechanism of vaccine action is typically modelled in two ways:\n\n16.2.1 All-or-nothing model\n\n\n\n\n\n\nAll-or-nothing (AoN, also called the polarized (Park et al., 2023), or take) model assumes that among vaccinated individuals, a proportion \\(VE_P\\) are completely protected, while the remaining fraction \\(1 - VE_P\\) remains completely unprotected (Park et al., 2023; Zachreson et al., 2023).\n\n\n\nAn effectiveness of 80% here implies that among vaccinated people, 80% are completely protected, and 20% receive no protection (World Health Organization, 2013).\n\nAssumming a standard SIR model, vaccine protects against infection with vaccine effectiveness \\(VE_P\\), \\(\\rho\\) represents the vaccination rate:\n\nAmong the susceptible \\(S\\), \\(\\rho S\\) are vaccinated.\nAmong those \\(\\rho S\\) who are vaccinated, \\(\\rho VE_P S\\) are completely protected and go directly to \\(R_v\\), the remaining is \\(\\rho (1 - VE_P) S\\).\nThe remaining \\(\\rho (1 - VE_P) S\\) are completely unprotected, and will be infected with force of infection \\(\\lambda(t)\\) just like those who are unvaccinated.\n\n\n\n\n\n\n\nFigure 16.1: All-or-nothing vaccination model (Park et al., 2023)\n\n\n\n\\[\\begin{align}\n\\frac{dS}{dt} &= -\\lambda(t) S - \\rho S \\\\\n\\frac{dI}{dt} &= \\lambda(t) S - \\gamma I \\\\\n\\frac{dR}{dt} &= \\gamma I \\\\\n\\frac{dS_v}{dt} &= \\rho (1 - VE_P) S - \\lambda(t) S_v \\\\\n\\frac{dI_v}{dt} &= \\lambda(t) S_v - \\gamma I_v \\\\\n\\frac{dR_v}{dt} &= \\rho VE_P S + \\gamma I_v\n\\end{align}\\]\n\n\n16.2.2 Leaky model\n\n\n\n\n\n\nLeaky (or degree) model assumes that all vaccinated individuals are partially protected (Zachreson et al., 2023).\n\n\n\nAn effectiveness of 80% here implies that all vaccinated people have the endpoint of interest reduced by 80% compared to non-vaccinees.\n\nThe assumption that no vaccinated people is totally or permanently protected implies one or both of the following (World Health Organization, 2013):\n\nNo amount (titre) of the immune marker is totally protective or, if it is, no individual can maintain that titre for a long period (because of waning or transient immunosuppression)\nThe degree of protection is a function of the level of the immune marker - the simplest explanation being that protection is a function of both the level of the immune marker and the challenge dose.\n\nAssumming a standard SIR model, vaccine protects against infection with vaccine effectiveness \\(VE_L\\), \\(\\rho\\) represents the vaccination rate.\n\nAmong susceptible \\(S\\), \\(\\rho S\\) are vaccinated.\nAmong those \\(\\rho S\\) who are vaccinated, force of infection \\(\\lambda(t)\\) is reduced by a factor of \\(1 - VE_L\\).\n\n\n\n\n\n\n\nFigure 16.2: Leaky vaccination model (Park et al., 2023)\n\n\n\n\\[\\begin{align}\n\\frac{dS}{dt} &= -\\lambda(t) S - \\rho S \\\\\n\\frac{dI}{dt} &= \\lambda(t) S - \\gamma I \\\\\n\\frac{dR}{dt} &= \\gamma I \\\\\n\\frac{dS_v}{dt} &= \\rho S - (1 - VE_L) \\lambda(t) S_v \\\\\n\\frac{dI_v}{dt} &= (1 - VE_L) \\lambda(t) S_v - \\gamma I_v \\\\\n\\frac{dR_v}{dt} &= \\gamma I_v\n\\end{align}\\]",
     "crumbs": [
       "Interventions",
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Model vaccination</span>"
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Model vaccination</span>"
     ]
   },
   {
     "objectID": "vax-mod.html#mixed-effects",
     "href": "vax-mod.html#mixed-effects",
-    "title": "15  Model vaccination",
-    "section": "15.3 Mixed effects",
-    "text": "15.3 Mixed effects\nImperfect vaccines often have a combination of effects: they can protect against infection, severe disease, and transmission at the same time.\n\nAssuming a vaccine with leaky effectiveness \\(VE_L\\) against infection and severe disease, the model can be designed as follows:\n\n\nAmong susceptible \\(S\\), \\(\\rho S\\) are vaccinated.\nAmong those \\(\\rho S\\) who are vaccinated, force of infection \\(\\lambda(t)\\) is reduced by a factor of \\(1 - VE_L\\).\nVaccine reduces the proportion of severe disease from \\(p_s\\) to \\(p_s'\\).",
+    "title": "16  Model vaccination",
+    "section": "16.3 Mixed effects",
+    "text": "16.3 Mixed effects\nImperfect vaccines often have a combination of effects: they can protect against infection, severe disease, and transmission at the same time.\n\nAssuming a vaccine with leaky effectiveness \\(VE_L\\) against infection and severe disease, the model can be designed as follows:\n\n\nAmong susceptible \\(S\\), \\(\\rho S\\) are vaccinated.\nAmong those \\(\\rho S\\) who are vaccinated, force of infection \\(\\lambda(t)\\) is reduced by a factor of \\(1 - VE_L\\).\nVaccine reduces the proportion of severe disease from \\(p_s\\) to \\(p_s'\\).",
     "crumbs": [
       "Interventions",
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Model vaccination</span>"
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Model vaccination</span>"
     ]
   },
   {
     "objectID": "vax-mod.html#multiple-doses",
     "href": "vax-mod.html#multiple-doses",
-    "title": "15  Model vaccination",
-    "section": "15.4 Multiple doses",
-    "text": "15.4 Multiple doses\nSome vaccines require multiple doses, like measles (2 doses) or rotavirus (2 doses), with varying effectiveness per dose. Below is the DynaMICE model (Verguet et al., 2015) for the 2-dose measles vaccine, assuming AoN effectiveness as in Figure 15.1 for both doses.",
+    "title": "16  Model vaccination",
+    "section": "16.4 Multiple doses",
+    "text": "16.4 Multiple doses\nSome vaccines require multiple doses, like measles (2 doses) or rotavirus (2 doses), with varying effectiveness per dose. Below is the DynaMICE model (Verguet et al., 2015) for the 2-dose measles vaccine, assuming AoN effectiveness as in Figure 16.1 for both doses.",
     "crumbs": [
       "Interventions",
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Model vaccination</span>"
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Model vaccination</span>"
     ]
   },
   {
     "objectID": "vax-mod.html#code",
     "href": "vax-mod.html#code",
-    "title": "15  Model vaccination",
-    "section": "15.5 Code",
-    "text": "15.5 Code\n\n15.5.1 A perfect vaccine against infection\n\nlibrary(odin)\nlibrary(tidyr)\nlibrary(ggplot2)\n\n\n\npfvac_ode &lt;- odin({\n  # Derivatives\n  deriv(S) &lt;- -beta * S * I - rho * S\n  deriv(I) &lt;- beta * S * I - gamma * I\n  deriv(R) &lt;- gamma * I\n  deriv(V) &lt;- rho * S\n  \n  # Initial conditions\n  initial(S) &lt;- N_init - I_init\n  initial(I) &lt;- I_init\n  initial(R) &lt;- R_init\n  initial(V) &lt;- V_init\n  \n  # Parameters and initial values\n  beta &lt;- user(8.77e-8)\n  gamma &lt;- user(0.2)\n  rho &lt;- user(0.005)\n  N_init &lt;- user(5700000)\n  I_init &lt;- user(1)\n  R_init &lt;- user(0)\n  V_init &lt;- user(0)\n})\n\n\n# Initialize model\npfvac_mod &lt;- pfvac_ode$new()\n# How long to run\ntimes &lt;- seq(0,300)\n# Run the model\npred &lt;- data.frame(pfvac_mod$run(times))\n\n\n\nCode\ndf_plot &lt;- pivot_longer(pred, cols = S:V, names_to = \"comp\", values_to = \"n\")\n\nggplot(df_plot, aes(x = t, y = n, color = comp)) +\n  geom_line(linewidth = 1.2) +\n  scale_color_brewer(palette = \"PuOr\", breaks = c(\"S\", \"I\", \"R\", \"V\")) +\n  labs(color = NULL, y = NULL, x = \"Time\") +\n  theme_minimal() +\n  theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\n\n\n15.5.2 AoN model against infection\n\n\n15.5.3 Leaky model against infection\n\n\n\n\nPark, S. W., Li, M., Metcalf, C. J. E., Grenfell, B. T., & Dushoff, J. (2023). Immune boosting bridges leaky and polarized vaccination models. medRxiv. https://doi.org/10.1101/2023.07.14.23292670\n\n\nVerguet, S., Johri, M., Morris, S. K., Gauvreau, C. L., Jha, P., & Jit, M. (2015). Controlling measles using supplemental immunization activities: A mathematical model to inform optimal policy. Vaccine, 33(10), 1291–1296. https://doi.org/10.1016/j.vaccine.2014.11.050\n\n\nWorld Health Organization. (2013). Correlates of vaccine-induced protection: Methods and implications.\n\n\nZachreson, C., Tobin, R., Szanyi, J., Walker, C., Cromer, D., Shearer, F. M., Conway, E., Ryan, G., Cheng, A., McCaw, J. M., & Geard, N. (2023). Individual variation in vaccine immune response can produce bimodal distributions of protection. Vaccine, 41(45), 6630–6636. https://doi.org/10.1016/j.vaccine.2023.09.025",
+    "title": "16  Model vaccination",
+    "section": "16.5 Code",
+    "text": "16.5 Code\n\n16.5.1 A perfect vaccine against infection\n\nlibrary(odin)\nlibrary(tidyr)\nlibrary(ggplot2)\n\n\n\npfvac_ode &lt;- odin({\n  # Derivatives\n  deriv(S) &lt;- -beta * S * I - rho * S\n  deriv(I) &lt;- beta * S * I - gamma * I\n  deriv(R) &lt;- gamma * I\n  deriv(V) &lt;- rho * S\n  \n  # Initial conditions\n  initial(S) &lt;- N_init - I_init\n  initial(I) &lt;- I_init\n  initial(R) &lt;- R_init\n  initial(V) &lt;- V_init\n  \n  # Parameters and initial values\n  beta &lt;- user(8.77e-8)\n  gamma &lt;- user(0.2)\n  rho &lt;- user(0.005)\n  N_init &lt;- user(5700000)\n  I_init &lt;- user(1)\n  R_init &lt;- user(0)\n  V_init &lt;- user(0)\n})\n\n\n# Initialize model\npfvac_mod &lt;- pfvac_ode$new()\n# How long to run\ntimes &lt;- seq(0,300)\n# Run the model\npred &lt;- data.frame(pfvac_mod$run(times))\n\n\n\nCode\ndf_plot &lt;- pivot_longer(pred, cols = S:V, names_to = \"comp\", values_to = \"n\")\n\nggplot(df_plot, aes(x = t, y = n, color = comp)) +\n  geom_line(linewidth = 1.2) +\n  scale_color_brewer(palette = \"PuOr\", breaks = c(\"S\", \"I\", \"R\", \"V\")) +\n  labs(color = NULL, y = NULL, x = \"Time\") +\n  theme_minimal() +\n  theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\n\n\n16.5.2 AoN model against infection\n\n\n16.5.3 Leaky model against infection\n\n\n\n\nPark, S. W., Li, M., Metcalf, C. J. E., Grenfell, B. T., & Dushoff, J. (2023). Immune boosting bridges leaky and polarized vaccination models. medRxiv. https://doi.org/10.1101/2023.07.14.23292670\n\n\nVerguet, S., Johri, M., Morris, S. K., Gauvreau, C. L., Jha, P., & Jit, M. (2015). Controlling measles using supplemental immunization activities: A mathematical model to inform optimal policy. Vaccine, 33(10), 1291–1296. https://doi.org/10.1016/j.vaccine.2014.11.050\n\n\nWorld Health Organization. (2013). Correlates of vaccine-induced protection: Methods and implications.\n\n\nZachreson, C., Tobin, R., Szanyi, J., Walker, C., Cromer, D., Shearer, F. M., Conway, E., Ryan, G., Cheng, A., McCaw, J. M., & Geard, N. (2023). Individual variation in vaccine immune response can produce bimodal distributions of protection. Vaccine, 41(45), 6630–6636. https://doi.org/10.1016/j.vaccine.2023.09.025",
     "crumbs": [
       "Interventions",
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Model vaccination</span>"
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Model vaccination</span>"
     ]
   },
   {
@@ -859,111 +892,111 @@
   {
     "objectID": "he-etr.html",
     "href": "he-etr.html",
-    "title": "16  EtR Process",
+    "title": "17  EtR Process",
     "section": "",
     "text": "Overview\nHealth economics is closely linked to policy. Understanding how policies are made (in a proper way) helps us design studies that can contribute to policy-making. It is also useful to put yourself in the role of policy makers to consider how your research can best benefit the public.\nEvidence to Recommendation Process (EtR Process) is a systematic, standardized decision-making process used by national immunization technical advisory groups (NITAGs) for the development of evidence-based recommendations for immunization policy. EtR Process is composed of four steps:\nSteps 1, 2 and 3 should be conducted by the NITAG Secretariat or a working group. In step 4, all NITAG members should be involved.",
     "crumbs": [
       "Health economics",
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>EtR Process</span>"
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>EtR Process</span>"
     ]
   },
   {
     "objectID": "he-etr.html#overview",
     "href": "he-etr.html#overview",
-    "title": "16  EtR Process",
+    "title": "17  EtR Process",
     "section": "",
     "text": "The policy question\nThe elements to consider\nThe evidence\nThe recommendation\n\n\n\n\n\n\n\n\nClick here for a summary of all steps",
     "crumbs": [
       "Health economics",
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>EtR Process</span>"
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>EtR Process</span>"
     ]
   },
   {
     "objectID": "he-etr.html#prerequisite-step",
     "href": "he-etr.html#prerequisite-step",
-    "title": "16  EtR Process",
+    "title": "17  EtR Process",
     "section": "Prerequisite step",
     "text": "Prerequisite step\nWhen using the EtR Process for the first time, a prerequisite step should be conducted by the whole NITAG to develop 2 tools:\n\nGeneric criteria tables\nEtR framework\n\nNoted that this step only needs to be conducted once.\n\nGeneric criteria tables\nGeneric criteria tables comprise 7 tables that contain all issues relevant for any immunization policy question, unspecific to any particular disease or vaccine. Each table links a criterion with many factors. Each factor then has many elements, each representing a type of evidence needed for for NITAG consideration.\n\n\n\n\n\n\n\n\nCriterion\nFactor\nElement\n\n\n\n\nProblem\nBurden/epidemiology of disease\nFrequency of the disease (incidence, prevalence)\nSeverity of the disease (mortality, morbidity)\n\n\n\n\n\n\n\n\n\nClick here to see the criteria, their factors and elements\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEtR framework\nEtR framework is a structured document that shows the logical progression from the evidence to the decision. EtR framework has 3 main sections:\n\nIntroduction: presents the policy question.\nCriteria: presents 7 criteria, factors and elements from the generic criteria tables, with evidence and notes.\nDraft NITAG recommendation: presents the draft NITAG decision.\n\n\n\n\n\n\n\nClick here for a sample EtR framework",
     "crumbs": [
       "Health economics",
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>EtR Process</span>"
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>EtR Process</span>"
     ]
   },
   {
     "objectID": "he-etr.html#the-policy-question",
     "href": "he-etr.html#the-policy-question",
-    "title": "16  EtR Process",
-    "section": "16.1 The policy question",
-    "text": "16.1 The policy question\nAn initial policy question can be either raised by the Ministry of Health to NITAG, or by NITAG itself. The initial policy question is usually rather broad, for example:\n\nShould vaccine X be introduced in a routine vaccination programme?\nShould the schedule of vaccine X be reviewed?\n\nThis step is to revise the broad question into a structured policy question that detailed enough to guide the collection of evidence. A structured policy question should has:\n\nIntervention: The vaccine formulation, dosage and schedule.\nPopulation: The population targeted to receive the vaccine and/or will be affected by it.\nGoal of intervention: The outcome of interest, could be measurable (e.g. reduction of a certain disease) or not.\nComparison: If compares a new intervention to an existing one.\nOptions: If several options are available (e.g. different vaccine formulations, dosages or schedules).",
+    "title": "17  EtR Process",
+    "section": "17.1 The policy question",
+    "text": "17.1 The policy question\nAn initial policy question can be either raised by the Ministry of Health to NITAG, or by NITAG itself. The initial policy question is usually rather broad, for example:\n\nShould vaccine X be introduced in a routine vaccination programme?\nShould the schedule of vaccine X be reviewed?\n\nThis step is to revise the broad question into a structured policy question that detailed enough to guide the collection of evidence. A structured policy question should has:\n\nIntervention: The vaccine formulation, dosage and schedule.\nPopulation: The population targeted to receive the vaccine and/or will be affected by it.\nGoal of intervention: The outcome of interest, could be measurable (e.g. reduction of a certain disease) or not.\nComparison: If compares a new intervention to an existing one.\nOptions: If several options are available (e.g. different vaccine formulations, dosages or schedules).",
     "crumbs": [
       "Health economics",
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>EtR Process</span>"
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>EtR Process</span>"
     ]
   },
   {
     "objectID": "he-etr.html#the-elements-to-consider",
     "href": "he-etr.html#the-elements-to-consider",
-    "title": "16  EtR Process",
-    "section": "16.2 The elements to consider",
-    "text": "16.2 The elements to consider\nThis step is to create specific criteria tables from the generic criteria tables. It includes 2 steps:\n\nMake the elements specific: Specify the disease, intervention and population of interest for all elements in the generic criteria tables.\nSelect the factors and specified elements relevant for the policy question: After specifying the elements, pick the relevant factors and specified elements, and place them in the EtR framework.",
+    "title": "17  EtR Process",
+    "section": "17.2 The elements to consider",
+    "text": "17.2 The elements to consider\nThis step is to create specific criteria tables from the generic criteria tables. It includes 2 steps:\n\nMake the elements specific: Specify the disease, intervention and population of interest for all elements in the generic criteria tables.\nSelect the factors and specified elements relevant for the policy question: After specifying the elements, pick the relevant factors and specified elements, and place them in the EtR framework.",
     "crumbs": [
       "Health economics",
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>EtR Process</span>"
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>EtR Process</span>"
     ]
   },
   {
     "objectID": "he-etr.html#the-evidence",
     "href": "he-etr.html#the-evidence",
-    "title": "16  EtR Process",
-    "section": "16.3 The evidence",
-    "text": "16.3 The evidence\nThis step is to collect evidence on the selected factors and specified elements determined in Step 2, rate the evidence quality, and put them in the EtR framework. It is the most labour-intensive part.\nEvidence may be obtained from literature (published or unpublished), statistical data, surveillance records, experiences from countries that have already implemented the intervention, documents/publications and/or recommendations from WHO, WHO SAGE, Regional Immunization Technical Advisory Groups such as the European Technical Advisory Group of Experts on Immunization or other NITAGs.\nCriterion 2 “Benefits and harms of the intervention” is extremely important, therefore:\n\nSome NITAGs conduct systematic review, which is very time and resource consuming and should only be done if necessary capacities are available.\nUse GRADE quality assessments to assess the evidence quality, which is the confidence level in how close the reported effects in the evidence are to the true effects.\n\nLower quality data does not prevent recommendations, but the limitations should be clearly outlined.",
+    "title": "17  EtR Process",
+    "section": "17.3 The evidence",
+    "text": "17.3 The evidence\nThis step is to collect evidence on the selected factors and specified elements determined in Step 2, rate the evidence quality, and put them in the EtR framework. It is the most labour-intensive part.\nEvidence may be obtained from literature (published or unpublished), statistical data, surveillance records, experiences from countries that have already implemented the intervention, documents/publications and/or recommendations from WHO, WHO SAGE, Regional Immunization Technical Advisory Groups such as the European Technical Advisory Group of Experts on Immunization or other NITAGs.\nCriterion 2 “Benefits and harms of the intervention” is extremely important, therefore:\n\nSome NITAGs conduct systematic review, which is very time and resource consuming and should only be done if necessary capacities are available.\nUse GRADE quality assessments to assess the evidence quality, which is the confidence level in how close the reported effects in the evidence are to the true effects.\n\nLower quality data does not prevent recommendations, but the limitations should be clearly outlined.",
     "crumbs": [
       "Health economics",
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>EtR Process</span>"
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>EtR Process</span>"
     ]
   },
   {
     "objectID": "he-etr.html#the-recommendation",
     "href": "he-etr.html#the-recommendation",
-    "title": "16  EtR Process",
-    "section": "16.4 The recommendation",
-    "text": "16.4 The recommendation\nIn this step, the Secretariat or working group draft NITAG decision and recommendation, and present to all NITAG members. The whole NITAG should discuss and agree on a final NITAG decision and recommendation.",
+    "title": "17  EtR Process",
+    "section": "17.4 The recommendation",
+    "text": "17.4 The recommendation\nIn this step, the Secretariat or working group draft NITAG decision and recommendation, and present to all NITAG members. The whole NITAG should discuss and agree on a final NITAG decision and recommendation.",
     "crumbs": [
       "Health economics",
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>EtR Process</span>"
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>EtR Process</span>"
     ]
   },
   {
     "objectID": "he-etr.html#excercise",
     "href": "he-etr.html#excercise",
-    "title": "16  EtR Process",
+    "title": "17  EtR Process",
     "section": "Excercise",
     "text": "Excercise\nStep 1. The policy question\n\nShould flu vaccine be introduced in a routine vaccination programme?\n\nMake a structured policy question that include:\n\nIntervention\nPopulation\nGoal\n\n\n\n\n\n\n\nSample answer\n\n\n\n\n\nIntervention: Influenza vaccine VaxiGrip Tetra, single dose of 0.5 mL.\nPopulation:\n\nIn PH (relatively younger population, median = 25 years old)\nPeople with high contacts with animals\nVets, slaughterhouse workers, farmers, retailers\nYoung (aged 6 months to 4 years)\nOld (aged 55 years old and above)\nPregnant women\nImmunocompromised\n\nGoal:\n\nPreventing spillover infections (animals to human with new variants, which may cause pandemic)\nReducing hospitalization rate and mortality rate\nPreventing infection\nReduced severe cases needing of hospitalization\nProtecting others\nMaximise vaccine coverage\n\n\n\n\nStep 2. The elements to consider\n\n\n\n\n\n\n\n\nCriterion\nFactor\nHow will you collect this evidence?\n\n\n\n\nProblem\nBurden/epidemiology of disease\n\n\n\nBenefits and Harms\nHow substantial are the desired anticipated effects?\nDo the desirable effect outweigh the undesirable effects?\n\n\n\nValues\nDoes the target population feel that the desirable effect is large relative to the undesirable effects?\n\n\n\nResource use\nIs the intervention a reasonable and efficient use of resources?\n\n\n\nEquity\nWhat would be the impact of the intervention on health equity?\n\n\n\n\n\n\n\n\n\n\nSample answer\n\n\n\n\n\n\n\n\n\n\n\n\n\nCriterion\nFactor\nHow will you collect this evidence?\n\n\n\n\nProblem\nBurden/epidemiology of disease\nHospitalization rate\nMortality rate\n\n\nBenefits and Harms\nHow substantial are the desired anticipated effects?\nDo the desirable effect outweigh the undesirable effects?\nHospitalisations pre- and post-vaccination\nPresence of adverse events (AEs) and severe adverse events (SAEs)\n\n\nValues\nDoes the target population feel that the desirable effect is large relative to the undesirable effects?\nSurvey the target population\nFocus group discussions with the target groups\nKey informant interviews\n\n\nResource use\nIs the intervention a reasonable and efficient use of resources?\nOperational research (i.e., resource allocation)\nHealth service modelling\nSupply and Demand Forecasting\n\n\nEquity\nWhat would be the impact of the intervention on health equity?\nUse modelling to evaluate the impact and the cost-effectiveness of the influenza vaccination programmes stratified by the different target groups\nECEA or DCEA",
     "crumbs": [
       "Health economics",
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>EtR Process</span>"
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>EtR Process</span>"
     ]
   },
   {
     "objectID": "rp-risk.html",
     "href": "rp-risk.html",
-    "title": "17  Risk assessment report",
+    "title": "18  Risk assessment report",
     "section": "",
-    "text": "17.1 Examples\nRisk assessment for measles resurgence in the UK\nRapid risk assessment: Measles in Canada, public health implications in 2024",
+    "text": "18.1 Examples\nRisk assessment for measles resurgence in the UK\nRapid risk assessment: Measles in Canada, public health implications in 2024",
     "crumbs": [
       "Reports",
-      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Risk assessment report</span>"
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Risk assessment report</span>"
     ]
   },
   {
     "objectID": "rp-risk.html#data",
     "href": "rp-risk.html#data",
-    "title": "17  Risk assessment report",
-    "section": "17.2 Data",
-    "text": "17.2 Data\n\nHistorical case notification of past outbreaks 2014 and 2019 Date of onset + date of birth (or age)\nCurrent level of susceptibility in HCMC:\n\n\nSerology\nVaccine registry\nBirth rates\n\n\nConnectivity between Phu Quoc and HCMC: Flight data / boat data?\n\nP = 1 – (1 / (R0 * s))^m",
+    "title": "18  Risk assessment report",
+    "section": "18.2 Data",
+    "text": "18.2 Data\n\nHistorical case notification of past outbreaks 2014 and 2019 Date of onset + date of birth (or age)\nCurrent level of susceptibility in HCMC:\n\n\nSerology\nVaccine registry\nBirth rates\n\n\nConnectivity between Phu Quoc and HCMC: Flight data / boat data?\n\nP = 1 – (1 / (R0 * s))^m",
     "crumbs": [
       "Reports",
-      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Risk assessment report</span>"
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Risk assessment report</span>"
     ]
   },
   {
@@ -971,7 +1004,7 @@
     "href": "references.html",
     "title": "References",
     "section": "",
-    "text": "Becker, A. D., & Grenfell, B. T. (2017). tsiR: An R package for\ntime-series Susceptible-Infected-Recovered models of epidemics. PLOS\nONE, 12(9), e0185528. https://doi.org/10.1371/journal.pone.0185528\n\n\nBettencourt, L. M. A., & Ribeiro, R. M. (2008). Real Time Bayesian\nEstimation of the Epidemic Potential of Emerging Infectious Diseases.\nPLOS ONE, 3(5), e2185. https://doi.org/10.1371/journal.pone.0002185\n\n\nBishai, D., Brenzel, L., & Padula, W. (Eds.). (2023). Handbook\nof applied health economics in vaccines. Oxford University Press.\nhttps://doi.org/10.1093/oso/9780192896087.001.0001\n\n\nBradshaw, W. J., Alley, E. C., Huggins, J. H., Lloyd, A. L., &\nEsvelt, K. M. (2021). Bidirectional contact tracing could dramatically\nimprove COVID-19 control. Nature Communications,\n12(1), 232. https://doi.org/10.1038/s41467-020-20325-7\n\n\nBreban, R., Vardavas, R., & Blower, S. (2007). Theory versus Data:\nHow to Calculate R0? PLOS ONE, 2(3), e282. https://doi.org/10.1371/journal.pone.0000282\n\n\nCauchemez, S., Bhattarai, A., Marchbanks, T. L., Fagan, R. P., Ostroff,\nS., Ferguson, N. M., Swerdlow, D., Pennsylvania H1N1 working group, the,\nSodha, S. V., Moll, M. E., Angulo, F. J., Palekar, R., Archer, W. R.,\n& Finelli, L. (2011). Role of social networks in shaping disease\ntransmission during a community outbreak of 2009 H1N1 pandemic\ninfluenza. Proceedings of the National Academy of Sciences,\n108(7), 2825–2830. https://doi.org/10.1073/pnas.1008895108\n\n\nChitnis, N. (2017). Introduction to SEIR Models.\n\n\nChristley, R. M., Mort, M., Wynne, B., Wastling, J. M., Heathwaite, A.\nL., Pickup, R., Austin, Z., & Latham, S. M. (2013).\n“Wrong, but Useful”: Negotiating Uncertainty\nin Infectious Disease Modelling. PLOS ONE, 8(10),\ne76277. https://doi.org/10.1371/journal.pone.0076277\n\n\nCori, A., Ferguson, N. M., Fraser, C., & Cauchemez, S. (2013). A new\nframework and software to estimate time-varying reproduction numbers\nduring epidemics. American Journal of Epidemiology,\n178(9), 1505–1512. https://doi.org/10.1093/aje/kwt133\n\n\nDelamater, P. L., Street, E. J., Leslie, T. F., Yang, Y. T., &\nJacobsen, K. H. (2019). Complexity of the basic reproduction number\n(R0) - volume 25, number 1january 2019 - emerging\ninfectious diseases journal - CDC. https://doi.org/10.3201/eid2501.171901\n\n\nDiekmann, O., Heesterbeek, J. A. P., & Metz, J. A. J. (1990). On the\ndefinition and the computation of the basic reproduction ratio R0 in\nmodels for infectious diseases in heterogeneous populations. Journal\nof Mathematical Biology, 28(4), 365–382. https://doi.org/10.1007/BF00178324\n\n\nDriessche, P. van den. (2017). Reproduction numbers of infectious\ndisease models. Infectious Disease Modelling, 2(3),\n288–303. https://doi.org/10.1016/j.idm.2017.06.002\n\n\nDriessche, P. van den, & Watmough, J. (2002). Reproduction numbers\nand sub-threshold endemic equilibria for compartmental models of disease\ntransmission. Mathematical Biosciences, 180(1), 29–48.\nhttps://doi.org/10.1016/S0025-5564(02)00108-6\n\n\nDu, Z., Zhang, W., Zhang, D., Yu, S., & Hao, Y. (2017). Estimating\nthe basic reproduction rate of HFMD using the time series SIR model in\nGuangdong, China. PLOS ONE, 12(7), e0179623. https://doi.org/10.1371/journal.pone.0179623\n\n\nFinkenstädt, B. F., & Grenfell, B. T. (2000). Time series modelling\nof childhood diseases: A dynamical systems approach. Journal of the\nRoyal Statistical Society Series C: Applied Statistics,\n49(2), 187–205. https://doi.org/10.1111/1467-9876.00187\n\n\nGoeree, R., & Diaby, V. (2013). Introduction to health economics and\ndecision-making: Is economics relevant for the frontline clinician?\nBest Practice & Research Clinical Gastroenterology,\n27(6), 831–844. https://doi.org/10.1016/j.bpg.2013.08.016\n\n\nGostic, K. M., McGough, L., Baskerville, E. B., Abbott, S., Joshi, K.,\nTedijanto, C., Kahn, R., Niehus, R., Hay, J. A., Salazar, P. M. D.,\nHellewell, J., Meakin, S., Munday, J. D., Bosse, N. I., Sherrat, K.,\nThompson, R. N., White, L. F., Huisman, J. S., Scire, J., … Cobey, S.\n(2020). Practical considerations for measuring the effective\nreproductive number, Rt. PLOS Computational Biology,\n16(12), e1008409. https://doi.org/10.1371/journal.pcbi.1008409\n\n\nGreen, W. D., Ferguson, N. M., & Cori, A. (2022). Inferring the\nreproduction number using the renewal equation in heterogeneous\nepidemics. Journal of The Royal Society Interface,\n19(188), 20210429. https://doi.org/10.1098/rsif.2021.0429\n\n\nHeeg, B. M. S., Damen, J., Buskens, E., Caleo, S., Charro, F. de, &\nHout, B. A. van. (2008). Modelling Approaches.\nPharmacoEconomics, 26(8), 633–648. https://doi.org/10.2165/00019053-200826080-00002\n\n\nHilborn, R., & Mangel, M. (1997). The ecological detective:\nConfronting models with data. Princeton University Press. https://www.jstor.org/stable/j.ctt24hqnx\n\n\nJit, M., & Brisson, M. (2011). Modelling the Epidemiology of\nInfectious Diseases for Decision Analysis. PharmacoEconomics,\n29(5), 371–386. https://doi.org/10.2165/11539960-000000000-00000\n\n\nJones, J. H. (2007). Notes on R0. California: Department of\nAnthropological Sciences, 323, 1–19.\n\n\nKeeling, M. J. (2006). State-of-science review: Predictive and\nreal-time epidemiological modelling. S9. DTI.\n\n\nKeeling, M. J., & Rohani, P. (2011). Modeling Infectious\nDiseases in Humans and Animals. Princeton University Press. https://doi.org/10.1515/9781400841035\n\n\nKenah, E., Lipsitch, M., & Robins, J. M. (2008). Generation interval\ncontraction and epidemic data analysis. Mathematical\nBiosciences, 213(1), 71–79. https://doi.org/10.1016/j.mbs.2008.02.007\n\n\nKim, S.-Y., & Goldie, S. J. (2008). Cost-Effectiveness Analyses of\nVaccination Programmes. PharmacoEconomics, 26(3),\n191–215. https://doi.org/10.2165/00019053-200826030-00004\n\n\nKnight, J., & Mishra, S. (2020). Estimating effective reproduction\nnumber using generation time versus serial interval, with application to\ncovid-19 in the greater toronto area, canada. Infectious Disease\nModelling, 5, 889–896. https://doi.org/10.1016/j.idm.2020.10.009\n\n\nKuntz, K., Sainfort, F., Butler, M., Taylor, B., Kulasingam, S.,\nGregory, S., Mann, E., Anderson, J. M., & Kane, R. L. (2013).\nDecision and Simulation Modeling Alongside Systematic Reviews.\nAgency for Healthcare Research; Quality (US). https://www.ncbi.nlm.nih.gov/books/NBK127478/\n\n\nPandit, J. J. (2020). Managing the R0 of COVID-19: mathematics fights\nback. Anaesthesia, 75(12), 1643–1647. https://doi.org/10.1111/anae.15151\n\n\nPark, S. W., Li, M., Metcalf, C. J. E., Grenfell, B. T., & Dushoff,\nJ. (2023). Immune boosting bridges leaky and polarized vaccination\nmodels. medRxiv. https://doi.org/10.1101/2023.07.14.23292670\n\n\nPollard, A. J., & Bijker, E. M. (2021). A guide to vaccinology: from\nbasic principles to new developments. Nature Reviews\nImmunology, 21(2), 83–100. https://doi.org/10.1038/s41577-020-00479-7\n\n\nPrieto, L., & Sacristán, J. A. (2003). Problems and solutions in\ncalculating quality-adjusted life years (QALYs). Health and Quality\nof Life Outcomes, 1(1), 80. https://doi.org/10.1186/1477-7525-1-80\n\n\nRui, J., Li, K., Wei, H., Guo, X., Zhao, Z., Wang, Y., Song, W.,\nAbudunaibi, B., & Chen, T. (2024). MODELS: A six-step framework for\ndeveloping an infectious disease model. Infectious Diseases of\nPoverty, 13(1), 30. https://doi.org/10.1186/s40249-024-01195-3\n\n\nSender, R., Bar-On, Y., Park, S. W., Noor, E., Dushoff, J., & Milo,\nR. (2022). The unmitigated profile of COVID-19 infectiousness.\neLife, 11, e79134. https://doi.org/10.7554/eLife.79134\n\n\nSeverens, J. L., & Milne, R. J. (2004). Discounting Health Outcomes\nin Economic Evaluation: The Ongoing Debate. Value in Health,\n7(4), 397–401. https://doi.org/10.1111/j.1524-4733.2004.74002.x\n\n\nShim, E., & Galvani, A. P. (2012). Distinguishing vaccine efficacy\nand effectiveness. Vaccine, 30(47), 6700–6705. https://doi.org/10.1016/j.vaccine.2012.08.045\n\n\nSittimart, M., Rattanavipapong, W., Mirelman, A. J., Hung, T. M., Dabak,\nS., Downey, L. E., Jit, M., Teerawattananon, Y., & Turner, H. C.\n(2024). An overview of the perspectives used in health economic\nevaluations. Cost Effectiveness and Resource Allocation,\n22(1), 41. https://doi.org/10.1186/s12962-024-00552-1\n\n\nSmith, J. S., & Sturrock, D. T. (2023). Simio and simulation -\nmodeling, analysis, applications - 6th edition. https://textbook.simio.com/SASMAA6/\n\n\nTurner, H. C., Archer, R. A., Downey, L. E., Isaranuwatchai, W.,\nChalkidou, K., Jit, M., & Teerawattananon, Y. (2021). An\nintroduction to the main types of economic evaluations used for\ninforming priority setting and resource allocation in healthcare: Key\nfeatures, uses, and limitations. Frontiers in Public Health,\n9. https://www.frontiersin.org/articles/10.3389/fpubh.2021.722927\n\n\nVegvari, C., Abbott, S., Ball, F., Brooks-Pollock, E., Challen, R.,\nCollyer, B. S., Dangerfield, C., Gog, J. R., Gostic, K. M., Heffernan,\nJ. M., Hollingsworth, T. D., Isham, V., Kenah, E., Mollison, D.,\nPanovska-Griffiths, J., Pellis, L., Roberts, M. G., Scalia Tomba, G.,\nThompson, R. N., & Trapman, P. (2022). Commentary on the use of the\nreproduction number R during the COVID-19 pandemic. Statistical\nMethods in Medical Research, 31(9), 1675–1685. https://doi.org/10.1177/09622802211037079\n\n\nVerani, J. R., Baqui, A. H., Broome, C. V., Cherian, T., Cohen, C.,\nFarrar, J. L., Feikin, D. R., Groome, M. J., Hajjeh, R. A., Johnson, H.\nL., Madhi, S. A., Mulholland, K., O’Brien, K. L., Parashar, U. D.,\nPatel, M. M., Rodrigues, L. C., Santosham, M., Scott, J. A., Smith, P.\nG., … Zell, E. R. (2017). Case-control vaccine effectiveness studies:\nPreparation, design, and enrollment of cases and controls.\nVaccine, 35(25), 3295–3302. https://doi.org/10.1016/j.vaccine.2017.04.037\n\n\nVerguet, S., Johri, M., Morris, S. K., Gauvreau, C. L., Jha, P., &\nJit, M. (2015). Controlling measles using supplemental immunization\nactivities: A mathematical model to inform optimal policy.\nVaccine, 33(10), 1291–1296. https://doi.org/10.1016/j.vaccine.2014.11.050\n\n\nVynnycky, E., & White, R. (2010). An Introduction to Infectious\nDisease Modelling. OUP Oxford.\n\n\nWallinga, J., & Lipsitch, M. (2006). How generation intervals shape\nthe relationship between growth rates and reproductive numbers.\nProceedings of the Royal Society B: Biological Sciences,\n274(1609), 599–604. https://doi.org/10.1098/rspb.2006.3754\n\n\nWallinga, J., & Teunis, P. (2004). Different epidemic curves for\nsevere acute respiratory syndrome reveal similar impacts of control\nmeasures. American Journal of Epidemiology, 160(6),\n509–516. https://doi.org/10.1093/aje/kwh255\n\n\nWhitehead, S. J., & Ali, S. (2010). Health outcomes in economic\nevaluation: The QALY and utilities. British Medical Bulletin,\n96(1), 5–21. https://doi.org/10.1093/bmb/ldq033\n\n\nWorld Health Organization. (2013). Correlates of vaccine-induced\nprotection: Methods and implications.\n\n\nZachreson, C., Tobin, R., Szanyi, J., Walker, C., Cromer, D., Shearer,\nF. M., Conway, E., Ryan, G., Cheng, A., McCaw, J. M., & Geard, N.\n(2023). Individual variation in vaccine immune response can produce\nbimodal distributions of protection. Vaccine, 41(45),\n6630–6636. https://doi.org/10.1016/j.vaccine.2023.09.025",
+    "text": "Becker, A. D., & Grenfell, B. T. (2017). tsiR: An R package for\ntime-series Susceptible-Infected-Recovered models of epidemics. PLOS\nONE, 12(9), e0185528. https://doi.org/10.1371/journal.pone.0185528\n\n\nBettencourt, L. M. A., & Ribeiro, R. M. (2008). Real Time Bayesian\nEstimation of the Epidemic Potential of Emerging Infectious Diseases.\nPLOS ONE, 3(5), e2185. https://doi.org/10.1371/journal.pone.0002185\n\n\nBishai, D., Brenzel, L., & Padula, W. (Eds.). (2023). Handbook\nof applied health economics in vaccines. Oxford University Press.\nhttps://doi.org/10.1093/oso/9780192896087.001.0001\n\n\nBradshaw, W. J., Alley, E. C., Huggins, J. H., Lloyd, A. L., &\nEsvelt, K. M. (2021). Bidirectional contact tracing could dramatically\nimprove COVID-19 control. Nature Communications,\n12(1), 232. https://doi.org/10.1038/s41467-020-20325-7\n\n\nBreban, R., Vardavas, R., & Blower, S. (2007). Theory versus Data:\nHow to Calculate R0? PLOS ONE, 2(3), e282. https://doi.org/10.1371/journal.pone.0000282\n\n\nCauchemez, S., Bhattarai, A., Marchbanks, T. L., Fagan, R. P., Ostroff,\nS., Ferguson, N. M., Swerdlow, D., Pennsylvania H1N1 working group, the,\nSodha, S. V., Moll, M. E., Angulo, F. J., Palekar, R., Archer, W. R.,\n& Finelli, L. (2011). Role of social networks in shaping disease\ntransmission during a community outbreak of 2009 H1N1 pandemic\ninfluenza. Proceedings of the National Academy of Sciences,\n108(7), 2825–2830. https://doi.org/10.1073/pnas.1008895108\n\n\nChitnis, N. (2017). Introduction to SEIR Models.\n\n\nChristley, R. M., Mort, M., Wynne, B., Wastling, J. M., Heathwaite, A.\nL., Pickup, R., Austin, Z., & Latham, S. M. (2013).\n“Wrong, but Useful”: Negotiating Uncertainty\nin Infectious Disease Modelling. PLOS ONE, 8(10),\ne76277. https://doi.org/10.1371/journal.pone.0076277\n\n\nCori, A., Ferguson, N. M., Fraser, C., & Cauchemez, S. (2013). A new\nframework and software to estimate time-varying reproduction numbers\nduring epidemics. American Journal of Epidemiology,\n178(9), 1505–1512. https://doi.org/10.1093/aje/kwt133\n\n\nDelamater, P. L., Street, E. J., Leslie, T. F., Yang, Y. T., &\nJacobsen, K. H. (2019). Complexity of the basic reproduction number\n(R0) - volume 25, number 1january 2019 - emerging\ninfectious diseases journal - CDC. https://doi.org/10.3201/eid2501.171901\n\n\nDiekmann, O., Heesterbeek, J. A. P., & Metz, J. A. J. (1990). On the\ndefinition and the computation of the basic reproduction ratio R0 in\nmodels for infectious diseases in heterogeneous populations. Journal\nof Mathematical Biology, 28(4), 365–382. https://doi.org/10.1007/BF00178324\n\n\nDriessche, P. van den. (2017). Reproduction numbers of infectious\ndisease models. Infectious Disease Modelling, 2(3),\n288–303. https://doi.org/10.1016/j.idm.2017.06.002\n\n\nDriessche, P. van den, & Watmough, J. (2002). Reproduction numbers\nand sub-threshold endemic equilibria for compartmental models of disease\ntransmission. Mathematical Biosciences, 180(1), 29–48.\nhttps://doi.org/10.1016/S0025-5564(02)00108-6\n\n\nDu, Z., Zhang, W., Zhang, D., Yu, S., & Hao, Y. (2017). Estimating\nthe basic reproduction rate of HFMD using the time series SIR model in\nGuangdong, China. PLOS ONE, 12(7), e0179623. https://doi.org/10.1371/journal.pone.0179623\n\n\nFinkenstädt, B. F., & Grenfell, B. T. (2000). Time series modelling\nof childhood diseases: A dynamical systems approach. Journal of the\nRoyal Statistical Society Series C: Applied Statistics,\n49(2), 187–205. https://doi.org/10.1111/1467-9876.00187\n\n\nGoeree, R., & Diaby, V. (2013). Introduction to health economics and\ndecision-making: Is economics relevant for the frontline clinician?\nBest Practice & Research Clinical Gastroenterology,\n27(6), 831–844. https://doi.org/10.1016/j.bpg.2013.08.016\n\n\nGostic, K. M., McGough, L., Baskerville, E. B., Abbott, S., Joshi, K.,\nTedijanto, C., Kahn, R., Niehus, R., Hay, J. A., Salazar, P. M. D.,\nHellewell, J., Meakin, S., Munday, J. D., Bosse, N. I., Sherrat, K.,\nThompson, R. N., White, L. F., Huisman, J. S., Scire, J., … Cobey, S.\n(2020). Practical considerations for measuring the effective\nreproductive number, Rt. PLOS Computational Biology,\n16(12), e1008409. https://doi.org/10.1371/journal.pcbi.1008409\n\n\nGreen, W. D., Ferguson, N. M., & Cori, A. (2022). Inferring the\nreproduction number using the renewal equation in heterogeneous\nepidemics. Journal of The Royal Society Interface,\n19(188), 20210429. https://doi.org/10.1098/rsif.2021.0429\n\n\nHeeg, B. M. S., Damen, J., Buskens, E., Caleo, S., Charro, F. de, &\nHout, B. A. van. (2008). Modelling Approaches.\nPharmacoEconomics, 26(8), 633–648. https://doi.org/10.2165/00019053-200826080-00002\n\n\nHilborn, R., & Mangel, M. (1997). The ecological detective:\nConfronting models with data. Princeton University Press. https://www.jstor.org/stable/j.ctt24hqnx\n\n\nJit, M., & Brisson, M. (2011). Modelling the Epidemiology of\nInfectious Diseases for Decision Analysis. PharmacoEconomics,\n29(5), 371–386. https://doi.org/10.2165/11539960-000000000-00000\n\n\nJones, J. H. (2007). Notes on R0. California: Department of\nAnthropological Sciences, 323, 1–19.\n\n\nKeeling, M. J. (2006). State-of-science review: Predictive and\nreal-time epidemiological modelling. S9. DTI.\n\n\nKeeling, M. J., & Rohani, P. (2011). Modeling Infectious\nDiseases in Humans and Animals. Princeton University Press. https://doi.org/10.1515/9781400841035\n\n\nKenah, E., Lipsitch, M., & Robins, J. M. (2008). Generation interval\ncontraction and epidemic data analysis. Mathematical\nBiosciences, 213(1), 71–79. https://doi.org/10.1016/j.mbs.2008.02.007\n\n\nKim, S.-Y., & Goldie, S. J. (2008). Cost-Effectiveness Analyses of\nVaccination Programmes. PharmacoEconomics, 26(3),\n191–215. https://doi.org/10.2165/00019053-200826030-00004\n\n\nKnight, J., & Mishra, S. (2020). Estimating effective reproduction\nnumber using generation time versus serial interval, with application to\ncovid-19 in the greater toronto area, canada. Infectious Disease\nModelling, 5, 889–896. https://doi.org/10.1016/j.idm.2020.10.009\n\n\nKuntz, K., Sainfort, F., Butler, M., Taylor, B., Kulasingam, S.,\nGregory, S., Mann, E., Anderson, J. M., & Kane, R. L. (2013).\nDecision and Simulation Modeling Alongside Systematic Reviews.\nAgency for Healthcare Research; Quality (US). https://www.ncbi.nlm.nih.gov/books/NBK127478/\n\n\nNelson, K. E., & Williams, C. M. (2014). Infectious Disease\nEpidemiology: Theory and Practice. Jones & Bartlett Publishers.\n\n\nPandit, J. J. (2020). Managing the R0 of COVID-19: mathematics fights\nback. Anaesthesia, 75(12), 1643–1647. https://doi.org/10.1111/anae.15151\n\n\nPark, S. W., Li, M., Metcalf, C. J. E., Grenfell, B. T., & Dushoff,\nJ. (2023). Immune boosting bridges leaky and polarized vaccination\nmodels. medRxiv. https://doi.org/10.1101/2023.07.14.23292670\n\n\nPollard, A. J., & Bijker, E. M. (2021). A guide to vaccinology: from\nbasic principles to new developments. Nature Reviews\nImmunology, 21(2), 83–100. https://doi.org/10.1038/s41577-020-00479-7\n\n\nPrieto, L., & Sacristán, J. A. (2003). Problems and solutions in\ncalculating quality-adjusted life years (QALYs). Health and Quality\nof Life Outcomes, 1(1), 80. https://doi.org/10.1186/1477-7525-1-80\n\n\nRui, J., Li, K., Wei, H., Guo, X., Zhao, Z., Wang, Y., Song, W.,\nAbudunaibi, B., & Chen, T. (2024). MODELS: A six-step framework for\ndeveloping an infectious disease model. Infectious Diseases of\nPoverty, 13(1), 30. https://doi.org/10.1186/s40249-024-01195-3\n\n\nSender, R., Bar-On, Y., Park, S. W., Noor, E., Dushoff, J., & Milo,\nR. (2022). The unmitigated profile of COVID-19 infectiousness.\neLife, 11, e79134. https://doi.org/10.7554/eLife.79134\n\n\nSeverens, J. L., & Milne, R. J. (2004). Discounting Health Outcomes\nin Economic Evaluation: The Ongoing Debate. Value in Health,\n7(4), 397–401. https://doi.org/10.1111/j.1524-4733.2004.74002.x\n\n\nShim, E., & Galvani, A. P. (2012). Distinguishing vaccine efficacy\nand effectiveness. Vaccine, 30(47), 6700–6705. https://doi.org/10.1016/j.vaccine.2012.08.045\n\n\nSittimart, M., Rattanavipapong, W., Mirelman, A. J., Hung, T. M., Dabak,\nS., Downey, L. E., Jit, M., Teerawattananon, Y., & Turner, H. C.\n(2024). An overview of the perspectives used in health economic\nevaluations. Cost Effectiveness and Resource Allocation,\n22(1), 41. https://doi.org/10.1186/s12962-024-00552-1\n\n\nSmith, J. S., & Sturrock, D. T. (2023). Simio and simulation -\nmodeling, analysis, applications - 6th edition. https://textbook.simio.com/SASMAA6/\n\n\nTexier, G., Farouh, M., Pellegrin, L., Jackson, M. L., Meynard, J.-B.,\nDeparis, X., & Chaudet, H. (2016). Outbreak definition by change\npoint analysis: a tool for public health decision? BMC Medical\nInformatics and Decision Making, 16(1), 33. https://doi.org/10.1186/s12911-016-0271-x\n\n\nTurner, H. C., Archer, R. A., Downey, L. E., Isaranuwatchai, W.,\nChalkidou, K., Jit, M., & Teerawattananon, Y. (2021). An\nintroduction to the main types of economic evaluations used for\ninforming priority setting and resource allocation in healthcare: Key\nfeatures, uses, and limitations. Frontiers in Public Health,\n9. https://www.frontiersin.org/articles/10.3389/fpubh.2021.722927\n\n\nVegvari, C., Abbott, S., Ball, F., Brooks-Pollock, E., Challen, R.,\nCollyer, B. S., Dangerfield, C., Gog, J. R., Gostic, K. M., Heffernan,\nJ. M., Hollingsworth, T. D., Isham, V., Kenah, E., Mollison, D.,\nPanovska-Griffiths, J., Pellis, L., Roberts, M. G., Scalia Tomba, G.,\nThompson, R. N., & Trapman, P. (2022). Commentary on the use of the\nreproduction number R during the COVID-19 pandemic. Statistical\nMethods in Medical Research, 31(9), 1675–1685. https://doi.org/10.1177/09622802211037079\n\n\nVerani, J. R., Baqui, A. H., Broome, C. V., Cherian, T., Cohen, C.,\nFarrar, J. L., Feikin, D. R., Groome, M. J., Hajjeh, R. A., Johnson, H.\nL., Madhi, S. A., Mulholland, K., O’Brien, K. L., Parashar, U. D.,\nPatel, M. M., Rodrigues, L. C., Santosham, M., Scott, J. A., Smith, P.\nG., … Zell, E. R. (2017). Case-control vaccine effectiveness studies:\nPreparation, design, and enrollment of cases and controls.\nVaccine, 35(25), 3295–3302. https://doi.org/10.1016/j.vaccine.2017.04.037\n\n\nVerguet, S., Johri, M., Morris, S. K., Gauvreau, C. L., Jha, P., &\nJit, M. (2015). Controlling measles using supplemental immunization\nactivities: A mathematical model to inform optimal policy.\nVaccine, 33(10), 1291–1296. https://doi.org/10.1016/j.vaccine.2014.11.050\n\n\nVynnycky, E., & White, R. (2010). An Introduction to Infectious\nDisease Modelling. OUP Oxford.\n\n\nWallinga, J., & Lipsitch, M. (2006). How generation intervals shape\nthe relationship between growth rates and reproductive numbers.\nProceedings of the Royal Society B: Biological Sciences,\n274(1609), 599–604. https://doi.org/10.1098/rspb.2006.3754\n\n\nWallinga, J., & Teunis, P. (2004). Different epidemic curves for\nsevere acute respiratory syndrome reveal similar impacts of control\nmeasures. American Journal of Epidemiology, 160(6),\n509–516. https://doi.org/10.1093/aje/kwh255\n\n\nWhitehead, S. J., & Ali, S. (2010). Health outcomes in economic\nevaluation: The QALY and utilities. British Medical Bulletin,\n96(1), 5–21. https://doi.org/10.1093/bmb/ldq033\n\n\nWorld Health Organization. (2013). Correlates of vaccine-induced\nprotection: Methods and implications.\n\n\nZachreson, C., Tobin, R., Szanyi, J., Walker, C., Cromer, D., Shearer,\nF. M., Conway, E., Ryan, G., Cheng, A., McCaw, J. M., & Geard, N.\n(2023). Individual variation in vaccine immune response can produce\nbimodal distributions of protection. Vaccine, 41(45),\n6630–6636. https://doi.org/10.1016/j.vaccine.2023.09.025",
     "crumbs": [
       "References"
     ]
@@ -1007,39 +1040,6 @@
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>C</span>  <span class='chapter-title'>Simulate line list</span>"
-    ]
-  },
-  {
-    "objectID": "mle.html#section",
-    "href": "mle.html#section",
-    "title": "6  Maximum likelihood estimation",
-    "section": "6.3 ",
-    "text": "6.3",
-    "crumbs": [
-      "Calibration",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Maximum likelihood estimation</span>"
-    ]
-  },
-  {
-    "objectID": "rt-prac.html",
-    "href": "rt-prac.html",
-    "title": "12  \\(R_t\\) in practice",
-    "section": "",
-    "text": "12.1 Interpret \\(R_t\\)\nlibrary(dplyr)\nlibrary(tidyr)\nlibrary(zoo)\nlibrary(data.table)\nlibrary(ggplot2)\nlibrary(EpiEstim)\nlibrary(janitor)\nlibrary(cowplot)\nlibrary(lubridate)",
-    "crumbs": [
-      "Reproduction number",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>$R_t$ in practice</span>"
-    ]
-  },
-  {
-    "objectID": "rt-prac.html#r_t-with-color-code",
-    "href": "rt-prac.html#r_t-with-color-code",
-    "title": "12  \\(R_t\\) in practice",
-    "section": "12.2 \\(R_t\\) with color code",
-    "text": "12.2 \\(R_t\\) with color code\n\n\nCode\ndf &lt;- readRDS(\"data/linelist.rds\")\ndf &lt;- df |&gt;\n  count(date_onset) |&gt;\n  complete(date_onset = seq(date_onset[1], date_onset[length(date_onset)], by = \"days\"),\n           fill = list(n = 0))\n\ncolnames(df) &lt;- c(\"dates\", \"I\")\ndf &lt;- df |&gt;\n  filter(dates &gt; ymd(\"2023-02-24\"), dates &lt; ymd(\"2023-06-23\"))\n\nmod &lt;- estimate_R(incid = df,\n                  method = \"parametric_si\",\n                  config = make_config(list(mean_si = 4.5, std_si = 1.3)))\n\ndf_line &lt;- mod$R\ndf_line$dates &lt;- mod$dates[df_line$t_end]\ndf_line &lt;- clean_names(df_line)\ndf_line &lt;- df_line |&gt;\n  clean_names() |&gt;\n  mutate(\n    b_posterior = std_r ^ 2 / mean_r,\n    a_posterior = mean_r / b_posterior,\n    pct = pgamma(\n      1,\n      shape = a_posterior,\n      scale = b_posterior,\n      lower.tail = F\n    ),\n    trend = case_when(\n      pct &gt; 0.9 ~ \"purple\",\n      pct &gt; 0.75 & pct &lt;= 0.9 ~ \"red\",\n      pct &gt; 0.25 & pct &lt;= 0.75 ~ \"orange\",\n      pct &gt; 0.1 & pct &lt;= 0.25 ~ \"yellow\",\n      pct &lt;= 0.1 ~ \"green\"\n    )\n  )\ndf_line$trend &lt;- factor(df_line$trend,\n                        levels = c(\"green\", \"yellow\", \"orange\", \"red\", \"purple\"))\n\ndf_ribbon &lt;- df_line\ndf_ribbon$group &lt;- consecutive_id(df_ribbon$trend)\ndf_ribbon &lt;- head(do.call(rbind, by(df_ribbon, df_ribbon$group, rbind, NA)), -1)\ndf_ribbon[, c(\"trend\", \"group\")] &lt;- lapply(df_ribbon[, c(\"trend\", \"group\")], na.locf)\ndf_ribbon[] &lt;- lapply(df_ribbon, na.locf, fromLast = T)\n\ncols &lt;- c(\n  \"green\" = \"#169873\",\n  \"yellow\" = \"#DFDF11\",\n  \"orange\" = \"#FFA200\",\n  \"red\" = \"#F2545B\",\n  \"purple\" = \"#5328FF\"\n)\nlabs &lt;- c(\n  \"green\" = \"Declining\",\n  \"yellow\" = \"Likely declining\",\n  \"orange\" = \"Uncertain trend or stable\",\n  \"red\" = \"Likely growing\",\n  \"purple\" = \"Growing\"\n)\n\nepi_plot &lt;- ggplot(df, aes(x = dates, y = I)) +\n  geom_bar(stat = \"identity\", fill = \"#AED2FF\") +\n  scale_x_date(limits = c(min(df$dates) - 1, max(df$dates) + 1), expand = c(0, 0)) +\n  scale_y_continuous(expand = c(0, 0)) +\n  labs(x = NULL, y = \"Incidence\") +\n  theme_classic()\n\nrt_plot &lt;- ggplot() +\n  geom_hline(yintercept = 1,\n             alpha = 0.5,\n             linetype = \"dashed\") +\n  geom_ribbon(\n    aes(\n      x = dates,\n      ymin = quantile_0_025_r,\n      ymax = quantile_0_975_r,\n      fill = trend,\n      group = group\n    ),\n    data = df_ribbon,\n    alpha = 0.3\n  ) +\n  geom_line(aes(\n    x = dates,\n    y = mean_r,\n    color = trend,\n    group = 1\n  ), data = df_line) +\n  scale_x_date(limits = c(min(df$dates) - 1, max(df$dates) + 1), expand = c(0, 0)) +\n  scale_color_manual(\n    values = cols,\n    labels = labs,\n    guide = guide_legend(nrow = 2, byrow = TRUE)\n  ) +\n  scale_fill_manual(\n    values = cols,\n    labels = labs,\n    guide = guide_legend(nrow = 2, byrow = TRUE)\n  ) +\n  labs(\n    x = \"Date of onset\",\n    y = expression(R[t]),\n    color = \"Trend\",\n    fill = \"Trend\"\n  ) +\n  theme_classic() +\n  theme(legend.position = \"bottom\")\n\nplot_grid(epi_plot, rt_plot, nrow = 2, align = \"v\", rel_heights = c(0.4, 0.7))",
-    "crumbs": [
-      "Reproduction number",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>$R_t$ in practice</span>"
     ]
   }
 ]
