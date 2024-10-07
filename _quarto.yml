@@ -1,9 +1,6 @@
 project:
   type: book
   output-dir: docs
-  
-execute:
-  freeze: auto
 
 book:
   favicon: logo-icon.svg
