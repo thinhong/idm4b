@@ -10,6 +10,16 @@ Download influenza incidence data here:
 
 :::
 
+```{r, message=FALSE, warning=FALSE}
+library(tidyr)
+library(odin)
+library(bbmle)
+library(ggplot2)
+library(glue)
+library(ggsci)
+library(RColorBrewer)
+```
+
 ## Likelihood
 
 $$\mathbb{L}(\theta | x) = \mathbb{P}(x | \theta)$$
@@ -32,17 +42,116 @@ $$- log \mathbb{L}(\theta) = - \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \rig
 
 - **Step 4**. The optimizer try different values of $\theta$ in the paramater space $\Theta$ for which negative log-likelihood $- log \mathbb{L}(\theta)$ is minimized.
 
-## 
+## Statistical distributions for fitting
+
+Choosing the right distribution depends on your data type.
+
+### Number of cases
+
+#### Poisson distribution
+
+$Pois(\lambda)$ is the probability of observing $k$ **events** occurring in a **fixed interval** of time if these events occur with a known **constant mean rate** $\lambda$ and **independently of the time since the last event**:
+
+$$\mathbb{P}(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}$$
+
+$Pois(\lambda)$ is simple as it only requires one parameter, $\lambda$. However, a limitation is that the mean equals the variance ($\text{mean} = \text{variance} = \lambda$), which may not always match your data if it has more variability (overdispersion).
+
+Below is examples of $Pois(\lambda = 4)$ and $Pois(\lambda = 10)$.
+
+```{r}
+#| code-fold: true
+#| fig-width: 5
+#| fig-height: 2.5
+#| out-width: "100%"
+
+df_plot <- data.frame(k = 0:20,
+                      prob04 = dpois(0:20, 4),
+                      prob10 = dpois(0:20, 10))
+
+df_plot <- pivot_longer(df_plot,
+                        contains("prob"),
+                        names_to = "rate",
+                        values_to = "prob")
+
+ann_line_4 <- data.frame(
+  rate = "prob04",
+  x_mean = 4,
+  y_mean = 0,
+  yend_mean = max(dpois(0:20, 4)),
+  x_var = 2,
+  xend_var = 6,
+  y_var = 0
+)
+
+ann_line_10 <- data.frame(
+  rate = "prob10",
+  x_mean = 10,
+  y_mean = 0,
+  yend_mean = max(dpois(0:20, 10)),
+  x_var = 5,
+  xend_var = 15,
+  y_var = 0
+)
+
+ggplot(df_plot, aes(x = k, y = prob, color = rate)) +
+  geom_point() +
+  geom_line() +
+  geom_segment(data = ann_line_4,
+               aes(x = x_mean, y = y_mean, yend = yend_mean),
+               linetype = "dashed") +
+  geom_segment(
+    data = ann_line_4,
+    aes(x = x_var, xend = xend_var, y = y_var),
+    arrow = arrow(length = unit(0.03, "npc"), ends = "both")
+  ) +
+  geom_segment(data = ann_line_10,
+               aes(x = x_mean, y = y_mean, yend = yend_mean),
+               linetype = "dashed") +
+  geom_segment(
+    data = ann_line_10,
+    aes(x = x_var, xend = xend_var, y = y_var),
+    arrow = arrow(length = unit(0.03, "npc"), ends = "both")
+  ) +
+  facet_grid( ~ rate, labeller = as_labeller(c(prob04 = "lambda == 4", prob10 = "lambda == 10"), default = label_parsed)) +
+  scale_x_continuous(breaks = seq(0, 20, 2)) +
+  scale_color_lancet() +
+  labs(y = "P(X = k)") +
+  theme_bw() +
+  theme(legend.position = "none")
+```
+
+#### Binomial distribution
+
+Imagine a sequence of independent Bernoulli trials: each trial has two potential outcomes called "success" (with probability $p$) and "failure" (with probability $1 - p$). $B(n, p)$ is the probability of getting exactly $k$ **successes** with **success probability** $p$ in a sequence of $n$ **independent Bernoulli trials**:
+
+$$\mathbb{P}(X = k) = {n \choose k} p^k q^{n - k}$$
+
+::: {.callout-important collapse=true}
+
+## Poisson and Binomial distributions
+
+The Poisson distribution is a limiting case of a Binomial distribution when the number of trials $n$ is large and the success probability $p$ is small. If $n \geq 100$ and $np \leq 10$ (meaning $p \leq 0.1$), the Poisson distribution with $\lambda = np$ is a good approximation of the Binomial distribution.
+
+:::
+
+#### Negative binomial distribution
+
+Imagine a sequence of independent Bernoulli trials: each trial has two potential outcomes called "success" (with probability $p$) and "failure" (with probability $1 - p$). We keep observing the trials until exactly $r$ successes occur. $NB(r, p)$ (or Pascal) distribution is the probability of getting $k$ **failures** until $r$ **successes** occurs in a sequence of $n$ **independent Bernoulli trials**:
+
+
+
+::: {.callout-tip}
+
+**Binomial** distribution gives the probability of $k$ **successes** in a fixed number of $n$ trials.
+
+**Negative binomial** distribution gives the probability of $k$ **failures**, given that we have $r$ successes in $n$ trials.
+
+:::
+
+The Negative binomial has two parameters: $r$, the number of successes, and $p$, the probability of success. Its key advantage is that it allows for variance greater than the mean, which makes it suitable for overdispersed data where variability exceeds the average.
+
 
 ## Code
-
-```{r, message=FALSE, warning=FALSE}
-library(tidyr)
-library(odin)
-library(bbmle)
-library(ggplot2)
-library(RColorBrewer)
-```
 
 We will use the same data of a H1N1 influenza outbreak in an elementary school in @sec-lse-code and fit the deterministic SEIR model with code @lst-seir-det.
 

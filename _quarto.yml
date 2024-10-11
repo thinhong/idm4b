@@ -66,6 +66,7 @@ format:
     df-print: paged
     toc-depth: 5
     toc-expand: 3
+    callout-appearance: simple
 
 comments:
   giscus:
