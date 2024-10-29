@@ -1,13 +1,11 @@
 # Maximum likelihood estimation
 
-::: {.callout-note}
-
+::: callout-note
 ## Preparation
 
 Download influenza incidence data here:
 
 {{< downloadthis data/flu_inc.csv dname="flu_inc" label="flu_inc.csv" type=light >}}
-
 :::
 
 ```{r, message=FALSE, warning=FALSE}
@@ -28,19 +26,19 @@ $$\mathbb{L}(\theta | x) = \mathbb{P}(x | \theta)$$
 
 The maximum likelihood estimation follows 4 steps:
 
-- **Step 1**. Write down the likelihood function $L(\theta)$. Likelihood function is a function of $\theta$, which is the product of the $n$ mass/density function terms of the observed values $y_i$.
+-   **Step 1**. Write down the likelihood function $L(\theta)$. Likelihood function is a function of $\theta$, which is the product of the $n$ mass/density function terms of the observed values $y_i$.
 
 $$\mathbb{L}(\theta) = \prod_{i = 1}^{n} f_Y(y_i| \theta)$$
 
-- **Step 2**. Take the natural log of the likelihood $log L(\theta)$, or log-likelihood. The production in likelihood now becomes the sum in log-likelihood. See @sec-calib-loglik for more details.
+-   **Step 2**. Take the natural log of the likelihood $log L(\theta)$, or log-likelihood. The production in likelihood now becomes the sum in log-likelihood. See @sec-calib-loglik for more details.
 
 $$log \mathbb{L}(\theta) = \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]$$
 
-- **Step 3**. Take the negative log-likelihood $- log L(\theta)$. Because optimizers work by minimizing a function, we have to work on negative log-likelihood. See @sec-calib-negloglik for more details.
+-   **Step 3**. Take the negative log-likelihood $- log L(\theta)$. Because optimizers work by minimizing a function, we have to work on negative log-likelihood. See @sec-calib-negloglik for more details.
 
 $$- log \mathbb{L}(\theta) = - \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]$$
 
-- **Step 4**. The optimizer try different values of $\theta$ in the paramater space $\Theta$ for which negative log-likelihood $- log \mathbb{L}(\theta)$ is minimized.
+-   **Step 4**. The optimizer try different values of $\theta$ in the paramater space $\Theta$ for which negative log-likelihood $- log \mathbb{L}(\theta)$ is minimized.
 
 ## Statistical distributions for fitting
 
@@ -54,7 +52,9 @@ $Pois(\lambda)$ is the probability of observing $k$ **events** occurring in a **
 
 $$\mathbb{P}(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}$$
 
-$Pois(\lambda)$ is simple as it only requires one parameter, $\lambda$. However, a limitation is that the mean equals the variance ($\text{mean} = \text{variance} = \lambda$), which may not always match your data if it has more variability (overdispersion).
+- $\text{Mean} = \text{Variance} = \lambda$.
+
+$Pois(\lambda)$ is simple as it only requires one parameter, $\lambda$. However, a limitation is that the mean equals the variance ($\text{mean} = \text{variance} = \lambda$), which may not match your data if it has more variability (overdispersion).
 
 Below is examples of $Pois(\lambda = 4)$ and $Pois(\lambda = 10)$.
 
@@ -124,13 +124,27 @@ ggplot(df_plot, aes(x = k, y = prob, color = rate)) +
 
 Imagine a sequence of independent Bernoulli trials: each trial has two potential outcomes called "success" (with probability $p$) and "failure" (with probability $1 - p$). $B(n, p)$ is the probability of getting exactly $k$ **successes** with **success probability** $p$ in a sequence of $n$ **independent Bernoulli trials**:
 
-$$\mathbb{P}(X = k) = {n \choose k} p^k q^{n - k}$$
+$$\mathbb{P}(X = k) = {n \choose k} p^k (1 - p)^{n - k}$$ {#eq-binom-pmf}
 
-::: {.callout-important collapse=true}
+- $\text{Mean} = \text{Median} = \text{Mode} = np$.
+- $\text{Variance} = np(1 - p)$.
 
-## Poisson and Binomial distributions
+The Poisson distribution is a limiting case of a Binomial distribution when the number of trials $n$ is large and the success probability $p$ is small. If $n \geq 100$ and $np \leq 10$ (meaning $p \leq 0.1$), the Poisson distribution with $\lambda = np$ is a good approximation of the Binomial distribution [@oxfordcollegeofemoryuniversity].
 
-The Poisson distribution is a limiting case of a Binomial distribution when the number of trials $n$ is large and the success probability $p$ is small. If $n \geq 100$ and $np \leq 10$ (meaning $p \leq 0.1$), the Poisson distribution with $\lambda = np$ is a good approximation of the Binomial distribution.
+::: {.callout-important collapse="true"}
+## Prove the connection between Poisson and Binomial distributions
+
+Let's start with $B(n, p)$: the probability of getting $k$ successes with success probability $p$ in a sequence of $n$ independent Bernoulli trials with @eq-binom-pmf.
+
+$$\mathbb{P}(X = k) = {n \choose k} p^k (1 - p)^{n - k}$$
+
+The expected value, or the mean number of successes is $np$. Let say this is equal to the mean number of observing events in $Pois(\lambda)$ which is $\lambda$:
+
+$$np = \lambda \Leftrightarrow p = \frac{\lambda}{n}$$
+
+Substitute this into @eq-binom-pmf becomes:
+
+$$\mathbb{P}(X = k) = {n \choose k} \left(\frac{\lambda}{n}\right)^k \left(1 - \frac{\lambda}{n}\right)^{n - k}$$
 
 :::
 
@@ -138,18 +152,13 @@ The Poisson distribution is a limiting case of a Binomial distribution when the 
 
 Imagine a sequence of independent Bernoulli trials: each trial has two potential outcomes called "success" (with probability $p$) and "failure" (with probability $1 - p$). We keep observing the trials until exactly $r$ successes occur. $NB(r, p)$ (or Pascal) distribution is the probability of getting $k$ **failures** until $r$ **successes** occurs in a sequence of $n$ **independent Bernoulli trials**:
 
-
-
-::: {.callout-tip}
-
+::: callout-tip
 **Binomial** distribution gives the probability of $k$ **successes** in a fixed number of $n$ trials.
 
 **Negative binomial** distribution gives the probability of $k$ **failures**, given that we have $r$ successes in $n$ trials.
-
 :::
 
 The Negative binomial has two parameters: $r$, the number of successes, and $p$, the probability of success. Its key advantage is that it allows for variance greater than the mean, which makes it suitable for overdispersed data where variability exceeds the average.
-
 
 ## Code
 
@@ -209,7 +218,7 @@ I0 <- 1
 R0 <- 0
 ```
 
-- **Step 1**. Write down the likelihood function $L(\theta)$.
+-   **Step 1**. Write down the likelihood function $L(\theta)$.
 
 We assume the incidence data is generated from a normal distribution with mean $\mu_{inc}$ is the predicted incidence and a standard deviation $\sigma_{inc}$.
 
@@ -221,7 +230,7 @@ We use the `dnorm()` function to define this likelihood.
 dnorm(x = data, mean = pred, sd = sd_inc)
 ```
 
-- **Step 2**. Take the natural log of the likelihood $log L(\theta)$, product becomes sum.
+-   **Step 2**. Take the natural log of the likelihood $log L(\theta)$, product becomes sum.
 
 $$log L(\theta) = \sum_{i = 1}^{n} log \left[ \mathcal{N}(\mu_{inc}, \sigma_{inc}) \right]$$
 
@@ -229,7 +238,7 @@ $$log L(\theta) = \sum_{i = 1}^{n} log \left[ \mathcal{N}(\mu_{inc}, \sigma_{inc
 sum(dnorm(x = data, mean = pred, sd = sd_inc, log = T))
 ```
 
-- **Step 3**. Take the negative log-likelihood $- log L(\theta)$.
+-   **Step 3**. Take the negative log-likelihood $- log L(\theta)$.
 
 $$- log L(\theta) = - \sum_{i = 1}^{n} log \left[ \mathcal{N}(\mu_{inc}, \sigma_{inc}) \right]$$
 
@@ -237,7 +246,7 @@ $$- log L(\theta) = - \sum_{i = 1}^{n} log \left[ \mathcal{N}(\mu_{inc}, \sigma_
 - sum(dnorm(x = data, mean = pred, sd = sd_inc, log = T))
 ```
 
-- **Step 4**. Pass the negative log-likelihood $- log L(\theta)$ to the optimizer.
+-   **Step 4**. Pass the negative log-likelihood $- log L(\theta)$ to the optimizer.
 
 [Root mean squared error as SD](https://hankstevens.github.io/Primer-of-Ecology/disease.html)
 
@@ -300,5 +309,3 @@ Let compute $R_0$. For a "closed population" SEIR model, $R_0 = \frac{\beta}{\ga
 rnum0 <- params[1] * S0 / params[3]
 rnum0
 ```
-
-

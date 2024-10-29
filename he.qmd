@@ -165,3 +165,32 @@ Discounting should not be confused with adjusting for inflation. **Both are need
 -   Discounting: This is about the idea that a dollar today is worth more than a dollar in the future. It reflects our preference for receiving benefits or money sooner rather than later. It’s used to adjust future costs or benefits to their present value.
 
 -   Inflation: This is about how the general price level of goods and services increases over time. Inflation means that money loses its purchasing power, so what \$1 buys today might cost more in the future.
+
+## Define methods of value analysis
+
+### Net monetary benefit (NMB) or benefit-cost ratio
+
+Compares alternative interventions in terms of their net social cost, defined as the difference of the social cost and social benefit, expressed in monetary value.
+
+$$\text{NMB} = \text{Benefit of intervention} - \text{Cost of intervention}$$
+
+Sometime, this value assessment is done by calculating the benefit-cost ratio:
+
+$$\text{Benefit-cost ratio} = \frac{\text{Benefit of intervention}}{\text{Cost of intervention}}$$
+
+When benefit > cost, meaning that NMB > 0 or benefit-cost ratio > 1, the intervention is said to be cost beneficial, and to represent good value for money.
+
+When two interventions are being compared, report the incremental NMB which shows how intervention 1 is better than intervention 2.
+
+$$\text{Incremental NMB} = \text{NMB}_1 - \text{NMB}_2$$
+
+### Incremental cost effectiveness ratio (ICER)
+
+The ICER is the single most important interpretation of a CEA [@handbook2023]. Compares two or more alternative interventions in terms of their efficiency, by relating their cost and outcomes.
+
+$$\text{ICER} = \frac{\Delta \text{Cost}}{\Delta \text{Effectiveness}} = \frac{\text{Cost}_1 - \text{Cost}_2}{\text{Effectiveness}_1 - \text{Effectiveness}_2}$$
+
+- ICER < 0:
+  - $\Delta \text{Cost} < 0$ and $\Delta \text{Effectiveness} > 0$: Intervention 1 is cheaper and has greater effectiveness (good).
+  - $\Delta \text{Cost} > 0$ and $\Delta \text{Effectiveness} < 0$: Intervention 1 is more expensive and has less effectiveness (bad).
+- ICER > 0: Intervention 1 is more expensive, but also has greater effectiveness. In this case, the ICER has to be compared to the decision maker's willingness-to-pay threshold per unit of the outcome.

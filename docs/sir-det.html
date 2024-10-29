@@ -594,16 +594,12 @@ Listing&nbsp;1.1: Deterministic SIR model
 </section>
 <section id="incidence-or-prevalence" class="level2" data-number="1.5">
 <h2 data-number="1.5" class="anchored" data-anchor-id="incidence-or-prevalence"><span class="header-section-number">1.5</span> Incidence or prevalence</h2>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-important">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Important
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <p>Be careful of what kind of data we are using to fit the model:</p>
 <ul>
 <li><strong>Incidence</strong>: use the <span class="math inline">\(\beta SI\)</span> part.</li>
@@ -613,6 +609,7 @@ Important
 <li><strong>Prevalence</strong>: use the <strong>I compartment</strong>.</li>
 </ul>
 <p><span class="math display">\[\text{Prevalence} = \frac{\text{Number of existing cases at time t}}{\text{Total population at time t}}\]</span></p>
+</div>
 </div>
 </div>
 <p>There are two ways to compute incidence.</p>
@@ -679,17 +676,14 @@ Important
 <li>Incidence reflects the immediate rate of new infections, the peak of incidence is reached when the transmission rate begins to decline.</li>
 <li>Prevalence accumulates both new and existing cases. Even after the incidence starts to decline, the active cases who were infected before the incidence peak are still there waiting for recovering. Prevalence only starts to decline when the recovery rate surpasses the rate of new infections significantly.</li>
 </ul>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-important">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Important
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <p>Normally, public health officials are interested in the <strong>incidence</strong> in the general population (to track disease spread) and the <strong>prevalence</strong> in intensive care units (to ensure it does not exceed ICU bed capacity).</p>
+</div>
 </div>
 </div>
 </section>

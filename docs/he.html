@@ -431,6 +431,11 @@ window.Quarto = {
   <li><a href="#perspectives" id="toc-perspectives" class="nav-link" data-scroll-target="#perspectives">Perspectives</a></li>
   <li><a href="#discounting-vs-inflation" id="toc-discounting-vs-inflation" class="nav-link" data-scroll-target="#discounting-vs-inflation">Discounting vs inflation</a></li>
   </ul></li>
+  <li><a href="#define-methods-of-value-analysis" id="toc-define-methods-of-value-analysis" class="nav-link" data-scroll-target="#define-methods-of-value-analysis">Define methods of value analysis</a>
+  <ul>
+  <li><a href="#net-monetary-benefit-nmb-or-benefit-cost-ratio" id="toc-net-monetary-benefit-nmb-or-benefit-cost-ratio" class="nav-link" data-scroll-target="#net-monetary-benefit-nmb-or-benefit-cost-ratio">Net monetary benefit (NMB) or benefit-cost ratio</a></li>
+  <li><a href="#incremental-cost-effectiveness-ratio-icer" id="toc-incremental-cost-effectiveness-ratio-icer" class="nav-link" data-scroll-target="#incremental-cost-effectiveness-ratio-icer">Incremental cost effectiveness ratio (ICER)</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -506,20 +511,17 @@ Acknowledgement
 </tr>
 </tbody>
 </table>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <ul>
 <li>Cost-utility is sometimes considered as a special type of cost-effectiveness.</li>
 <li>There are 2 more types of full economic evaluations: cost-minimisation and cost-consequence, but they are less commonly used.</li>
 </ul>
+</div>
 </div>
 </div>
 </section>
@@ -810,6 +812,32 @@ Figure&nbsp;3: Compartmental dynamic model, adapted from <span class="citation" 
 <ul>
 <li><p>Discounting: This is about the idea that a dollar today is worth more than a dollar in the future. It reflects our preference for receiving benefits or money sooner rather than later. It’s used to adjust future costs or benefits to their present value.</p></li>
 <li><p>Inflation: This is about how the general price level of goods and services increases over time. Inflation means that money loses its purchasing power, so what $1 buys today might cost more in the future.</p></li>
+</ul>
+</section>
+</section>
+<section id="define-methods-of-value-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="define-methods-of-value-analysis">Define methods of value analysis</h2>
+<section id="net-monetary-benefit-nmb-or-benefit-cost-ratio" class="level3">
+<h3 class="anchored" data-anchor-id="net-monetary-benefit-nmb-or-benefit-cost-ratio">Net monetary benefit (NMB) or benefit-cost ratio</h3>
+<p>Compares alternative interventions in terms of their net social cost, defined as the difference of the social cost and social benefit, expressed in monetary value.</p>
+<p><span class="math display">\[\text{NMB} = \text{Benefit of intervention} - \text{Cost of intervention}\]</span></p>
+<p>Sometime, this value assessment is done by calculating the benefit-cost ratio:</p>
+<p><span class="math display">\[\text{Benefit-cost ratio} = \frac{\text{Benefit of intervention}}{\text{Cost of intervention}}\]</span></p>
+<p>When benefit &gt; cost, meaning that NMB &gt; 0 or benefit-cost ratio &gt; 1, the intervention is said to be cost beneficial, and to represent good value for money.</p>
+<p>When two interventions are being compared, report the incremental NMB which shows how intervention 1 is better than intervention 2.</p>
+<p><span class="math display">\[\text{Incremental NMB} = \text{NMB}_1 - \text{NMB}_2\]</span></p>
+</section>
+<section id="incremental-cost-effectiveness-ratio-icer" class="level3">
+<h3 class="anchored" data-anchor-id="incremental-cost-effectiveness-ratio-icer">Incremental cost effectiveness ratio (ICER)</h3>
+<p>The ICER is the single most important interpretation of a CEA <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>. Compares two or more alternative interventions in terms of their efficiency, by relating their cost and outcomes.</p>
+<p><span class="math display">\[\text{ICER} = \frac{\Delta \text{Cost}}{\Delta \text{Effectiveness}} = \frac{\text{Cost}_1 - \text{Cost}_2}{\text{Effectiveness}_1 - \text{Effectiveness}_2}\]</span></p>
+<ul>
+<li>ICER &lt; 0:
+<ul>
+<li><span class="math inline">\(\Delta \text{Cost} &lt; 0\)</span> and <span class="math inline">\(\Delta \text{Effectiveness} &gt; 0\)</span>: Intervention 1 is cheaper and has greater effectiveness (good).</li>
+<li><span class="math inline">\(\Delta \text{Cost} &gt; 0\)</span> and <span class="math inline">\(\Delta \text{Effectiveness} &lt; 0\)</span>: Intervention 1 is more expensive and has less effectiveness (bad).</li>
+</ul></li>
+<li>ICER &gt; 0: Intervention 1 is more expensive, but also has greater effectiveness. In this case, the ICER has to be compared to the decision maker’s willingness-to-pay threshold per unit of the outcome.</li>
 </ul>
 
 
@@ -1292,7 +1320,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"selector":".lightbox","openEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"loop":false,"openEffect":"zoom","descPosition":"bottom","selector":".lightbox","closeEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

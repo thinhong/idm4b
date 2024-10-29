@@ -523,7 +523,7 @@ window.Quarto = {
 </ul>
 <p>Looking back at <a href="#def-rt-inst" class="quarto-xref">Definition&nbsp;<span>11.1</span></a>, <span class="math inline">\(R_t^i\)</span> is the expected number of secondary infections occurring at time <span class="math inline">\(t\)</span> (<span class="math inline">\(I_t\)</span>), divided by the number of infected individuals (<span class="math inline">\(\sum_{s = 1}^{t} I_{t - s}\)</span>), each scaled by their relative infectiousness at time <span class="math inline">\(t\)</span> (<span class="math inline">\(w_s\)</span>).</p>
 <p>The only parametric assumption required by this method is <strong>the form of the generation interval</strong>. The standard assumption is that <span class="math inline">\(w_s\)</span> follows a <strong>discretized gamma distribution</strong>, but any parametric or empirical discrete distribution also work <span class="citation" data-cites="gostic2020">(<a href="references.html#ref-gostic2020" role="doc-biblioref">Gostic et al., 2020</a>)</span>.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout callout-style-simple callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -618,17 +618,14 @@ Proofs
 <ol start="2" type="1">
 <li>Case <span class="math inline">\(R_t^c\)</span> is shifted forward in time relative to instantaneous <span class="math inline">\(R_t^i\)</span>, produces leading estimates of <span class="math inline">\(R_t\)</span> because it uses data from time points <strong>after</strong> <span class="math inline">\(t\)</span>, whereas the <span class="math inline">\(R_t^i\)</span> uses data from time points <strong>before</strong> <span class="math inline">\(t\)</span>.</li>
 </ol>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-important">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Important
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <p>Overall, <strong>for real-time analyses</strong> aiming to <strong>infer the impact of changes in policy</strong>, behavior, or other extrinsic factors on transmission, the <strong>instantaneous reproductive number</strong> will provide more temporally accurate estimates and is <strong>most appropriate</strong>.</p>
+</div>
 </div>
 </div>
 </section>

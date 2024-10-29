@@ -473,7 +473,7 @@ window.Quarto = {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-simple callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -484,7 +484,7 @@ Preparation
 </div>
 <div class="callout-body-container callout-body">
 <p>Download influenza incidence data here:</p>
-<p><a href="#dnldts60649" onclick="fetch('data:text/csv;base64,ZGF5LGluYw0KMCwwDQoxLDENCjIsMQ0KMywwDQo0LDINCjUsNQ0KNiwzDQo3LDMNCjgsMw0KOSw2DQoxMCwyDQoxMSw1DQoxMiw5DQoxMywxMw0KMTQsMTINCjE1LDEzDQoxNiwxMQ0KMTcsMTINCjE4LDYNCjE5LDYNCjIwLDYNCjIxLDMNCjIyLDENCjIzLDANCjI0LDINCjI1LDANCjI2LDANCjI3LDANCjI4LDANCjI5LDINCjMwLDANCjMxLDINCjMyLDANCjMzLDANCjM0LDANCjM1LDANCjM2LDANCjM3LDANCjM4LDANCjM5LDANCjQwLDANCjQxLDANCjQyLDANCjQzLDANCjQ0LDANCjQ1LDANCjQ2LDANCjQ3LDANCjQ4LDANCjQ5LDANCjUwLDANCg==').then(res => res.blob()).then(blob => {
+<p><a href="#dnldts59461" onclick="fetch('data:text/csv;base64,ZGF5LGluYw0KMCwwDQoxLDENCjIsMQ0KMywwDQo0LDINCjUsNQ0KNiwzDQo3LDMNCjgsMw0KOSw2DQoxMCwyDQoxMSw1DQoxMiw5DQoxMywxMw0KMTQsMTINCjE1LDEzDQoxNiwxMQ0KMTcsMTINCjE4LDYNCjE5LDYNCjIwLDYNCjIxLDMNCjIyLDENCjIzLDANCjI0LDINCjI1LDANCjI2LDANCjI3LDANCjI4LDANCjI5LDINCjMwLDANCjMxLDINCjMyLDANCjMzLDANCjM0LDANCjM1LDANCjM2LDANCjM3LDANCjM4LDANCjM5LDANCjQwLDANCjQxLDANCjQyLDANCjQzLDANCjQ0LDANCjQ1LDANCjQ2LDANCjQ3LDANCjQ4LDANCjQ5LDANCjUwLDANCg==').then(res => res.blob()).then(blob => {
       const downloadURL = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -492,12 +492,12 @@ Preparation
       a.download = 'flu_inc.csv'; a.click();
       window.URL.revokeObjectURL(downloadURL);
       document.body.removeChild(a);
-        });"><button class="btn btn-light downloadthis  " id="dnldts60649"><i class="bi bi-download"></i> flu_inc.csv </button></a></p>
+        });"><button class="btn btn-light downloadthis  " id="dnldts59461"><i class="bi bi-download"></i> flu_inc.csv </button></a></p>
 </div>
 </div>
 <section id="methods" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="methods"><span class="header-section-number">5.1</span> Methods</h2>
-<p>Refer to <a href="dict.html#def-residual" class="quarto-xref">Definition&nbsp;<span>A.4</span></a>, the residual sum of squares (RSS) is the sum of the squares of residuals.</p>
+<p>Refer to <a href="dict.html#def-residual" class="quarto-xref">Definition&nbsp;<span>A.10</span></a>, the residual sum of squares (RSS) is the sum of the squares of residuals.</p>
 <p><span class="math display">\[RSS = \sum_{i = 1}^{n}[y_i - f(x_i)]^2\]</span></p>
 <ul>
 <li><span class="math inline">\(y_i\)</span>: the observed value.</li>

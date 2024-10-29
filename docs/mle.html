@@ -494,7 +494,7 @@ Preparation
 </div>
 <div class="callout-body-container callout-body">
 <p>Download influenza incidence data here:</p>
-<p><a href="#dnldts42304" onclick="fetch('data:text/csv;base64,ZGF5LGluYw0KMCwwDQoxLDENCjIsMQ0KMywwDQo0LDINCjUsNQ0KNiwzDQo3LDMNCjgsMw0KOSw2DQoxMCwyDQoxMSw1DQoxMiw5DQoxMywxMw0KMTQsMTINCjE1LDEzDQoxNiwxMQ0KMTcsMTINCjE4LDYNCjE5LDYNCjIwLDYNCjIxLDMNCjIyLDENCjIzLDANCjI0LDINCjI1LDANCjI2LDANCjI3LDANCjI4LDANCjI5LDINCjMwLDANCjMxLDINCjMyLDANCjMzLDANCjM0LDANCjM1LDANCjM2LDANCjM3LDANCjM4LDANCjM5LDANCjQwLDANCjQxLDANCjQyLDANCjQzLDANCjQ0LDANCjQ1LDANCjQ2LDANCjQ3LDANCjQ4LDANCjQ5LDANCjUwLDANCg==').then(res => res.blob()).then(blob => {
+<p><a href="#dnldts48665" onclick="fetch('data:text/csv;base64,ZGF5LGluYw0KMCwwDQoxLDENCjIsMQ0KMywwDQo0LDINCjUsNQ0KNiwzDQo3LDMNCjgsMw0KOSw2DQoxMCwyDQoxMSw1DQoxMiw5DQoxMywxMw0KMTQsMTINCjE1LDEzDQoxNiwxMQ0KMTcsMTINCjE4LDYNCjE5LDYNCjIwLDYNCjIxLDMNCjIyLDENCjIzLDANCjI0LDINCjI1LDANCjI2LDANCjI3LDANCjI4LDANCjI5LDINCjMwLDANCjMxLDINCjMyLDANCjMzLDANCjM0LDANCjM1LDANCjM2LDANCjM3LDANCjM4LDANCjM5LDANCjQwLDANCjQxLDANCjQyLDANCjQzLDANCjQ0LDANCjQ1LDANCjQ2LDANCjQ3LDANCjQ4LDANCjQ5LDANCjUwLDANCg==').then(res => res.blob()).then(blob => {
       const downloadURL = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -502,7 +502,7 @@ Preparation
       a.download = 'flu_inc.csv'; a.click();
       window.URL.revokeObjectURL(downloadURL);
       document.body.removeChild(a);
-        });"><button class="btn btn-light downloadthis  " id="dnldts42304"><i class="bi bi-download"></i> flu_inc.csv </button></a></p>
+        });"><button class="btn btn-light downloadthis  " id="dnldts48665"><i class="bi bi-download"></i> flu_inc.csv </button></a></p>
 </div>
 </div>
 <div class="cell">
@@ -546,7 +546,10 @@ Preparation
 <h4 data-number="6.3.1.1" class="anchored" data-anchor-id="poisson-distribution"><span class="header-section-number">6.3.1.1</span> Poisson distribution</h4>
 <p><span class="math inline">\(Pois(\lambda)\)</span> is the probability of observing <span class="math inline">\(k\)</span> <strong>events</strong> occurring in a <strong>fixed interval</strong> of time if these events occur with a known <strong>constant mean rate</strong> <span class="math inline">\(\lambda\)</span> and <strong>independently of the time since the last event</strong>:</p>
 <p><span class="math display">\[\mathbb{P}(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}\]</span></p>
-<p><span class="math inline">\(Pois(\lambda)\)</span> is simple as it only requires one parameter, <span class="math inline">\(\lambda\)</span>. However, a limitation is that the mean equals the variance (<span class="math inline">\(\text{mean} = \text{variance} = \lambda\)</span>), which may not always match your data if it has more variability (overdispersion).</p>
+<ul>
+<li><span class="math inline">\(\text{Mean} = \text{Variance} = \lambda\)</span>.</li>
+</ul>
+<p><span class="math inline">\(Pois(\lambda)\)</span> is simple as it only requires one parameter, <span class="math inline">\(\lambda\)</span>. However, a limitation is that the mean equals the variance (<span class="math inline">\(\text{mean} = \text{variance} = \lambda\)</span>), which may not match your data if it has more variability (overdispersion).</p>
 <p>Below is examples of <span class="math inline">\(Pois(\lambda = 4)\)</span> and <span class="math inline">\(Pois(\lambda = 10)\)</span>.</p>
 <div class="cell">
 <details class="code-fold">
@@ -618,20 +621,30 @@ Preparation
 <section id="binomial-distribution" class="level4" data-number="6.3.1.2">
 <h4 data-number="6.3.1.2" class="anchored" data-anchor-id="binomial-distribution"><span class="header-section-number">6.3.1.2</span> Binomial distribution</h4>
 <p>Imagine a sequence of independent Bernoulli trials: each trial has two potential outcomes called “success” (with probability <span class="math inline">\(p\)</span>) and “failure” (with probability <span class="math inline">\(1 - p\)</span>). <span class="math inline">\(B(n, p)\)</span> is the probability of getting exactly <span class="math inline">\(k\)</span> <strong>successes</strong> with <strong>success probability</strong> <span class="math inline">\(p\)</span> in a sequence of <span class="math inline">\(n\)</span> <strong>independent Bernoulli trials</strong>:</p>
-<p><span class="math display">\[\mathbb{P}(X = k) = {n \choose k} p^k q^{n - k}\]</span></p>
+<p><span id="eq-binom-pmf"><span class="math display">\[\mathbb{P}(X = k) = {n \choose k} p^k (1 - p)^{n - k} \tag{6.1}\]</span></span></p>
+<ul>
+<li><span class="math inline">\(\text{Mean} = \text{Median} = \text{Mode} = np\)</span>.</li>
+<li><span class="math inline">\(\text{Variance} = np(1 - p)\)</span>.</li>
+</ul>
+<p>The Poisson distribution is a limiting case of a Binomial distribution when the number of trials <span class="math inline">\(n\)</span> is large and the success probability <span class="math inline">\(p\)</span> is small. If <span class="math inline">\(n \geq 100\)</span> and <span class="math inline">\(np \leq 10\)</span> (meaning <span class="math inline">\(p \leq 0.1\)</span>), the Poisson distribution with <span class="math inline">\(\lambda = np\)</span> is a good approximation of the Binomial distribution <span class="citation" data-cites="oxfordcollegeofemoryuniversity">(<a href="references.html#ref-oxfordcollegeofemoryuniversity" role="doc-biblioref">Oxford College of Emory University, n.d.</a>)</span>.</p>
 <div class="callout callout-style-simple callout-important callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Poisson and Binomial distributions
+Prove the connection between Poisson and Binomial distributions
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The Poisson distribution is a limiting case of a Binomial distribution when the number of trials <span class="math inline">\(n\)</span> is large and the success probability <span class="math inline">\(p\)</span> is small. If <span class="math inline">\(n \geq 100\)</span> and <span class="math inline">\(np \leq 10\)</span> (meaning <span class="math inline">\(p \leq 0.1\)</span>), the Poisson distribution with <span class="math inline">\(\lambda = np\)</span> is a good approximation of the Binomial distribution.</p>
+<p>Let’s start with <span class="math inline">\(B(n, p)\)</span>: the probability of getting <span class="math inline">\(k\)</span> successes with success probability <span class="math inline">\(p\)</span> in a sequence of <span class="math inline">\(n\)</span> independent Bernoulli trials with <a href="#eq-binom-pmf" class="quarto-xref">Equation&nbsp;<span>6.1</span></a>.</p>
+<p><span class="math display">\[\mathbb{P}(X = k) = {n \choose k} p^k (1 - p)^{n - k}\]</span></p>
+<p>The expected value, or the mean number of successes is <span class="math inline">\(np\)</span>. Let say this is equal to the mean number of observing events in <span class="math inline">\(Pois(\lambda)\)</span> which is <span class="math inline">\(\lambda\)</span>:</p>
+<p><span class="math display">\[np = \lambda \Leftrightarrow p = \frac{\lambda}{n}\]</span></p>
+<p>Substitute this into <a href="#eq-binom-pmf" class="quarto-xref">Equation&nbsp;<span>6.1</span></a> becomes:</p>
+<p><span class="math display">\[\mathbb{P}(X = k) = {n \choose k} \left(\frac{\lambda}{n}\right)^k \left(1 - \frac{\lambda}{n}\right)^{n - k}\]</span></p>
 </div>
 </div>
 </div>
@@ -784,6 +797,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
 <div id="ref-cauchemez2011" class="csl-entry" role="listitem">
 Cauchemez, S., Bhattarai, A., Marchbanks, T. L., Fagan, R. P., Ostroff, S., Ferguson, N. M., Swerdlow, D., Pennsylvania H1N1 working group, the, Sodha, S. V., Moll, M. E., Angulo, F. J., Palekar, R., Archer, W. R., &amp; Finelli, L. (2011). Role of social networks in shaping disease transmission during a community outbreak of 2009 H1N1 pandemic influenza. <em>Proceedings of the National Academy of Sciences</em>, <em>108</em>(7), 2825–2830. <a href="https://doi.org/10.1073/pnas.1008895108">https://doi.org/10.1073/pnas.1008895108</a>
+</div>
+<div id="ref-oxfordcollegeofemoryuniversity" class="csl-entry" role="listitem">
+Oxford College of Emory University. (n.d.). <em>The connection between the poisson and binomial distributions</em>. <a href="https://math.oxford.emory.edu/site/math117/connectingPoissonAndBinomial/">https://math.oxford.emory.edu/site/math117/connectingPoissonAndBinomial/</a>
 </div>
 </div>
 </section>

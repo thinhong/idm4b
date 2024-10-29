@@ -1,8 +1,28 @@
 # Dictionary
 
-Epidemic is "the occurrence of more cases of disease than expected in a given area or among a specific group of people over a particular period of time" (US-CDC) [@texier2016]. Epidemic is derived from the Greek *epi* and *demos* meaning "that which is upon the people", to describe the burden of some phenomenon on "the people" [@nelson2014].
+::: {#def-cfr}
+Case fatality rate (CFR): the number of deaths divided by the number of **confirmed cases** [@meyerowitz-katz2020].
+:::
 
+::: {#def-ifr}
+Infection fatality rate (IFR): the number of deaths divided by the number of **infected individuals** [@meyerowitz-katz2020].
+:::
+
+::: {#def-forecast}
+Forecast: predictions about what **will** happen, helpful for situation awareness.
+:::
+
+::: {#def-projection}
+Projection: estimates about what **could** happen, considering multiple possible outcomes, helpful for intervention planning when faced with uncertainty.
+:::
+
+::: {#def-epidemic}
+Epidemic is "the occurrence of more cases of disease than expected in a given area or among a specific group of people over a particular period of time" (US-CDC) [@texier2016]. Epidemic is derived from the Greek *epi* and *demos* meaning "that which is upon the people", to describe the burden of some phenomenon on "the people" [@nelson2014].
+:::
+
+::: {#def-tractable}
 Tractable: can be solved [(source)](https://en.wikipedia.org/wiki/Tractable)
+:::
 
 ::: {#def-micsim}
 Microsimulation: an analysis in which individual instantiations of a system - such as a patient's lifetime or the course of an epidemic - are generated using a random process to 'draw' from probability distributions a large number of times, in order to examine the central tendency and possibly the distribution of outcomes [@kim2008].
