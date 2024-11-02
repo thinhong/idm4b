@@ -66,3 +66,8 @@ Inverse matrix:
 
 $$\begin{bmatrix} a & b \\ c & d \end{bmatrix}^{-1} = \frac{1}{ad - bc} \begin{bmatrix} d & -b \\ -c & a \end{bmatrix}$$
 :::
+
+::: {#def-monte-carlo}
+Monte Carlo methods or Monte Carlo experiments: using repeated random sampling simulation to obtain numerical results.
+:::
+

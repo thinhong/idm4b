@@ -1,5 +1,190 @@
 # MCMC
 
+```{r}
+#| echo: false
+library(ggplot2)
+```
+
+## Monte Carlo simulation
+
+Monte Carlo simulation is a method that uses repeated random sampling to obtain numerical results.
+
+We will use Monte Carlo simulation to create a circle and estimate $\pi$.
+
+### Create a circle
+
+To create a circle of radius $r = 1$ centered at $(0, 0)$, we first define a square with side length 2, extending from $[-1, 1]$ in both $x$ and $y$ directions. We generate random points uniformly within this square by drawing $x$ and $y$ values from the interval $[-1, 1]$.
+
+```{r}
+#| echo: false
+set.seed(7)
+
+runs <- 10000
+xs <- runif(runs, min = -1, max = 1)
+ys <- runif(runs, min = -1, max = 1)
+```
+
+::: {.grid}
+
+::: {.g-col-5}
+
+```{r}
+#| echo: false
+#| fig-width: 3
+#| fig-height: 3
+
+df_plot <- data.frame(xs, ys)
+ggplot(df_plot[1:1000, ], aes(x = xs, y = ys)) +
+  geom_point(color = "#5fc7a6") +
+  labs(x = NULL, y = NULL) +
+  scale_x_continuous(expand = c(0, 0), limits = c(-1, 1)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(-1, 1)) +
+  theme_classic()
+```
+
+:::
+
+::: {.g-col-7}
+
+```{r}
+#| eval: false
+set.seed(7)
+
+runs <- 10000
+xs <- runif(runs, min = -1, max = 1)
+ys <- runif(runs, min = -1, max = 1)
+```
+
+:::
+
+:::
+
+The distance from each point to the center $(0, 0)$ is $\sqrt{x^2 + y^2}$. A point lies within the circle if $\sqrt{x^2 + y^2} \leq 1$.
+
+```{r}
+#| echo: false
+in_circle <- xs ^ 2 + ys ^ 2 <= 1 ^ 2
+df <- data.frame(iter = 1:runs, xs, ys, in_circle)
+```
+
+::: {.grid}
+
+::: {.g-col-5}
+
+```{r}
+#| echo: false
+#| fig-width: 3
+#| fig-height: 3
+
+ggplot(df[1:1000, ], aes(x = xs, y = ys, color = in_circle)) +
+  geom_point() +
+  labs(x = NULL, y = NULL) +
+  scale_x_continuous(expand = c(0, 0), limits = c(-1, 1)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(-1, 1)) +
+  scale_color_manual(values = c("#5fc7a6", "#f79071")) +
+  theme_classic() +
+  theme(legend.position = "none")
+```
+
+:::
+
+::: {.g-col-7}
+
+```{r}
+#| eval: false
+in_circle <- xs ^ 2 + ys ^ 2 <= 1 ^ 2
+df <- data.frame(iter = 1:runs, xs, ys, in_circle)
+```
+
+:::
+
+:::
+
+
+### Estimate $\pi$
+
+The area of a circle is $\pi r^2$.
+
+The area of the bounding square is $(2r)^2 = 4r^2$.
+
+Dividing the area of the circle by the area of the square, we get a ratio:
+
+$$\frac{\text{area of circle}}{\text{area of square}} = \frac{\pi r^2}{4r^2} = \frac{\pi}{4}$$
+
+Therefore,
+
+$$\pi = 4 \times \frac{\text{area of circle}}{\text{area of square}}$$
+
+If we approximate the area of circle by the number of simulated points within the circle, and the area of square by the total number of simulated points, we have:
+
+$$\pi \approx 4 \times \frac{\text{simulated points within circle}}{\text{total number of simulated points}}$$
+
+```{r}
+df$mc_pi <- 4 * cumsum(df$in_circle) / df$iter
+```
+
+Let explore how the approximation of $\pi$ improves as more points are sampled.
+
+```{r}
+#| echo: false
+ojs_define(data = df)
+```
+
+```{ojs}
+//| echo: false
+ojsdata = transpose(data)
+
+viewof n_points = Inputs.range(
+  [10, 10000], 
+  {value: 1000, step: 1, label: "Number of points:"}
+)
+
+ojsdata_filtered = ojsdata.slice(1, n_points)
+```
+
+::: {.grid}
+
+::: {.g-col-5}
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 300, height: 300,
+  x: {label: null},
+  y: {label: null},
+  marks: [Plot.dot(ojsdata_filtered, {x: "xs", y: "ys", fill: "in_circle"})],
+  color: {scheme: "set2"}
+})
+```
+
+:::
+
+::: {.g-col-7}
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 400, height: 280,
+  marks: [
+    Plot.lineY(ojsdata_filtered, {
+      x: "iter", 
+      y: "mc_pi", 
+      stroke: "blue",
+      tip: true,
+      title: d => `\u{1D70B} = ${d.mc_pi}\nIteration = ${d.iter}`
+    })
+  ],
+  x: {label: "Iteration"},
+  y: {label: "\u{1D70B}"},
+})
+```
+
+:::
+
+::::
+
+### MCMC in infectious disease modelling
+
 Suppose that we have an iid (see @def-iid) incubation periods dataset of $n$ samples $y = (y_1, y_2, \cdots, y_n)$. We assume these data are independent draws from a Gamma distribution with shape $\alpha$ and rate $\beta$.
 
 ::: {.callout-note collapse="true"}
