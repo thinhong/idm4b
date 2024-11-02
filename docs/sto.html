@@ -382,8 +382,14 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="3">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#have-i-run-enough-simulations" id="toc-have-i-run-enough-simulations" class="nav-link active" data-scroll-target="#have-i-run-enough-simulations">Have I run enough simulations?</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -407,8 +413,24 @@ window.Quarto = {
 </header>
 
 
+<section id="have-i-run-enough-simulations" class="level2">
+<h2 class="anchored" data-anchor-id="have-i-run-enough-simulations">Have I run enough simulations?</h2>
+<p>The optimal number of simulations is reached when results stabilize, showing approximate convergence. This means additional simulations don’t significantly change the outcome. See <a href="mcmc.html#fig-mc-iter" class="quarto-xref">Figure&nbsp;<span>7.1</span></a> for a demonstration of this convergence.</p>
+<p>Steps to calculate the needed number of simulations [<a href="https://stats.stackexchange.com/a/29626">source</a>]:</p>
+<ol type="1">
+<li><p>Run the simulation with a default number of runs <span class="math inline">\(R_0\)</span> (usually <span class="math inline">\(R_0 = 1000\)</span>). Now you should have a vector with the results <span class="math inline">\(x_0\)</span> where <span class="math inline">\(\text{length}(x_0) = R_0\)</span>.</p></li>
+<li><p>Calculate the mean value <span class="math inline">\(\overline{x_0}\)</span> and standard deviation <span class="math inline">\(\sigma_0\)</span>.</p></li>
+<li><p>Specify the allowed level of error <span class="math inline">\(\epsilon\)</span> and the uncertainty <span class="math inline">\(\alpha\)</span> you are willing to accept. Normally you choose <span class="math inline">\(\epsilon = \alpha = 0.05\%\)</span>.</p></li>
+<li><p>Use this equation to get the required number of simulations:</p></li>
+</ol>
+<p><span class="math display">\[R \geq \left( \frac{Z_{1 - \frac{\alpha}{2}} \times \sigma_0}{\epsilon \times x_0} \right)^2\]</span></p>
+<ol start="5" type="1">
+<li>Use the Student t-distribution rather than the normal distribution for small <span class="math inline">\(R_0\)</span>.</li>
+</ol>
+<p>the output doesn’t change much if the model was run with more simulations</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

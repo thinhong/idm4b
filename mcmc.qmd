@@ -162,6 +162,8 @@ Plot.plot({
 ::: {.g-col-7}
 
 ```{ojs}
+//| label: fig-mc-iter
+//| fig-cap: "Approximation of pi"
 //| echo: false
 Plot.plot({
   width: 400, height: 280,

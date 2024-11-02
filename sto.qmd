@@ -1,1 +1,21 @@
 # Stochastic models
+
+## Have I run enough simulations?
+
+The optimal number of simulations is reached when results stabilize, showing approximate convergence. This means additional simulations don't significantly change the outcome. See @fig-mc-iter for a demonstration of this convergence.
+
+Steps to calculate the needed number of simulations [[source](https://stats.stackexchange.com/a/29626)]:
+
+1. Run the simulation with a default number of runs $R_0$ (usually $R_0 = 1000$). Now you should have a vector with the results $x_0$ where $\text{length}(x_0) = R_0$.
+
+2. Calculate the mean value $\overline{x_0}$ and standard deviation $\sigma_0$.
+
+3. Specify the allowed level of error $\epsilon$ and the uncertainty $\alpha$ you are willing to accept. Normally you choose $\epsilon = \alpha = 0.05\%$.
+
+4. Use this equation to get the required number of simulations:
+
+$$R \geq \left( \frac{Z_{1 - \frac{\alpha}{2}} \times \sigma_0}{\epsilon \times x_0} \right)^2$$
+
+5. Use the Student t-distribution rather than the normal distribution for small $R_0$.
+
+the output doesn't change much if the model was run with more simulations
