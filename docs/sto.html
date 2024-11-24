@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -180,8 +200,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./het-det.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Heterogeneities</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./tsir.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">tsiR</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">tsiR</span></span></a>
   </div>
 </li>
       </ul>
@@ -198,7 +224,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./seir-sto.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SEIR</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">SEIR</span></span></a>
   </div>
 </li>
       </ul>
@@ -215,25 +241,25 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lse.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Least squares estimation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Least squares estimation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./mle.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Maximum likelihood estimation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Maximum likelihood estimation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./mcmc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">MCMC</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">MCMC</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./pomp.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Particle filter</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Particle filter</span></span></a>
   </div>
 </li>
       </ul>
@@ -250,25 +276,25 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./gen-int.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Generation interval</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Generation interval</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./r0.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rt.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rt-prac.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><span class="math inline">\(R_t\)</span> in practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><span class="math inline">\(R_t\)</span> in practice</span></span></a>
   </div>
 </li>
       </ul>
@@ -285,25 +311,25 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ftc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Flattening the curve</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Flattening the curve</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./vax.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Vaccination</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Vaccination</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./vax-perf.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Vaccine performance</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Vaccine performance</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./vax-mod.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Model vaccination</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model vaccination</span></span></a>
   </div>
 </li>
       </ul>
@@ -320,7 +346,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./he-etr.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">EtR Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">EtR Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -337,7 +363,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
       </ul>
@@ -387,7 +413,8 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#have-i-run-enough-simulations" id="toc-have-i-run-enough-simulations" class="nav-link active" data-scroll-target="#have-i-run-enough-simulations">Have I run enough simulations?</a></li>
+  <li><a href="#types-of-stochastic-epidemic-models" id="toc-types-of-stochastic-epidemic-models" class="nav-link active" data-scroll-target="#types-of-stochastic-epidemic-models">Types of stochastic epidemic models</a></li>
+  <li><a href="#have-i-run-enough-simulations" id="toc-have-i-run-enough-simulations" class="nav-link" data-scroll-target="#have-i-run-enough-simulations">Have I run enough simulations?</a></li>
   </ul>
 </nav>
     </div>
@@ -413,10 +440,20 @@ window.Quarto = {
 </header>
 
 
+<section id="types-of-stochastic-epidemic-models" class="level2">
+<h2 class="anchored" data-anchor-id="types-of-stochastic-epidemic-models">Types of stochastic epidemic models</h2>
+<p>Stochastic models can conveniently be classified according to their contact structure <span class="citation" data-cites="britton2015">(<a href="references.html#ref-britton2015" role="doc-biblioref">Britton et al., 2015</a>)</span>:</p>
+<ol type="1">
+<li><p>Global: no structure, often referred to as homogeneous mixing. Individuals’ probabilities of interaction do not depend on their location in the population.</p></li>
+<li><p>Network: Any individual-based epidemic model can be thought of as a network or random graph: with individuals as nodes, and infection of one by another as a link.</p></li>
+<li><p>Metapopulation: The population is partitioned into non-overlapping groups, e.g.&nbsp;households; individuals have one contact rate with individuals in different groups, and another (higher) rate for individuals in the same group. More general metapopulation models allow an individual to belong to several different types of group, each with its own contact rate, or allow more levels of mixing.</p></li>
+<li><p>Spatial: vary from simple lattices with only nearest–neighbour interactions, for which some theoretical analysis is possible, to complex models with long-distance interactions, for which only qualitative and approximate results are known. A key feature of spatial models is that they display slower than exponential growth, even in their earliest stage; this makes it difficult to approximate them adequately by deterministic models, and even to define threshold parameters.</p></li>
+</ol>
+</section>
 <section id="have-i-run-enough-simulations" class="level2">
 <h2 class="anchored" data-anchor-id="have-i-run-enough-simulations">Have I run enough simulations?</h2>
-<p>The optimal number of simulations is reached when results stabilize, showing approximate convergence. This means additional simulations don’t significantly change the outcome. See <a href="mcmc.html#fig-mc-iter" class="quarto-xref">Figure&nbsp;<span>7.1</span></a> for a demonstration of this convergence.</p>
-<p>Steps to calculate the needed number of simulations [<a href="https://stats.stackexchange.com/a/29626">source</a>]:</p>
+<p>The optimal number of simulations is reached when results stabilize, showing approximate convergence. This means additional simulations don’t significantly change the outcome. See <a href="mcmc.html#sec-mc-multi-sims" class="quarto-xref"><span>8.1.2.2 Multiple simulations</span></a> for a demonstration of this convergence.</p>
+<p>Steps to calculate the needed number of simulations (<a href="https://stats.stackexchange.com/a/29626">source</a>):</p>
 <ol type="1">
 <li><p>Run the simulation with a default number of runs <span class="math inline">\(R_0\)</span> (usually <span class="math inline">\(R_0 = 1000\)</span>). Now you should have a vector with the results <span class="math inline">\(x_0\)</span> where <span class="math inline">\(\text{length}(x_0) = R_0\)</span>.</p></li>
 <li><p>Calculate the mean value <span class="math inline">\(\overline{x_0}\)</span> and standard deviation <span class="math inline">\(\sigma_0\)</span>.</p></li>
@@ -430,6 +467,11 @@ window.Quarto = {
 <p>the output doesn’t change much if the model was run with more simulations</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-britton2015" class="csl-entry" role="listitem">
+Britton, T., House, T., Lloyd, A. L., Mollison, D., Riley, S., &amp; Trapman, P. (2015). Five challenges for stochastic epidemic models involving global transmission. <em>Epidemics</em>, <em>10</em>, 54–57. <a href="https://doi.org/10.1016/j.epidem.2014.05.002">https://doi.org/10.1016/j.epidem.2014.05.002</a>
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
@@ -860,12 +902,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./tsir.html" class="pagination-link" aria-label="tsiR">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">tsiR</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">tsiR</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./seir-sto.html" class="pagination-link" aria-label="SEIR">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SEIR</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">SEIR</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

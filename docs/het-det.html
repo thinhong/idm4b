@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Appendix A — Dictionary – Infectious disease modelling for babies</title>
+<title>3&nbsp; Heterogeneities – Infectious disease modelling for babies</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -50,8 +50,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./func.html" rel="next">
-<link href="./references.html" rel="prev">
+<link href="./tsir.html" rel="next">
+<link href="./seir-det.html" rel="prev">
 <link href="./logo-icon.svg" rel="icon" type="image/svg+xml">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -140,7 +140,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dict.html">Appendices</a></li><li class="breadcrumb-item"><a href="./dict.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Dictionary</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./det.html">Deterministic models</a></li><li class="breadcrumb-item"><a href="./het-det.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Heterogeneities</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -181,11 +181,11 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="./det.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Deterministic models</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./sir-det.html" class="sidebar-item-text sidebar-link">
@@ -200,7 +200,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./het-det.html" class="sidebar-item-text sidebar-link">
+  <a href="./het-det.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Heterogeneities</span></span></a>
   </div>
 </li>
@@ -376,16 +376,16 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
  <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./dict.html" class="sidebar-item-text sidebar-link active">
+  <a href="./dict.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Dictionary</span></span></a>
   </div>
 </li>
@@ -408,15 +408,22 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="3">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#waifw-matrix" id="toc-waifw-matrix" class="nav-link active" data-scroll-target="#waifw-matrix"><span class="header-section-number">3.1</span> WAIFW matrix</a></li>
+  <li><a href="#social-contact-matrix" id="toc-social-contact-matrix" class="nav-link" data-scroll-target="#social-contact-matrix"><span class="header-section-number">3.2</span> Social contact matrix</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dict.html">Appendices</a></li><li class="breadcrumb-item"><a href="./dict.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Dictionary</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./det.html">Deterministic models</a></li><li class="breadcrumb-item"><a href="./het-det.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Heterogeneities</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Appendix A — Dictionary</h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Heterogeneities</span></h1>
 </div>
 
 
@@ -433,87 +440,25 @@ window.Quarto = {
 </header>
 
 
-<p>Ad hoc: (literally Latin for “for this”) means built for a particular purpose, usually quickly and temporarily, generally signifies a solution designed for a specific problem or task, non-generalizable, and not intended to be able to be adapted to other purposes, <a href="https://math.stackexchange.com/questions/203254/the-usage-of-ad-hoc-vs-a-priori-in-mathematical-papers">source</a>.</p>
-<div id="def-cfr" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.1</strong></span> Case fatality rate (CFR): the number of deaths divided by the number of <strong>confirmed cases</strong> <span class="citation" data-cites="meyerowitz-katz2020">(<a href="references.html#ref-meyerowitz-katz2020" role="doc-biblioref">Meyerowitz-Katz &amp; Merone, 2020</a>)</span>.</p>
-</div>
-<div id="def-ifr" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.2</strong></span> Infection fatality rate (IFR): the number of deaths divided by the number of <strong>infected individuals</strong> <span class="citation" data-cites="meyerowitz-katz2020">(<a href="references.html#ref-meyerowitz-katz2020" role="doc-biblioref">Meyerowitz-Katz &amp; Merone, 2020</a>)</span>.</p>
-</div>
-<div id="def-forecast" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.3</strong></span> Forecast: predictions about what <strong>will</strong> happen, helpful for situation awareness.</p>
-</div>
-<div id="def-projection" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.4</strong></span> Projection: estimates about what <strong>could</strong> happen, considering multiple possible outcomes, helpful for intervention planning when faced with uncertainty.</p>
-</div>
-<div id="def-epidemic" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.5</strong></span> Epidemic is “the occurrence of more cases of disease than expected in a given area or among a specific group of people over a particular period of time” (US-CDC) <span class="citation" data-cites="texier2016">(<a href="references.html#ref-texier2016" role="doc-biblioref">Texier et al., 2016</a>)</span>. Epidemic is derived from the Greek <em>epi</em> and <em>demos</em> meaning “that which is upon the people”, to describe the burden of some phenomenon on “the people” <span class="citation" data-cites="nelson2014">(<a href="references.html#ref-nelson2014" role="doc-biblioref">Nelson &amp; Williams, 2014</a>)</span>.</p>
-</div>
-<div id="def-tractable" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.6</strong></span> Tractable: can be solved <a href="https://en.wikipedia.org/wiki/Tractable">(source)</a></p>
-</div>
-<div id="def-micsim" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.7</strong></span> Microsimulation: an analysis in which individual instantiations of a system - such as a patient’s lifetime or the course of an epidemic - are generated using a random process to ‘draw’ from probability distributions a large number of times, in order to examine the central tendency and possibly the distribution of outcomes <span class="citation" data-cites="kim2008">(<a href="references.html#ref-kim2008" role="doc-biblioref">Kim &amp; Goldie, 2008</a>)</span>.</p>
-</div>
-<div id="def-iid" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.8</strong></span> iid (<strong>independent</strong> and <strong>identically distributed</strong> random variables): each random variable has the <strong>same probability distribution</strong> as the others and <strong>all</strong> are <strong>mutually independent</strong>.</p>
-</div>
-<div id="def-closedform-sol" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.9</strong></span> <strong>Closed-form solution</strong> (or closed form expression) is any formula that can be evaluated in a finite number of standard operations (<a href="https://riskencyclopedia.com/articles/closed_form_solution/">source</a>).</p>
-</div>
-<p>infection fatality ratio (IFR) and case fatality ratio (CFR) and serology data.</p>
-<div id="def-residual" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.10</strong></span> <strong>Residual</strong>: is the difference between the observed value and the <strong>estimated</strong> value.</p>
-</div>
-<div id="def-error" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.11</strong></span> <strong>Error</strong>: is the deviation of the observed value from the <strong>true</strong> value.</p>
-</div>
-<p>Matrix and linear transformation:</p>
+<p>An assumption of the classical SIR model is homogeneous mixing. To include heterogeneities, we can pick a characteristic to divide the population into subgroups, where each subgroup shares a similar <strong>risk</strong> of <strong>both contracting AND transmitting</strong> infection <span class="citation" data-cites="keeling2011">(<a href="references.html#ref-keeling2011" role="doc-biblioref">Keeling &amp; Rohani, 2011</a>)</span>.</p>
 <ul>
-<li>Linear transformation is a function (transformation = function) that take in a vector and spit out a vector.</li>
-<li>Lines remain lines, and origin remains fixed.</li>
+<li><p>Sexually transmitted infections (STIs): subgroups are based on the <strong>number</strong> of contacts.</p></li>
+<li><p>Childhood diseases (measles, mumps, chickenpox - those with a high <span class="math inline">\(R_0\)</span>): subgroups are based on the <strong>nature</strong> of contacts, with those in frequent contact with children being at higher risk.</p></li>
 </ul>
-<div class="callout callout-style-simple callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Visualisation of linear transformation
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p><img src="img/dict/litrans.webp" class="img-fluid"></p>
-</div>
-</div>
-</div>
-<p>Eigenvector (<span class="math inline">\(\vec{v}\)</span>):</p>
-<p>Eigenvalue (<span class="math inline">\(\lambda\)</span>):</p>
-<div id="def-inv-matrix" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.12</strong></span> Inverse matrix:</p>
-<p><span class="math display">\[\begin{bmatrix} a &amp; b \\ c &amp; d \end{bmatrix}^{-1} = \frac{1}{ad - bc} \begin{bmatrix} d &amp; -b \\ -c &amp; a \end{bmatrix}\]</span></p>
-</div>
-<div id="def-monte-carlo" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition A.13</strong></span> Monte Carlo methods or Monte Carlo experiments: using repeated random sampling simulation to obtain numerical results.</p>
-</div>
+<p>Adding heterogeneities increases the parameters to estimate, often requiring more biological data. Ideally, line list data of which characteristics .</p>
+<section id="waifw-matrix" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="waifw-matrix"><span class="header-section-number">3.1</span> WAIFW matrix</h2>
+</section>
+<section id="social-contact-matrix" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="social-contact-matrix"><span class="header-section-number">3.2</span> Social contact matrix</h2>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
-<div id="ref-kim2008" class="csl-entry" role="listitem">
-Kim, S.-Y., &amp; Goldie, S. J. (2008). Cost-Effectiveness Analyses of Vaccination Programmes. <em>PharmacoEconomics</em>, <em>26</em>(3), 191–215. <a href="https://doi.org/10.2165/00019053-200826030-00004">https://doi.org/10.2165/00019053-200826030-00004</a>
-</div>
-<div id="ref-meyerowitz-katz2020" class="csl-entry" role="listitem">
-Meyerowitz-Katz, G., &amp; Merone, L. (2020). A systematic review and meta-analysis of published research data on COVID-19 infection fatality rates. <em>International Journal of Infectious Diseases</em>, <em>101</em>, 138–148. <a href="https://doi.org/10.1016/j.ijid.2020.09.1464">https://doi.org/10.1016/j.ijid.2020.09.1464</a>
-</div>
-<div id="ref-nelson2014" class="csl-entry" role="listitem">
-Nelson, K. E., &amp; Williams, C. M. (2014). <em>Infectious Disease Epidemiology: Theory and Practice</em>. Jones &amp; Bartlett Publishers.
-</div>
-<div id="ref-texier2016" class="csl-entry" role="listitem">
-Texier, G., Farouh, M., Pellegrin, L., Jackson, M. L., Meynard, J.-B., Deparis, X., &amp; Chaudet, H. (2016). Outbreak definition by change point analysis: a tool for public health decision? <em>BMC Medical Informatics and Decision Making</em>, <em>16</em>(1), 33. <a href="https://doi.org/10.1186/s12911-016-0271-x">https://doi.org/10.1186/s12911-016-0271-x</a>
+<div id="ref-keeling2011" class="csl-entry" role="listitem">
+Keeling, M. J., &amp; Rohani, P. (2011). <em>Modeling Infectious Diseases in Humans and Animals</em>. Princeton University Press. <a href="https://doi.org/10.1515/9781400841035">https://doi.org/10.1515/9781400841035</a>
 </div>
 </div>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -942,13 +887,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <input type="hidden" id="giscus-alt-theme" value="dark">
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./references.html" class="pagination-link" aria-label="References">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">References</span>
+      <a href="./seir-det.html" class="pagination-link" aria-label="SEIR">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">SEIR</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./func.html" class="pagination-link" aria-label="Useful functions">
-        <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Useful functions</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./tsir.html" class="pagination-link" aria-label="tsiR">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">tsiR</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -1,21 +1,33 @@
 # Stochastic models
 
+## Types of stochastic epidemic models
+
+Stochastic models can conveniently be classified according to their contact structure [@britton2015]:
+
+1. Global: no structure, often referred to as homogeneous mixing. Individuals' probabilities of interaction do not depend on their location in the population.
+
+2. Network: Any individual-based epidemic model can be thought of as a network or random graph: with individuals as nodes, and infection of one by another as a link.
+
+3. Metapopulation: The population is partitioned into non-overlapping groups, e.g. households; individuals have one contact rate with individuals in different groups, and another (higher) rate for individuals in the same group. More general metapopulation models allow an individual to belong to several different types of group, each with its own contact rate, or allow more levels of mixing.
+
+4. Spatial: vary from simple lattices with only nearest–neighbour interactions, for which some theoretical analysis is possible, to complex models with long-distance interactions, for which only qualitative and approximate results are known. A key feature of spatial models is that they display slower than exponential growth, even in their earliest stage; this makes it difficult to approximate them adequately by deterministic models, and even to define threshold parameters.
+
 ## Have I run enough simulations?
 
-The optimal number of simulations is reached when results stabilize, showing approximate convergence. This means additional simulations don't significantly change the outcome. See @fig-mc-iter for a demonstration of this convergence.
+The optimal number of simulations is reached when results stabilize, showing approximate convergence. This means additional simulations don't significantly change the outcome. See @sec-mc-multi-sims for a demonstration of this convergence.
 
-Steps to calculate the needed number of simulations [[source](https://stats.stackexchange.com/a/29626)]:
+Steps to calculate the needed number of simulations ([source](https://stats.stackexchange.com/a/29626)):
 
-1. Run the simulation with a default number of runs $R_0$ (usually $R_0 = 1000$). Now you should have a vector with the results $x_0$ where $\text{length}(x_0) = R_0$.
+1.  Run the simulation with a default number of runs $R_0$ (usually $R_0 = 1000$). Now you should have a vector with the results $x_0$ where $\text{length}(x_0) = R_0$.
 
-2. Calculate the mean value $\overline{x_0}$ and standard deviation $\sigma_0$.
+2.  Calculate the mean value $\overline{x_0}$ and standard deviation $\sigma_0$.
 
-3. Specify the allowed level of error $\epsilon$ and the uncertainty $\alpha$ you are willing to accept. Normally you choose $\epsilon = \alpha = 0.05\%$.
+3.  Specify the allowed level of error $\epsilon$ and the uncertainty $\alpha$ you are willing to accept. Normally you choose $\epsilon = \alpha = 0.05\%$.
 
-4. Use this equation to get the required number of simulations:
+4.  Use this equation to get the required number of simulations:
 
 $$R \geq \left( \frac{Z_{1 - \frac{\alpha}{2}} \times \sigma_0}{\epsilon \times x_0} \right)^2$$
 
-5. Use the Student t-distribution rather than the normal distribution for small $R_0$.
+5.  Use the Student t-distribution rather than the normal distribution for small $R_0$.
 
 the output doesn't change much if the model was run with more simulations

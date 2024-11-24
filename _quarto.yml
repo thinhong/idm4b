@@ -20,9 +20,10 @@ book:
       chapters: 
         - sir-det.qmd
         - seir-det.qmd
+        - het-det.qmd
         - tsir.qmd
     - part: sto.qmd
-      chapters: 
+      chapters:
         - seir-sto.qmd
     - part: calib.qmd
       chapters:

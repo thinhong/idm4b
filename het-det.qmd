@@ -1,0 +1,14 @@
+# Heterogeneities
+
+An assumption of the classical SIR model is homogeneous mixing. To include heterogeneities, we can pick a characteristic to divide the population into subgroups, where each subgroup shares a similar **risk** of **both contracting AND transmitting** infection [@keeling2011].
+
+- Sexually transmitted infections (STIs): subgroups are based on the **number** of contacts.
+
+- Childhood diseases (measles, mumps, chickenpox - those with a high $R_0$): subgroups are based on the **nature** of contacts, with those in frequent contact with children being at higher risk.
+
+Adding heterogeneities increases the parameters to estimate, often requiring more biological data. Ideally, line list data of which characteristics . 
+
+## WAIFW matrix
+
+## Social contact matrix
+

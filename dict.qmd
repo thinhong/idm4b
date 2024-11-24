@@ -1,5 +1,7 @@
 # Dictionary
 
+Ad hoc: (literally Latin for "for this") means built for a particular purpose, usually quickly and temporarily, generally signifies a solution designed for a specific problem or task, non-generalizable, and not intended to be able to be adapted to other purposes, [source](https://math.stackexchange.com/questions/203254/the-usage-of-ad-hoc-vs-a-priori-in-mathematical-papers).
+
 ::: {#def-cfr}
 Case fatality rate (CFR): the number of deaths divided by the number of **confirmed cases** [@meyerowitz-katz2020].
 :::
