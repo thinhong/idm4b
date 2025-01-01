@@ -1,0 +1,160 @@
+---
+title: "Particle filter"
+execute: 
+  warning: false
+  message: false
+---
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+## Particle filter
+
+Particle filters are used for sampling **latent states** in systems where we cannot observe all variables directly. This methodology is applied to solve **Hidden Markov Models** and nonlinear filtering problems. The primary goal of a particle filter is to estimate the **posterior density** of state variables based on **observation** variables.
+
+### Key terminology
+
+- Particles: Samples representing the posterior distribution.
+
+- Weighting: Assigning likelihood weights to particles based on their agreement with observations.
+
+- Resampling: Selecting particles based on their weights. Particles with higher weights are sampled more frequently. This process is also referred to as Monte Carlo localisation.
+
+### Example
+
+A typical example is estimating the position of a robot vacuum on a 2D map of a room. Here's a simplified example:
+
+- The robot moves on a 2D grid from $(-10, -10)$ to $(10, 10)$.
+- Motion model: At each time step, the robot moves a bit in both the x and y directions.
+- Measurements: A sensor measures the robot's position but only provides the $x$, with some noise.
+
+Given these observations, we want to determine the latent state, which is the robot's true position on the map. The particle filter accomplishes this through the following steps:
+
+1. Initialisation: creating a bunch of samples (particles) of what the system's state could be.
+2. Predict: Update each particle's state based on a model of the system's dynamics, adding some noise to account for uncertainty.
+3. Weight: Compare the predicted state of each particle to the actual observation. Assign a weight to each particle based on how well it matches the observation.
+4. Resample: Select particles based on their weights (higher weight = more likely to be selected). This removes particles with low weights and duplicates particles with high weights
+5. Repeat: Go back to the predict step and iterate for each time step.
+
+Let us assume the robot starts somewhere near the centre of the room. We generate 300 particles to represent possible initial positions.
+
+```{r}
+#| fig-width: 3
+#| fig-height: 3
+
+# Some helper functions
+## Assume a normal likelihood
+norm_likelihood <- function(x_loc, x_obs, obs_sd) {
+  exp(-0.5 * (x_loc - x_obs)^2 / obs_sd^2)
+}
+
+## Plot function
+plot_pf <- function(data, x_obs = NULL) {
+  p <- ggplot({{ data }}, aes(x = x, y = y, size = weight)) +
+    geom_point(color = "#214bc3", alpha = 0.3) +
+    scale_x_continuous(limits = c(-10, 10), breaks = seq(-10, 10, 5)) +
+    scale_y_continuous(limits = c(-10, 10), breaks = seq(-10, 10, 5)) +
+    theme_classic() +
+    theme(legend.position = "none")
+  if (!is.null(x_obs)) {
+    p <- p + geom_vline(xintercept = {{ x_obs }},
+               color = "#001A6E",
+               linetype = "dashed")
+  }
+  p
+}
+
+# Number of particles
+N <- 300
+
+particles <- data.frame(x = rnorm(N, 0, 9), y = rnorm(N, 0, 9))
+
+ggplot(particles, aes(x = x, y = y)) +
+  geom_point(color = "#214bc3", alpha = 0.3) +
+    scale_x_continuous(limits = c(-10, 10), breaks = seq(-10, 10, 5)) +
+    scale_y_continuous(limits = c(-10, 10), breaks = seq(-10, 10, 5)) +
+  theme_classic() +
+  theme(legend.position = "none")
+```
+
+Now, suppose the sensor reads `x_obs = 3`. We assume the sensor is noisy, with a standard deviation of 1.
+
+```{r}
+#| fig-width: 3
+#| fig-height: 3
+x_obs <- 3
+obs_sd <- 1
+
+particles$weight <- norm_likelihood(x_loc = particles$x, x_obs = x_obs, obs_sd = obs_sd)
+
+plot_pf(particles, x_obs)
+```
+
+Next, the robot moves. Assume the robot follows a circular trajectory around the origin in a clockwise direction. The velocity vector is defined as $v = (-y, x) \times V / \sqrt{x^2 + y^2}$, where $V$ is the forward velocity.
+
+```{r}
+#| fig-width: 3
+#| fig-height: 3
+V <- 5
+for (i in 1:10) {
+  # Extract the first and second columns
+  x <- particles[, 1]
+  y <- particles[, 2]
+  
+  # Calculate the norm
+  norm <- sqrt(x^2 + y^2)
+  
+  # Update the predictions
+  particles[, 1] <- particles[, 1] - 0.1 * y * V / norm
+  particles[, 2] <- particles[, 2] + 0.1 * x * V / norm
+}
+
+plot_pf(particles)
+```
+
+After predicting, we resample to obtain an unweighted set of particles:
+
+```{r}
+#| fig-width: 3
+#| fig-height: 3
+set.seed(123)
+particles$x <- sample(x = particles$x, size = N, replace = T, prob = particles$weight)
+particles$y <- sample(x = particles$y, size = N, replace = T, prob = particles$weight)
+
+ggplot(particles, aes(x = x, y = y)) +
+  geom_point(color = "#214bc3", alpha = 0.3) +
+  scale_x_continuous(limits = c(-10, 10), breaks = seq(-10, 10, 5)) +
+  scale_y_continuous(limits = c(-10, 10), breaks = seq(-10, 10, 5)) +
+  theme_classic() +
+  theme(legend.position = "none")
+```
+
+Finally, incorporate a new measurement and repeat the process:
+
+```{r}
+#| fig-width: 3
+#| fig-height: 3
+x_obs <- 5
+obs_sd <- 1
+
+particles$weight <- norm_likelihood(x_loc = particles$x, x_obs = x_obs, obs_sd = obs_sd)
+
+plot_pf(particles, x_obs)
+```
+
+## POMP
+
+maximum likelihood via iterated filtering
+
+https://kingaa.github.io/short-course/mif/mif.html
+
+## PMCMC
+
+PMCMC stands for Particle Markov Chain Monte Carlo. It's a full Bayesian approach and basically a way to combine:
+
+- Particle Filtering (to handle hidden states of a system), and
+- MCMC (Markov Chain Monte Carlo) (to handle unknown parameters).
+
+It is extremely computationally intensive.

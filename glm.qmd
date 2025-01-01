@@ -1,0 +1,68 @@
+---
+title: "Generalized linear models"
+---
+
+## Model
+
+$$g(Y) = \beta_0 + \beta_1 x_1 + \dots + \beta_k x_k$$
+
+There are three components to a GLM:
+
+- Random component: the probability distribution of the outcome Y, any distribution within the **exponential family**.
+
+- Systematic component: the linear combinations of predictors $\beta_0 + \beta_1 x_1 + \dots + \beta_k x_k$
+
+- Link function $g(Y)$: the link between random and systematic components.
+
+## Common link functions
+
+
+
+## Offset
+
+rate = count / unit time
+
+offset converts a count to rate
+
+## Poisson regression
+
+Poisson regression models are generalized linear models with the logarithm as the link function.
+
+```{r}
+week <- 1:7
+amount_time <- c(0.85, 1.1, 0.85, 1.2, 0.95, 1.1, 0.9)
+count <- c(90, 76, 37, 27, 19, 13, 9)
+rate <- count / amount_time
+df <- data.frame(week, amount_time, count, rate)
+```
+
+
+$$\log(\text{count}) = \beta_0 + \beta \cdot \text{week}$$
+
+If we are fitting $\text{rate}$ instead of $\text{count}$:
+
+$$\begin{align}
+\log(\text{rate}) = \log\left(\frac{\text{count}}{\text{amount time}}\right) &= \beta_0 + \beta \cdot \text{week} \\
+\Leftrightarrow \log(\text{count}) - \log(\text{amount time}) &= \beta_0 + \beta \cdot \text{week} \\
+\Leftrightarrow \log(\text{count}) &= \beta_0 + \beta \cdot \text{week} + \log(\text{amount time})
+\end{align}$$
+
+The $\log(\text{amount time})$ is an offset.
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+mod <- glm(count ~ week + offset(log(amount_time)), family = poisson)
+mod
+```
+
+```{r}
+pred <- predict(mod, type = "response")
+ggplot(df, aes(x = week, y = count)) +
+  geom_point() +
+  geom_line(aes(y = pred)) +
+  theme_classic()
+```
+

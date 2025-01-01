@@ -1,0 +1,6 @@
+---
+title: "Odin notes"
+format: html
+---
+
+`deriv()` for continuous time, `update()` for discrete time.

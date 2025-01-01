@@ -31,3 +31,103 @@ $$R \geq \left( \frac{Z_{1 - \frac{\alpha}{2}} \times \sigma_0}{\epsilon \times 
 5.  Use the Student t-distribution rather than the normal distribution for small $R_0$.
 
 the output doesn't change much if the model was run with more simulations
+
+```{r}
+library(odin)
+library(dde)
+library(tidyverse)
+
+sir_sto <- odin({
+  ## Core equations for transitions between compartments:
+  update(S) <- S - n_SI
+  update(I) <- I + n_SI - n_IR
+  update(R) <- R + n_IR
+
+  ## Individual probabilities of transition:
+  p_SI <- 1 - exp(-beta * I / N) # S to I
+  p_IR <- 1 - exp(-gamma) # I to R
+
+  ## Draws from binomial distributions for numbers changing between
+  ## compartments:
+  n_SI <- rbinom(S, p_SI)
+  n_IR <- rbinom(I, p_IR)
+
+  ## Total population size
+  N <- S + I + R
+
+  ## Initial states:
+  initial(S) <- S_ini
+  initial(I) <- I_ini
+  initial(R) <- 0
+
+  ## User defined parameters - default in parentheses:
+  S_ini <- user(1000)
+  I_ini <- user(1)
+  beta <- user(0.2)
+  gamma <- user(0.1)
+    
+})
+sir <- sir_sto$new()
+res_200 <- sir$run(0:100, replicate = 10000)
+res_200 <- sir$transform_variables(res_200)
+res_200 <- cbind.data.frame(t = res_200[[1]], res_200[-1])
+
+df_plot <- res_200 |> 
+  pivot_longer(cols = -t, names_to = "comp") |> 
+  mutate(
+    iter = factor(str_extract(comp, "(?<=\\.).*")),
+    comp = factor(str_extract(comp, "."))
+  )
+
+df_mean <- df_plot |> 
+  group_by(t, comp) |> 
+  summarise(mean_value = mean(value, na.rm = TRUE)) |> 
+  ungroup()
+
+ggplot() +
+  # geom_line(data = df_plot, mapping = aes(x = t, y = value, group = interaction(iter, comp), color = comp), alpha = 0.1) +
+  geom_line(data = df_mean, mapping = aes(x = t, y = mean_value, color = comp), linewidth = 2)
+```
+
+```{r}
+sir_deter <- odin({
+  ## Core equations for transitions between compartments:
+  update(S) <- S - n_SI
+  update(I) <- I + n_SI - n_IR
+  update(R) <- R + n_IR
+
+  ## Individual probabilities of transition:
+  p_SI <- 1 - exp(-beta * I / N) # S to I
+  p_IR <- 1 - exp(-gamma) # I to R
+
+  ## Draws from binomial distributions for numbers changing between compartments:
+  n_SI <- S * p_SI
+  n_IR <- I * p_IR
+
+  ## Total population size
+  N <- S + I + R
+
+  ## Initial states:
+  initial(S) <- S_ini
+  initial(I) <- I_ini
+  initial(R) <- 0
+
+  ## User defined parameters - default in parentheses:
+  S_ini <- user(1000)
+  I_ini <- user(1)
+  beta <- user(0.2)
+  gamma <- user(0.1)
+    
+})
+
+sir <- sir_deter$new()
+res <- data.frame(sir$run(0:100))
+colnames(res)[1] <- "t"
+
+df_plot <- res |> 
+  pivot_longer(cols = -t, names_to = "comp")
+
+ggplot() +
+  geom_line(data = df_plot, mapping = aes(x = t, y = value, color = comp))
+```
+

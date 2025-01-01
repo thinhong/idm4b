@@ -1,0 +1,44 @@
+# Survival analysis
+
+## Definitions
+
+## Hazard, rate, incidence
+
+They are the same word, using in different fields, hazard = rate = incidence:
+
+-   Rate: **number** of **new events** that occur during specified **time period**.
+-   Incidence: when the event is a disease, it is called incidence.
+-   Hazard: in survival analysis, it is called hazard.
+
+Let consider a discrete
+
+## Hazard function
+
+Hazard function $h(t)$ gives the probability that someone die at time $t$, given that they have survived up to that time $t$ (survived during the period $[0;t]$).
+
+$$h(t) = \frac{f(t)}{\mathbb{P}(T > t)} = \frac{f(t)}{S(t)}$$
+
+Where $f(t)$ is the time to first 
+
+## Cumulative hazard function
+
+Cumulative hazard function $F(t)$ gives the probability that someone die by time $t$ (die anytime during $[0;t]$).
+
+$$F(t) = \mathbb{P}(T \leq t) = \sum_{t = 0}^t h(t)$$
+
+## Survival function
+
+The survival function $S(t)$ gives the probability that someone will survive beyond time $t$ (they have survived $[0;t]$ and will continue to survive).
+
+$$S(t) = \mathbb{P}(T > t) = 1 - \mathbb{P}(T \leq t) = 1 - F(t)$$
+
+## IDM and survival analysis
+
+Much of infectious disease modeling is derived from, or at least shares, key concepts with survival analysis [@hay].
+
+| Survival analysis | Infectious disease modelling       |
+|-------------------|------------------------------------|
+| Hazard function   | Infection rate, force of infection |
+| Survival function | Probability of not infected        |
+
+: Linking survival analysis to infectious disease modelling

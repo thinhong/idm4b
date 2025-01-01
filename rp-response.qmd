@@ -1,0 +1,10 @@
+---
+title: "Outbreak response report"
+format: html
+---
+
+This tutorial is prepared using the WHO Ebola Response Team's report, *Ebola Virus Disease in West Africa-the First 9 Months of the Epidemic and Forward Projections* [@who2014], as a key reference.
+
+```{r}
+
+```

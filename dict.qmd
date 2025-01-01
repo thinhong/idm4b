@@ -73,3 +73,49 @@ $$\begin{bmatrix} a & b \\ c & d \end{bmatrix}^{-1} = \frac{1}{ad - bc} \begin{b
 Monte Carlo methods or Monte Carlo experiments: using repeated random sampling simulation to obtain numerical results.
 :::
 
+Transpose: flips a matrix/vector such that row become column and column become row. Notation: $A^\intercal$
+
+$$\begin{align}
+A &= \begin{bmatrix} a & b & c \\ d & e & f \end{bmatrix} \\
+A^\intercal &= \begin{bmatrix} a & d \\ b & e \\ c & f \end{bmatrix}
+\end{align}$$
+
+$$\begin{align}
+A &= \begin{bmatrix} a & b & c \end{bmatrix} \\
+A^\intercal &= \begin{bmatrix} a \\ b \\ c \end{bmatrix}
+\end{align}$$
+
+Tensor: an object with > 1 dimension
+
+Matrix: an object with 2 dimensions
+
+A **probability** is between 0 and 1 and is the chance (or risk) that an event (death, infection, etc...) happens. In general this probability is defined ***over a period of time*** and will necessarily increase as the duration of this period of time increases.
+
+::: {#def-rate}
+A **rate** is the number of new events that occur during specified time period [@selvin2004]. It is thus always positive (because both the number of events and time period are positive) and always expressed per unit of time (like speed km/h or m/s). Rate can be \> 1. Mathematically, it is the limit of the above-mentioned probability when the duration of the period of time tends towards zero (i.e. very small, i.e. instantaneous measure).
+:::
+
+A **proportion** is the ratio of a numerator and a denominator and by definition is between 0 and 1.
+
+What is the difference between **proportion** and **probability**? Consider this example:
+
+A bag is filled with 100 balls, of which 30 are [blue]{style="color: blue"} and 70 are [green]{style="color: green"}. Without looking, you pull out a ball, write down the color, then put it back to the bag. You repeat the action 10,000 times. The number of times you pulled out a [blue]{style="color: blue"} ball is 3011.
+
+- The proportion of [blue]{style="color: blue"} balls in the bag is 30/100 = 0.3
+- A **Frequentist** say: The probability of pulling out a [blue]{style="color: blue"} ball is 3011/10,000 = 0.3011 because you did experiment in long-run (10,000 times).
+- A **Bayesian** say: The probability of pulling out a [blue]{style="color: blue"} ball is 0.3 because you know that you have a proportion of 0.3 [blue]{style="color: blue"} balls in the bag.
+
+::: {#def-hazard}
+Hazard: is the probability an event occurs at time $t$, conditionally on being at risk.
+
+$$h(t) = \mathbb{P}(T = t|Survive = 1)$$
+
+In infectious disease modelling, hazard is the force of infection [@hay2024].
+
+:::
+
+::: {#def-cum-inc}
+Cumulative incidence or cumulative distribution function: is the probability an event occurs at anytime before time $t$.
+
+$$I(t) = \mathbb{P}(T \leq t)$$
+:::

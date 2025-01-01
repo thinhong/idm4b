@@ -1,0 +1,9 @@
+---
+title: "Generalized additive model"
+---
+
+## Model
+
+$$g(Y) = \beta_0 + f_1(x_1) + \dots + f_k(x_k)$$
+
+Splines are a versatile tool for modelling non-linear functions when the exact form of the function is unknown. However, underlying assumptions can lead to either over- or under-fitting. Penalised splines (P-splines) (Eilers and Marx, 1996) seek to avoid over-fitting through the inclusion of discrete penalties on the basis coefficients, though this penalty has no exact interpretation in terms of the function’s shape. Their Bayesian counterpart however (Lang and Brezger, 2004) offers a statistically robust method of capturing variation in the data whilst also preventing over-fitting through the inclusion of appropriate prior distributions that act on the functional form of the spline [@eales2022].

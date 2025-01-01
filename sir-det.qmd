@@ -1,6 +1,6 @@
 # SIR
 
-## Model
+## Model {#sec-sir-mod}
 
 ![](img/det/sir.svg)
 

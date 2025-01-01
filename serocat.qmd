@@ -1,0 +1,118 @@
+---
+title: "Serocatalytic models"
+---
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(ggplot2)
+```
+
+## Force of infection
+
+Recall from the SIR model @sec-sir-mod, that the rate of transition from $S$ to $I$, $\lambda = \beta I$, is called the **force of infection** (FOI). The FOI represents the risk of a susceptible individual becoming infected over a given period of time.
+
+## Serocatalytic models
+
+Serocatalytic models provide a simple framework: the population is divided into two groups seronegative ($N$) and seropositive ($P$). Assuming no seroreversion, individuals transition from $N$ to $P$ at a rate $\lambda$, which is equivalent to the FOI.
+
+![](img/sero/serocat.svg)
+
+The term "catalytic model" comes from its analogy to a chemical reaction, where reagent $N$ is transformed into reagent $P$ at a rate $\lambda$.
+
+The FOI can either be constant $\lambda$ or vary over time $\lambda(t)$.
+
+### Constant FOI
+
+Consider a cohort where we track seroprevalence over time (i.e., we observe $P(t)$). The system can be described by the following differential equations:
+
+$$\frac{dN(t)}{dt} = -\lambda N(t)$$
+
+$$\frac{dP(t)}{dt} = \lambda N(t)$$
+
+In which $N(t) + P(t) = 1$ or $N(t) = 1 - P(t)$. We can rewrite the latter equation as:
+
+$$\frac{dP(t)}{dt} = \lambda(1 - P(t))$$
+
+We can solve $P$ analytically as:
+
+$$P(t) = 1 - e^{-\lambda t}$$ {#eq-serocat-mod}
+
+::: {.callout-note collapse="true" appearance="minimal"}
+## Proof
+
+$$\begin{align}
+P(t) &= 1 - e^{-\lambda t} \Leftrightarrow e^{-\lambda t} = (1 - P(t)) \\
+P(t) &= 1 - e^{-\lambda t} \\
+\Leftrightarrow \frac{dP(t)}{dt} &= -(-\lambda)e^{-\lambda t} \\
+&= \lambda e^{-\lambda t} \\
+&= \lambda (1 - P(t))
+\end{align}$$
+:::
+
+### Constant FOI (endemic model)
+
+In a population where a disease is at endemic equilibrium without vaccination, seronegative ($N$) and seropositive ($P$) remain constant over time (because it is equilibrium). However, these proportions vary with age. By replacing the time term in @eq-serocat-mod with age, we can express the seropositive $P(a)$ as a function of age:
+
+$$P(a) = 1 - e^{-\lambda a}$$
+
+### Time-varying FOI
+
+FOI is a function of time $\lambda(t)$. Then @eq-serocat-mod become:
+
+$$\frac{dP(t)}{dt} = \lambda(t)(1 - P(t))$$
+
+We can solve $P$ analytically as:
+
+$$P = 1 - (1 - P_0) e^{-\int_0^t \lambda(u) du}$$
+
+::: {.callout-note collapse="true" appearance="minimal"}
+## Proof
+
+$$\begin{align}
+\frac{dP}{dt} &= \lambda(t)(1 - P) \\
+\Leftrightarrow \frac{dP}{1 - P} &= \lambda(t)dt
+\end{align}$$
+
+Now integrate both sides:
+
+$$\begin{align}
+\int \frac{dP}{1 - P} &= \int \lambda(t)dt \\
+\Leftrightarrow -\log(1 - P) &= \int \lambda(t)dt + C \\
+\Leftrightarrow \log(1 - P) &= -\int \lambda(t)dt - C
+\end{align}$$
+
+where $C$ is the constant of integration. Exponentiating both sides:
+
+$$1 - P = e^{-\int \lambda(t)dt - C}$$
+
+Simplifying further:
+
+$$1 - P = A e^{-\int \lambda(t) dt}$$
+
+where $A = e^{-C}$ is a constant determined by initial conditions. Solving for $P$:
+
+$$P = 1 - A e^{-\int \lambda(t) dt}$$
+
+If the initial condition is $P(0) = P_0$, substitute $t = 0$ into the solution:
+
+$$P_0 = 1 - A e^0 = 1 - A$$
+
+Thus, $A = 1 - P_0$, and the final solution is:
+
+$$P = 1 - (1 - P_0) e^{-\int_0^t \lambda(u) du}$$
+:::
+
+Usually we assume $P_0 = 0$ (the population is fully susceptible or seronegative at the beginning $t = 0$), so:
+
+$$P(t) = 1 - e^{-\int_0^t \lambda(u) du}$$
+
+### Time-varying FOI across different ages
+
+When the sample includes individuals of different ages, the seroprevalence $P(a, t)$ depends on both the individual's age $a$ and the calendar time $t$.
+
+$$P(a, t) = 1 - e^{-\int_{t - a}^t \lambda(u) du}$$
+
+where $\int_{t - a}^t \lambda(u)$ represents the cumulative FOI experienced by an individual from birth $t - a$ up to the current time $t$.
+
+### Seroreversion
+
+If individuals lose immunity over time (waning immunity) with a constant rate $\rho$.

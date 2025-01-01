@@ -1,0 +1,24 @@
+---
+title: "Measles vaccine"
+format: html
+---
+
+## Measles virus
+
+Measles virus belongs to the *Morbillivirus* genus in the *Paramyxoviridae* family and was isolated in 1954. Current vaccines are based on the Edmonston, Moraten, or Schwarz strains and have been available since the 1960s, with MMR combinations introduced in the 1970s [@gomez2013].
+
+## Live attenuated vaccine
+
+The measles vaccine is a live attenuated vaccine, where the primary goal is to ***weaken*** the virus. This is achieved by growing the virus in a foreign host, such as chick embryo cells, until it becomes well-adapted to the non-human environment and loses its ability to cause disease in humans.
+
+## Production process [@gomez2013]
+
+**1. Cell preparation**: Specific pathogen-free (SPF) embryonated chicken eggs are incubated. The embryos are treated with trypsin to prepare chick embryo fibroblast (CEF) cells under strict aseptic conditions.
+
+**2. Cell culture**: CEF cells are grown in roller bottles using fetal calf serum and M199 Hanks medium.
+
+**3. Virus cultivation**: The CEF cells are infected with the viral working seed and incubated for several days. The cells are then mechanically lysed to release the virus.
+
+**4. Purification and storage**: The virus is purified through centrifugation and filtration, then stored frozen.
+
+**5. Final product**: After passing quality control tests, the virus is formulated alone or combined with mumps and rubella vaccines. The final product is lyophilised for stability and reconstituted just before use.

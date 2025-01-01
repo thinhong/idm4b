@@ -30,7 +30,7 @@ book:
         - lse.qmd
         - mle.qmd
         - mcmc.qmd
-        - pomp.qmd
+        - pf.qmd
     - part: rnum.qmd
       chapters:
         - gen-int.qmd
@@ -43,15 +43,28 @@ book:
         - vax.qmd
         - vax-perf.qmd
         - vax-mod.qmd
+        - vax-measles.qmd
     - part: he.qmd
       chapters:
         - he-etr.qmd
+    - part: sero.qmd
+      chapters: 
+        - serocat.qmd
+    - part: stat-mod.qmd
+      chapters: 
+        - glm.qmd
+        - gam.qmd
+        - surv.qmd
+        - bayes.qmd
     - part: rp.qmd
       chapters: 
         - rp-risk.qmd
+        - rp-response.qmd
     - references.qmd
   appendices:
     - dict.qmd
+    - odin.qmd
+    - metaprg.qmd
     - func.qmd
     - simll.qmd
 

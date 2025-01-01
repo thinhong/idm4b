@@ -95,7 +95,7 @@ ggplot(df[1:1000, ], aes(x = xs, y = ys, color = in_circle)) +
 
 ```{r}
 #| eval: false
-in_circle <- xs ^ 2 + ys ^ 2 <= 1 ^ 2
+in_circle <- xs ^ 2 + ys ^ 2 <= 1
 df <- data.frame(n_points = 1:n_points, xs, ys, in_circle)
 ```
 

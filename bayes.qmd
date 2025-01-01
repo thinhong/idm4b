@@ -1,0 +1,9 @@
+# Bayesian
+
+When you meet someone for the first time, you naturally form a "first impression" of them. Maybe they seem friendly, serious, or even a bit shy. This first impression is like what statisticians call a "prior" - it's your initial belief about that person based on very little information.
+
+But as you get to know them better, you gather more information. Maybe you notice they always smile when they see you, or they share interesting stories. This new information allows you to update your first impression, much like updating a "prior" in Bayesian statistics.
+
+However, just like in psychology, where studies show that first impressions are hard to change, in Bayesian statistics, the "prior" can be strong, meaning it takes a lot of new evidence to significantly change your initial belief.
+
+Let's say you meet someone named Taylor on a first date, and your first impression is that Taylor is very serious (your prior). Over the next few dates, you notice that Taylor often makes you laugh and enjoys lighthearted conversations (new evidence). Your updated belief (posterior) might be that Taylor is serious but also has a fun side. However, if your first impression of Taylor being serious was very strong, it might take a lot more evidence before you start seeing Taylor as primarily fun-loving.
