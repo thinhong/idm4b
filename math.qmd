@@ -1,0 +1,26 @@
+---
+title: "Math"
+format: html
+---
+
+## Differentiation
+
+## Integral
+
+
+
+## Partial derivative
+
+A partial derivative measures how a function with multiple variables changes when you vary only one of those variables and keep the others fixed.
+
+For example, to compute:
+
+$$\frac{\partial(a^2 + b^2)}{\partial a}$$
+
+- Treat $b$ as if it were a constant.
+- Since $b^2$ is a constant with respect to $a$, its derivative is 0.
+- Take the derivative of $a^2$ with respect to $a$, which is $2a$.
+
+Hence:
+
+$$\frac{\partial(a^2 + b^2)}{\partial a} = 2a$$

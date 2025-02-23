@@ -1,5 +1,47 @@
 # Dictionary
 
+Poisson process:
+
+Trajectory or sample path: is the path that a system's state follows over time within its state-space. Different initial states result in different trajectories. Each path in @fig-ar-plot is a trajectory.
+
+::: {#def-dsl}
+Domain-specific language (DSL): is a computer language designed for a specific purpose or "domain". DSLs act as a bridge, allowing users to write models in a familiar syntax while benefiting from the speed of compiled languages [@fitzjohn2021].
+:::
+
+Bifurcation: a small change in a system's parameters causes the system to split into two distinct behaviors or paths.
+
+::: {#def-state-space-mod}
+State-space models are models that use state variables to describe a system by a set of first-order differential or difference equations, rather than by one or more nth-order differential or difference equations ([source](https://www.mathworks.com/help/ident/ug/what-are-state-space-models.html)). "State" refers to a set of variables that describe the current condition of the system, while "space" represents the collection of all possible values these state variables can assume.
+
+State-space model: is a Hidden Markov Process where the system has unobservable (hidden) "state variables" which change over time, each state depends only on the current state (Markov property). Hidden states are not directly measured, but we have observation data which may contain (potentially limited) information on the state variables. In infectious disease modelling, SIR and its stochastic extensions follow this framework. The true state of the system is often unknown, but we have observed data with measurement errors (e.g., underreporting or diagnostic errors) and a plausible understanding of the measurement process that translate the hidden states into the observed data [@endo2019].
+
+![](img/dict/hmp.svg)
+:::
+
+A sufficient statistic $g(x)$ for a parameter $\theta$ is a function of the data that captures all the information in the dataset about that parameter. If you have a sufficient statistic, you no longer need the entire dataset to do inference on $\theta$.
+
+::: {#def-func}
+Function: A relationship that assigns exactly one output $Y_i$ to each input $X_i$.
+
+![](img/dict/function.svg)
+:::
+
+::: {#def-func-form}
+Functional form: The explicit mathematical expression that describes this relationship of a function. Example:
+
+$$f(x) = 2x + 3$$
+
+In probability distributions, functional form refers to the probability density function (PDF) or probability mass function (PMF).
+:::
+
+::: {#def-func-form-up-to}
+Functional form "up to a constant": we know the shape or structure of the distribution but not the exact scaling factor that makes it a valid probability distribution (i.e., sums or integrates to 1).
+:::
+
+::: {#def-white-noise}
+White noise process: a sequence of serially uncorrelated (no correlation between its values at different times) random variables with zero mean and finite variance.
+:::
+
 Ad hoc: (literally Latin for "for this") means built for a particular purpose, usually quickly and temporarily, generally signifies a solution designed for a specific problem or task, non-generalizable, and not intended to be able to be adapted to other purposes, [source](https://math.stackexchange.com/questions/203254/the-usage-of-ad-hoc-vs-a-priori-in-mathematical-papers).
 
 ::: {#def-cfr}
@@ -85,7 +127,7 @@ A &= \begin{bmatrix} a & b & c \end{bmatrix} \\
 A^\intercal &= \begin{bmatrix} a \\ b \\ c \end{bmatrix}
 \end{align}$$
 
-Tensor: an object with > 1 dimension
+Tensor: an object with \> 1 dimension
 
 Matrix: an object with 2 dimensions
 
@@ -101,9 +143,9 @@ What is the difference between **proportion** and **probability**? Consider this
 
 A bag is filled with 100 balls, of which 30 are [blue]{style="color: blue"} and 70 are [green]{style="color: green"}. Without looking, you pull out a ball, write down the color, then put it back to the bag. You repeat the action 10,000 times. The number of times you pulled out a [blue]{style="color: blue"} ball is 3011.
 
-- The proportion of [blue]{style="color: blue"} balls in the bag is 30/100 = 0.3
-- A **Frequentist** say: The probability of pulling out a [blue]{style="color: blue"} ball is 3011/10,000 = 0.3011 because you did experiment in long-run (10,000 times).
-- A **Bayesian** say: The probability of pulling out a [blue]{style="color: blue"} ball is 0.3 because you know that you have a proportion of 0.3 [blue]{style="color: blue"} balls in the bag.
+-   The proportion of [blue]{style="color: blue"} balls in the bag is 30/100 = 0.3
+-   A **Frequentist** say: The probability of pulling out a [blue]{style="color: blue"} ball is 3011/10,000 = 0.3011 because you did experiment in long-run (10,000 times).
+-   A **Bayesian** say: The probability of pulling out a [blue]{style="color: blue"} ball is 0.3 because you know that you have a proportion of 0.3 [blue]{style="color: blue"} balls in the bag.
 
 ::: {#def-hazard}
 Hazard: is the probability an event occurs at time $t$, conditionally on being at risk.
@@ -111,7 +153,6 @@ Hazard: is the probability an event occurs at time $t$, conditionally on being a
 $$h(t) = \mathbb{P}(T = t|Survive = 1)$$
 
 In infectious disease modelling, hazard is the force of infection [@hay2024].
-
 :::
 
 ::: {#def-cum-inc}

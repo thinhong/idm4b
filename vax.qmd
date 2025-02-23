@@ -2,9 +2,11 @@
 
 ## Vaccines
 
-### Definition
+### Definitions
 
 A vaccine is a biological product that can be used to safely induce an **immune response** that confers protection against infection and/or disease on subsequent exposure to a pathogen [@pollard2021].
+
+
 
 ### Classification
 

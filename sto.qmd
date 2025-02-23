@@ -1,16 +1,282 @@
 # Stochastic models
 
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+library(ggplot2)
+library(dplyr)
+```
+
+## 
+
+Data on population dynamics include three basic forms of stochasticity: demographic stochasticity, environmental stochasticity, and sampling error.
+
+Process noise: including demographic and environmental noise [@dennis2006].
+
+Observation error: the observation or sampling methods by which population abundances are estimated [@dennis2006].
+
 ## Types of stochastic epidemic models
 
 Stochastic models can conveniently be classified according to their contact structure [@britton2015]:
 
-1. Global: no structure, often referred to as homogeneous mixing. Individuals' probabilities of interaction do not depend on their location in the population.
+1.  Global: no structure, often referred to as homogeneous mixing. Individuals' probabilities of interaction do not depend on their location in the population.
 
-2. Network: Any individual-based epidemic model can be thought of as a network or random graph: with individuals as nodes, and infection of one by another as a link.
+2.  Network: Any individual-based epidemic model can be thought of as a network or random graph: with individuals as nodes, and infection of one by another as a link.
 
-3. Metapopulation: The population is partitioned into non-overlapping groups, e.g. households; individuals have one contact rate with individuals in different groups, and another (higher) rate for individuals in the same group. More general metapopulation models allow an individual to belong to several different types of group, each with its own contact rate, or allow more levels of mixing.
+3.  Metapopulation: The population is partitioned into non-overlapping groups, e.g. households; individuals have one contact rate with individuals in different groups, and another (higher) rate for individuals in the same group. More general metapopulation models allow an individual to belong to several different types of group, each with its own contact rate, or allow more levels of mixing.
 
-4. Spatial: vary from simple lattices with only nearest–neighbour interactions, for which some theoretical analysis is possible, to complex models with long-distance interactions, for which only qualitative and approximate results are known. A key feature of spatial models is that they display slower than exponential growth, even in their earliest stage; this makes it difficult to approximate them adequately by deterministic models, and even to define threshold parameters.
+4.  Spatial: vary from simple lattices with only nearest–neighbour interactions, for which some theoretical analysis is possible, to complex models with long-distance interactions, for which only qualitative and approximate results are known. A key feature of spatial models is that they display slower than exponential growth, even in their earliest stage; this makes it difficult to approximate them adequately by deterministic models, and even to define threshold parameters.
+
+## Stochastic compartmental epidemic models
+
+### Gillespie algorithm
+
+The algorithm proceeds in two steps [@ganyani2021]:
+
+1. Simulate time at which the next event will occur: The time until the next event occurs follows an **exponential distribution** with a rate equal to the sum of the rates over all possible events
+2. Given the simulated time, simulate which event occurs
+
+
+
+## Monte Carlo simulation {#sec-mc-sim}
+
+Monte Carlo simulation is a method that uses repeated random sampling to obtain numerical results.
+
+We will use Monte Carlo simulation to create a circle and estimate $\pi$.
+
+### Create a circle
+
+To create a circle of radius $r = 1$ centered at $(0, 0)$, we first define a square with side length 2, extending from $[-1, 1]$ in both $x$ and $y$ directions. We generate random points uniformly within this square by drawing $x$ and $y$ values from the interval $[-1, 1]$.
+
+```{r}
+#| echo: false
+set.seed(7)
+
+n_points <- 10000
+xs <- runif(n_points, min = -1, max = 1)
+ys <- runif(n_points, min = -1, max = 1)
+```
+
+::::: grid
+::: g-col-5
+```{r}
+#| echo: false
+#| fig-width: 3
+#| fig-height: 3
+
+df_plot <- data.frame(xs, ys)
+ggplot(df_plot[1:1000, ], aes(x = xs, y = ys)) +
+  geom_point(color = "#5fc7a6") +
+  labs(x = NULL, y = NULL) +
+  scale_x_continuous(expand = c(0, 0), limits = c(-1, 1)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(-1, 1)) +
+  theme_classic()
+```
+:::
+
+::: g-col-7
+```{r}
+#| eval: false
+set.seed(7)
+
+n_points <- 1000
+xs <- runif(n_points, min = -1, max = 1)
+ys <- runif(n_points, min = -1, max = 1)
+```
+:::
+:::::
+
+The distance from each point to the center $(0, 0)$ is $\sqrt{x^2 + y^2}$. A point lies within the circle if $\sqrt{x^2 + y^2} \leq 1$.
+
+```{r}
+#| echo: false
+in_circle <- xs ^ 2 + ys ^ 2 <= 1
+df <- data.frame(n_points = 1:n_points, xs, ys, in_circle)
+```
+
+::::: grid
+::: g-col-5
+```{r}
+#| echo: false
+#| fig-width: 3
+#| fig-height: 3
+
+ggplot(df[1:1000, ], aes(x = xs, y = ys, color = in_circle)) +
+  geom_point() +
+  labs(x = NULL, y = NULL) +
+  scale_x_continuous(expand = c(0, 0), limits = c(-1, 1)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(-1, 1)) +
+  scale_color_manual(values = c("#5fc7a6", "#f79071")) +
+  theme_classic() +
+  theme(legend.position = "none")
+```
+:::
+
+::: g-col-7
+```{r}
+#| eval: false
+in_circle <- xs ^ 2 + ys ^ 2 <= 1
+df <- data.frame(n_points = 1:n_points, xs, ys, in_circle)
+```
+:::
+:::::
+
+### Estimate $\pi$
+
+The area of a circle is $\pi r^2$.
+
+The area of the bounding square is $(2r)^2 = 4r^2$.
+
+Dividing the area of the circle by the area of the square, we get a ratio:
+
+$$\frac{\text{area of circle}}{\text{area of square}} = \frac{\pi r^2}{4r^2} = \frac{\pi}{4}$$
+
+Therefore,
+
+$$\pi = 4 \times \frac{\text{area of circle}}{\text{area of square}}$$
+
+If we approximate the area of circle by the number of simulated points within the circle, and the area of square by the total number of simulated points, we have:
+
+$$\pi \approx 4 \times \frac{\text{simulated points within circle}}{\text{total number of simulated points}}$$
+
+#### One simulation
+
+Here we we run a single simulation to estimate $\pi$. Let explore how the approximation of $\pi$ changes as more points are sampled.
+
+```{r}
+df$my_pi <- 4 * cumsum(df$in_circle) / df$n_points
+```
+
+```{r}
+#| echo: false
+ojs_define(data = df)
+```
+
+```{ojs}
+//| echo: false
+ojsdata = transpose(data)
+
+viewof n_points = Inputs.range(
+  [10, 10000], 
+  {value: 1000, step: 1, label: "Number of points:"}
+)
+
+ojsdata_filtered = ojsdata.slice(1, n_points)
+```
+
+::::: grid
+::: g-col-5
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 300, height: 300,
+  x: {label: null, domain: [-1, 1]},
+  y: {label: null, domain: [-1, 1]},
+  marks: [Plot.dot(ojsdata_filtered, {x: "xs", y: "ys", fill: "in_circle"})],
+  color: {scheme: "set2"}
+})
+```
+:::
+
+::: g-col-7
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 400, height: 280,
+  marks: [
+    Plot.lineY(ojsdata_filtered, {
+      x: "n_points", 
+      y: "my_pi", 
+      stroke: "#214fbf",
+      tip: true,
+      title: d => `\u{1D70B} = ${d.my_pi}\nNumber of points = ${d.n_points}`
+    }),
+    Plot.ruleY([3.14159], {stroke: "#f95454"})
+  ],
+  x: {label: "Number of points"},
+  y: {label: "\u{1D70B}", domain: [2, 3.28]},
+})
+```
+:::
+:::::
+
+As more points are sampled, the approximation of $\pi$ improves. In the left figure, you can see that increasing the number of points better estimates the areas of the circle and square, leading to a closer approximation of the true value of $\pi$.
+
+#### Multiple simulations {#sec-mc-multi-sims}
+
+Instead of a single simulation with many points, we run $N$ smaller simulations. In each simulation, we sample a small number of points to estimate $\pi_i$. The final estimation is then averaged across simulations:
+
+$$\pi = \frac{1}{N}\sum_{i = 1}^{N} \pi_i$$
+
+```{r}
+#| echo: false
+# library(future.apply)
+# plan(multisession)
+# 
+# calc_pi <- function(n_sample, n_sim) {
+#   set.seed(7)
+#   xs_iter <- matrix(sample(xs, n_sample * n_sim, replace = T), ncol = n_sim)
+#   ys_iter <- matrix(sample(ys, n_sample * n_sim, replace = T), ncol = n_sim)
+#   in_circle <- xs_iter ^ 2 + ys_iter ^ 2 <= 1
+#   mean(4 * colSums(in_circle) / n_sample)
+# }
+# 
+# set.seed(7)
+# xs <- runif(1000000, min = -1, max = 1)
+# ys <- runif(1000000, min = -1, max = 1)
+# 
+# n_samples <- seq(10, 500, 10)
+# n_sims <- 100:3000
+# 
+# df <- expand.grid(n_samples, n_sims)
+# colnames(df) <- c("n_samples", "n_sims")
+# 
+# df$my_pi <- future_mapply(calc_pi, df$n_samples, df$n_sims, future.seed = T)
+# saveRDS(df, "data/simpi.rds")
+
+df <- readRDS("data/simpi.rds")
+```
+
+```{r}
+#| echo: false
+ojs_define(data2 = df)
+```
+
+```{ojs}
+//| echo: false
+ojsdata2 = transpose(data2)
+
+viewof n_samples = Inputs.range(
+  [10, 500], 
+  {value: 10, step: 10, label: "Number of points:"}
+)
+
+ojsdata_filtered2 = ojsdata2.filter(function(circle) {
+  return circle.n_samples == n_samples;
+})
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 600, height: 280,
+  marks: [
+    Plot.lineY(ojsdata_filtered2, {
+      x: "n_sims", 
+      y: "my_pi", 
+      stroke: "#214fbf",
+      tip: true,
+      title: d => `\u{1D70B} = ${d.my_pi}\nIteration = ${d.n_sims}`
+    }),
+    Plot.ruleY([3.14159], {stroke: "#f95454"})
+  ],
+  x: {label: "Iteration"},
+  y: {label: "\u{1D70B}", domain: [3.05, 3.235]},
+})
+```
+
+As shown in the one-simulation section, increasing the number of points improves accuracy. However, even with fewer points per simulation (e.g., 50), running many simulations and averaging the results enhances the approximation of $\pi$. This technique leverages the law of large numbers, where the average of repeated estimates converges to the true value.
 
 ## Have I run enough simulations?
 
@@ -69,7 +335,10 @@ sir_sto <- odin({
 })
 sir <- sir_sto$new()
 res_200 <- sir$run(0:100, replicate = 10000)
-res_200 <- sir$transform_variables(res_200)
+apply(res_200, c(1, 2), mean)
+
+
+#res_200 <- sir$transform_variables(res_200)
 res_200 <- cbind.data.frame(t = res_200[[1]], res_200[-1])
 
 df_plot <- res_200 |> 
@@ -130,4 +399,3 @@ df_plot <- res |>
 ggplot() +
   geom_line(data = df_plot, mapping = aes(x = t, y = value, color = comp))
 ```
-

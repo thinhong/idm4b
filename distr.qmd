@@ -1,0 +1,244 @@
+---
+title: "Probability distributions"
+format: html
+---
+
+## Exponential families {#sec-exp-fam}
+
+The exponential families is a class of probability distributions that takes the following general form [@dasgupta2011]:
+
+$$\mathbb{P}(X = x|\theta) = \underbrace{h(x)}_{\substack{\text{depends only} \\ \text{on x}}} \, \exp{\Big[\underbrace{\theta^\top T(x)}_{\substack{\text{data-parameter} \\ \text{interaction}}} - \underbrace{A(\theta)}_{\substack{\text{log-partition} \\ \text{(normalising)}}}\Big]}$$ {#eq-exp-fm}
+
+where:
+
+-   $\theta$ is the vector of parameters.
+
+-   $T(x)$ is the **sufficient statistic**: This captures the data-dependent part $x$ that does interact with the parameter $\theta$. Once you know $T(x)$, there is no additional information in the data $x$ that would help in estimating $\theta$ (which is why it is called *sufficient*). In a (full) exponential family, the dimension of $T(x)$ matches the length of vector $\theta$.
+
+-   $h(x)$ is the **underlying measure** or **base measure**: This captures the data-dependent part that depends **only** on the data $x$, not on $\theta$. It can be viewed as describing the "baseline" weighting or measure for the sample space. It must be non-negative since this is a probability and the exponential part is already non-negative.
+
+-   $A(\theta)$ is the **log-partition function** of $\theta$ (**NOT** the data $x$): You can rewrite @eq-exp-fm as:
+
+$$\mathbb{P}(X = x|\theta) = h(x) \, \frac{\exp{\big[\theta^\top T(x)\big]}}{\exp{\big[A(\theta)\big]}}$$
+
+So you can see $A(\theta)$ as the denominator will normalise the density ensuring the total probability sums (or integrates) to 1. It is totally determined by $T(x)$ and $h(x)$ and is called the "log-partition" because:
+
+$$A(\theta) = \log \left( \int_x h(x) \, \exp{\big[\theta^\top T(x)\big]} \, d\mu(x) \right)$$
+
+which is the log of the integral over all $x$.
+
+::: callout-important
+## Note
+
+Because $T(x)$ is the **sufficient statistic** for $\theta$, knowing $T(x)$ essentially captures all the information in the data relevant to estimating $\theta$. In many exponential‐family settings, you can exploit a moment condition to derive an estimator for $\theta$:
+
+$$\mu_{\theta} = \mathbb{E}_{\theta}\big[ T(x) \big]$$
+:::
+
+One common confusion it that there isn't just one exponential family of distributions \[[source](https://stats.stackexchange.com/questions/149814/role-of-base-measure-in-exponential-family)\]. There are many such exponential families and is determined by:
+
+-   The choice of the functions $h(x)$ and $T(x)$ specify the exponential family (i.e. model)
+
+-   The choice of the parameter vector $\theta$ then picks out a particular member (i.e. distribution) in that family
+
+### Common distributions in exponential families
+
+The exponential families include many of the most common distributions such as:
+
+|             |           |                 |
+|-------------|-----------|-----------------|
+| Normal      | Bernoulli | Exponential     |
+| Poisson     | Gamma     | Beta            |
+| Chi-squared | Geometric | Dirichlet       |
+| Categorical | Wishart   | Inverse Wishart |
+
+Some common distributions are exponential families when certain parameters are fixed and known such as:
+
+-   Binomial (with fixed number of trials)
+-   Multinomial (with fixed number of trials)
+-   Negative binomial (with fixed number of failures).
+
+Below is a summary table showing how common distributions such as Poisson, Binomial, and Normal fit into the exponential family framework:
+
+| **Distribution** | $\theta$ | $T(x)$ | $A(\theta)$ | $h(x)$ |
+|:--------------|:--------------|:-------------:|:-------------:|---------------|
+| Poisson($\lambda$) | $\log(\lambda)$ | $x$ | $\exp{(\theta)}$ | $\frac{1}{x!}$ for $x \in N$ |
+| Binomial($n$, $p$) | $\log{\big(\frac{p}{\,1-p\,}\big)}$ | $x$ | $n\log{\bigl[1 + \exp{(\theta)}\bigr]}$ | $\binom{n}{x}$ for $x \in N$ |
+| Normal($\mu$, $\sigma^2$) with known $\sigma^2$ | $\frac{\mu}{\sigma^2}$ | $x$ | $\frac{\theta^2\,\sigma^2}{2}$ | $\frac{1}{\sqrt{2\pi}\,\sigma}\,\exp\Bigl[-\,\tfrac{x^2}{2\sigma^2}\Bigr]$ |
+: Poisson, Binomial, and Normal distributions in exponential family framework {#tbl-exp-fam-distr}
+
+### Poisson
+
+$Pois(\lambda)$ is the probability of observing $k$ **events** occurring in a **fixed interval** of time if these events occur with a known **constant mean rate** $\lambda$ and **independently of the time since the last event**:
+
+$$\mathbb{P}(X = k) = \frac{\lambda^k \exp{(-\lambda)}}{k!}$$
+
+::: {.callout-note collapse="true"}
+## Derive Poisson PMF from the exponential family general form
+
+Let plug the following components into @eq-exp-fm:
+
+| **Distribution** | $\theta$ | $T(x)$ | $A(\theta)$ | $h(x)$ |
+|:--------------|:--------------|:-------------:|:-------------:|---------------|
+| Poisson($\lambda$) | $\log(\lambda)$ | $x$ | $\exp{(\theta)}$ | $\frac{1}{x!}$ for $x \in N$ |
+
+$$\begin{align}
+\mathbb{P}(X = x|\theta) &= \frac{1}{x!} \, \exp \Big[ \log(\lambda) \, x - \exp(\log(\lambda)) \Big] \\
+&= \frac{1}{x!} \, \exp \Big[ \log(\lambda) \, x - \lambda \Big] \\
+&= \frac{1}{x!} \, \exp \Big[ \log(\lambda) \, x \Big] \exp(-\lambda) \\
+&= \frac{\lambda^x \exp(-\lambda)}{x!}
+\end{align}$$
+
+Recall that:
+
+-   $\exp \left( log(\lambda) \right) = \lambda$
+
+-   $\exp \left( log(\lambda) \, x \right) = \lambda^x$, because $exp(a \cdot b) = e^{a \cdot b} = (e^a)^b$.
+:::
+
+$Pois(\lambda)$ is simple as it only requires one parameter, $\lambda$. However, a limitation is that the mean equals the variance ($\text{mean} = \text{variance} = \lambda$), which may not match your data if it has more variability (overdispersion).
+
+Below are examples of $Pois(\lambda)$ distributions. Note how the mean and variance vary across different $\lambda$ values.
+
+```{r}
+#| echo: false
+# Generate x values (the support of our Poisson distribution)
+x_vals <- 0:20
+
+# Generate all combinations of x and lambda
+df_poisson <- expand.grid(
+  x = x_vals,
+  lambda = 4:10
+)
+
+# Compute the pmf for each (x, lambda) pair
+df_poisson$pmf <- dpois(df_poisson$x, lambda = df_poisson$lambda)
+
+ojs_define(data2 = df_poisson)
+```
+
+```{ojs}
+//| echo: false
+poissonData = transpose(data2)
+
+// Create a slider that selects a lambda from 4 to 10
+viewof selectedLambda = Inputs.range(
+  [4, 10],
+  { step: 1, value: 4, label: "Select λ:" }
+)
+```
+
+```{ojs}
+//| echo: false
+
+// Pull the current λ and filter data
+mean = selectedLambda
+subset = poissonData.filter(d => d.lambda === mean)
+
+// Max pmf for plotting
+maxPmf = Math.max(...subset.map(d => d.pmf))
+
+// Variance = λ for a Poisson
+variance = mean
+
+// For the "arrow" on y=0, let’s just set it up so it starts at x1=(mean - variance/2) 
+// and ends at x2=(mean + variance/2) so that its total length is 'variance' = λ.
+arrowData = [
+  {
+    x1: mean - variance / 2, 
+    x2: mean + variance / 2,
+    y:  0,
+    x_var: mean,
+    y_var: 0.01,
+    variance: "Variance = " + variance
+  }
+]
+
+Plot.plot({
+  width: 500,
+  height: 300,
+  marginLeft: 60,
+  x: {
+    label: "k",
+    domain: [0, 20]
+  },
+  y: {
+    label: "P(X = k)",
+    domain: [0, 0.2]
+  },
+  marks: [
+    // 1) The Poisson pmf as a line + dots
+    Plot.line(subset, { x: "x", y: "pmf", stroke: "blue" }),
+    Plot.dot(subset,  { x: "x", y: "pmf", fill: "blue" }),
+
+    // 2) Dashed vertical line at x = λ (covers full plot height)
+    Plot.ruleX([mean], {
+      stroke: "blue",
+      strokeDasharray: "2",
+      label: `Mean = λ = ${mean}`
+    }),
+
+    // 3) Horizontal line segment (the “arrow shaft”) at y=0
+    //    from x = arrowX1 to x = arrowX2
+    Plot.ruleY(arrowData, {
+      x1: "x1",
+      x2: "x2",
+      y: "y",
+      stroke: "blue",
+      strokeWidth: 2
+    }),
+    Plot.text(arrowData, {
+      x: "x_var", 
+      y: "y_var", 
+      text: "variance"
+    })
+  ]
+})
+```
+
+### Binomial
+
+Imagine a sequence of independent Bernoulli trials: each trial has two potential outcomes called "success" (with probability $p$) and "failure" (with probability $1 - p$). $B(n, p)$ is the probability of getting exactly $k$ **successes** with **success probability** $p$ in a sequence of $n$ **independent Bernoulli trials**:
+
+$$\mathbb{P}(X = k) = {n \choose k} p^k (1 - p)^{n - k}$$ {#eq-binom-pmf}
+
+-   $\text{Mean} = \text{Median} = \text{Mode} = np$.
+-   $\text{Variance} = np(1 - p)$.
+
+The Poisson distribution is a limiting case of a Binomial distribution when the number of trials $n$ is large and the success probability $p$ is small. If $n \geq 100$ and $np \leq 10$ (meaning $p \leq 0.1$), the Poisson distribution with $\lambda = np$ is a good approximation of the Binomial distribution [@oxfordcollegeofemoryuniversity].
+
+::: {.callout-important collapse="true"}
+## Prove the connection between Poisson and Binomial distributions
+
+Let's start with $B(n, p)$: the probability of getting $k$ successes with success probability $p$ in a sequence of $n$ independent Bernoulli trials with @eq-binom-pmf.
+
+$$\mathbb{P}(X = k) = {n \choose k} p^k (1 - p)^{n - k}$$
+
+The expected value, or the mean number of successes is $np$. Let say this is equal to the mean number of observing events in $Pois(\lambda)$ which is $\lambda$:
+
+$$np = \lambda \Leftrightarrow p = \frac{\lambda}{n}$$
+
+Substitute this into @eq-binom-pmf becomes:
+
+$$\mathbb{P}(X = k) = {n \choose k} \left(\frac{\lambda}{n}\right)^k \left(1 - \frac{\lambda}{n}\right)^{n - k}$$
+:::
+
+### Normal
+
+The normal distribution has the following pdf:
+
+$$ f(x | \mu) = \frac{1}{\sqrt{2 \pi \sigma^2}} e^{\left[ -\frac{1}{2\sigma^2}(x-\mu)^2 \right]}$$
+
+You can realise some hallmarks of an exponential‐family distribution such as an exponential factor and somehow a normalization. If you are not satisfy, you can ask ChatGPT (or DeepSeek) to prove it for you.
+
+### Negative binomial
+
+Imagine a sequence of independent Bernoulli trials: each trial has two potential outcomes called "success" (with probability $p$) and "failure" (with probability $1 - p$). We keep observing the trials until exactly $r$ successes occur. $NB(r, p)$ (or Pascal) distribution is the probability of getting $k$ **failures** until $r$ **successes** occurs in a sequence of $n$ **independent Bernoulli trials**:
+
+::: callout-tip
+**Binomial** distribution gives the probability of $k$ **successes** in a fixed number of $n$ trials.
+
+**Negative binomial** distribution gives the probability of $k$ **failures**, given that we have $r$ successes in $n$ trials.
+:::
+
+The Negative binomial has two parameters: $r$, the number of successes, and $p$, the probability of success. Its key advantage is that it allows for variance greater than the mean, which makes it suitable for overdispersed data where variability exceeds the average.

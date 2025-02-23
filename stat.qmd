@@ -1,0 +1,66 @@
+---
+title: "Statistics"
+format: html
+---
+
+## Marginal distribution
+
+Imagine you have a box of objects of different colors and shapes:
+
+::: {.grid}
+
+::: {.g-col-6}
+
+- 3 red balls
+- 6 green balls
+- 1 red square
+- 4 green squares
+
+:::
+
+::: {.g-col-6}
+
+![](img/appx/margin-dist.webp)
+
+:::
+
+:::
+
+Let:
+
+- $X$ is the color of an object (red or green),
+- $Y$ is the shape of an object (ball or square)
+
+If you pick an object at random, the joint distribution $\mathbb{P}(X, Y)$ describes the probability of every (color, shape) combination:
+
+::: {.grid}
+
+::: {.g-col-6}
+
+- 3 red balls
+- 6 green balls
+- 1 red square
+- 4 green squares
+
+:::
+
+::: {.g-col-6}
+
+- $\mathbb{P}(X = \text{red}, Y = \text{ball})$
+- $\mathbb{P}(X = \text{green}, Y = \text{ball})$
+- $\mathbb{P}(X = \text{red}, Y = \text{square})$
+- $\mathbb{P}(X = \text{green}, Y = \text{square})$
+
+:::
+
+:::
+
+If you only care about **color**, the **marginal distribution** of **color** $\mathbb{P}(X)$, is found by summing the joint probabilities **over all shapes**:
+
+$$\begin{align}
+\mathbb{P}(X = \text{red}) &= \mathbb{P}(X = \text{red}, Y = \text{ball}) + \mathbb{P}(X = \text{red}, Y = \text{square}) \\
+&= \sum_{y} \mathbb{P}(X = x, Y = y)
+\end{align}$$
+
+
+

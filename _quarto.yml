@@ -24,13 +24,14 @@ book:
         - tsir.qmd
     - part: sto.qmd
       chapters:
+        - ar.qmd
         - seir-sto.qmd
     - part: calib.qmd
       chapters:
         - lse.qmd
         - mle.qmd
         - mcmc.qmd
-        - pf.qmd
+        - pmcmc.qmd
     - part: rnum.qmd
       chapters:
         - gen-int.qmd
@@ -51,11 +52,16 @@ book:
       chapters: 
         - serocat.qmd
     - part: stat-mod.qmd
-      chapters: 
+      chapters:
         - glm.qmd
         - gam.qmd
         - surv.qmd
         - bayes.qmd
+        - ar.qmd
+        - distr.qmd
+    - part: da.qmd
+      chapters: 
+        - smooth.qmd
     - part: rp.qmd
       chapters: 
         - rp-risk.qmd
@@ -63,8 +69,11 @@ book:
     - references.qmd
   appendices:
     - dict.qmd
+    - math.qmd
+    - stat.qmd
     - odin.qmd
     - metaprg.qmd
+    - ensemble.qmd
     - func.qmd
     - simll.qmd
 

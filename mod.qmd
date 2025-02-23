@@ -25,16 +25,41 @@ Models help us navigate and make decisions about complex situations by focusing 
 >
 > Keeling M (2006) *State-of-science review: predictive and real-time epidemiological modelling*. London: Office of Science and Innovation [@keeling2006; @christley2013].
 
+## The 3 purposes of modelling [@tredennick2021]
+
+### Exploration
+
+**Exploration** is to identify patterns in the data and generate hypotheses (then we use **inference** to test these hypotheses). While scientific methods emphasize hypothesis testing, it is often unclear where these hypotheses come from. They can come from theory, but more often, they from observed patterns in the data.
+
+In **exploration**, we calculate descriptive statistics, check correlations or make visualisations to understand the data.
+
+### Inference and Prediction
+
+Consider a regression model,
+
+$$\hat{y} = X \hat{\beta}$$
+
+of which $\hat{y}$ is a vector of predicted response, $X$ is the data matrix, $\hat{\beta}$ is a vector of parameters.
+
+**Inference** is about $\hat{\beta}$, to answer these questions:
+
+-   Which coefficients are non-zero, implying meaningful associations between covariates and the response?
+-   Which non-zero effects are positive, and which are negative?
+
+We model using a small fraction sampling from the population, and try to draw some statements about the whole population. In **inference**, we estimate parameters or conduct hypothesis testing.
+
+**Prediction** is about $\hat{y}$. In **prediction**, the key goal is to find a model that can ***accurately predict*** y for new observations of $X$.
+
 ## Types of model
 
 Models can be classified based on the following attributes [@kim2008]:
 
-1. **Time dynamics**: main features change over time (dynamic) or remain constant (static).
-2. **Randomness**: Any changes in the model occur randomly (stochastic or probabilistic) or follow pre-specified rules (deterministic).
-3. **Behavior representation**: the population's behaviour is simulated using aggregate variables (population averages) or individual behaviors (individual-based).
-4. **Time representation**: events occur at discrete intervals (discrete) or on a continuum (continuous).
-5. **Population entry**: allows individuals to enter or exit the model (open) or not (closed).
-6. **Equation structure**: the model is expressed in equations that are functions of linearly linked parameters (linear) or not (non-linear).
+1.  **Time dynamics**: main features change over time (dynamic) or remain constant (static).
+2.  **Randomness**: Any changes in the model occur randomly (stochastic or probabilistic) or follow pre-specified rules (deterministic).
+3.  **Behavior representation**: the population's behaviour is simulated using aggregate variables (population averages) or individual behaviors (individual-based).
+4.  **Time representation**: events occur at discrete intervals (discrete) or on a continuum (continuous).
+5.  **Population entry**: allows individuals to enter or exit the model (open) or not (closed).
+6.  **Equation structure**: the model is expressed in equations that are functions of linearly linked parameters (linear) or not (non-linear).
 
 ### Static vs dynamic
 
@@ -44,7 +69,7 @@ A **dynamic** model is one where **time is essential** to its operation. The mod
 
 ### Dynamic continuous-change vs discrete-change
 
-**Dynamic models** use **state variables** to describe the system's status at any point in time. If the state variables can change **continuously over continuous time**, then the model has continuous-change aspects. 
+**Dynamic models** use **state variables** to describe the system's status at any point in time. If the state variables can change **continuously over continuous time**, then the model has continuous-change aspects.
 
 ### Deterministic vs stochastic
 
@@ -60,9 +85,9 @@ Individual-based (or **microsimulation** - see @def-micsim) models keep track of
 
 Dynamic individual-based models have 3 subtypes [@kim2008]:
 
-1. **Individual-level Markov models**: extend static microsimulation model based with a Markov structure to allow interactions among individuals.
-2. **Discrete-event simulations (DES)**: sample the time to the next event and describes the life history of individuals progressing with various events over time, this type of model is originated from industrial engineering.
-3. **Agent-based models**: one of the most flexible modelling techniques, model each agent one by one and allow agents (e.g. individuals) to act and interact autonomously with their own behavioural rules [@handbook2023].
+1.  **Individual-level Markov models**: extend static microsimulation model based with a Markov structure to allow interactions among individuals.
+2.  **Discrete-event simulations (DES)**: sample the time to the next event and describes the life history of individuals progressing with various events over time, this type of model is originated from industrial engineering.
+3.  **Agent-based models**: one of the most flexible modelling techniques, model each agent one by one and allow agents (e.g. individuals) to act and interact autonomously with their own behavioural rules [@handbook2023].
 
 ## Solving a model
 

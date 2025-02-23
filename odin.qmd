@@ -3,4 +3,59 @@ title: "Odin notes"
 format: html
 ---
 
-`deriv()` for continuous time, `update()` for discrete time.
+`odin` actually belongs to a series of **3 packages** developed by researchers at Imperial College London that streamline infectious disease modelling tasks (see [@fitzjohn2021] for details):
+
+1. `odin`: is a domain-specific language @def-dsl for implementing state-space models @def-state-space-mod in R interface using C++, develop in 2016 and can model both continuous and discrete time.
+2. `dust`: is a framework for running discrete time stochastic models, it takes care of parallelisation, reproducible random number generation, execution on GPUs...
+3. `mcstate`: provides routines to fit the model using sequential Monte Carlo (particle filters) and prediction tasks.
+
+## odin
+
+user expresses their problems as a set of mathematical relationships, modelled as assignments to form a directed acyclic graph (DAG). odin then **sorts that graph**, which is why users can therefore write their equations in any order.
+
+For use with ordinary differential equations (ODEs), odin transpiles to [C code](https://mrc-ide.github.io/odin/) or [JavaScript](https://mrc-ide.github.io/odin.js).
+
+Metapopulation models can be written in the form of an array. `odin` support arrays up to 8 dimensions with index follow this order: `i`, `j`, `k`, `l`, `i5`, `i6`, `i7`, `i8` ([source](https://mrc-ide.github.io/odin/articles/functions.html)).
+
+`deriv()` for continuous time, 
+
+`update()` is a function for dust, which is discrete time.
+
+## mcstate
+
+### Stochastic SIR model
+
+The ODE of a deterministic SIR model is defined as:
+
+$$\begin{align}
+\frac{dS}{dt} &= -\beta SI \\
+\frac{dI}{dt} &= \beta SI - \gamma I \\
+\frac{dR}{dt} &= \gamma I
+\end{align}$$
+
+This model can be discretised in time steps of width $dt$ using the following update equations for each time step:
+
+$$\begin{align}
+S_{t + 1} &= S_t - n_{SI, t} \\
+I_{t + 1} &= I_t + n_{SI, t} - n_{IR, t} \\
+R_{t + 1} &= R_t + n_{IR, t}
+\end{align}$$
+
+where the number of individuals moving between compartments are given by drawing from binomial distributions:
+
+$$\begin{align}
+n_{SI, t} &\sim B(S_t, 1 - \exp(-\beta I_t)) \\
+n_{IR, t} &\sim B(I_t, 1 - \exp(-\gamma))
+\end{align}$$
+
+The binomial distribution $B(n, p)$ is used as there are $n$ trials, one for each individual in the compartments. In a single time step, each  p can be calculated as 1 dt eλ⋅ − where λ is the transition rate, as in a Poisson process time between events is exponentially distributed.
+
+```{r}
+
+```
+
+
+
+
+
+

@@ -1,0 +1,11 @@
+---
+title: "Smoothing"
+format: html
+---
+
+## Moving average
+
+
+
+## LOWESS
+

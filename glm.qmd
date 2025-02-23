@@ -4,29 +4,42 @@ title: "Generalized linear models"
 
 ## Model
 
-$$g(Y) = \beta_0 + \beta_1 x_1 + \dots + \beta_k x_k$$
+$$\begin{align}
+g(\mathbb{E}(Y|X)) &= \beta_0 + \beta_1 x_1 + \dots + \beta_k x_k \\
+\Leftrightarrow g(\mu) &= \beta^\top X
+\end{align}$$
 
 There are three components to a GLM:
 
-- Random component: the probability distribution of the outcome Y, any distribution within the **exponential family**.
+1.  **Systematic component**: The right-hand side is a linear combination of predictors: $\beta_0 + \beta_1 x_1 + \dots + \beta_k x_k$.
 
-- Systematic component: the linear combinations of predictors $\beta_0 + \beta_1 x_1 + \dots + \beta_k x_k$
+2.  **Random component**: The outcome $Y$ on the left-hand side, must follow a distribution from the **exponential family**.
 
-- Link function $g(Y)$: the link between random and systematic components.
+3.  **Link function**: $Y$ is wrapped in a link function $g(Y)$ that relates the **mean** $\mathbb{E}(Y)$ to the linear predictors.
 
-## Common link functions
+## Canonical link function
 
+A **canonical link function** is the link function that directly connects the mean $\mu$ of a distribution to its natural (canonical) parameter $\theta$ in the exponential family form. Which means we want:
 
+$$g(\mu) = \beta^\top X = \theta$$
+
+For instance, suppose $Y$ follows a Poisson distribution. We know from the exponential‐family representation @tbl-exp-fam-distr, that the canonical parameter $\theta = \log(\lambda)$, where $\lambda = \mu$ because $\mathbb{E}(Y) = \lambda$ for Poisson.
+
+Therefore, a **log link** function is the canonical link for a Poisson distribution:
+
+$$g(\mu) = \log(\mu) = \log(\lambda) = \theta$$
+
+Likewise, you can ask ChatGPT to prove that a **logit link** is the canonical link if $Y$ follows a Bernoulli, or Binomial distribution, and many other cases.
+
+## Poisson regression
+
+Poisson regression models are generalized linear models with the logarithm as the link function.
 
 ## Offset
 
 rate = count / unit time
 
 offset converts a count to rate
-
-## Poisson regression
-
-Poisson regression models are generalized linear models with the logarithm as the link function.
 
 ```{r}
 week <- 1:7
@@ -35,7 +48,6 @@ count <- c(90, 76, 37, 27, 19, 13, 9)
 rate <- count / amount_time
 df <- data.frame(week, amount_time, count, rate)
 ```
-
 
 $$\log(\text{count}) = \beta_0 + \beta \cdot \text{week}$$
 
@@ -65,4 +77,3 @@ ggplot(df, aes(x = week, y = count)) +
   geom_line(aes(y = pred)) +
   theme_classic()
 ```
-
