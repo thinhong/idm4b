@@ -623,11 +623,11 @@ window.Quarto = {
 </ul>
 <p><span class="math display">\[\mathbb{L}(\theta) = \prod_{i = 1}^{n} f_Y(y_i| \theta)\]</span></p>
 <ul>
-<li><strong>Step 2</strong>. Take the natural log of the likelihood <span class="math inline">\(log L(\theta)\)</span>, or log-likelihood. The production in likelihood now becomes the sum in log-likelihood. See <a href="calib.html#sec-calib-loglik" class="quarto-xref"><span>Section 2.2</span></a> for more details.</li>
+<li><strong>Step 2</strong>. Take the natural log of the likelihood <span class="math inline">\(log L(\theta)\)</span>, or log-likelihood. The production in likelihood now becomes the sum in log-likelihood. See <a href="calib.html#sec-calib-loglik" class="quarto-xref"><span>Section 4.2</span></a> for more details.</li>
 </ul>
 <p><span class="math display">\[log \mathbb{L}(\theta) = \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]\]</span></p>
 <ul>
-<li><strong>Step 3</strong>. Take the negative log-likelihood <span class="math inline">\(- log L(\theta)\)</span>. Because optimizers work by minimizing a function, we have to work on negative log-likelihood. See <a href="calib.html#sec-calib-negloglik" class="quarto-xref"><span>Section 2.3</span></a> for more details.</li>
+<li><strong>Step 3</strong>. Take the negative log-likelihood <span class="math inline">\(- log L(\theta)\)</span>. Because optimizers work by minimizing a function, we have to work on negative log-likelihood. See <a href="calib.html#sec-calib-negloglik" class="quarto-xref"><span>Section 4.3</span></a> for more details.</li>
 </ul>
 <p><span class="math display">\[- log \mathbb{L}(\theta) = - \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]\]</span></p>
 <ul>
@@ -673,7 +673,7 @@ Data
 </div>
 <div class="callout-body-container callout-body">
 <p>Download influenza incidence data here:</p>
-<p><a href="#dnldts6338" onclick="fetch('data:text/csv;base64,ZGF5LGluYw0KMCwwDQoxLDENCjIsMQ0KMywwDQo0LDINCjUsNQ0KNiwzDQo3LDMNCjgsMw0KOSw2DQoxMCwyDQoxMSw1DQoxMiw5DQoxMywxMw0KMTQsMTINCjE1LDEzDQoxNiwxMQ0KMTcsMTINCjE4LDYNCjE5LDYNCjIwLDYNCjIxLDMNCjIyLDENCjIzLDANCjI0LDINCjI1LDANCjI2LDANCjI3LDANCjI4LDANCjI5LDINCjMwLDANCjMxLDINCjMyLDANCjMzLDANCjM0LDANCjM1LDANCjM2LDANCjM3LDANCjM4LDANCjM5LDANCjQwLDANCjQxLDANCjQyLDANCjQzLDANCjQ0LDANCjQ1LDANCjQ2LDANCjQ3LDANCjQ4LDANCjQ5LDANCjUwLDANCg==').then(res => res.blob()).then(blob => {
+<p><a href="#dnldts9904" onclick="fetch('data:text/csv;base64,ZGF5LGluYw0KMCwwDQoxLDENCjIsMQ0KMywwDQo0LDINCjUsNQ0KNiwzDQo3LDMNCjgsMw0KOSw2DQoxMCwyDQoxMSw1DQoxMiw5DQoxMywxMw0KMTQsMTINCjE1LDEzDQoxNiwxMQ0KMTcsMTINCjE4LDYNCjE5LDYNCjIwLDYNCjIxLDMNCjIyLDENCjIzLDANCjI0LDINCjI1LDANCjI2LDANCjI3LDANCjI4LDANCjI5LDINCjMwLDANCjMxLDINCjMyLDANCjMzLDANCjM0LDANCjM1LDANCjM2LDANCjM3LDANCjM4LDANCjM5LDANCjQwLDANCjQxLDANCjQyLDANCjQzLDANCjQ0LDANCjQ1LDANCjQ2LDANCjQ3LDANCjQ4LDANCjQ5LDANCjUwLDANCg==').then(res => res.blob()).then(blob => {
       const downloadURL = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -681,7 +681,7 @@ Data
       a.download = 'flu_inc.csv'; a.click();
       window.URL.revokeObjectURL(downloadURL);
       document.body.removeChild(a);
-        });"><button class="btn btn-light downloadthis  " id="dnldts6338"><i class="bi bi-download"></i> flu_inc.csv </button></a></p>
+        });"><button class="btn btn-light downloadthis  " id="dnldts9904"><i class="bi bi-download"></i> flu_inc.csv </button></a></p>
 </div>
 </div>
 <p>We will use the same data of a H1N1 influenza outbreak in an elementary school in <a href="lse.html#sec-lse-code" class="quarto-xref"><span>Section 7.2</span></a> and fit the deterministic SEIR model with code <a href="seir-det.html#lst-seir-det" class="quarto-xref">Listing&nbsp;<span>2.1</span></a>.</p>
@@ -806,7 +806,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 </div>
 </div>
 <p>It looks very similar to the model we fitted with LSE at <a href="lse.html#fig-lse-seir" class="quarto-xref">Figure&nbsp;<span>7.1</span></a>.</p>
-<p>Let compute <span class="math inline">\(R_0\)</span>. For a “closed population” SEIR model, <span class="math inline">\(R_0 = \frac{\beta}{\gamma} S_0\)</span>. Again, this is similar to the <span class="math inline">\(R_0\)</span> estimated from LSE at <a href="lse.html#lst-lse-r0" class="quarto-xref">Listing&nbsp;<span>7.1</span></a>. The reason is MLE is equal to LSE when we pick the normal distribution likelihood, see <a href="calib.html#sec-calib-mle-lse" class="quarto-xref"><span>Section 4</span></a> for more details.</p>
+<p>Let compute <span class="math inline">\(R_0\)</span>. For a “closed population” SEIR model, <span class="math inline">\(R_0 = \frac{\beta}{\gamma} S_0\)</span>. Again, this is similar to the <span class="math inline">\(R_0\)</span> estimated from LSE at <a href="lse.html#lst-lse-r0" class="quarto-xref">Listing&nbsp;<span>7.1</span></a>. The reason is MLE is equal to LSE when we pick the normal distribution likelihood, see <a href="calib.html#sec-calib-mle-lse" class="quarto-xref"><span>Section 6</span></a> for more details.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>rnum0 <span class="ot">&lt;-</span> params[<span class="dv">1</span>] <span class="sc">*</span> S0 <span class="sc">/</span> params[<span class="dv">3</span>]</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>rnum0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

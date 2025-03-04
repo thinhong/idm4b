@@ -98,6 +98,10 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-X391ZN63GG', { 'anonymize_ip': true});
 </script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -542,7 +546,9 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-calib-lse" id="toc-sec-calib-lse" class="nav-link active" data-scroll-target="#sec-calib-lse">Least squares estimation</a></li>
+  <li><a href="#model-fitting" id="toc-model-fitting" class="nav-link active" data-scroll-target="#model-fitting">Model fitting</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a></li>
+  <li><a href="#sec-calib-lse" id="toc-sec-calib-lse" class="nav-link" data-scroll-target="#sec-calib-lse">Least squares estimation</a></li>
   <li><a href="#sec-calib-mle" id="toc-sec-calib-mle" class="nav-link" data-scroll-target="#sec-calib-mle">Maximum likelihood estimation</a>
   <ul>
   <li><a href="#likelihood" id="toc-likelihood" class="nav-link" data-scroll-target="#likelihood">Likelihood</a></li>
@@ -576,6 +582,12 @@ window.Quarto = {
 </header>
 
 
+<section id="model-fitting" class="level2">
+<h2 class="anchored" data-anchor-id="model-fitting">Model fitting</h2>
+<p>Model fitting is the process of <strong>adjusting</strong> the model’s <strong>parameters</strong> so that the <strong>model’s predictions</strong> align <strong>as closely as possible</strong> with <strong>real-world observations</strong>.</p>
+</section>
+<section id="methods" class="level2">
+<h2 class="anchored" data-anchor-id="methods">Methods</h2>
 <p>Model fitting methods typically include <span class="citation" data-cites="rui2024">(<a href="references.html#ref-rui2024" role="doc-biblioref">Rui et al., 2024</a>)</span>:</p>
 <ul>
 <li>Least squares estimation (LSE).</li>
@@ -584,13 +596,33 @@ window.Quarto = {
 <li>Akaike information criterion (AIC).</li>
 <li>Bayesian information criterion (BIC).</li>
 </ul>
+<p>Basically you use the method to compare the simulated predictions with the observed data points. There are some ways to do that.</p>
+</section>
 <section id="sec-calib-lse" class="level2">
 <h2 class="anchored" data-anchor-id="sec-calib-lse">Least squares estimation</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="calib_files/figure-html/unnamed-chunk-2-1.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
 <p><span id="eq-calib-rss"><span class="math display">\[RSS = \sum_{i = 1}^{n}[y_i - f(x_i)]^2 \tag{1}\]</span></span></p>
 <p>Least squares estimation corresponds to maximum likelihood estimation when the noise is normally distributed with equal variances.</p>
 </section>
 <section id="sec-calib-mle" class="level2">
 <h2 class="anchored" data-anchor-id="sec-calib-mle">Maximum likelihood estimation</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="calib_files/figure-html/unnamed-chunk-3-1.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
 <p>A generalization of the least squares idea is the likelihood.</p>
 <section id="likelihood" class="level3">
 <h3 class="anchored" data-anchor-id="likelihood">Likelihood</h3>
