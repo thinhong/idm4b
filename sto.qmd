@@ -8,13 +8,55 @@ library(ggplot2)
 library(dplyr)
 ```
 
-## 
+## Concepts of stochasticity
 
-Data on population dynamics include three basic forms of stochasticity: demographic stochasticity, environmental stochasticity, and sampling error.
+The dynamics of every population has both deterministic (predictable) and stochastic (unpredictable) forces [@lande2003]. These two processes act at the same time, so real-world data often look "noisy". We can split that noise into three basic forms of stochasticity, that can be classified into 2 groups:
 
-Process noise: including demographic and environmental noise [@dennis2006].
+1.  **Process noise**: the randomness within the process that generates the data. It has two forms of stochasticity:
 
-Observation error: the observation or sampling methods by which population abundances are estimated [@dennis2006].
+    -   **Demographic stochasticity (statistical noise)**: random events which are usually conceived as being independent among individuals. For example, **each individual** might die or survive with a certain probability per unit time [@lande2003]. Because this stochasticity operates independently among individuals, it tends to average out in large populations and has a greater impact on small populations [@lande2003].
+
+    -   **Environmental stochasticity**: random temporal changes that affect **all individuals equally**, no matter the population size. It **overtakes demographic stochasticity in large populations** [@ganyani2021]. Examples include external unpredictable events (temperature, rainfall, humidity) and individual variation (variability in contact patterns, superspreaders). These factors translate into fluctuations in the transmission parameter, often captured by overdispersion in Poisson models [@ganyani2021].
+
+2.  **Sampling/observational/measurement error**: refers to errors caused by observation or sampling methods [@dennis2006], because real data collection is never perfect.
+
+![](img/dict/hmp.svg)
+
+$$x_{t + 1} = f(x_t) + \epsilon_{\text{process}}$$
+
+$$y_t = x_t + \epsilon_{\text{observation}}$$
+
+## A general stochastic SIR model
+
+Most stochastic models for compartmental epidemic models are Markov processes, whereby the future state of the population at time $t + 1$ depends only on the current state at time $t$ [@ganyani2021]. Recall that a deterministic SIR model follows:
+
+$$\frac{dS}{dt} = -\frac{\beta SI}{N}$$
+
+$$\frac{dI}{dt} = \frac{\beta SI}{N} - \gamma I$$
+
+$$\frac{dR}{dt} = \gamma I$$
+
+### Demographic stochasticity
+
+Let $I_t$ and $R_t$ be Poisson processes that denote the number of individuals who have been infected and the number of individuals who have recovered at time $t$. The probability of having a new infection or new recovery occur at time $t + h$ is:
+
+$$\mathbb{P}(I_{t + h} = I_t + 1 | I_t) = \frac{\beta S_t I_t}{N} h + o(h)$$
+
+$$\mathbb{P}(R_{t + h} = R_t + 1 | R_t) = \gamma I_t h + o(h)$$
+
+### Environmental stochasticity
+
+Environmental stochasticity is typically modeled by randomising the transmission rate with white noise [@ganyani2021]. One way to incorporate it in the SIR model is to multiply the transmission rate by a Lévy white noise process $\xi_t$ which fluctuates around one. For instance, let $\xi_t = \frac{d \Gamma(t)}{dt}$, with $\Gamma(t)$ having Gamma increments so that:
+
+$$\Gamma(t + h) - \Gamma(t) \sim Gamma(\frac{h}{\sigma^2}, \sigma^2)$$
+
+Then the infection event probability becomes:
+
+$$\mathbb{P}(I_{t + h} = I_t + 1 | I_t) = \frac{\beta \xi_t S_t I_t}{N} h + o(h)$$
+
+This lets random environment-driven fluctuations scale the transmission rate for everyone, on top of individual-level randomness
+
+### Observational error
 
 ## Types of stochastic epidemic models
 
@@ -34,10 +76,8 @@ Stochastic models can conveniently be classified according to their contact stru
 
 The algorithm proceeds in two steps [@ganyani2021]:
 
-1. Simulate time at which the next event will occur: The time until the next event occurs follows an **exponential distribution** with a rate equal to the sum of the rates over all possible events
-2. Given the simulated time, simulate which event occurs
-
-
+1.  Simulate time at which the next event will occur: The time until the next event occurs follows an **exponential distribution** with a rate equal to the sum of the rates over all possible events
+2.  Given the simulated time, simulate which event occurs
 
 ## Monte Carlo simulation {#sec-mc-sim}
 
@@ -295,107 +335,3 @@ Steps to calculate the needed number of simulations ([source](https://stats.stac
 $$R \geq \left( \frac{Z_{1 - \frac{\alpha}{2}} \times \sigma_0}{\epsilon \times x_0} \right)^2$$
 
 5.  Use the Student t-distribution rather than the normal distribution for small $R_0$.
-
-the output doesn't change much if the model was run with more simulations
-
-```{r}
-library(odin)
-library(dde)
-library(tidyverse)
-
-sir_sto <- odin({
-  ## Core equations for transitions between compartments:
-  update(S) <- S - n_SI
-  update(I) <- I + n_SI - n_IR
-  update(R) <- R + n_IR
-
-  ## Individual probabilities of transition:
-  p_SI <- 1 - exp(-beta * I / N) # S to I
-  p_IR <- 1 - exp(-gamma) # I to R
-
-  ## Draws from binomial distributions for numbers changing between
-  ## compartments:
-  n_SI <- rbinom(S, p_SI)
-  n_IR <- rbinom(I, p_IR)
-
-  ## Total population size
-  N <- S + I + R
-
-  ## Initial states:
-  initial(S) <- S_ini
-  initial(I) <- I_ini
-  initial(R) <- 0
-
-  ## User defined parameters - default in parentheses:
-  S_ini <- user(1000)
-  I_ini <- user(1)
-  beta <- user(0.2)
-  gamma <- user(0.1)
-    
-})
-sir <- sir_sto$new()
-res_200 <- sir$run(0:100, replicate = 10000)
-apply(res_200, c(1, 2), mean)
-
-
-#res_200 <- sir$transform_variables(res_200)
-res_200 <- cbind.data.frame(t = res_200[[1]], res_200[-1])
-
-df_plot <- res_200 |> 
-  pivot_longer(cols = -t, names_to = "comp") |> 
-  mutate(
-    iter = factor(str_extract(comp, "(?<=\\.).*")),
-    comp = factor(str_extract(comp, "."))
-  )
-
-df_mean <- df_plot |> 
-  group_by(t, comp) |> 
-  summarise(mean_value = mean(value, na.rm = TRUE)) |> 
-  ungroup()
-
-ggplot() +
-  # geom_line(data = df_plot, mapping = aes(x = t, y = value, group = interaction(iter, comp), color = comp), alpha = 0.1) +
-  geom_line(data = df_mean, mapping = aes(x = t, y = mean_value, color = comp), linewidth = 2)
-```
-
-```{r}
-sir_deter <- odin({
-  ## Core equations for transitions between compartments:
-  update(S) <- S - n_SI
-  update(I) <- I + n_SI - n_IR
-  update(R) <- R + n_IR
-
-  ## Individual probabilities of transition:
-  p_SI <- 1 - exp(-beta * I / N) # S to I
-  p_IR <- 1 - exp(-gamma) # I to R
-
-  ## Draws from binomial distributions for numbers changing between compartments:
-  n_SI <- S * p_SI
-  n_IR <- I * p_IR
-
-  ## Total population size
-  N <- S + I + R
-
-  ## Initial states:
-  initial(S) <- S_ini
-  initial(I) <- I_ini
-  initial(R) <- 0
-
-  ## User defined parameters - default in parentheses:
-  S_ini <- user(1000)
-  I_ini <- user(1)
-  beta <- user(0.2)
-  gamma <- user(0.1)
-    
-})
-
-sir <- sir_deter$new()
-res <- data.frame(sir$run(0:100))
-colnames(res)[1] <- "t"
-
-df_plot <- res |> 
-  pivot_longer(cols = -t, names_to = "comp")
-
-ggplot() +
-  geom_line(data = df_plot, mapping = aes(x = t, y = value, color = comp))
-```

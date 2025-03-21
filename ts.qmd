@@ -1,0 +1,15 @@
+---
+title: "Time series"
+format: html
+---
+
+A time series is simply a set of observations of the same variable recorded in sequence over time. 
+
+We often assume data points are i.i.d. (independent and identically distributed), but with infectious disease counts, that doesn't hold. If today's cases are high, tomorrow's cases will probably be high too, because infection spreads from existing cases. This relationship is called **temporal dependency**. 
+
+However, if we aggregate time series data, the aggregated data points could be independent.
+
+![](img/mod/ts-agg.svg)
+
+**Autocorrelation** measures how much current values in a time series relate to past values. In other words, if you notice a pattern today, you can often expect a similar pattern tomorrow. This is a key point when modelling infectious diseases, since ignoring autocorrelation can lead to misleading conclusions.
+

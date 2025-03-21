@@ -85,7 +85,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./mle.html" rel="next">
-<link href="./calib.html" rel="prev">
+<link href="./mod-fit.html" rel="prev">
 <link href="./logo-icon.svg" rel="icon" type="image/svg+xml">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -179,7 +179,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./calib.html">Calibration</a></li><li class="breadcrumb-item"><a href="./lse.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Least squares estimation</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mod-fit.html">Model fitting</a></li><li class="breadcrumb-item"><a href="./lse.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Least squares estimation</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -276,8 +276,8 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./calib.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Calibration</span></a>
+            <a href="./mod-fit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model fitting</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -464,6 +464,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Probability distributions</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Time series</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -478,7 +484,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./smooth.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Smoothing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Smoothing</span></span></a>
   </div>
 </li>
       </ul>
@@ -495,13 +501,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-response.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Outbreak response report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Outbreak response report</span></span></a>
   </div>
 </li>
       </ul>
@@ -589,7 +595,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./calib.html">Calibration</a></li><li class="breadcrumb-item"><a href="./lse.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Least squares estimation</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mod-fit.html">Model fitting</a></li><li class="breadcrumb-item"><a href="./lse.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Least squares estimation</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Least squares estimation</span></h1>
 </div>
@@ -619,7 +625,7 @@ Preparation
 </div>
 <div class="callout-body-container callout-body">
 <p>Download influenza incidence data here:</p>
-<p><a href="#dnldts7189" onclick="fetch('data:text/csv;base64,ZGF5LGluYw0KMCwwDQoxLDENCjIsMQ0KMywwDQo0LDINCjUsNQ0KNiwzDQo3LDMNCjgsMw0KOSw2DQoxMCwyDQoxMSw1DQoxMiw5DQoxMywxMw0KMTQsMTINCjE1LDEzDQoxNiwxMQ0KMTcsMTINCjE4LDYNCjE5LDYNCjIwLDYNCjIxLDMNCjIyLDENCjIzLDANCjI0LDINCjI1LDANCjI2LDANCjI3LDANCjI4LDANCjI5LDINCjMwLDANCjMxLDINCjMyLDANCjMzLDANCjM0LDANCjM1LDANCjM2LDANCjM3LDANCjM4LDANCjM5LDANCjQwLDANCjQxLDANCjQyLDANCjQzLDANCjQ0LDANCjQ1LDANCjQ2LDANCjQ3LDANCjQ4LDANCjQ5LDANCjUwLDANCg==').then(res => res.blob()).then(blob => {
+<p><a href="#dnldts14007" onclick="fetch('data:text/csv;base64,ZGF5LGluYw0KMCwwDQoxLDENCjIsMQ0KMywwDQo0LDINCjUsNQ0KNiwzDQo3LDMNCjgsMw0KOSw2DQoxMCwyDQoxMSw1DQoxMiw5DQoxMywxMw0KMTQsMTINCjE1LDEzDQoxNiwxMQ0KMTcsMTINCjE4LDYNCjE5LDYNCjIwLDYNCjIxLDMNCjIyLDENCjIzLDANCjI0LDINCjI1LDANCjI2LDANCjI3LDANCjI4LDANCjI5LDINCjMwLDANCjMxLDINCjMyLDANCjMzLDANCjM0LDANCjM1LDANCjM2LDANCjM3LDANCjM4LDANCjM5LDANCjQwLDANCjQxLDANCjQyLDANCjQzLDANCjQ0LDANCjQ1LDANCjQ2LDANCjQ3LDANCjQ4LDANCjQ5LDANCjUwLDANCg==').then(res => res.blob()).then(blob => {
       const downloadURL = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -627,7 +633,7 @@ Preparation
       a.download = 'flu_inc.csv'; a.click();
       window.URL.revokeObjectURL(downloadURL);
       document.body.removeChild(a);
-        });"><button class="btn btn-light downloadthis  " id="dnldts7189"><i class="bi bi-download"></i> flu_inc.csv </button></a></p>
+        });"><button class="btn btn-light downloadthis  " id="dnldts14007"><i class="bi bi-download"></i> flu_inc.csv </button></a></p>
 </div>
 </div>
 <section id="methods" class="level2" data-number="7.1">
@@ -1233,8 +1239,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <input type="hidden" id="giscus-alt-theme" value="dark">
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./calib.html" class="pagination-link" aria-label="Calibration">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Calibration</span>
+      <a href="./mod-fit.html" class="pagination-link" aria-label="Model fitting">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Model fitting</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

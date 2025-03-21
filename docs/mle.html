@@ -179,7 +179,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./calib.html">Calibration</a></li><li class="breadcrumb-item"><a href="./mle.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Maximum likelihood estimation</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mod-fit.html">Model fitting</a></li><li class="breadcrumb-item"><a href="./mle.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Maximum likelihood estimation</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -276,8 +276,8 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./calib.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Calibration</span></a>
+            <a href="./mod-fit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model fitting</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -464,6 +464,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Probability distributions</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Time series</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -478,7 +484,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./smooth.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Smoothing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Smoothing</span></span></a>
   </div>
 </li>
       </ul>
@@ -495,13 +501,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-response.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Outbreak response report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Outbreak response report</span></span></a>
   </div>
 </li>
       </ul>
@@ -591,7 +597,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./calib.html">Calibration</a></li><li class="breadcrumb-item"><a href="./mle.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Maximum likelihood estimation</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mod-fit.html">Model fitting</a></li><li class="breadcrumb-item"><a href="./mle.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Maximum likelihood estimation</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Maximum likelihood estimation</span></h1>
 </div>
@@ -623,11 +629,11 @@ window.Quarto = {
 </ul>
 <p><span class="math display">\[\mathbb{L}(\theta) = \prod_{i = 1}^{n} f_Y(y_i| \theta)\]</span></p>
 <ul>
-<li><strong>Step 2</strong>. Take the natural log of the likelihood <span class="math inline">\(log L(\theta)\)</span>, or log-likelihood. The production in likelihood now becomes the sum in log-likelihood. See <a href="calib.html#sec-calib-loglik" class="quarto-xref"><span>Section 4.2</span></a> for more details.</li>
+<li><strong>Step 2</strong>. Take the natural log of the likelihood <span class="math inline">\(log L(\theta)\)</span>, or log-likelihood. The production in likelihood now becomes the sum in log-likelihood. See <a href="mod-fit.html#sec-calib-loglik" class="quarto-xref"><span>Section 1.2.2</span></a> for more details.</li>
 </ul>
 <p><span class="math display">\[log \mathbb{L}(\theta) = \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]\]</span></p>
 <ul>
-<li><strong>Step 3</strong>. Take the negative log-likelihood <span class="math inline">\(- log L(\theta)\)</span>. Because optimizers work by minimizing a function, we have to work on negative log-likelihood. See <a href="calib.html#sec-calib-negloglik" class="quarto-xref"><span>Section 4.3</span></a> for more details.</li>
+<li><strong>Step 3</strong>. Take the negative log-likelihood <span class="math inline">\(- log L(\theta)\)</span>. Because optimizers work by minimizing a function, we have to work on negative log-likelihood. See <a href="mod-fit.html#sec-calib-negloglik" class="quarto-xref"><span>Section 1.2.3</span></a> for more details.</li>
 </ul>
 <p><span class="math display">\[- log \mathbb{L}(\theta) = - \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]\]</span></p>
 <ul>
@@ -673,7 +679,7 @@ Data
 </div>
 <div class="callout-body-container callout-body">
 <p>Download influenza incidence data here:</p>
-<p><a href="#dnldts9904" onclick="fetch('data:text/csv;base64,ZGF5LGluYw0KMCwwDQoxLDENCjIsMQ0KMywwDQo0LDINCjUsNQ0KNiwzDQo3LDMNCjgsMw0KOSw2DQoxMCwyDQoxMSw1DQoxMiw5DQoxMywxMw0KMTQsMTINCjE1LDEzDQoxNiwxMQ0KMTcsMTINCjE4LDYNCjE5LDYNCjIwLDYNCjIxLDMNCjIyLDENCjIzLDANCjI0LDINCjI1LDANCjI2LDANCjI3LDANCjI4LDANCjI5LDINCjMwLDANCjMxLDINCjMyLDANCjMzLDANCjM0LDANCjM1LDANCjM2LDANCjM3LDANCjM4LDANCjM5LDANCjQwLDANCjQxLDANCjQyLDANCjQzLDANCjQ0LDANCjQ1LDANCjQ2LDANCjQ3LDANCjQ4LDANCjQ5LDANCjUwLDANCg==').then(res => res.blob()).then(blob => {
+<p><a href="#dnldts61626" onclick="fetch('data:text/csv;base64,ZGF5LGluYw0KMCwwDQoxLDENCjIsMQ0KMywwDQo0LDINCjUsNQ0KNiwzDQo3LDMNCjgsMw0KOSw2DQoxMCwyDQoxMSw1DQoxMiw5DQoxMywxMw0KMTQsMTINCjE1LDEzDQoxNiwxMQ0KMTcsMTINCjE4LDYNCjE5LDYNCjIwLDYNCjIxLDMNCjIyLDENCjIzLDANCjI0LDINCjI1LDANCjI2LDANCjI3LDANCjI4LDANCjI5LDINCjMwLDANCjMxLDINCjMyLDANCjMzLDANCjM0LDANCjM1LDANCjM2LDANCjM3LDANCjM4LDANCjM5LDANCjQwLDANCjQxLDANCjQyLDANCjQzLDANCjQ0LDANCjQ1LDANCjQ2LDANCjQ3LDANCjQ4LDANCjQ5LDANCjUwLDANCg==').then(res => res.blob()).then(blob => {
       const downloadURL = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -681,7 +687,7 @@ Data
       a.download = 'flu_inc.csv'; a.click();
       window.URL.revokeObjectURL(downloadURL);
       document.body.removeChild(a);
-        });"><button class="btn btn-light downloadthis  " id="dnldts9904"><i class="bi bi-download"></i> flu_inc.csv </button></a></p>
+        });"><button class="btn btn-light downloadthis  " id="dnldts61626"><i class="bi bi-download"></i> flu_inc.csv </button></a></p>
 </div>
 </div>
 <p>We will use the same data of a H1N1 influenza outbreak in an elementary school in <a href="lse.html#sec-lse-code" class="quarto-xref"><span>Section 7.2</span></a> and fit the deterministic SEIR model with code <a href="seir-det.html#lst-seir-det" class="quarto-xref">Listing&nbsp;<span>2.1</span></a>.</p>
@@ -806,7 +812,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 </div>
 </div>
 <p>It looks very similar to the model we fitted with LSE at <a href="lse.html#fig-lse-seir" class="quarto-xref">Figure&nbsp;<span>7.1</span></a>.</p>
-<p>Let compute <span class="math inline">\(R_0\)</span>. For a “closed population” SEIR model, <span class="math inline">\(R_0 = \frac{\beta}{\gamma} S_0\)</span>. Again, this is similar to the <span class="math inline">\(R_0\)</span> estimated from LSE at <a href="lse.html#lst-lse-r0" class="quarto-xref">Listing&nbsp;<span>7.1</span></a>. The reason is MLE is equal to LSE when we pick the normal distribution likelihood, see <a href="calib.html#sec-calib-mle-lse" class="quarto-xref"><span>Section 6</span></a> for more details.</p>
+<p>Let compute <span class="math inline">\(R_0\)</span>. For a “closed population” SEIR model, <span class="math inline">\(R_0 = \frac{\beta}{\gamma} S_0\)</span>. Again, this is similar to the <span class="math inline">\(R_0\)</span> estimated from LSE at <a href="lse.html#lst-lse-r0" class="quarto-xref">Listing&nbsp;<span>7.1</span></a>. The reason is MLE is equal to LSE when we pick the normal distribution likelihood, see <a href="mod-fit.html#sec-calib-mle-lse" class="quarto-xref"><span>Section 1.2.4</span></a> for more details.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>rnum0 <span class="ot">&lt;-</span> params[<span class="dv">1</span>] <span class="sc">*</span> S0 <span class="sc">/</span> params[<span class="dv">3</span>]</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>rnum0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

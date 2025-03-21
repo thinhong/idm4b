@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1280"
+   height="220"
+   overflow="hidden"
+   version="1.1"
+   id="svg72"
+   sodipodi:docname="ts-agg.svg"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs76" />
+  <sodipodi:namedview
+     id="namedview74"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="1.1929687"
+     inkscape:cx="639.58088"
+     inkscape:cy="359.60707"
+     inkscape:window-width="3440"
+     inkscape:window-height="1334"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg72" />
+  <rect
+     x="0"
+     y="0"
+     width="1280"
+     height="251.42108"
+     fill="#ffffff"
+     id="rect2"
+     style="stroke-width:0.590928" />
+  <path
+     d="m 66.5001,130.5 c 0,-24.853 20.1471,-44.9999 44.9999,-44.9999 24.853,0 45,20.1469 45,44.9999 0,24.853 -20.147,45 -45,45 -24.8528,0 -44.9999,-20.147 -44.9999,-45 z"
+     stroke="#042433"
+     stroke-width="3"
+     stroke-miterlimit="8"
+     fill="none"
+     fill-rule="evenodd"
+     id="path4" />
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="48px"
+     id="text6"
+     x="82.502296"
+     y="148">𝑥</text>
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="35px"
+     id="text8"
+     x="106.422"
+     y="158">1</text>
+  <path
+     d="m 220.5,130.5 c 0,-24.853 20.147,-44.9999 45,-44.9999 24.853,0 45,20.1469 45,44.9999 0,24.853 -20.147,45 -45,45 -24.853,0 -45,-20.147 -45,-45 z"
+     stroke="#042433"
+     stroke-width="3"
+     stroke-miterlimit="8"
+     fill="none"
+     fill-rule="evenodd"
+     id="path10" />
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="48px"
+     id="text12"
+     x="236.172"
+     y="148">𝑥</text>
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="35px"
+     id="text14"
+     x="261.20499"
+     y="158">2</text>
+  <path
+     d="m 374.5,130.5 c 0,-24.853 20.147,-44.9999 45,-44.9999 24.853,0 45,20.1469 45,44.9999 0,24.853 -20.147,45 -45,45 -24.853,0 -45,-20.147 -45,-45 z"
+     stroke="#042433"
+     stroke-width="3"
+     stroke-miterlimit="8"
+     fill="none"
+     fill-rule="evenodd"
+     id="path16" />
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="48px"
+     id="text18"
+     x="390.39801"
+     y="148">𝑥</text>
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="35px"
+     id="text20"
+     x="415.431"
+     y="158">3</text>
+  <path
+     d="m 1145.5,130.5 c 0,-24.853 20.15,-44.9999 45,-44.9999 24.85,0 45,20.1469 45,44.9999 0,24.853 -20.15,45 -45,45 -24.85,0 -45,-20.147 -45,-45 z"
+     stroke="#042433"
+     stroke-width="3"
+     stroke-miterlimit="8"
+     fill="none"
+     fill-rule="evenodd"
+     id="path22" />
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="48px"
+     id="text24"
+     x="1159.5601"
+     y="148">𝑥</text>
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="35px"
+     id="text26"
+     x="1186.3"
+     y="158">𝑇</text>
+  <path
+     d="m 156,128 h 54.275 v 4 H 156 Z m 52.275,-4 12,6 -12,6 z"
+     id="path28" />
+  <path
+     d="m 310,128 h 54.275 v 4 H 310 Z m 52.275,-4 12,6 -12,6 z"
+     id="path30" />
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-style="oblique"
+     font-weight="400"
+     font-size="48px"
+     id="text32"
+     x="1018.15"
+     y="148">…</text>
+  <path
+     d="m 1081,128 h 54.28 v 4 H 1081 Z m 52.28,-4 12,6 -12,6 z"
+     id="path34" />
+  <path
+     d="m 927,130 h 64.275"
+     stroke="#000000"
+     stroke-width="4"
+     stroke-miterlimit="8"
+     fill="none"
+     fill-rule="evenodd"
+     id="path36" />
+  <path
+     d="m 529.5,130.5 c 0,-24.853 20.147,-44.9999 45,-44.9999 24.853,0 45,20.1469 45,44.9999 0,24.853 -20.147,45 -45,45 -24.853,0 -45,-20.147 -45,-45 z"
+     stroke="#042433"
+     stroke-width="3"
+     stroke-miterlimit="8"
+     fill="none"
+     fill-rule="evenodd"
+     id="path38" />
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="48px"
+     id="text40"
+     x="544.62402"
+     y="148">𝑥</text>
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="35px"
+     id="text42"
+     x="569.65698"
+     y="158">4</text>
+  <path
+     d="m 683.5,130.5 c 0,-24.853 20.147,-44.9999 45,-44.9999 24.853,0 45,20.1469 45,44.9999 0,24.853 -20.147,45 -45,45 -24.853,0 -45,-20.147 -45,-45 z"
+     stroke="#042433"
+     stroke-width="3"
+     stroke-miterlimit="8"
+     fill="none"
+     fill-rule="evenodd"
+     id="path44" />
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="48px"
+     id="text46"
+     x="698.84998"
+     y="148">𝑥</text>
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="35px"
+     id="text48"
+     x="723.883"
+     y="158">5</text>
+  <path
+     d="m 837.5,130.5 c 0,-24.853 20.147,-44.9999 45,-44.9999 24.853,0 45,20.1469 45,44.9999 0,24.853 -20.147,45 -45,45 -24.853,0 -45,-20.147 -45,-45 z"
+     stroke="#042433"
+     stroke-width="3"
+     stroke-miterlimit="8"
+     fill="none"
+     fill-rule="evenodd"
+     id="path50" />
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="48px"
+     id="text52"
+     x="853.07599"
+     y="148">𝑥</text>
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="35px"
+     id="text54"
+     x="878.10901"
+     y="158">6</text>
+  <path
+     d="m 619,128 h 54.275 v 4 H 619 Z m 52.275,-4 12,6 -12,6 z"
+     id="path56" />
+  <path
+     d="m 773,128 h 54.275 v 4 H 773 Z m 52.275,-4 12,6 -12,6 z"
+     id="path58" />
+  <path
+     d="m 464,128 h 54.275 v 4 H 464 Z m 52.275,-4 12,6 -12,6 z"
+     id="path60" />
+  <path
+     d="m 47.5001,93.3337 c 0,-10.9538 8.8798,-19.8336 19.8336,-19.8336 H 463.666 c 10.954,0 19.834,8.8798 19.834,19.8336 v 79.3323 c 0,10.954 -8.88,19.834 -19.834,19.834 H 67.3337 c -10.9538,0 -19.8336,-8.88 -19.8336,-19.834 z"
+     stroke="#042433"
+     stroke-width="3"
+     stroke-miterlimit="8"
+     fill="none"
+     fill-rule="evenodd"
+     id="path62" />
+  <path
+     d="m 504.86147,93.33936 c 0,-10.952237 8.98209,-19.83077 20.06202,-19.83077 h 400.88845 c 11.07993,0 20.06202,8.878533 20.06202,19.83077 v 79.32098 c 0,10.95243 -8.98209,19.83117 -20.06202,19.83117 H 524.92349 c -11.07993,0 -20.06202,-8.87874 -20.06202,-19.83117 z"
+     stroke="#042433"
+     stroke-width="3.01698"
+     stroke-miterlimit="8"
+     fill="none"
+     fill-rule="evenodd"
+     id="path64" />
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="32px"
+     id="text66"
+     x="187.229"
+     y="53">Aggregated</text>
+  <text
+     font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+     font-weight="400"
+     font-size="32px"
+     id="text68"
+     x="650.12"
+     y="53">Aggregated</text>
+</svg>

@@ -276,8 +276,8 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./calib.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Calibration</span></a>
+            <a href="./mod-fit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model fitting</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -464,6 +464,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Probability distributions</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Time series</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -478,7 +484,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./smooth.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Smoothing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Smoothing</span></span></a>
   </div>
 </li>
       </ul>
@@ -495,13 +501,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-risk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Risk assessment report</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rp-response.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Outbreak response report</span></span></a>
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Outbreak response report</span></span></a>
   </div>
 </li>
       </ul>
@@ -626,7 +632,7 @@ Preparation
 </div>
 <div class="callout-body-container callout-body">
 <p>Download COVID-19 incidence data here:</p>
-<p><a href="#dnldts51818" onclick="fetch('data:text/csv;base64,77u/ZGF5LGluYw0KMSwxDQoyLDMNCjMsMg0KNCwyDQo1LDMNCjYsMQ0KNyw0DQo4LDEyDQo5LDYNCjEwLDE4DQoxMSwxNA0KMTIsMjINCjEzLDUzDQoxNCw5Mg0KMTUsMTgzDQoxNiwxNjUNCjE3LDEzNg0KMTgsMTQ5DQoxOSwxNjUNCjIwLDIzNA0KMjEsMzEwDQoyMiwzNTYNCjIzLDMzMw0KMjQsNDI2DQoyNSwzNTENCjI2LDQzNw0KMjcsNjg5DQoyOCw2MzYNCjI5LDc1OA0KMzAsNzY2DQozMSw4MjENCjMyLDU3Nw0KMzMsNTk0DQozNCw4NjgNCjM1LDkzNg0KMzYsOTc5DQozNywxMDcxDQozOCw5ODQNCjM5LDc2NQ0KNDAsNjM0DQo0MSw4NjENCjQyLDk1Mw0KNDMsODc1DQo0NCw3OTgNCjQ1LDYxOQ0KNDYsNTE4DQo0Nyw1MDANCjQ4LDYwMw0KNDksNjU5DQo=').then(res => res.blob()).then(blob => {
+<p><a href="#dnldts29074" onclick="fetch('data:text/csv;base64,77u/ZGF5LGluYw0KMSwxDQoyLDMNCjMsMg0KNCwyDQo1LDMNCjYsMQ0KNyw0DQo4LDEyDQo5LDYNCjEwLDE4DQoxMSwxNA0KMTIsMjINCjEzLDUzDQoxNCw5Mg0KMTUsMTgzDQoxNiwxNjUNCjE3LDEzNg0KMTgsMTQ5DQoxOSwxNjUNCjIwLDIzNA0KMjEsMzEwDQoyMiwzNTYNCjIzLDMzMw0KMjQsNDI2DQoyNSwzNTENCjI2LDQzNw0KMjcsNjg5DQoyOCw2MzYNCjI5LDc1OA0KMzAsNzY2DQozMSw4MjENCjMyLDU3Nw0KMzMsNTk0DQozNCw4NjgNCjM1LDkzNg0KMzYsOTc5DQozNywxMDcxDQozOCw5ODQNCjM5LDc2NQ0KNDAsNjM0DQo0MSw4NjENCjQyLDk1Mw0KNDMsODc1DQo0NCw3OTgNCjQ1LDYxOQ0KNDYsNTE4DQo0Nyw1MDANCjQ4LDYwMw0KNDksNjU5DQo=').then(res => res.blob()).then(blob => {
       const downloadURL = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -634,7 +640,7 @@ Preparation
       a.download = 'covid_uk.csv'; a.click();
       window.URL.revokeObjectURL(downloadURL);
       document.body.removeChild(a);
-        });"><button class="btn btn-light downloadthis  " id="dnldts51818"><i class="bi bi-download"></i> covid_uk.csv </button></a></p>
+        });"><button class="btn btn-light downloadthis  " id="dnldts29074"><i class="bi bi-download"></i> covid_uk.csv </button></a></p>
 </div>
 </div>
 <p>There are 2 approaches to estimating <span class="math inline">\(R_0\)</span>, depending on the type of data available:</p>

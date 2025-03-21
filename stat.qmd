@@ -62,5 +62,9 @@ $$\begin{align}
 &= \sum_{y} \mathbb{P}(X = x, Y = y)
 \end{align}$$
 
+## ANOVA
+
+Analysis of variance (ANOVA) is **a family** of statistical methods to compare the means by analysing the variance. 
+
 
 
