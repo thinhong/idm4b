@@ -22,9 +22,9 @@ The dynamics of every population has both deterministic (predictable) and stocha
 
 ![](img/dict/hmp.svg)
 
-$$x_{t + 1} = f(x_t) + \epsilon_{\text{process}}$$
+$$x_{t + 1} = \underbrace{f(x_t)}_{\text{deterministic}} + \underbrace{\varepsilon_{\text{process}}}_{\text{stochastic}}$$
 
-$$y_t = x_t + \epsilon_{\text{observation}}$$
+$$y_t = x_t + \underbrace{\varepsilon_{\text{observation}}}_{\text{stochastic}}$$
 
 ## A general stochastic SIR model
 

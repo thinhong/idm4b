@@ -659,8 +659,8 @@ window.Quarto = {
 <li><p><strong>Sampling/observational/measurement error</strong>: refers to errors caused by observation or sampling methods <span class="citation" data-cites="dennis2006">(<a href="references.html#ref-dennis2006" role="doc-biblioref">Dennis et al., 2006</a>)</span>, because real data collection is never perfect.</p></li>
 </ol>
 <p><img src="img/dict/hmp.svg" class="img-fluid"></p>
-<p><span class="math display">\[x_{t + 1} = f(x_t) + \epsilon_{\text{process}}\]</span></p>
-<p><span class="math display">\[y_t = x_t + \epsilon_{\text{observation}}\]</span></p>
+<p><span class="math display">\[x_{t + 1} = \underbrace{f(x_t)}_{\text{deterministic}} + \underbrace{\varepsilon_{\text{process}}}_{\text{stochastic}}\]</span></p>
+<p><span class="math display">\[y_t = x_t + \underbrace{\varepsilon_{\text{observation}}}_{\text{stochastic}}\]</span></p>
 </section>
 <section id="a-general-stochastic-sir-model" class="level2">
 <h2 class="anchored" data-anchor-id="a-general-stochastic-sir-model">A general stochastic SIR model</h2>

@@ -1554,7 +1554,7 @@
     "href": "sto.html",
     "title": "Stochastic models",
     "section": "",
-    "text": "Concepts of stochasticity\nThe dynamics of every population has both deterministic (predictable) and stochastic (unpredictable) forces (Lande et al., 2003). These two processes act at the same time, so real-world data often look “noisy”. We can split that noise into three basic forms of stochasticity, that can be classified into 2 groups:\n\\[x_{t + 1} = f(x_t) + \\epsilon_{\\text{process}}\\]\n\\[y_t = x_t + \\epsilon_{\\text{observation}}\\]",
+    "text": "Concepts of stochasticity\nThe dynamics of every population has both deterministic (predictable) and stochastic (unpredictable) forces (Lande et al., 2003). These two processes act at the same time, so real-world data often look “noisy”. We can split that noise into three basic forms of stochasticity, that can be classified into 2 groups:\n\\[x_{t + 1} = \\underbrace{f(x_t)}_{\\text{deterministic}} + \\underbrace{\\varepsilon_{\\text{process}}}_{\\text{stochastic}}\\]\n\\[y_t = x_t + \\underbrace{\\varepsilon_{\\text{observation}}}_{\\text{stochastic}}\\]",
     "crumbs": [
       "Stochastic models"
     ]
