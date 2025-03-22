@@ -603,15 +603,14 @@ window.Quarto = {
   <li><a href="#concepts-of-stochasticity" id="toc-concepts-of-stochasticity" class="nav-link active" data-scroll-target="#concepts-of-stochasticity">Concepts of stochasticity</a></li>
   <li><a href="#a-general-stochastic-sir-model" id="toc-a-general-stochastic-sir-model" class="nav-link" data-scroll-target="#a-general-stochastic-sir-model">A general stochastic SIR model</a>
   <ul>
-  <li><a href="#demographic-stochasticity" id="toc-demographic-stochasticity" class="nav-link" data-scroll-target="#demographic-stochasticity">Demographic stochasticity</a></li>
+  <li><a href="#demographic-stochasticity" id="toc-demographic-stochasticity" class="nav-link" data-scroll-target="#demographic-stochasticity">Demographic stochasticity</a>
+  <ul>
+  <li><a href="#gillespie-algorithm" id="toc-gillespie-algorithm" class="nav-link" data-scroll-target="#gillespie-algorithm">Gillespie algorithm</a></li>
+  </ul></li>
   <li><a href="#environmental-stochasticity" id="toc-environmental-stochasticity" class="nav-link" data-scroll-target="#environmental-stochasticity">Environmental stochasticity</a></li>
   <li><a href="#observational-error" id="toc-observational-error" class="nav-link" data-scroll-target="#observational-error">Observational error</a></li>
   </ul></li>
   <li><a href="#types-of-stochastic-epidemic-models" id="toc-types-of-stochastic-epidemic-models" class="nav-link" data-scroll-target="#types-of-stochastic-epidemic-models">Types of stochastic epidemic models</a></li>
-  <li><a href="#stochastic-compartmental-epidemic-models" id="toc-stochastic-compartmental-epidemic-models" class="nav-link" data-scroll-target="#stochastic-compartmental-epidemic-models">Stochastic compartmental epidemic models</a>
-  <ul>
-  <li><a href="#gillespie-algorithm" id="toc-gillespie-algorithm" class="nav-link" data-scroll-target="#gillespie-algorithm">Gillespie algorithm</a></li>
-  </ul></li>
   <li><a href="#sec-mc-sim" id="toc-sec-mc-sim" class="nav-link" data-scroll-target="#sec-mc-sim">Monte Carlo simulation</a>
   <ul>
   <li><a href="#create-a-circle" id="toc-create-a-circle" class="nav-link" data-scroll-target="#create-a-circle">Create a circle</a></li>
@@ -653,8 +652,8 @@ window.Quarto = {
 <ol type="1">
 <li><p><strong>Process noise</strong>: the randomness within the process that generates the data. It has two forms of stochasticity:</p>
 <ul>
-<li><p><strong>Demographic stochasticity (statistical noise)</strong>: random events which are usually conceived as being independent among individuals. For example, <strong>each individual</strong> might die or survive with a certain probability per unit time <span class="citation" data-cites="lande2003">(<a href="references.html#ref-lande2003" role="doc-biblioref">Lande et al., 2003</a>)</span>. Because this stochasticity operates independently among individuals, it tends to average out in large populations and has a greater impact on small populations <span class="citation" data-cites="lande2003">(<a href="references.html#ref-lande2003" role="doc-biblioref">Lande et al., 2003</a>)</span>.</p></li>
-<li><p><strong>Environmental stochasticity</strong>: random temporal changes that affect <strong>all individuals equally</strong>, no matter the population size. It <strong>overtakes demographic stochasticity in large populations</strong> <span class="citation" data-cites="ganyani2021">(<a href="references.html#ref-ganyani2021" role="doc-biblioref">Ganyani et al., 2021</a>)</span>. Examples include external unpredictable events (temperature, rainfall, humidity) and individual variation (variability in contact patterns, superspreaders). These factors translate into fluctuations in the transmission parameter, often captured by overdispersion in Poisson models <span class="citation" data-cites="ganyani2021">(<a href="references.html#ref-ganyani2021" role="doc-biblioref">Ganyani et al., 2021</a>)</span>.</p></li>
+<li><p><strong>Demographic stochasticity (statistical noise)</strong>: random events which are usually conceived as being independent among individuals <span class="citation" data-cites="lande2003">(<a href="references.html#ref-lande2003" role="doc-biblioref">Lande et al., 2003</a>)</span>. For example, <strong>each individual</strong> might die or survive with a certain probability per unit time <span class="citation" data-cites="lande2003">(<a href="references.html#ref-lande2003" role="doc-biblioref">Lande et al., 2003</a>)</span>. Because this stochasticity operates independently among individuals, it tends to average out in large populations and has a greater impact on small populations <span class="citation" data-cites="lande2003">(<a href="references.html#ref-lande2003" role="doc-biblioref">Lande et al., 2003</a>)</span>.</p></li>
+<li><p><strong>Environmental stochasticity</strong>: random temporal changes that affect <strong>all individuals equally</strong>, no matter the population size <span class="citation" data-cites="lande2003">(<a href="references.html#ref-lande2003" role="doc-biblioref">Lande et al., 2003</a>)</span>. It <strong>overtakes demographic stochasticity in large populations</strong> <span class="citation" data-cites="ganyani2021">(<a href="references.html#ref-ganyani2021" role="doc-biblioref">Ganyani et al., 2021</a>)</span>. Examples include external unpredictable events (temperature, rainfall, humidity) and individual variation (variability in contact patterns, superspreaders). These factors translate into fluctuations in the transmission parameter, often captured by overdispersion in Poisson models <span class="citation" data-cites="ganyani2021">(<a href="references.html#ref-ganyani2021" role="doc-biblioref">Ganyani et al., 2021</a>)</span>.</p></li>
 </ul></li>
 <li><p><strong>Sampling/observational/measurement error</strong>: refers to errors caused by observation or sampling methods <span class="citation" data-cites="dennis2006">(<a href="references.html#ref-dennis2006" role="doc-biblioref">Dennis et al., 2006</a>)</span>, because real data collection is never perfect.</p></li>
 </ol>
@@ -673,6 +672,14 @@ window.Quarto = {
 <p>Let <span class="math inline">\(I_t\)</span> and <span class="math inline">\(R_t\)</span> be Poisson processes that denote the number of individuals who have been infected and the number of individuals who have recovered at time <span class="math inline">\(t\)</span>. The probability of having a new infection or new recovery occur at time <span class="math inline">\(t + h\)</span> is:</p>
 <p><span class="math display">\[\mathbb{P}(I_{t + h} = I_t + 1 | I_t) = \frac{\beta S_t I_t}{N} h + o(h)\]</span></p>
 <p><span class="math display">\[\mathbb{P}(R_{t + h} = R_t + 1 | R_t) = \gamma I_t h + o(h)\]</span></p>
+<section id="gillespie-algorithm" class="level4">
+<h4 class="anchored" data-anchor-id="gillespie-algorithm">Gillespie algorithm</h4>
+<p>The algorithm proceeds in two steps <span class="citation" data-cites="ganyani2021">(<a href="references.html#ref-ganyani2021" role="doc-biblioref">Ganyani et al., 2021</a>)</span>:</p>
+<ol type="1">
+<li>Simulate time at which the next event will occur: The time until the next event occurs follows an <strong>exponential distribution</strong> with a rate equal to the sum of the rates over all possible events</li>
+<li>Given the simulated time, simulate which event occurs</li>
+</ol>
+</section>
 </section>
 <section id="environmental-stochasticity" class="level3">
 <h3 class="anchored" data-anchor-id="environmental-stochasticity">Environmental stochasticity</h3>
@@ -680,10 +687,13 @@ window.Quarto = {
 <p><span class="math display">\[\Gamma(t + h) - \Gamma(t) \sim Gamma(\frac{h}{\sigma^2}, \sigma^2)\]</span></p>
 <p>Then the infection event probability becomes:</p>
 <p><span class="math display">\[\mathbb{P}(I_{t + h} = I_t + 1 | I_t) = \frac{\beta \xi_t S_t I_t}{N} h + o(h)\]</span></p>
-<p>This lets random environment-driven fluctuations scale the transmission rate for everyone, on top of individual-level randomness</p>
+<p>This lets random environment-driven fluctuations scale the transmission rate for everyone, on top of individual-level randomness.</p>
 </section>
 <section id="observational-error" class="level3">
 <h3 class="anchored" data-anchor-id="observational-error">Observational error</h3>
+<p>A typical example of observation error in infectious disease modelling is under-reporting. Not everyone who falls ill goes to the GP or hospital, and many aren’t correctly diagnosed. We often capture this by a binomial process, with a reporting probability <span class="math inline">\(\varepsilon\)</span> that covers both missed cases and diagnosis errors <span class="citation" data-cites="endo2019">(<a href="references.html#ref-endo2019" role="doc-biblioref">Endo et al., 2019</a>)</span>.</p>
+<p><span class="math display">\[g(y_t | x_t) = Bin(y_t; x_t, \varepsilon)\]</span></p>
+<p>In a hidden Markov process, the measurement model links our observed data <span class="math inline">\({Y_t}_n\)</span> (collected at discrete times <span class="math inline">\(\{t_1, \cdots, t_N\}\)</span>) to the underlying process. To separate environmental noise from possibly overdispersed observational stochasticity, we often choose a measurement model that can handle overdispersion <span class="citation" data-cites="ganyani2021">(<a href="references.html#ref-ganyani2021" role="doc-biblioref">Ganyani et al., 2021</a>)</span>. For count data, a Poisson or negative binomial model is typically used <span class="citation" data-cites="ganyani2021">(<a href="references.html#ref-ganyani2021" role="doc-biblioref">Ganyani et al., 2021</a>)</span>.</p>
 </section>
 </section>
 <section id="types-of-stochastic-epidemic-models" class="level2">
@@ -695,17 +705,6 @@ window.Quarto = {
 <li><p>Metapopulation: The population is partitioned into non-overlapping groups, e.g.&nbsp;households; individuals have one contact rate with individuals in different groups, and another (higher) rate for individuals in the same group. More general metapopulation models allow an individual to belong to several different types of group, each with its own contact rate, or allow more levels of mixing.</p></li>
 <li><p>Spatial: vary from simple lattices with only nearest–neighbour interactions, for which some theoretical analysis is possible, to complex models with long-distance interactions, for which only qualitative and approximate results are known. A key feature of spatial models is that they display slower than exponential growth, even in their earliest stage; this makes it difficult to approximate them adequately by deterministic models, and even to define threshold parameters.</p></li>
 </ol>
-</section>
-<section id="stochastic-compartmental-epidemic-models" class="level2">
-<h2 class="anchored" data-anchor-id="stochastic-compartmental-epidemic-models">Stochastic compartmental epidemic models</h2>
-<section id="gillespie-algorithm" class="level3">
-<h3 class="anchored" data-anchor-id="gillespie-algorithm">Gillespie algorithm</h3>
-<p>The algorithm proceeds in two steps <span class="citation" data-cites="ganyani2021">(<a href="references.html#ref-ganyani2021" role="doc-biblioref">Ganyani et al., 2021</a>)</span>:</p>
-<ol type="1">
-<li>Simulate time at which the next event will occur: The time until the next event occurs follows an <strong>exponential distribution</strong> with a rate equal to the sum of the rates over all possible events</li>
-<li>Given the simulated time, simulate which event occurs</li>
-</ol>
-</section>
 </section>
 <section id="sec-mc-sim" class="level2">
 <h2 class="anchored" data-anchor-id="sec-mc-sim">Monte Carlo simulation</h2>
@@ -774,14 +773,14 @@ window.Quarto = {
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>my_pi <span class="ot">&lt;-</span> <span class="dv">4</span> <span class="sc">*</span> <span class="fu">cumsum</span>(df<span class="sc">$</span>in_circle) <span class="sc">/</span> df<span class="sc">$</span>n_points</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb4" data-startfrom="198" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 197;"><span id="cb4-198"><a href="#cb4-198" aria-hidden="true" tabindex="-1"></a>ojsdata <span class="op">=</span> <span class="fu">transpose</span>(data)</span>
-<span id="cb4-199"><a href="#cb4-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-200"><a href="#cb4-200" aria-hidden="true" tabindex="-1"></a>viewof n_points <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
-<span id="cb4-201"><a href="#cb4-201" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">10</span><span class="op">,</span> <span class="dv">10000</span>]<span class="op">,</span> </span>
-<span id="cb4-202"><a href="#cb4-202" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">value</span><span class="op">:</span> <span class="dv">1000</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Number of points:"</span>}</span>
-<span id="cb4-203"><a href="#cb4-203" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb4-204"><a href="#cb4-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-205"><a href="#cb4-205" aria-hidden="true" tabindex="-1"></a>ojsdata_filtered <span class="op">=</span> ojsdata<span class="op">.</span><span class="fu">slice</span>(<span class="dv">1</span><span class="op">,</span> n_points)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb4" data-startfrom="202" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 201;"><span id="cb4-202"><a href="#cb4-202" aria-hidden="true" tabindex="-1"></a>ojsdata <span class="op">=</span> <span class="fu">transpose</span>(data)</span>
+<span id="cb4-203"><a href="#cb4-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-204"><a href="#cb4-204" aria-hidden="true" tabindex="-1"></a>viewof n_points <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
+<span id="cb4-205"><a href="#cb4-205" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">10</span><span class="op">,</span> <span class="dv">10000</span>]<span class="op">,</span> </span>
+<span id="cb4-206"><a href="#cb4-206" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">value</span><span class="op">:</span> <span class="dv">1000</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Number of points:"</span>}</span>
+<span id="cb4-207"><a href="#cb4-207" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-208"><a href="#cb4-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-209"><a href="#cb4-209" aria-hidden="true" tabindex="-1"></a>ojsdata_filtered <span class="op">=</span> ojsdata<span class="op">.</span><span class="fu">slice</span>(<span class="dv">1</span><span class="op">,</span> n_points)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-1-1" data-nodetype="declaration">
@@ -807,13 +806,13 @@ window.Quarto = {
 <div class="grid">
 <div class="g-col-5">
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb5" data-startfrom="211" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 210;"><span id="cb5-211"><a href="#cb5-211" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb5-212"><a href="#cb5-212" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">300</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">300</span><span class="op">,</span></span>
-<span id="cb5-213"><a href="#cb5-213" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="kw">null</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">1</span>]}<span class="op">,</span></span>
-<span id="cb5-214"><a href="#cb5-214" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="kw">null</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">1</span>]}<span class="op">,</span></span>
-<span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [Plot<span class="op">.</span><span class="fu">dot</span>(ojsdata_filtered<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"xs"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"ys"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"in_circle"</span>})]<span class="op">,</span></span>
-<span id="cb5-216"><a href="#cb5-216" aria-hidden="true" tabindex="-1"></a>  <span class="dt">color</span><span class="op">:</span> {<span class="dt">scheme</span><span class="op">:</span> <span class="st">"set2"</span>}</span>
-<span id="cb5-217"><a href="#cb5-217" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb5" data-startfrom="215" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 214;"><span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb5-216"><a href="#cb5-216" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">300</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">300</span><span class="op">,</span></span>
+<span id="cb5-217"><a href="#cb5-217" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="kw">null</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">1</span>]}<span class="op">,</span></span>
+<span id="cb5-218"><a href="#cb5-218" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="kw">null</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">1</span>]}<span class="op">,</span></span>
+<span id="cb5-219"><a href="#cb5-219" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [Plot<span class="op">.</span><span class="fu">dot</span>(ojsdata_filtered<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"xs"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"ys"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"in_circle"</span>})]<span class="op">,</span></span>
+<span id="cb5-220"><a href="#cb5-220" aria-hidden="true" tabindex="-1"></a>  <span class="dt">color</span><span class="op">:</span> {<span class="dt">scheme</span><span class="op">:</span> <span class="st">"set2"</span>}</span>
+<span id="cb5-221"><a href="#cb5-221" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-2" data-nodetype="expression">
 
@@ -823,21 +822,21 @@ window.Quarto = {
 </div>
 <div class="g-col-7">
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb6" data-startfrom="224" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 223;"><span id="cb6-224"><a href="#cb6-224" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb6-225"><a href="#cb6-225" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">400</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">280</span><span class="op">,</span></span>
-<span id="cb6-226"><a href="#cb6-226" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
-<span id="cb6-227"><a href="#cb6-227" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">lineY</span>(ojsdata_filtered<span class="op">,</span> {</span>
-<span id="cb6-228"><a href="#cb6-228" aria-hidden="true" tabindex="-1"></a>      <span class="dt">x</span><span class="op">:</span> <span class="st">"n_points"</span><span class="op">,</span> </span>
-<span id="cb6-229"><a href="#cb6-229" aria-hidden="true" tabindex="-1"></a>      <span class="dt">y</span><span class="op">:</span> <span class="st">"my_pi"</span><span class="op">,</span> </span>
-<span id="cb6-230"><a href="#cb6-230" aria-hidden="true" tabindex="-1"></a>      <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#214fbf"</span><span class="op">,</span></span>
-<span id="cb6-231"><a href="#cb6-231" aria-hidden="true" tabindex="-1"></a>      <span class="dt">tip</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
-<span id="cb6-232"><a href="#cb6-232" aria-hidden="true" tabindex="-1"></a>      <span class="dt">title</span><span class="op">:</span> d <span class="kw">=&gt;</span> <span class="vs">`</span><span class="sc">\u{1D70B}</span><span class="vs"> = </span><span class="sc">${</span>d<span class="op">.</span><span class="at">my_pi</span><span class="sc">}\n</span><span class="vs">Number of points = </span><span class="sc">${</span>d<span class="op">.</span><span class="at">n_points</span><span class="sc">}</span><span class="vs">`</span></span>
-<span id="cb6-233"><a href="#cb6-233" aria-hidden="true" tabindex="-1"></a>    })<span class="op">,</span></span>
-<span id="cb6-234"><a href="#cb6-234" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="fl">3.14159</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#f95454"</span>})</span>
-<span id="cb6-235"><a href="#cb6-235" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">,</span></span>
-<span id="cb6-236"><a href="#cb6-236" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Number of points"</span>}<span class="op">,</span></span>
-<span id="cb6-237"><a href="#cb6-237" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"</span><span class="sc">\u{1D70B}</span><span class="st">"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="dv">2</span><span class="op">,</span> <span class="fl">3.28</span>]}<span class="op">,</span></span>
-<span id="cb6-238"><a href="#cb6-238" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb6" data-startfrom="228" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 227;"><span id="cb6-228"><a href="#cb6-228" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb6-229"><a href="#cb6-229" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">400</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">280</span><span class="op">,</span></span>
+<span id="cb6-230"><a href="#cb6-230" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb6-231"><a href="#cb6-231" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">lineY</span>(ojsdata_filtered<span class="op">,</span> {</span>
+<span id="cb6-232"><a href="#cb6-232" aria-hidden="true" tabindex="-1"></a>      <span class="dt">x</span><span class="op">:</span> <span class="st">"n_points"</span><span class="op">,</span> </span>
+<span id="cb6-233"><a href="#cb6-233" aria-hidden="true" tabindex="-1"></a>      <span class="dt">y</span><span class="op">:</span> <span class="st">"my_pi"</span><span class="op">,</span> </span>
+<span id="cb6-234"><a href="#cb6-234" aria-hidden="true" tabindex="-1"></a>      <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#214fbf"</span><span class="op">,</span></span>
+<span id="cb6-235"><a href="#cb6-235" aria-hidden="true" tabindex="-1"></a>      <span class="dt">tip</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb6-236"><a href="#cb6-236" aria-hidden="true" tabindex="-1"></a>      <span class="dt">title</span><span class="op">:</span> d <span class="kw">=&gt;</span> <span class="vs">`</span><span class="sc">\u{1D70B}</span><span class="vs"> = </span><span class="sc">${</span>d<span class="op">.</span><span class="at">my_pi</span><span class="sc">}\n</span><span class="vs">Number of points = </span><span class="sc">${</span>d<span class="op">.</span><span class="at">n_points</span><span class="sc">}</span><span class="vs">`</span></span>
+<span id="cb6-237"><a href="#cb6-237" aria-hidden="true" tabindex="-1"></a>    })<span class="op">,</span></span>
+<span id="cb6-238"><a href="#cb6-238" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="fl">3.14159</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#f95454"</span>})</span>
+<span id="cb6-239"><a href="#cb6-239" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">,</span></span>
+<span id="cb6-240"><a href="#cb6-240" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Number of points"</span>}<span class="op">,</span></span>
+<span id="cb6-241"><a href="#cb6-241" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"</span><span class="sc">\u{1D70B}</span><span class="st">"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="dv">2</span><span class="op">,</span> <span class="fl">3.28</span>]}<span class="op">,</span></span>
+<span id="cb6-242"><a href="#cb6-242" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-3" data-nodetype="expression">
 
@@ -853,16 +852,16 @@ window.Quarto = {
 <p>Instead of a single simulation with many points, we run <span class="math inline">\(N\)</span> smaller simulations. In each simulation, we sample a small number of points to estimate <span class="math inline">\(\pi_i\)</span>. The final estimation is then averaged across simulations:</p>
 <p><span class="math display">\[\pi = \frac{1}{N}\sum_{i = 1}^{N} \pi_i\]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb7" data-startfrom="288" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 287;"><span id="cb7-288"><a href="#cb7-288" aria-hidden="true" tabindex="-1"></a>ojsdata2 <span class="op">=</span> <span class="fu">transpose</span>(data2)</span>
-<span id="cb7-289"><a href="#cb7-289" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-290"><a href="#cb7-290" aria-hidden="true" tabindex="-1"></a>viewof n_samples <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
-<span id="cb7-291"><a href="#cb7-291" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">10</span><span class="op">,</span> <span class="dv">500</span>]<span class="op">,</span> </span>
-<span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">value</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Number of points:"</span>}</span>
-<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a>ojsdata_filtered2 <span class="op">=</span> ojsdata2<span class="op">.</span><span class="fu">filter</span>(<span class="kw">function</span>(circle) {</span>
-<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> circle<span class="op">.</span><span class="at">n_samples</span> <span class="op">==</span> n_samples<span class="op">;</span></span>
-<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb7" data-startfrom="292" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 291;"><span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a>ojsdata2 <span class="op">=</span> <span class="fu">transpose</span>(data2)</span>
+<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a>viewof n_samples <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
+<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">10</span><span class="op">,</span> <span class="dv">500</span>]<span class="op">,</span> </span>
+<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">value</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Number of points:"</span>}</span>
+<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-298"><a href="#cb7-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-299"><a href="#cb7-299" aria-hidden="true" tabindex="-1"></a>ojsdata_filtered2 <span class="op">=</span> ojsdata2<span class="op">.</span><span class="fu">filter</span>(<span class="kw">function</span>(circle) {</span>
+<span id="cb7-300"><a href="#cb7-300" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> circle<span class="op">.</span><span class="at">n_samples</span> <span class="op">==</span> n_samples<span class="op">;</span></span>
+<span id="cb7-301"><a href="#cb7-301" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-4-1" data-nodetype="declaration">
@@ -886,21 +885,21 @@ window.Quarto = {
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb8" data-startfrom="301" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 300;"><span id="cb8-301"><a href="#cb8-301" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb8-302"><a href="#cb8-302" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">600</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">280</span><span class="op">,</span></span>
-<span id="cb8-303"><a href="#cb8-303" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
-<span id="cb8-304"><a href="#cb8-304" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">lineY</span>(ojsdata_filtered2<span class="op">,</span> {</span>
-<span id="cb8-305"><a href="#cb8-305" aria-hidden="true" tabindex="-1"></a>      <span class="dt">x</span><span class="op">:</span> <span class="st">"n_sims"</span><span class="op">,</span> </span>
-<span id="cb8-306"><a href="#cb8-306" aria-hidden="true" tabindex="-1"></a>      <span class="dt">y</span><span class="op">:</span> <span class="st">"my_pi"</span><span class="op">,</span> </span>
-<span id="cb8-307"><a href="#cb8-307" aria-hidden="true" tabindex="-1"></a>      <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#214fbf"</span><span class="op">,</span></span>
-<span id="cb8-308"><a href="#cb8-308" aria-hidden="true" tabindex="-1"></a>      <span class="dt">tip</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
-<span id="cb8-309"><a href="#cb8-309" aria-hidden="true" tabindex="-1"></a>      <span class="dt">title</span><span class="op">:</span> d <span class="kw">=&gt;</span> <span class="vs">`</span><span class="sc">\u{1D70B}</span><span class="vs"> = </span><span class="sc">${</span>d<span class="op">.</span><span class="at">my_pi</span><span class="sc">}\n</span><span class="vs">Iteration = </span><span class="sc">${</span>d<span class="op">.</span><span class="at">n_sims</span><span class="sc">}</span><span class="vs">`</span></span>
-<span id="cb8-310"><a href="#cb8-310" aria-hidden="true" tabindex="-1"></a>    })<span class="op">,</span></span>
-<span id="cb8-311"><a href="#cb8-311" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="fl">3.14159</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#f95454"</span>})</span>
-<span id="cb8-312"><a href="#cb8-312" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">,</span></span>
-<span id="cb8-313"><a href="#cb8-313" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Iteration"</span>}<span class="op">,</span></span>
-<span id="cb8-314"><a href="#cb8-314" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"</span><span class="sc">\u{1D70B}</span><span class="st">"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="fl">3.05</span><span class="op">,</span> <span class="fl">3.235</span>]}<span class="op">,</span></span>
-<span id="cb8-315"><a href="#cb8-315" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb8" data-startfrom="305" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 304;"><span id="cb8-305"><a href="#cb8-305" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb8-306"><a href="#cb8-306" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">600</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">280</span><span class="op">,</span></span>
+<span id="cb8-307"><a href="#cb8-307" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb8-308"><a href="#cb8-308" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">lineY</span>(ojsdata_filtered2<span class="op">,</span> {</span>
+<span id="cb8-309"><a href="#cb8-309" aria-hidden="true" tabindex="-1"></a>      <span class="dt">x</span><span class="op">:</span> <span class="st">"n_sims"</span><span class="op">,</span> </span>
+<span id="cb8-310"><a href="#cb8-310" aria-hidden="true" tabindex="-1"></a>      <span class="dt">y</span><span class="op">:</span> <span class="st">"my_pi"</span><span class="op">,</span> </span>
+<span id="cb8-311"><a href="#cb8-311" aria-hidden="true" tabindex="-1"></a>      <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#214fbf"</span><span class="op">,</span></span>
+<span id="cb8-312"><a href="#cb8-312" aria-hidden="true" tabindex="-1"></a>      <span class="dt">tip</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb8-313"><a href="#cb8-313" aria-hidden="true" tabindex="-1"></a>      <span class="dt">title</span><span class="op">:</span> d <span class="kw">=&gt;</span> <span class="vs">`</span><span class="sc">\u{1D70B}</span><span class="vs"> = </span><span class="sc">${</span>d<span class="op">.</span><span class="at">my_pi</span><span class="sc">}\n</span><span class="vs">Iteration = </span><span class="sc">${</span>d<span class="op">.</span><span class="at">n_sims</span><span class="sc">}</span><span class="vs">`</span></span>
+<span id="cb8-314"><a href="#cb8-314" aria-hidden="true" tabindex="-1"></a>    })<span class="op">,</span></span>
+<span id="cb8-315"><a href="#cb8-315" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="fl">3.14159</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#f95454"</span>})</span>
+<span id="cb8-316"><a href="#cb8-316" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">,</span></span>
+<span id="cb8-317"><a href="#cb8-317" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Iteration"</span>}<span class="op">,</span></span>
+<span id="cb8-318"><a href="#cb8-318" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"</span><span class="sc">\u{1D70B}</span><span class="st">"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="fl">3.05</span><span class="op">,</span> <span class="fl">3.235</span>]}<span class="op">,</span></span>
+<span id="cb8-319"><a href="#cb8-319" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-5" data-nodetype="expression">
 
@@ -933,6 +932,9 @@ Britton, T., House, T., Lloyd, A. L., Mollison, D., Riley, S., &amp; Trapman, P.
 </div>
 <div id="ref-dennis2006" class="csl-entry" role="listitem">
 Dennis, B., Ponciano, J. M., Lele, S. R., Taper, M. L., &amp; Staples, D. F. (2006). Estimating Density Dependence, Process Noise, and Observation Error. <em>Ecological Monographs</em>, <em>76</em>(3), 323–341. <a href="https://doi.org/10.1890/0012-9615(2006)76[323:EDDPNA]2.0.CO;2">https://doi.org/10.1890/0012-9615(2006)76[323:EDDPNA]2.0.CO;2</a>
+</div>
+<div id="ref-endo2019" class="csl-entry" role="listitem">
+Endo, A., Leeuwen, E. van, &amp; Baguelin, M. (2019). Introduction to particle markov-chain monte carlo for disease dynamics modellers. <em>Epidemics</em>, <em>29</em>, 100363. <a href="https://doi.org/10.1016/j.epidem.2019.100363">https://doi.org/10.1016/j.epidem.2019.100363</a>
 </div>
 <div id="ref-ganyani2021" class="csl-entry" role="listitem">
 Ganyani, T., Faes, C., &amp; Hens, N. (2021). Simulation and Analysis Methods for Stochastic Compartmental Epidemic Models. <em>Annual Review of Statistics and Its Application</em>, <em>8</em>(Volume 8, 2021), 69–88. <a href="https://doi.org/10.1146/annurev-statistics-061120-034438">https://doi.org/10.1146/annurev-statistics-061120-034438</a>

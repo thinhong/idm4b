@@ -14,9 +14,9 @@ The dynamics of every population has both deterministic (predictable) and stocha
 
 1.  **Process noise**: the randomness within the process that generates the data. It has two forms of stochasticity:
 
-    -   **Demographic stochasticity (statistical noise)**: random events which are usually conceived as being independent among individuals. For example, **each individual** might die or survive with a certain probability per unit time [@lande2003]. Because this stochasticity operates independently among individuals, it tends to average out in large populations and has a greater impact on small populations [@lande2003].
+    -   **Demographic stochasticity (statistical noise)**: random events which are usually conceived as being independent among individuals [@lande2003]. For example, **each individual** might die or survive with a certain probability per unit time [@lande2003]. Because this stochasticity operates independently among individuals, it tends to average out in large populations and has a greater impact on small populations [@lande2003].
 
-    -   **Environmental stochasticity**: random temporal changes that affect **all individuals equally**, no matter the population size. It **overtakes demographic stochasticity in large populations** [@ganyani2021]. Examples include external unpredictable events (temperature, rainfall, humidity) and individual variation (variability in contact patterns, superspreaders). These factors translate into fluctuations in the transmission parameter, often captured by overdispersion in Poisson models [@ganyani2021].
+    -   **Environmental stochasticity**: random temporal changes that affect **all individuals equally**, no matter the population size [@lande2003]. It **overtakes demographic stochasticity in large populations** [@ganyani2021]. Examples include external unpredictable events (temperature, rainfall, humidity) and individual variation (variability in contact patterns, superspreaders). These factors translate into fluctuations in the transmission parameter, often captured by overdispersion in Poisson models [@ganyani2021].
 
 2.  **Sampling/observational/measurement error**: refers to errors caused by observation or sampling methods [@dennis2006], because real data collection is never perfect.
 
@@ -44,6 +44,13 @@ $$\mathbb{P}(I_{t + h} = I_t + 1 | I_t) = \frac{\beta S_t I_t}{N} h + o(h)$$
 
 $$\mathbb{P}(R_{t + h} = R_t + 1 | R_t) = \gamma I_t h + o(h)$$
 
+#### Gillespie algorithm
+
+The algorithm proceeds in two steps [@ganyani2021]:
+
+1.  Simulate time at which the next event will occur: The time until the next event occurs follows an **exponential distribution** with a rate equal to the sum of the rates over all possible events
+2.  Given the simulated time, simulate which event occurs
+
 ### Environmental stochasticity
 
 Environmental stochasticity is typically modeled by randomising the transmission rate with white noise [@ganyani2021]. One way to incorporate it in the SIR model is to multiply the transmission rate by a Lévy white noise process $\xi_t$ which fluctuates around one. For instance, let $\xi_t = \frac{d \Gamma(t)}{dt}$, with $\Gamma(t)$ having Gamma increments so that:
@@ -54,9 +61,15 @@ Then the infection event probability becomes:
 
 $$\mathbb{P}(I_{t + h} = I_t + 1 | I_t) = \frac{\beta \xi_t S_t I_t}{N} h + o(h)$$
 
-This lets random environment-driven fluctuations scale the transmission rate for everyone, on top of individual-level randomness
+This lets random environment-driven fluctuations scale the transmission rate for everyone, on top of individual-level randomness.
 
 ### Observational error
+
+A typical example of observation error in infectious disease modelling is under-reporting. Not everyone who falls ill goes to the GP or hospital, and many aren't correctly diagnosed. We often capture this by a binomial process, with a reporting probability $\varepsilon$ that covers both missed cases and diagnosis errors [@endo2019].
+
+$$g(y_t | x_t) = Bin(y_t; x_t, \varepsilon)$$
+
+In a hidden Markov process, the measurement model links our observed data ${Y_t}_n$ (collected at discrete times $\{t_1, \cdots, t_N\}$) to the underlying process. To separate environmental noise from possibly overdispersed observational stochasticity, we often choose a measurement model that can handle overdispersion [@ganyani2021]. For count data, a Poisson or negative binomial model is typically used [@ganyani2021].
 
 ## Types of stochastic epidemic models
 
@@ -69,15 +82,6 @@ Stochastic models can conveniently be classified according to their contact stru
 3.  Metapopulation: The population is partitioned into non-overlapping groups, e.g. households; individuals have one contact rate with individuals in different groups, and another (higher) rate for individuals in the same group. More general metapopulation models allow an individual to belong to several different types of group, each with its own contact rate, or allow more levels of mixing.
 
 4.  Spatial: vary from simple lattices with only nearest–neighbour interactions, for which some theoretical analysis is possible, to complex models with long-distance interactions, for which only qualitative and approximate results are known. A key feature of spatial models is that they display slower than exponential growth, even in their earliest stage; this makes it difficult to approximate them adequately by deterministic models, and even to define threshold parameters.
-
-## Stochastic compartmental epidemic models
-
-### Gillespie algorithm
-
-The algorithm proceeds in two steps [@ganyani2021]:
-
-1.  Simulate time at which the next event will occur: The time until the next event occurs follows an **exponential distribution** with a rate equal to the sum of the rates over all possible events
-2.  Given the simulated time, simulate which event occurs
 
 ## Monte Carlo simulation {#sec-mc-sim}
 
