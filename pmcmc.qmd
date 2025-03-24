@@ -161,10 +161,12 @@ PMCMC stands for Particle Markov Chain Monte Carlo. It's a full Bayesian approac
 
 The main components of HMP are:
 
-1.  $x_t$ is the hidden state variable: the true number of infectious individuals.
-2.  Time evolution process $f(x_{t + 1}|x_t)$: the state variable at the next time step $x_{t + 1}$ is a function of the current state: $\mathbb{P}(x_{t + 1}) = f(x_{t + 1}|x_t)$, since this is a Markov process.
-3.  $y_t$ is the observations: the reported case counts.
-4.  Observation process $g(y_t|x_t)$: the probabilistic distribution of observing $y_t$ is a function of $x_t$. Typically this is underreporting represented by a binomial process with reporting probability $\epsilon$: $\mathbb{P}(y_t) = g(y_t|x_t) = Bin(n = x_t, p = \epsilon)$.
+1.  Hidden state $x_t$: This represents the true number of infectious individuals. In an SIR model, the state is "hidden" because:
+    - Only the I compartment can be observed, while the others are hidden
+    - There is an observation noise that hide the true value of I
+2.  Time evolution process $f(x_{t + 1}|x_t)$: The state variable at the next time step $x_{t + 1}$ is a function of the current state: $\mathbb{P}(x_{t + 1}) = f(x_{t + 1}|x_t)$, since this is a Markov process.
+3.  Observations $y_t$: The reported case counts at each time $t$.
+4.  Observation process $g(y_t|x_t)$: The probabilistic distribution of observing $y_t$ is a function of $x_t$. Typically this is underreporting represented by a binomial process with reporting probability $\epsilon$: $\mathbb{P}(y_t) = g(y_t|x_t) = Bin(n = x_t, p = \epsilon)$.
 
 We are interested in the time evolution process $f(x_{t + 1}|x_t)$, modelled with a set of parameters $\theta$. The posterior distribution of $\theta$, when we have the case counts $y_t$: $\mathbb{P}(\theta|y_t)$, is:
 

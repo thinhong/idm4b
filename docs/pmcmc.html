@@ -787,10 +787,14 @@ window.Quarto = {
 <p><img src="img/dict/hmp.svg" class="img-fluid"></p>
 <p>The main components of HMP are:</p>
 <ol type="1">
-<li><span class="math inline">\(x_t\)</span> is the hidden state variable: the true number of infectious individuals.</li>
-<li>Time evolution process <span class="math inline">\(f(x_{t + 1}|x_t)\)</span>: the state variable at the next time step <span class="math inline">\(x_{t + 1}\)</span> is a function of the current state: <span class="math inline">\(\mathbb{P}(x_{t + 1}) = f(x_{t + 1}|x_t)\)</span>, since this is a Markov process.</li>
-<li><span class="math inline">\(y_t\)</span> is the observations: the reported case counts.</li>
-<li>Observation process <span class="math inline">\(g(y_t|x_t)\)</span>: the probabilistic distribution of observing <span class="math inline">\(y_t\)</span> is a function of <span class="math inline">\(x_t\)</span>. Typically this is underreporting represented by a binomial process with reporting probability <span class="math inline">\(\epsilon\)</span>: <span class="math inline">\(\mathbb{P}(y_t) = g(y_t|x_t) = Bin(n = x_t, p = \epsilon)\)</span>.</li>
+<li>Hidden state <span class="math inline">\(x_t\)</span>: This represents the true number of infectious individuals. In an SIR model, the state is “hidden” because:
+<ul>
+<li>Only the I compartment can be observed, while the others are hidden</li>
+<li>There is an observation noise that hide the true value of I</li>
+</ul></li>
+<li>Time evolution process <span class="math inline">\(f(x_{t + 1}|x_t)\)</span>: The state variable at the next time step <span class="math inline">\(x_{t + 1}\)</span> is a function of the current state: <span class="math inline">\(\mathbb{P}(x_{t + 1}) = f(x_{t + 1}|x_t)\)</span>, since this is a Markov process.</li>
+<li>Observations <span class="math inline">\(y_t\)</span>: The reported case counts at each time <span class="math inline">\(t\)</span>.</li>
+<li>Observation process <span class="math inline">\(g(y_t|x_t)\)</span>: The probabilistic distribution of observing <span class="math inline">\(y_t\)</span> is a function of <span class="math inline">\(x_t\)</span>. Typically this is underreporting represented by a binomial process with reporting probability <span class="math inline">\(\epsilon\)</span>: <span class="math inline">\(\mathbb{P}(y_t) = g(y_t|x_t) = Bin(n = x_t, p = \epsilon)\)</span>.</li>
 </ol>
 <p>We are interested in the time evolution process <span class="math inline">\(f(x_{t + 1}|x_t)\)</span>, modelled with a set of parameters <span class="math inline">\(\theta\)</span>. The posterior distribution of <span class="math inline">\(\theta\)</span>, when we have the case counts <span class="math inline">\(y_t\)</span>: <span class="math inline">\(\mathbb{P}(\theta|y_t)\)</span>, is:</p>
 <p><span class="math display">\[\mathbb{P}(\theta|y_t) \propto \mathbb{P}(y_t|\theta) \cdot \mathbb{P}(\theta)\]</span></p>

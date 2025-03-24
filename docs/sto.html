@@ -657,9 +657,15 @@ window.Quarto = {
 </ul></li>
 <li><p><strong>Sampling/observational/measurement error</strong>: refers to errors caused by observation or sampling methods <span class="citation" data-cites="dennis2006">(<a href="references.html#ref-dennis2006" role="doc-biblioref">Dennis et al., 2006</a>)</span>, because real data collection is never perfect.</p></li>
 </ol>
+<p>A hidden Markov process (aka state-space model) <span class="citation" data-cites="endo2019">(<a href="references.html#ref-endo2019" role="doc-biblioref">Endo et al., 2019</a>)</span> can illustrated these noises.</p>
 <p><img src="img/dict/hmp.svg" class="img-fluid"></p>
 <p><span class="math display">\[x_{t + 1} = \underbrace{f(x_t)}_{\text{deterministic}} + \underbrace{\varepsilon_{\text{process}}}_{\text{stochastic}}\]</span></p>
-<p><span class="math display">\[y_t = x_t + \underbrace{\varepsilon_{\text{observation}}}_{\text{stochastic}}\]</span></p>
+<p><span class="math display">\[y_{t + 1} = x_{t + 1} + \underbrace{\varepsilon_{\text{observation}}}_{\text{stochastic}}\]</span></p>
+<p>Process noise <span class="math inline">\(\varepsilon_{\text{process}}\)</span> is propagated over time because the state feeds into itself:</p>
+<p><span class="math display">\[\begin{align}x_{t + 2} &amp;= f(x_{t + 1}) + \varepsilon_{\text{process}} \\
+&amp;= f(f(x_t) + \varepsilon_{\text{process}}) + \varepsilon_{\text{process}} \end{align}\]</span></p>
+<p>Observation noise <span class="math inline">\(\varepsilon_{\text{observation}}\)</span> only shows up once when we measure the system. It doesn’t affect later steps:</p>
+<p><span class="math display">\[y_{t + 2} = x_{t + 2} + \varepsilon_{\text{observation}}\]</span></p>
 </section>
 <section id="a-general-stochastic-sir-model" class="level2">
 <h2 class="anchored" data-anchor-id="a-general-stochastic-sir-model">A general stochastic SIR model</h2>
@@ -773,14 +779,14 @@ window.Quarto = {
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>my_pi <span class="ot">&lt;-</span> <span class="dv">4</span> <span class="sc">*</span> <span class="fu">cumsum</span>(df<span class="sc">$</span>in_circle) <span class="sc">/</span> df<span class="sc">$</span>n_points</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb4" data-startfrom="202" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 201;"><span id="cb4-202"><a href="#cb4-202" aria-hidden="true" tabindex="-1"></a>ojsdata <span class="op">=</span> <span class="fu">transpose</span>(data)</span>
-<span id="cb4-203"><a href="#cb4-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-204"><a href="#cb4-204" aria-hidden="true" tabindex="-1"></a>viewof n_points <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
-<span id="cb4-205"><a href="#cb4-205" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">10</span><span class="op">,</span> <span class="dv">10000</span>]<span class="op">,</span> </span>
-<span id="cb4-206"><a href="#cb4-206" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">value</span><span class="op">:</span> <span class="dv">1000</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Number of points:"</span>}</span>
-<span id="cb4-207"><a href="#cb4-207" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb4-208"><a href="#cb4-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-209"><a href="#cb4-209" aria-hidden="true" tabindex="-1"></a>ojsdata_filtered <span class="op">=</span> ojsdata<span class="op">.</span><span class="fu">slice</span>(<span class="dv">1</span><span class="op">,</span> n_points)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb4" data-startfrom="213" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 212;"><span id="cb4-213"><a href="#cb4-213" aria-hidden="true" tabindex="-1"></a>ojsdata <span class="op">=</span> <span class="fu">transpose</span>(data)</span>
+<span id="cb4-214"><a href="#cb4-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-215"><a href="#cb4-215" aria-hidden="true" tabindex="-1"></a>viewof n_points <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
+<span id="cb4-216"><a href="#cb4-216" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">10</span><span class="op">,</span> <span class="dv">10000</span>]<span class="op">,</span> </span>
+<span id="cb4-217"><a href="#cb4-217" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">value</span><span class="op">:</span> <span class="dv">1000</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Number of points:"</span>}</span>
+<span id="cb4-218"><a href="#cb4-218" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-219"><a href="#cb4-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-220"><a href="#cb4-220" aria-hidden="true" tabindex="-1"></a>ojsdata_filtered <span class="op">=</span> ojsdata<span class="op">.</span><span class="fu">slice</span>(<span class="dv">1</span><span class="op">,</span> n_points)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-1-1" data-nodetype="declaration">
@@ -806,13 +812,13 @@ window.Quarto = {
 <div class="grid">
 <div class="g-col-5">
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb5" data-startfrom="215" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 214;"><span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb5-216"><a href="#cb5-216" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">300</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">300</span><span class="op">,</span></span>
-<span id="cb5-217"><a href="#cb5-217" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="kw">null</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">1</span>]}<span class="op">,</span></span>
-<span id="cb5-218"><a href="#cb5-218" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="kw">null</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">1</span>]}<span class="op">,</span></span>
-<span id="cb5-219"><a href="#cb5-219" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [Plot<span class="op">.</span><span class="fu">dot</span>(ojsdata_filtered<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"xs"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"ys"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"in_circle"</span>})]<span class="op">,</span></span>
-<span id="cb5-220"><a href="#cb5-220" aria-hidden="true" tabindex="-1"></a>  <span class="dt">color</span><span class="op">:</span> {<span class="dt">scheme</span><span class="op">:</span> <span class="st">"set2"</span>}</span>
-<span id="cb5-221"><a href="#cb5-221" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb5" data-startfrom="226" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 225;"><span id="cb5-226"><a href="#cb5-226" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb5-227"><a href="#cb5-227" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">300</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">300</span><span class="op">,</span></span>
+<span id="cb5-228"><a href="#cb5-228" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="kw">null</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">1</span>]}<span class="op">,</span></span>
+<span id="cb5-229"><a href="#cb5-229" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="kw">null</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">1</span>]}<span class="op">,</span></span>
+<span id="cb5-230"><a href="#cb5-230" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [Plot<span class="op">.</span><span class="fu">dot</span>(ojsdata_filtered<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"xs"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"ys"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"in_circle"</span>})]<span class="op">,</span></span>
+<span id="cb5-231"><a href="#cb5-231" aria-hidden="true" tabindex="-1"></a>  <span class="dt">color</span><span class="op">:</span> {<span class="dt">scheme</span><span class="op">:</span> <span class="st">"set2"</span>}</span>
+<span id="cb5-232"><a href="#cb5-232" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-2" data-nodetype="expression">
 
@@ -822,21 +828,21 @@ window.Quarto = {
 </div>
 <div class="g-col-7">
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb6" data-startfrom="228" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 227;"><span id="cb6-228"><a href="#cb6-228" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb6-229"><a href="#cb6-229" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">400</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">280</span><span class="op">,</span></span>
-<span id="cb6-230"><a href="#cb6-230" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
-<span id="cb6-231"><a href="#cb6-231" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">lineY</span>(ojsdata_filtered<span class="op">,</span> {</span>
-<span id="cb6-232"><a href="#cb6-232" aria-hidden="true" tabindex="-1"></a>      <span class="dt">x</span><span class="op">:</span> <span class="st">"n_points"</span><span class="op">,</span> </span>
-<span id="cb6-233"><a href="#cb6-233" aria-hidden="true" tabindex="-1"></a>      <span class="dt">y</span><span class="op">:</span> <span class="st">"my_pi"</span><span class="op">,</span> </span>
-<span id="cb6-234"><a href="#cb6-234" aria-hidden="true" tabindex="-1"></a>      <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#214fbf"</span><span class="op">,</span></span>
-<span id="cb6-235"><a href="#cb6-235" aria-hidden="true" tabindex="-1"></a>      <span class="dt">tip</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
-<span id="cb6-236"><a href="#cb6-236" aria-hidden="true" tabindex="-1"></a>      <span class="dt">title</span><span class="op">:</span> d <span class="kw">=&gt;</span> <span class="vs">`</span><span class="sc">\u{1D70B}</span><span class="vs"> = </span><span class="sc">${</span>d<span class="op">.</span><span class="at">my_pi</span><span class="sc">}\n</span><span class="vs">Number of points = </span><span class="sc">${</span>d<span class="op">.</span><span class="at">n_points</span><span class="sc">}</span><span class="vs">`</span></span>
-<span id="cb6-237"><a href="#cb6-237" aria-hidden="true" tabindex="-1"></a>    })<span class="op">,</span></span>
-<span id="cb6-238"><a href="#cb6-238" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="fl">3.14159</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#f95454"</span>})</span>
-<span id="cb6-239"><a href="#cb6-239" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">,</span></span>
-<span id="cb6-240"><a href="#cb6-240" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Number of points"</span>}<span class="op">,</span></span>
-<span id="cb6-241"><a href="#cb6-241" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"</span><span class="sc">\u{1D70B}</span><span class="st">"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="dv">2</span><span class="op">,</span> <span class="fl">3.28</span>]}<span class="op">,</span></span>
-<span id="cb6-242"><a href="#cb6-242" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb6" data-startfrom="239" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 238;"><span id="cb6-239"><a href="#cb6-239" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb6-240"><a href="#cb6-240" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">400</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">280</span><span class="op">,</span></span>
+<span id="cb6-241"><a href="#cb6-241" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb6-242"><a href="#cb6-242" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">lineY</span>(ojsdata_filtered<span class="op">,</span> {</span>
+<span id="cb6-243"><a href="#cb6-243" aria-hidden="true" tabindex="-1"></a>      <span class="dt">x</span><span class="op">:</span> <span class="st">"n_points"</span><span class="op">,</span> </span>
+<span id="cb6-244"><a href="#cb6-244" aria-hidden="true" tabindex="-1"></a>      <span class="dt">y</span><span class="op">:</span> <span class="st">"my_pi"</span><span class="op">,</span> </span>
+<span id="cb6-245"><a href="#cb6-245" aria-hidden="true" tabindex="-1"></a>      <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#214fbf"</span><span class="op">,</span></span>
+<span id="cb6-246"><a href="#cb6-246" aria-hidden="true" tabindex="-1"></a>      <span class="dt">tip</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb6-247"><a href="#cb6-247" aria-hidden="true" tabindex="-1"></a>      <span class="dt">title</span><span class="op">:</span> d <span class="kw">=&gt;</span> <span class="vs">`</span><span class="sc">\u{1D70B}</span><span class="vs"> = </span><span class="sc">${</span>d<span class="op">.</span><span class="at">my_pi</span><span class="sc">}\n</span><span class="vs">Number of points = </span><span class="sc">${</span>d<span class="op">.</span><span class="at">n_points</span><span class="sc">}</span><span class="vs">`</span></span>
+<span id="cb6-248"><a href="#cb6-248" aria-hidden="true" tabindex="-1"></a>    })<span class="op">,</span></span>
+<span id="cb6-249"><a href="#cb6-249" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="fl">3.14159</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#f95454"</span>})</span>
+<span id="cb6-250"><a href="#cb6-250" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">,</span></span>
+<span id="cb6-251"><a href="#cb6-251" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Number of points"</span>}<span class="op">,</span></span>
+<span id="cb6-252"><a href="#cb6-252" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"</span><span class="sc">\u{1D70B}</span><span class="st">"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="dv">2</span><span class="op">,</span> <span class="fl">3.28</span>]}<span class="op">,</span></span>
+<span id="cb6-253"><a href="#cb6-253" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-3" data-nodetype="expression">
 
@@ -852,16 +858,16 @@ window.Quarto = {
 <p>Instead of a single simulation with many points, we run <span class="math inline">\(N\)</span> smaller simulations. In each simulation, we sample a small number of points to estimate <span class="math inline">\(\pi_i\)</span>. The final estimation is then averaged across simulations:</p>
 <p><span class="math display">\[\pi = \frac{1}{N}\sum_{i = 1}^{N} \pi_i\]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb7" data-startfrom="292" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 291;"><span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a>ojsdata2 <span class="op">=</span> <span class="fu">transpose</span>(data2)</span>
-<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a>viewof n_samples <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
-<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">10</span><span class="op">,</span> <span class="dv">500</span>]<span class="op">,</span> </span>
-<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">value</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Number of points:"</span>}</span>
-<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-298"><a href="#cb7-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-299"><a href="#cb7-299" aria-hidden="true" tabindex="-1"></a>ojsdata_filtered2 <span class="op">=</span> ojsdata2<span class="op">.</span><span class="fu">filter</span>(<span class="kw">function</span>(circle) {</span>
-<span id="cb7-300"><a href="#cb7-300" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> circle<span class="op">.</span><span class="at">n_samples</span> <span class="op">==</span> n_samples<span class="op">;</span></span>
-<span id="cb7-301"><a href="#cb7-301" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb7" data-startfrom="303" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 302;"><span id="cb7-303"><a href="#cb7-303" aria-hidden="true" tabindex="-1"></a>ojsdata2 <span class="op">=</span> <span class="fu">transpose</span>(data2)</span>
+<span id="cb7-304"><a href="#cb7-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-305"><a href="#cb7-305" aria-hidden="true" tabindex="-1"></a>viewof n_samples <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
+<span id="cb7-306"><a href="#cb7-306" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">10</span><span class="op">,</span> <span class="dv">500</span>]<span class="op">,</span> </span>
+<span id="cb7-307"><a href="#cb7-307" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">value</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Number of points:"</span>}</span>
+<span id="cb7-308"><a href="#cb7-308" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-309"><a href="#cb7-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-310"><a href="#cb7-310" aria-hidden="true" tabindex="-1"></a>ojsdata_filtered2 <span class="op">=</span> ojsdata2<span class="op">.</span><span class="fu">filter</span>(<span class="kw">function</span>(circle) {</span>
+<span id="cb7-311"><a href="#cb7-311" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> circle<span class="op">.</span><span class="at">n_samples</span> <span class="op">==</span> n_samples<span class="op">;</span></span>
+<span id="cb7-312"><a href="#cb7-312" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-4-1" data-nodetype="declaration">
@@ -885,21 +891,21 @@ window.Quarto = {
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb8" data-startfrom="305" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 304;"><span id="cb8-305"><a href="#cb8-305" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb8-306"><a href="#cb8-306" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">600</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">280</span><span class="op">,</span></span>
-<span id="cb8-307"><a href="#cb8-307" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
-<span id="cb8-308"><a href="#cb8-308" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">lineY</span>(ojsdata_filtered2<span class="op">,</span> {</span>
-<span id="cb8-309"><a href="#cb8-309" aria-hidden="true" tabindex="-1"></a>      <span class="dt">x</span><span class="op">:</span> <span class="st">"n_sims"</span><span class="op">,</span> </span>
-<span id="cb8-310"><a href="#cb8-310" aria-hidden="true" tabindex="-1"></a>      <span class="dt">y</span><span class="op">:</span> <span class="st">"my_pi"</span><span class="op">,</span> </span>
-<span id="cb8-311"><a href="#cb8-311" aria-hidden="true" tabindex="-1"></a>      <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#214fbf"</span><span class="op">,</span></span>
-<span id="cb8-312"><a href="#cb8-312" aria-hidden="true" tabindex="-1"></a>      <span class="dt">tip</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
-<span id="cb8-313"><a href="#cb8-313" aria-hidden="true" tabindex="-1"></a>      <span class="dt">title</span><span class="op">:</span> d <span class="kw">=&gt;</span> <span class="vs">`</span><span class="sc">\u{1D70B}</span><span class="vs"> = </span><span class="sc">${</span>d<span class="op">.</span><span class="at">my_pi</span><span class="sc">}\n</span><span class="vs">Iteration = </span><span class="sc">${</span>d<span class="op">.</span><span class="at">n_sims</span><span class="sc">}</span><span class="vs">`</span></span>
-<span id="cb8-314"><a href="#cb8-314" aria-hidden="true" tabindex="-1"></a>    })<span class="op">,</span></span>
-<span id="cb8-315"><a href="#cb8-315" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="fl">3.14159</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#f95454"</span>})</span>
-<span id="cb8-316"><a href="#cb8-316" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">,</span></span>
-<span id="cb8-317"><a href="#cb8-317" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Iteration"</span>}<span class="op">,</span></span>
-<span id="cb8-318"><a href="#cb8-318" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"</span><span class="sc">\u{1D70B}</span><span class="st">"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="fl">3.05</span><span class="op">,</span> <span class="fl">3.235</span>]}<span class="op">,</span></span>
-<span id="cb8-319"><a href="#cb8-319" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb8" data-startfrom="316" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 315;"><span id="cb8-316"><a href="#cb8-316" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb8-317"><a href="#cb8-317" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">600</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">280</span><span class="op">,</span></span>
+<span id="cb8-318"><a href="#cb8-318" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb8-319"><a href="#cb8-319" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">lineY</span>(ojsdata_filtered2<span class="op">,</span> {</span>
+<span id="cb8-320"><a href="#cb8-320" aria-hidden="true" tabindex="-1"></a>      <span class="dt">x</span><span class="op">:</span> <span class="st">"n_sims"</span><span class="op">,</span> </span>
+<span id="cb8-321"><a href="#cb8-321" aria-hidden="true" tabindex="-1"></a>      <span class="dt">y</span><span class="op">:</span> <span class="st">"my_pi"</span><span class="op">,</span> </span>
+<span id="cb8-322"><a href="#cb8-322" aria-hidden="true" tabindex="-1"></a>      <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#214fbf"</span><span class="op">,</span></span>
+<span id="cb8-323"><a href="#cb8-323" aria-hidden="true" tabindex="-1"></a>      <span class="dt">tip</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb8-324"><a href="#cb8-324" aria-hidden="true" tabindex="-1"></a>      <span class="dt">title</span><span class="op">:</span> d <span class="kw">=&gt;</span> <span class="vs">`</span><span class="sc">\u{1D70B}</span><span class="vs"> = </span><span class="sc">${</span>d<span class="op">.</span><span class="at">my_pi</span><span class="sc">}\n</span><span class="vs">Iteration = </span><span class="sc">${</span>d<span class="op">.</span><span class="at">n_sims</span><span class="sc">}</span><span class="vs">`</span></span>
+<span id="cb8-325"><a href="#cb8-325" aria-hidden="true" tabindex="-1"></a>    })<span class="op">,</span></span>
+<span id="cb8-326"><a href="#cb8-326" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="fl">3.14159</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#f95454"</span>})</span>
+<span id="cb8-327"><a href="#cb8-327" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">,</span></span>
+<span id="cb8-328"><a href="#cb8-328" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Iteration"</span>}<span class="op">,</span></span>
+<span id="cb8-329"><a href="#cb8-329" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"</span><span class="sc">\u{1D70B}</span><span class="st">"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="fl">3.05</span><span class="op">,</span> <span class="fl">3.235</span>]}<span class="op">,</span></span>
+<span id="cb8-330"><a href="#cb8-330" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-5" data-nodetype="expression">
 

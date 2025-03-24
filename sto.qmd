@@ -20,11 +20,22 @@ The dynamics of every population has both deterministic (predictable) and stocha
 
 2.  **Sampling/observational/measurement error**: refers to errors caused by observation or sampling methods [@dennis2006], because real data collection is never perfect.
 
+A hidden Markov process (aka state-space model) [@endo2019] can illustrated these noises.
+
 ![](img/dict/hmp.svg)
 
 $$x_{t + 1} = \underbrace{f(x_t)}_{\text{deterministic}} + \underbrace{\varepsilon_{\text{process}}}_{\text{stochastic}}$$
 
-$$y_t = x_t + \underbrace{\varepsilon_{\text{observation}}}_{\text{stochastic}}$$
+$$y_{t + 1} = x_{t + 1} + \underbrace{\varepsilon_{\text{observation}}}_{\text{stochastic}}$$
+
+Process noise $\varepsilon_{\text{process}}$ is propagated over time because the state feeds into itself:
+
+$$\begin{align}x_{t + 2} &= f(x_{t + 1}) + \varepsilon_{\text{process}} \\ 
+&= f(f(x_t) + \varepsilon_{\text{process}}) + \varepsilon_{\text{process}} \end{align}$$
+
+Observation noise $\varepsilon_{\text{observation}}$ only shows up once when we measure the system. It doesn't affect later steps:
+
+$$y_{t + 2} = x_{t + 2} + \varepsilon_{\text{observation}}$$
 
 ## A general stochastic SIR model
 
