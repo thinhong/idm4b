@@ -20,7 +20,7 @@ The dynamics of every population has both deterministic (predictable) and stocha
 
 2.  **Sampling/observational/measurement error**: refers to errors caused by observation or sampling methods [@dennis2006], because real data collection is never perfect.
 
-A hidden Markov process (aka state-space model) [@endo2019] can illustrated these noises.
+A hidden Markov process (aka state-space model) [@endo2019] can illustrate these noises.
 
 ![](img/dict/hmp.svg)
 
