@@ -73,6 +73,14 @@ A **dynamic** model is one where **time is essential** to its operation. The mod
 
 ### Deterministic vs stochastic
 
+**Deterministic** means that if you know ***enough*** about the initial state of a system, you can predict exactly how this system will behave in the future [@denny2000]. In real life, truly deterministic systems are rare. A pendulum clock is a close example, where we can control all the conditions. In biology, systems are much less predictable, and deterministic behavior can be viewed at best as a polite fiction [@denny2000].
+
+If a system is not deterministic, it is by definition **stochastic** [@denny2000]. Even if we know exactly the state of a stochastic system at one time, we can never predict exactly what its state will be in the future [@denny2000].
+
+The line between deterministic and stochastic is often blurry and can depend on how much we understand or can measure. Many things we call stochastic might actually be deterministic if we knew all the details of how they work. In practice, we often treat complex systems as stochastic simply because it’s too hard to make precise predictions [@denny2000].
+
+This boundary has become even less clear with the rise of **chaos** theory. Chaotic systems are technically deterministic, but they’re so sensitive to initial conditions that tiny, unmeasurable changes can lead to completely different outcomes. This extreme sensitivity makes them look random, even though they aren't [@denny2000].
+
 A **deterministic** model assumes that there is **no randomness**, and the system can be fully described by a defined set of equations and parameters. **Each run** of the deterministic model **always** generates the **same result** [@handbook2023].
 
 A **stochastic** model assumes events occur **randomly**, affecting single parameters or multiple components within the system. **Each run** of a stochastic model generates **different results**. Therefore, stochastic models must be run for hundreds or thousands of iterations to explore the full range of possible outcomes [@handbook2023].

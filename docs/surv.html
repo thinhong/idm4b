@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -58,10 +58,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-2303af33364ecd9e50932dd4c114f382.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -548,12 +548,17 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#definitions" id="toc-definitions" class="nav-link active" data-scroll-target="#definitions"><span class="header-section-number">24.1</span> Definitions</a></li>
-  <li><a href="#hazard-rate-incidence" id="toc-hazard-rate-incidence" class="nav-link" data-scroll-target="#hazard-rate-incidence"><span class="header-section-number">24.2</span> Hazard, rate, incidence</a></li>
-  <li><a href="#hazard-function" id="toc-hazard-function" class="nav-link" data-scroll-target="#hazard-function"><span class="header-section-number">24.3</span> Hazard function</a></li>
-  <li><a href="#cumulative-hazard-function" id="toc-cumulative-hazard-function" class="nav-link" data-scroll-target="#cumulative-hazard-function"><span class="header-section-number">24.4</span> Cumulative hazard function</a></li>
-  <li><a href="#survival-function" id="toc-survival-function" class="nav-link" data-scroll-target="#survival-function"><span class="header-section-number">24.5</span> Survival function</a></li>
-  <li><a href="#idm-and-survival-analysis" id="toc-idm-and-survival-analysis" class="nav-link" data-scroll-target="#idm-and-survival-analysis"><span class="header-section-number">24.6</span> IDM and survival analysis</a></li>
+  <li><a href="#time-to-event-data" id="toc-time-to-event-data" class="nav-link active" data-scroll-target="#time-to-event-data"><span class="header-section-number">24.1</span> Time-to-event data</a></li>
+  <li><a href="#cumulative-density-ft" id="toc-cumulative-density-ft" class="nav-link" data-scroll-target="#cumulative-density-ft"><span class="header-section-number">24.2</span> Cumulative density <span class="math inline">\(F(t)\)</span></a></li>
+  <li><a href="#probability-density-ft" id="toc-probability-density-ft" class="nav-link" data-scroll-target="#probability-density-ft"><span class="header-section-number">24.3</span> Probability density <span class="math inline">\(f(t)\)</span></a></li>
+  <li><a href="#survival-function-st" id="toc-survival-function-st" class="nav-link" data-scroll-target="#survival-function-st"><span class="header-section-number">24.4</span> Survival function <span class="math inline">\(S(t)\)</span></a>
+  <ul>
+  <li><a href="#st-and-ft" id="toc-st-and-ft" class="nav-link" data-scroll-target="#st-and-ft"><span class="header-section-number">24.4.1</span> <span class="math inline">\(S(t)\)</span> and <span class="math inline">\(F(t)\)</span></a></li>
+  <li><a href="#st-and-ft-1" id="toc-st-and-ft-1" class="nav-link" data-scroll-target="#st-and-ft-1"><span class="header-section-number">24.4.2</span> <span class="math inline">\(S(t)\)</span> and <span class="math inline">\(f(t)\)</span></a></li>
+  </ul></li>
+  <li><a href="#hazard-function" id="toc-hazard-function" class="nav-link" data-scroll-target="#hazard-function"><span class="header-section-number">24.5</span> Hazard function</a></li>
+  <li><a href="#hazard-rate-incidence" id="toc-hazard-rate-incidence" class="nav-link" data-scroll-target="#hazard-rate-incidence"><span class="header-section-number">24.6</span> Hazard, rate, incidence</a></li>
+  <li><a href="#idm-and-survival-analysis" id="toc-idm-and-survival-analysis" class="nav-link" data-scroll-target="#idm-and-survival-analysis"><span class="header-section-number">24.7</span> IDM and survival analysis</a></li>
   </ul>
 </nav>
     </div>
@@ -579,62 +584,135 @@ window.Quarto = {
 </header>
 
 
-<section id="definitions" class="level2" data-number="24.1">
-<h2 data-number="24.1" class="anchored" data-anchor-id="definitions"><span class="header-section-number">24.1</span> Definitions</h2>
+<section id="time-to-event-data" class="level2" data-number="24.1">
+<h2 data-number="24.1" class="anchored" data-anchor-id="time-to-event-data"><span class="header-section-number">24.1</span> Time-to-event data</h2>
+<p><img src="img/surv/time-to-event.svg" class="img-fluid"></p>
+<p>Let say when you were born, someone started the clock, and stop when you die. The time record on the clock is time-to-event.</p>
+<p>If this person is bored, they stop the clock before you die, so the time to when you die is unknown. This is called censoring.</p>
 </section>
-<section id="hazard-rate-incidence" class="level2" data-number="24.2">
-<h2 data-number="24.2" class="anchored" data-anchor-id="hazard-rate-incidence"><span class="header-section-number">24.2</span> Hazard, rate, incidence</h2>
+<section id="cumulative-density-ft" class="level2" data-number="24.2">
+<h2 data-number="24.2" class="anchored" data-anchor-id="cumulative-density-ft"><span class="header-section-number">24.2</span> Cumulative density <span class="math inline">\(F(t)\)</span></h2>
+<p><span class="math inline">\(F(t)\)</span> is the probability that the event has occurred on or before time <span class="math inline">\(t\)</span>.</p>
+<p><span class="math display">\[F(t) = \mathbb{P}(T \leq t)\]</span></p>
+</section>
+<section id="probability-density-ft" class="level2" data-number="24.3">
+<h2 data-number="24.3" class="anchored" data-anchor-id="probability-density-ft"><span class="header-section-number">24.3</span> Probability density <span class="math inline">\(f(t)\)</span></h2>
+<p><span class="math inline">\(f(t)\)</span> is the instantaneous <strong>rate</strong> that an event will occur at exactly time <span class="math inline">\(t\)</span>.</p>
+<p><span class="math display">\[f(t) = \frac{dF(t)}{dt}\]</span></p>
+<p>Multiply <span class="math inline">\(f(t)\)</span> by a small interval <span class="math inline">\(\Delta t\)</span> to get an actual probability.</p>
+</section>
+<section id="survival-function-st" class="level2" data-number="24.4">
+<h2 data-number="24.4" class="anchored" data-anchor-id="survival-function-st"><span class="header-section-number">24.4</span> Survival function <span class="math inline">\(S(t)\)</span></h2>
+<p><span class="math inline">\(S(t)\)</span> is the probability that a subject is still event-free at time <span class="math inline">\(t\)</span>. In other words, the time-to-event <span class="math inline">\(T\)</span> (when you die) is larger than a chosen time point <span class="math inline">\(t\)</span> (when you stop the clock).</p>
+<p><span class="math display">\[S(t) = \mathbb{P}(T &gt; t)\]</span></p>
+<p>Let say on the date you were born, 100 babies were also born at the hospital. Someone started the clock. Now after 30 years, 80 are still alive.</p>
+<p><span class="math display">\[S(\text{30 years}) = \frac{80}{100} = 0.8\]</span></p>
+<section id="st-and-ft" class="level3" data-number="24.4.1">
+<h3 data-number="24.4.1" class="anchored" data-anchor-id="st-and-ft"><span class="header-section-number">24.4.1</span> <span class="math inline">\(S(t)\)</span> and <span class="math inline">\(F(t)\)</span></h3>
+<p><span class="math display">\[\begin{cases}
+S(t) = \mathbb{P}(T &gt; t) \\
+F(t) = \mathbb{P}(T \leq t)
+\end{cases}\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[S(t) = 1 - F(t)\]</span></p>
+</section>
+<section id="st-and-ft-1" class="level3" data-number="24.4.2">
+<h3 data-number="24.4.2" class="anchored" data-anchor-id="st-and-ft-1"><span class="header-section-number">24.4.2</span> <span class="math inline">\(S(t)\)</span> and <span class="math inline">\(f(t)\)</span></h3>
+<p><span class="math display">\[f(t) = \frac{dF(t)}{dt} = \frac{d[1 - S(t)]}{dt} = \frac{-dS(t)}{dt}\]</span></p>
+</section>
+</section>
+<section id="hazard-function" class="level2" data-number="24.5">
+<h2 data-number="24.5" class="anchored" data-anchor-id="hazard-function"><span class="header-section-number">24.5</span> Hazard function</h2>
+<p><span class="math inline">\(h(t)\)</span> is the instantaneous event <strong>rate</strong> (events per unit time, not a probability) at time <span class="math inline">\(t\)</span>, given the subject has survived up to <span class="math inline">\(t\)</span>.</p>
+<p><span class="math display">\[h(t) = \frac{f(t)}{\mathbb{P}(T &gt; t)} = \frac{f(t)}{S(t)}\]</span></p>
+<p>Think of it as: among those still alive at time <span class="math inline">\(t\)</span>, how many are expected to experience the event per unit time in the next instant.</p>
+<p>On the date you were born, 100 babies were also born at the hospital. Someone started the clock. Now after 30 years, 80 are still alive (<span class="math inline">\(S(\text{30 years}) = 0.8\)</span>). Suppose the density at 30 years is <span class="math inline">\(f(\text{30 years}) = 0.01 \text{ year}^{-1}\)</span> (1 % chance of dying in the next year for an individual).</p>
+<p><span class="math display">\[h(\text{30 years}) = \frac{f(\text{30 years})}{S(\text{30 years})} = \frac{0.01}{0.8} = 0.0125\]</span></p>
+<p>That is, the instantaneous risk at age 30 is 1.25% per year.</p>
+<p>Or we can think of it as: 1 person is expected to die among 80 people still alive at age 30.</p>
+<p><span class="math display">\[h(\text{30 years}) = \frac{1}{80} \text{per year} = 0.0125 \text{ year}^{-1}\]</span></p>
+</section>
+<section id="hazard-rate-incidence" class="level2" data-number="24.6">
+<h2 data-number="24.6" class="anchored" data-anchor-id="hazard-rate-incidence"><span class="header-section-number">24.6</span> Hazard, rate, incidence</h2>
 <p>They are the same word, using in different fields, hazard = rate = incidence:</p>
 <ul>
 <li>Rate: <strong>number</strong> of <strong>new events</strong> that occur during specified <strong>time period</strong>.</li>
 <li>Incidence: when the event is a disease, it is called incidence.</li>
 <li>Hazard: in survival analysis, it is called hazard.</li>
 </ul>
-<p>Let consider a discrete</p>
 </section>
-<section id="hazard-function" class="level2" data-number="24.3">
-<h2 data-number="24.3" class="anchored" data-anchor-id="hazard-function"><span class="header-section-number">24.3</span> Hazard function</h2>
-<p>Hazard function <span class="math inline">\(h(t)\)</span> gives the probability that someone die at time <span class="math inline">\(t\)</span>, given that they have survived up to that time <span class="math inline">\(t\)</span> (survived during the period <span class="math inline">\([0;t]\)</span>).</p>
-<p><span class="math display">\[h(t) = \frac{f(t)}{\mathbb{P}(T &gt; t)} = \frac{f(t)}{S(t)}\]</span></p>
-<p>Where <span class="math inline">\(f(t)\)</span> is the time to first</p>
-</section>
-<section id="cumulative-hazard-function" class="level2" data-number="24.4">
-<h2 data-number="24.4" class="anchored" data-anchor-id="cumulative-hazard-function"><span class="header-section-number">24.4</span> Cumulative hazard function</h2>
-<p>Cumulative hazard function <span class="math inline">\(F(t)\)</span> gives the probability that someone die by time <span class="math inline">\(t\)</span> (die anytime during <span class="math inline">\([0;t]\)</span>).</p>
-<p><span class="math display">\[F(t) = \mathbb{P}(T \leq t) = \sum_{t = 0}^t h(t)\]</span></p>
-</section>
-<section id="survival-function" class="level2" data-number="24.5">
-<h2 data-number="24.5" class="anchored" data-anchor-id="survival-function"><span class="header-section-number">24.5</span> Survival function</h2>
-<p>The survival function <span class="math inline">\(S(t)\)</span> gives the probability that someone will survive beyond time <span class="math inline">\(t\)</span> (they have survived <span class="math inline">\([0;t]\)</span> and will continue to survive).</p>
-<p><span class="math display">\[S(t) = \mathbb{P}(T &gt; t) = 1 - \mathbb{P}(T \leq t) = 1 - F(t)\]</span></p>
-</section>
-<section id="idm-and-survival-analysis" class="level2" data-number="24.6">
-<h2 data-number="24.6" class="anchored" data-anchor-id="idm-and-survival-analysis"><span class="header-section-number">24.6</span> IDM and survival analysis</h2>
-<p>Much of infectious disease modeling is derived from, or at least shares, key concepts with survival analysis <span class="citation" data-cites="hay">(<a href="references.html#ref-hay" role="doc-biblioref">Hay et al., n.d.</a>)</span>.</p>
+<section id="idm-and-survival-analysis" class="level2" data-number="24.7">
+<h2 data-number="24.7" class="anchored" data-anchor-id="idm-and-survival-analysis"><span class="header-section-number">24.7</span> IDM and survival analysis</h2>
+<p>Much of infectious disease modelling is derived from, or at least shares, key concepts with survival analysis <span class="citation" data-cites="hay2024">(<a href="references.html#ref-hay2024" role="doc-biblioref">Hay et al., 2024</a>)</span>.</p>
+<p><img src="img/det/sir.svg" class="img-fluid"></p>
+<p>In the SIR model, susceptibles become infectious at the <strong>force of infection</strong> <span class="math inline">\(\lambda(t)\)</span>. In other words, <span class="math inline">\(\lambda(t)\)</span> is the instantaneous rate at which a still‐susceptible person becomes infected at time <span class="math inline">\(t\)</span>.</p>
+<p>This is exactly the definition of a <strong>hazard function</strong> in survival analysis.</p>
+<p><span class="math display">\[
+\lambda(t)=h_{\text {infection }}(t)=\frac{\text { density of new infections at } t}{\text { probability of still being susceptible at } t}
+\]</span></p>
+<p>So the jump from S to I shares the same mathematics as any “time-to-event” clock, here the “event” is infection instead of death.</p>
 <table class="caption-top table">
 <caption>Linking survival analysis to infectious disease modelling</caption>
+<colgroup>
+<col style="width: 23%">
+<col style="width: 29%">
+<col style="width: 47%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Survival analysis</th>
 <th>Infectious disease modelling</th>
+<th>Explanation</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Hazard function</td>
-<td>Infection rate, force of infection</td>
+<td><strong>Survival function</strong> <span class="math inline">\(S(t)=P(T&gt;t)\)</span></td>
+<td><strong>Proportion susceptible</strong> in a cohort model</td>
+<td>At each moment, the curve of remaining susceptibles mirrors a survival curve.</td>
 </tr>
 <tr class="even">
-<td>Survival function</td>
-<td>Probability of not infected</td>
+<td><strong>Hazard ratio</strong></td>
+<td><strong>Relative risk under intervention</strong></td>
+<td>Compare two forces of infection (e.g.&nbsp;with vs without masks) → HR = <span class="math inline">\(\lambda_1/\lambda_0\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Competing risks</strong></td>
+<td><strong>Multiple exit routes from S</strong> (e.g.&nbsp;infection by strain A vs strain B)</td>
+<td>Each strain has its own hazard; the <em>sub-hazards</em> sum to the total risk of leaving S.</td>
+</tr>
+<tr class="even">
+<td><strong>Cumulative hazard</strong> <span class="math inline">\(H(t)=\int_0^t h(u)\,du\)</span></td>
+<td><strong>Attack rate</strong> over time</td>
+<td><span class="math inline">\(1-\exp[-H(t)]\)</span> gives the cumulative proportion ever infected—often called the <em>final size</em> in a closed SIR outbreak.</td>
+</tr>
+<tr class="odd">
+<td><strong>Time-varying covariate</strong> in Cox model</td>
+<td><strong>Seasonal contact pattern</strong> <span class="math inline">\(\beta(t)\)</span></td>
+<td>A sinusoidal <span class="math inline">\(\beta(t)\)</span> modulates the hazard exactly like a time-varying coefficient in survival analysis.</td>
+</tr>
+<tr class="even">
+<td><strong>Generation-time / waiting-time density</strong> <span class="math inline">\(f(t)\)</span></td>
+<td><strong>Serial interval</strong> distribution</td>
+<td>The PDF of when an infectee infects others drives renewal-equation models just as <span class="math inline">\(f(t)\)</span> drives failure timing.</td>
+</tr>
+<tr class="odd">
+<td><strong>Mixture cure model</strong></td>
+<td><strong>Partial immunity / vaccination</strong></td>
+<td>A fraction <span class="math inline">\(\pi\)</span> is “cured” (fully immune); the rest face the usual infection hazard.</td>
+</tr>
+<tr class="even">
+<td><strong>Left truncation</strong> (enter study late)</td>
+<td><strong>Seeding an epidemic</strong></td>
+<td>Only individuals present at time <span class="math inline">\(t_0\)</span> are modelled; earlier infections are truncated away.</td>
 </tr>
 </tbody>
 </table>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
-<div id="ref-hay" class="csl-entry" role="listitem">
-Hay, J., Routledge, I., &amp; Takahashi, S. (n.d.). <em>Serodynamics: a review of methods for epidemiological inference using serological data</em>. <a href="https://doi.org/10.31219/osf.io/kqdsn">https://doi.org/10.31219/osf.io/kqdsn</a>
+<div id="ref-hay2024" class="csl-entry" role="listitem">
+Hay, J. A., Routledge, I., &amp; Takahashi, S. (2024). Serodynamics: A primer and synthetic review of methods for epidemiological inference using serological data. <em>Epidemics</em>, 100806. <a href="https://doi.org/10.1016/j.epidem.2024.100806">https://doi.org/10.1016/j.epidem.2024.100806</a>
 </div>
 </div>
 </section>
@@ -722,8 +800,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -834,7 +910,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

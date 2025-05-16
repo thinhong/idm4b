@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -58,10 +58,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-2303af33364ecd9e50932dd4c114f382.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -568,8 +568,15 @@ window.Quarto = {
 </header>
 
 
-<p>Poisson process:</p>
-<p>Trajectory or sample path: is the path that a system’s state follows over time within its state-space. Different initial states result in different trajectories. Each path in <a href="ar.html#fig-ar-plot" class="quarto-xref">Figure&nbsp;<span>5.1</span></a> is a trajectory.</p>
+<p>Poisson process is a model for a series of discrete events where the average time between events is known (<span class="math inline">\(\lambda\)</span>), but the exact timing of events is random. The arrival of an event is independent of the event before (waiting time between events is memoryless). The number of events in any given finite interval of length <span class="math inline">\(t\)</span> follows a Poisson distribution (<a href="https://builtin.com/data-science/poisson-process">source</a>).</p>
+<p>Interpreted as a homogeneous <strong>stochastic counting</strong> process <span class="math inline">\(\{ N(t), t \geq 0 \}\)</span>, it has 3 key properties:</p>
+<ul>
+<li>Starts at zero: <span class="math inline">\(N(0) = 0\)</span></li>
+<li>Independent increments: counts in disjoint time intervals are independent</li>
+<li>Stationary increments: for any interval of length <span class="math inline">\(t\)</span>, the event count follows a Poisson distribution <span class="math inline">\(N(t) \sim Pois(\lambda)\)</span></li>
+</ul>
+<p>An <strong>inhomogeneous</strong> Poisson process allows the rate <span class="math inline">\(\lambda(t)\)</span> to vary with time. The independent-increments property is retained, but the mean event count in any interval <span class="math inline">\((s, s + t]\)</span> is Poisson with mean <span class="math inline">\(\int_s^{s+t} \lambda(u) du\)</span>.</p>
+<p>Trajectory or sample path: is the path or a simulation that a system’s state follows over time within its state-space. Different initial states result in different trajectories. Each path in <a href="ar.html#fig-ar-plot" class="quarto-xref">Figure&nbsp;<span>5.1</span></a> is a trajectory.</p>
 <div id="def-dsl" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition A.1</strong></span> Domain-specific language (DSL): is a computer language designed for a specific purpose or “domain”. DSLs act as a bridge, allowing users to write models in a familiar syntax while benefiting from the speed of compiled languages <span class="citation" data-cites="fitzjohn2021">(<a href="references.html#ref-fitzjohn2021" role="doc-biblioref">FitzJohn et al., 2021</a>)</span>.</p>
 </div>
@@ -804,8 +811,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -916,7 +921,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

@@ -1,6 +1,69 @@
 # Survival analysis
 
-## Definitions
+## Time-to-event data
+
+![](img/surv/time-to-event.svg)
+
+Let say when you were born, someone started the clock, and stop when you die. The time record on the clock is time-to-event.
+
+If this person is bored, they stop the clock before you die, so the time to when you die is unknown. This is called censoring.
+
+## Cumulative density $F(t)$
+
+$F(t)$ is the probability that the event has occurred on or before time $t$.
+
+$$F(t) = \mathbb{P}(T \leq t)$$
+
+## Probability density $f(t)$
+
+$f(t)$ is the instantaneous **rate** that an event will occur at exactly time $t$.
+
+$$f(t) = \frac{dF(t)}{dt}$$
+
+Multiply $f(t)$ by a small interval $\Delta t$ to get an actual probability.
+
+## Survival function $S(t)$
+
+$S(t)$ is the probability that a subject is still event-free at time $t$. In other words, the time-to-event $T$ (when you die) is larger than a chosen time point $t$ (when you stop the clock).
+
+$$S(t) = \mathbb{P}(T > t)$$
+
+Let say on the date you were born, 100 babies were also born at the hospital. Someone started the clock. Now after 30 years, 80 are still alive.
+
+$$S(\text{30 years}) = \frac{80}{100} = 0.8$$
+
+### $S(t)$ and $F(t)$
+
+$$\begin{cases}
+S(t) = \mathbb{P}(T > t) \\
+F(t) = \mathbb{P}(T \leq t)
+\end{cases}$$
+
+Therefore,
+
+$$S(t) = 1 - F(t)$$
+
+### $S(t)$ and $f(t)$
+
+$$f(t) = \frac{dF(t)}{dt} = \frac{d[1 - S(t)]}{dt} = \frac{-dS(t)}{dt}$$
+
+## Hazard function
+
+$h(t)$ is the instantaneous event **rate** (events per unit time, not a probability) at time $t$, given the subject has survived up to $t$.
+
+$$h(t) = \frac{f(t)}{\mathbb{P}(T > t)} = \frac{f(t)}{S(t)}$$
+
+Think of it as: among those still alive at time $t$, how many are expected to experience the event per unit time in the next instant.
+
+On the date you were born, 100 babies were also born at the hospital. Someone started the clock. Now after 30 years, 80 are still alive ($S(\text{30 years}) = 0.8$). Suppose the density at 30 years is $f(\text{30 years}) = 0.01 \text{ year}^{-1}$ (1 % chance of dying in the next year for an individual).
+
+$$h(\text{30 years}) = \frac{f(\text{30 years})}{S(\text{30 years})} = \frac{0.01}{0.8} = 0.0125$$
+
+That is, the instantaneous risk at age 30 is 1.25% per year.
+
+Or we can think of it as: 1 person is expected to die among 80 people still alive at age 30.
+
+$$h(\text{30 years}) = \frac{1}{80} \text{per year} = 0.0125 \text{ year}^{-1}$$
 
 ## Hazard, rate, incidence
 
@@ -10,35 +73,31 @@ They are the same word, using in different fields, hazard = rate = incidence:
 -   Incidence: when the event is a disease, it is called incidence.
 -   Hazard: in survival analysis, it is called hazard.
 
-Let consider a discrete
-
-## Hazard function
-
-Hazard function $h(t)$ gives the probability that someone die at time $t$, given that they have survived up to that time $t$ (survived during the period $[0;t]$).
-
-$$h(t) = \frac{f(t)}{\mathbb{P}(T > t)} = \frac{f(t)}{S(t)}$$
-
-Where $f(t)$ is the time to first 
-
-## Cumulative hazard function
-
-Cumulative hazard function $F(t)$ gives the probability that someone die by time $t$ (die anytime during $[0;t]$).
-
-$$F(t) = \mathbb{P}(T \leq t) = \sum_{t = 0}^t h(t)$$
-
-## Survival function
-
-The survival function $S(t)$ gives the probability that someone will survive beyond time $t$ (they have survived $[0;t]$ and will continue to survive).
-
-$$S(t) = \mathbb{P}(T > t) = 1 - \mathbb{P}(T \leq t) = 1 - F(t)$$
-
 ## IDM and survival analysis
 
-Much of infectious disease modeling is derived from, or at least shares, key concepts with survival analysis [@hay].
+Much of infectious disease modelling is derived from, or at least shares, key concepts with survival analysis [@hay2024].
 
-| Survival analysis | Infectious disease modelling       |
-|-------------------|------------------------------------|
-| Hazard function   | Infection rate, force of infection |
-| Survival function | Probability of not infected        |
+![](img/det/sir.svg)
+
+In the SIR model, susceptibles become infectious at the **force of infection** $\lambda(t)$. In other words, $\lambda(t)$ is the instantaneous rate at which a still‐susceptible person becomes infected at time $t$.
+
+This is exactly the definition of a **hazard function** in survival analysis.
+
+$$
+\lambda(t)=h_{\text {infection }}(t)=\frac{\text { density of new infections at } t}{\text { probability of still being susceptible at } t}
+$$
+
+So the jump from S to I shares the same mathematics as any "time-to-event" clock, here the "event" is infection instead of death.
+
+| Survival analysis | Infectious disease modelling | Explanation |
+|-----------------|---------------------|----------------------------------|
+| **Survival function** $S(t)=P(T>t)$ | **Proportion susceptible** in a cohort model | At each moment, the curve of remaining susceptibles mirrors a survival curve. |
+| **Hazard ratio** | **Relative risk under intervention** | Compare two forces of infection (e.g. with vs without masks) → HR = $\lambda_1/\lambda_0$. |
+| **Competing risks** | **Multiple exit routes from S** (e.g. infection by strain A vs strain B) | Each strain has its own hazard; the *sub-hazards* sum to the total risk of leaving S. |
+| **Cumulative hazard** $H(t)=\int_0^t h(u)\,du$ | **Attack rate** over time | $1-\exp[-H(t)]$ gives the cumulative proportion ever infected—often called the *final size* in a closed SIR outbreak. |
+| **Time-varying covariate** in Cox model | **Seasonal contact pattern** $\beta(t)$ | A sinusoidal $\beta(t)$ modulates the hazard exactly like a time-varying coefficient in survival analysis. |
+| **Generation-time / waiting-time density** $f(t)$ | **Serial interval** distribution | The PDF of when an infectee infects others drives renewal-equation models just as $f(t)$ drives failure timing. |
+| **Mixture cure model** | **Partial immunity / vaccination** | A fraction $\pi$ is “cured” (fully immune); the rest face the usual infection hazard. |
+| **Left truncation** (enter study late) | **Seeding an epidemic** | Only individuals present at time $t_0$ are modelled; earlier infections are truncated away. |
 
 : Linking survival analysis to infectious disease modelling

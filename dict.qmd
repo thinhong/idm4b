@@ -1,8 +1,16 @@
 # Dictionary
 
-Poisson process:
+Poisson process is a model for a series of discrete events where the average time between events is known ($\lambda$), but the exact timing of events is random. The arrival of an event is independent of the event before (waiting time between events is memoryless). The number of events in any given finite interval of length $t$ follows a Poisson distribution ([source](https://builtin.com/data-science/poisson-process)).
 
-Trajectory or sample path: is the path that a system's state follows over time within its state-space. Different initial states result in different trajectories. Each path in @fig-ar-plot is a trajectory.
+Interpreted as a homogeneous **stochastic counting** process $\{ N(t), t \geq 0 \}$, it has 3 key properties:
+
+- Starts at zero: $N(0) = 0$
+- Independent increments: counts in disjoint time intervals are independent
+- Stationary increments: for any interval of length $t$, the event count follows a Poisson distribution $N(t) \sim Pois(\lambda)$
+
+An **inhomogeneous** Poisson process allows the rate $\lambda(t)$ to vary with time. The independent-increments property is retained, but the mean event count in any interval $(s, s + t]$ is Poisson with mean $\int_s^{s+t} \lambda(u) du$.
+
+Trajectory or sample path: is the path or a simulation that a system's state follows over time within its state-space. Different initial states result in different trajectories. Each path in @fig-ar-plot is a trajectory.
 
 ::: {#def-dsl}
 Domain-specific language (DSL): is a computer language designed for a specific purpose or "domain". DSLs act as a bridge, allowing users to write models in a familiar syntax while benefiting from the speed of compiled languages [@fitzjohn2021].

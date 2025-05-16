@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -92,10 +92,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-2303af33364ecd9e50932dd4c114f382.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -915,9 +915,9 @@ Listing&nbsp;1.1: Deterministic SIR model
 </div>
 </div>
 </div>
-<p>When <span class="math inline">\(\gamma\)</span> <strong>decreases</strong>, patients recover more slowly:</p>
+<p>When <span class="math inline">\(\gamma\)</span> <strong>decreases</strong>, patients recover more slowly meaning that they remain infectious for a longer period:</p>
 <ul>
-<li>Outbreak size <strong><em>increases</em></strong>: patients remain infectious for a longer period; since <span class="math inline">\(R_0 = \frac{\beta}{\gamma}\)</span>, a decrease in <span class="math inline">\(\gamma\)</span> leads to an increase in <span class="math inline">\(R_0\)</span>, meaning each infected individual infects less people on average.</li>
+<li>Outbreak size <strong><em>increases</em></strong>: since <span class="math inline">\(R_0 = \frac{\beta}{\gamma}\)</span>, a decrease in <span class="math inline">\(\gamma\)</span> leads to an increase in <span class="math inline">\(R_0\)</span>, meaning each infected individual infects more people on average.</li>
 <li><strong><em>Higher</em></strong> epidemic peak: with a higher <span class="math inline">\(R_0\)</span> more individuals are infected after each generation.</li>
 <li>Time until peak <strong><em>may increases</em></strong>: the infected population takes longer to clear out due to slower recovery, but the exact timing of the peak also depends on the balance between infection and recovery rates.</li>
 <li>Epidemic duration <strong><em>slightly increases</em></strong>: for same reason as the peak time, the overall duration of the epidemic is prolonged due to slower recovery rates.</li>
@@ -1046,8 +1046,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -1158,7 +1156,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -58,10 +58,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-2303af33364ecd9e50932dd4c114f382.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -656,6 +656,10 @@ window.Quarto = {
 </section>
 <section id="deterministic-vs-stochastic" class="level3">
 <h3 class="anchored" data-anchor-id="deterministic-vs-stochastic">Deterministic vs stochastic</h3>
+<p><strong>Deterministic</strong> means that if you know <strong><em>enough</em></strong> about the initial state of a system, you can predict exactly how this system will behave in the future <span class="citation" data-cites="denny2000">(<a href="references.html#ref-denny2000" role="doc-biblioref">Denny &amp; Gaines, 2000</a>)</span>. In real life, truly deterministic systems are rare. A pendulum clock is a close example, where we can control all the conditions. In biology, systems are much less predictable, and deterministic behavior can be viewed at best as a polite fiction <span class="citation" data-cites="denny2000">(<a href="references.html#ref-denny2000" role="doc-biblioref">Denny &amp; Gaines, 2000</a>)</span>.</p>
+<p>If a system is not deterministic, it is by definition <strong>stochastic</strong> <span class="citation" data-cites="denny2000">(<a href="references.html#ref-denny2000" role="doc-biblioref">Denny &amp; Gaines, 2000</a>)</span>. Even if we know exactly the state of a stochastic system at one time, we can never predict exactly what its state will be in the future <span class="citation" data-cites="denny2000">(<a href="references.html#ref-denny2000" role="doc-biblioref">Denny &amp; Gaines, 2000</a>)</span>.</p>
+<p>The line between deterministic and stochastic is often blurry and can depend on how much we understand or can measure. Many things we call stochastic might actually be deterministic if we knew all the details of how they work. In practice, we often treat complex systems as stochastic simply because it’s too hard to make precise predictions <span class="citation" data-cites="denny2000">(<a href="references.html#ref-denny2000" role="doc-biblioref">Denny &amp; Gaines, 2000</a>)</span>.</p>
+<p>This boundary has become even less clear with the rise of <strong>chaos</strong> theory. Chaotic systems are technically deterministic, but they’re so sensitive to initial conditions that tiny, unmeasurable changes can lead to completely different outcomes. This extreme sensitivity makes them look random, even though they aren’t <span class="citation" data-cites="denny2000">(<a href="references.html#ref-denny2000" role="doc-biblioref">Denny &amp; Gaines, 2000</a>)</span>.</p>
 <p>A <strong>deterministic</strong> model assumes that there is <strong>no randomness</strong>, and the system can be fully described by a defined set of equations and parameters. <strong>Each run</strong> of the deterministic model <strong>always</strong> generates the <strong>same result</strong> <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>.</p>
 <p>A <strong>stochastic</strong> model assumes events occur <strong>randomly</strong>, affecting single parameters or multiple components within the system. <strong>Each run</strong> of a stochastic model generates <strong>different results</strong>. Therefore, stochastic models must be run for hundreds or thousands of iterations to explore the full range of possible outcomes <span class="citation" data-cites="handbook2023">(<a href="references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>.</p>
 </section>
@@ -694,6 +698,9 @@ Bishai, D., Brenzel, L., &amp; Padula, W. (Eds.). (2023). <em>Handbook of applie
 </div>
 <div id="ref-christley2013" class="csl-entry" role="listitem">
 Christley, R. M., Mort, M., Wynne, B., Wastling, J. M., Heathwaite, A. L., Pickup, R., Austin, Z., &amp; Latham, S. M. (2013). <span>“</span>Wrong, but Useful<span>”</span>: Negotiating Uncertainty in Infectious Disease Modelling. <em>PLOS ONE</em>, <em>8</em>(10), e76277. <a href="https://doi.org/10.1371/journal.pone.0076277">https://doi.org/10.1371/journal.pone.0076277</a>
+</div>
+<div id="ref-denny2000" class="csl-entry" role="listitem">
+Denny, M., &amp; Gaines, S. (2000). <em>Chance in biology: Using probability to explore nature</em>. Princeton University Press. <a href="https://www.jstor.org/stable/j.ctt7rqt4">https://www.jstor.org/stable/j.ctt7rqt4</a>
 </div>
 <div id="ref-keeling2006" class="csl-entry" role="listitem">
 Keeling, M. J. (2006). <em>State-of-science review: Predictive and real-time epidemiological modelling. S9</em>. DTI.
@@ -796,8 +803,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -908,7 +913,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
