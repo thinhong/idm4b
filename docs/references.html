@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -57,10 +57,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-2303af33364ecd9e50932dd4c114f382.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -640,6 +640,10 @@ D. F. (2006). Estimating Density Dependence, Process Noise, and
 Observation Error. <em>Ecological Monographs</em>, <em>76</em>(3),
 323–341. <a href="https://doi.org/10.1890/0012-9615(2006)76[323:EDDPNA]2.0.CO;2">https://doi.org/10.1890/0012-9615(2006)76[323:EDDPNA]2.0.CO;2</a>
 </div>
+<div id="ref-denny2000" class="csl-entry" role="listitem">
+Denny, M., &amp; Gaines, S. (2000). <em>Chance in biology: Using
+probability to explore nature</em>. Princeton University Press. <a href="https://www.jstor.org/stable/j.ctt7rqt4">https://www.jstor.org/stable/j.ctt7rqt4</a>
+</div>
 <div id="ref-diekmann1990" class="csl-entry" role="listitem">
 Diekmann, O., Heesterbeek, J. A. P., &amp; Metz, J. A. J. (1990). On the
 definition and the computation of the basic reproduction ratio R0 in
@@ -723,11 +727,6 @@ epidemics. <em>Journal of The Royal Society Interface</em>,
 Hay, J. A., Routledge, I., &amp; Takahashi, S. (2024). Serodynamics: A
 primer and synthetic review of methods for epidemiological inference
 using serological data. <em>Epidemics</em>, 100806. <a href="https://doi.org/10.1016/j.epidem.2024.100806">https://doi.org/10.1016/j.epidem.2024.100806</a>
-</div>
-<div id="ref-hay" class="csl-entry" role="listitem">
-Hay, J., Routledge, I., &amp; Takahashi, S. (n.d.). <em>Serodynamics: a
-review of methods for epidemiological inference using serological
-data</em>. <a href="https://doi.org/10.31219/osf.io/kqdsn">https://doi.org/10.31219/osf.io/kqdsn</a>
 </div>
 <div id="ref-heeg2008" class="csl-entry" role="listitem">
 Heeg, B. M. S., Damen, J., Buskens, E., Caleo, S., Charro, F. de, &amp;
@@ -1017,8 +1016,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -1129,7 +1126,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

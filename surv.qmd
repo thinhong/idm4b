@@ -10,7 +10,7 @@ If this person is bored, they stop the clock before you die, so the time to when
 
 ## Cumulative density $F(t)$
 
-$F(t)$ is the probability that the event has occurred on or before time $t$.
+Survival analysis is about time-to-event, so we start with probability of the time-to-event. $F(t)$ is the probability that the event has occurred on or before time $t$ (the time-to-event $T$ is less than or equal to when we stop the clock at $t$).
 
 $$F(t) = \mathbb{P}(T \leq t)$$
 

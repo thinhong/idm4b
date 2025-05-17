@@ -1,6 +1,8 @@
 project:
   type: book
   output-dir: docs
+  post-render:
+    - make-slides.R
 
 book:
   favicon: logo-icon.svg
