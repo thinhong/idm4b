@@ -1,0 +1,124 @@
+---
+title: "Nonlinear models"
+format:
+  html:
+    code-fold: true
+---
+
+## Polynomial models
+
+Polynomial means $x^2$ (quadratic), $x^3$ (cubic), $x^4$ (quartic)... and higher degrees. In practice, we hardly go beyond $x^3$.
+
+**Why polynomial can account for nonlinear?**
+
+- The first derivative $f'(x)$ as the ***slope*** or ***speed*** of the curve.
+- The second derivative $f''(x)$ as the ***acceleration*** (i.e. how quickly that slope itself is changing).
+- If $f''(x) = 0$ everywhere: the slope never changes, so the graph stays a perfect straight line.
+- If $f''(x) \neq 0$: the slope is being pushed up or down, it increase or decrease faster, so the graph look like a curve.
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(MultiKink)
+data("triceps")
+
+df <- tibble(x = seq(-3, 3, length.out = 400)) |> 
+  mutate(
+    linear_f       = 2 * x,        # f(x) = 2x
+    linear_fprime  = 2,        # f'(x) = 2
+    linear_fdouble = 0,        # f''(x) = 0
+    
+    quad_f       = x^2,        # f(x) = x^2
+    quad_fprime  = 2 * x,      # f'(x) = 2x
+    quad_fdouble = 2,          # f''(x) = 2
+    
+    cubic_f       = x^3,       # f(x) = x^3
+    cubic_fprime  = 3 * x^2,   # f'(x) = 3x^2
+    cubic_fdouble = 6 * x      # f''(x) = 6x
+  ) |> 
+  pivot_longer(
+    cols = -x,
+    names_to = "var",
+    values_to = "y"
+  ) |> 
+  separate(var, into = c("func", "deriv"), sep = "_f") |> 
+  mutate(
+    func = case_when(
+      func == "linear" ~ "y = 2x",
+      func == "quad"   ~ "y = x²",
+      func == "cubic"  ~ "y = x³"
+    ),
+    deriv = case_when(
+      deriv == ""       ~ "f(x)",
+      deriv == "prime"  ~ "f'(x)",
+      deriv == "double" ~ "f''(x)"
+    ),
+    deriv = factor(deriv, levels = c("f(x)", "f'(x)", "f''(x)"))
+  )
+```
+
+```{r}
+#| fig-width: 5
+#| fig-height: 4
+#| out-width: "100%"
+ggplot(df, aes(x = x, y = y)) +
+  geom_line() +
+  facet_grid(rows = vars(deriv), cols = vars(func), scales = "free_y") +
+  labs(
+    x = "x",
+    y = NULL
+  ) +
+  theme_bw()
+```
+
+- $y = 2x$ has no acceleration ($f''(x) = 0$), it increases slowly as a line.
+- $y = x^2$ has constant positive acceleration meaning the slope changes fast, so it has a curve shape. For $x < 0$, the slope is negative, so $y$ is decreasing. For $x > 0$, the slope is positive, so $y$ is increasing. So there is a bend at $x = 0$ (a change from decreasing to increasing).
+
+**Limitations**:
+
+- **Limited flexibility**: polynomials can only produce curves of a fixed algebraic form, so they may struggle to fit patterns that aren't "smoothly curving" in that specific way.
+- **Uncontrolled behavior at** $\pm \infty$: For large $|x|$, polynomial will grow without bound (see $x^3$ as an example), which can be unrealistic.
+- **Intrinsic (built-in) non-monotonicity**: every polynomial of degree $\ge 2$ must bend up and down at least once, so you cannot force it to be entirely increasing or decreasing if that's what you need.
+
+## Fractional polynomial models
+
+Fractional polynomials extend ordinary polynomials by allowing non-integer (and zero or negative) exponents like $x^{0.5}$, $x^{-1}$, $log(x)$ (which is $x^0$ in the FP framework)
+
+## Piecewise model
+
+```{r, warning=FALSE, message=FALSE}
+#| fig-width: 5
+#| fig-height: 3
+#| out-width: "100%"
+triceps <- triceps |> 
+  mutate(
+    age_group = cut(
+      age,
+      breaks = c(-Inf, 5, 10, 20, 30, 40, Inf),
+      right = FALSE
+    )
+  )
+
+pred7 <- predict(lm(triceps ~ age + I((age - 5) * (age >= 5)) +
+                      I((age - 10) * (age >= 10)) +
+                      I((age - 20) * (age >= 20)) +
+                      I((age - 30) * (age >= 30)) +
+                      I((age - 40) * (age >= 40)), data = triceps))
+
+ggplot(triceps, aes(x = age, y = triceps)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(
+    data = triceps,
+    aes(x = age, y = triceps, group = age_group),
+    method = "lm",
+    se = FALSE,
+    colour = "blue"
+  ) +
+  theme_bw()
+```
+
+
+## GAM
+
+$$g(Y) = \beta_0 + f_1(x_1) + \dots + f_k(x_k)$$
+
+Splines are a versatile tool for modelling non-linear functions when the exact form of the function is unknown. However, underlying assumptions can lead to either over- or under-fitting. Penalised splines (P-splines) (Eilers and Marx, 1996) seek to avoid over-fitting through the inclusion of discrete penalties on the basis coefficients, though this penalty has no exact interpretation in terms of the function’s shape. Their Bayesian counterpart however (Lang and Brezger, 2004) offers a statistically robust method of capturing variation in the data whilst also preventing over-fitting through the inclusion of appropriate prior distributions that act on the functional form of the spline [@eales2022].

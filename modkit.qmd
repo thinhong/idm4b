@@ -1,0 +1,38 @@
+---
+title: "Modelling toolkit"
+format: html
+---
+
+## Key steps of modelling
+
+| Tool | What it does? | Why it's essential? | Examples |
+|----|----|----|----|
+| Simulator | Take $\theta \rightarrow x(t, \theta)$ | Generate output of the model so you can fit later | deSolve, odin |
+| Estimation methods | Find $\theta$ that match data | Different models need different algorithms | optim, rstan, brms, pomp |
+| Validation |  |  |  |
+| Uncertainty analysis |  |  |  |
+
+Simulator: a function to generate output from your model. Calibration / estimation method:
+
+## Simulator
+
+## Estimation method
+
+Choosing an appropriate estimation method depends on
+
+| Col1 | Col2 | Col3 | Col4 | Col5 |
+|----|----|----|----|----|
+| Whenever likeli | No process noise, likelihood is tractable and point estimate is adequate | MLE | optim |  |
+|  | Full posterior needed | MCMC | rstan, brms |  |
+| Stochastic |  |  |  |  |
+| Stochastic with hidden states |  | Particle methods |  |  |
+|  |  |  |  |  |
+
+### `optim()`
+
+Use to find the minimum of a function
+
+`optim(par, fn)` - `par`: a vector of initial parameters - `fn`: the function to be minimised, must return a single scalar value
+
+-   Nelder-Mead
+-   BFGS: Broyden-Fletcher-Goldfarb-Shanno algorithm for gradient descent

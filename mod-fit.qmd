@@ -1,16 +1,14 @@
 ---
 title: "Model fitting"
-execute: 
+execute:
   echo: false
   warning: false
 ---
 
 ```{r}
 #| results: false
-library(tidyverse)
 library(odin)
 library(bbmle)
-library(purrr)
 
 # The observed data points
 df <- read.csv("data/flu_inc.csv")
@@ -23,14 +21,14 @@ odin_seir <- odin::odin({
   deriv(I) <- sigma * E - gamma * I
   deriv(R) <- gamma * I
   deriv(CInc) <- sigma * E
-  
+
   # Initial conditions
   initial(S) <- S_init
   initial(E) <- E_init
   initial(I) <- I_init
   initial(R) <- R_init
   initial(CInc) <- CInc_init
-  
+
   # Parameters and initial values
   beta <- user(0.004)
   sigma <- user(0.5)
@@ -45,7 +43,7 @@ odin_seir <- odin::odin({
 seir_mod <- function(beta, sigma, gamma, S0, E0, I0, R0, times) {
   # Set values for a new run
   odin_run <- odin_seir$new(beta = beta, sigma = sigma, gamma = gamma, S_init = S0, E_init = E0, I_init = I0, R_init = R0)
-  
+
   # Run the model
   out <- data.frame(odin_run$run(times))
 
@@ -60,43 +58,13 @@ E0 <- 0
 I0 <- 1
 R0 <- 0
 
-beta_vals <- seq(0.001, 0.01, 0.001)
-sigma_vals <- seq(1, 3, 0.1)
-gamma_vals <- seq(1, 3, 0.1)
-
-param_grid <- expand.grid(
-  beta  = beta_vals,
-  sigma = sigma_vals,
-  gamma = gamma_vals
-)
-
-# Run over each combination of (beta, sigma, gamma) and combine into a single data frame
-results_df <- pmap_dfr(param_grid, function(beta, sigma, gamma) {
-  mod_out <- seir_mod(
-    beta  = beta,
-    sigma = sigma,
-    gamma = gamma,
-    S0    = S0,
-    E0    = E0,
-    I0    = I0,
-    R0    = R0,
-    times = 0:(length(df$inc) - 1)
-  )
-  # Add columns for parameter tracking
-  mod_out$beta  <- beta
-  mod_out$sigma <- sigma
-  mod_out$gamma <- gamma
-  
-  mod_out
-})
-
 mll <- function(beta, sigma, gamma, sd_inc) {
   # Make sure that parameters are positive
-  beta <- exp(beta) 
+  beta <- exp(beta)
   sigma <- exp(sigma)
   gamma <- exp(gamma)
   sd_inc <- exp(sd_inc)
-  
+
   pred <- seir_mod(beta = beta, sigma = sigma, gamma = gamma, S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = 0:(length(df$inc) - 1))
   pred <- pred$Inc
   # Return the negative log-likelihood
@@ -104,19 +72,36 @@ mll <- function(beta, sigma, gamma, sd_inc) {
 }
 
 starting_param_val <- list(beta = 0.004, sigma = 0.5, gamma = 0.5, sd_inc = 3)
-
 estimates <- mle2(minuslogl = mll, start = lapply(starting_param_val, log), method = "Nelder-Mead")
-
 params <- exp(coef(estimates))
 
-pred <- seir_mod(beta = params[1], sigma = params[2], gamma = params[3], S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = df$day)
-df_plot <- pred[,c("t", "Inc")]
-df_plot <- merge(df_plot, df, by.x = "t", by.y = "day")
-colnames(df_plot) <- c("day", "pred", "inc")
+optim_df <- data.frame(
+  beta  = as.numeric(params[1]),
+  sigma = as.numeric(params[2]),
+  gamma = as.numeric(params[3]),
+  sd    = as.numeric(params[4])
+)
 
-# Compute 95% confidence interval
-lwr <- qnorm(p = 0.025, mean = pred$Inc, sd = params[4])
-upr <- qnorm(p = 0.975, mean = pred$Inc, sd = params[4])
+# Poisson likelihood: incidence counts given predicted mean λ = predicted incidence
+mll_pois <- function(beta, sigma, gamma) {
+  beta  <- exp(beta)
+  sigma <- exp(sigma)
+  gamma <- exp(gamma)
+  pred <- seir_mod(beta = beta, sigma = sigma, gamma = gamma, S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = 0:(length(df$inc) - 1))$Inc
+  pred <- pmax(pred, 1e-9)  # guard against log(0)
+  -sum(dpois(x = df$inc, lambda = pred, log = TRUE))
+}
+
+estimates_pois <- mle2(minuslogl = mll_pois,
+                       start = list(beta = log(0.004), sigma = log(0.5), gamma = log(0.5)),
+                       method = "Nelder-Mead")
+params_pois <- exp(coef(estimates_pois))
+
+optim_pois_df <- data.frame(
+  beta  = as.numeric(params_pois[1]),
+  sigma = as.numeric(params_pois[2]),
+  gamma = as.numeric(params_pois[3])
+)
 ```
 
 Model fitting, or **calibration**, is the process of **adjusting** a model's **parameters** so that the **model's predictions** align **as closely as possible** with **real-world observations**.
@@ -131,58 +116,245 @@ $$\frac{dI}{dt} = \sigma E - \gamma I$$
 
 $$\frac{dR}{dt} = \gamma I$$
 
-Below you'll find an interactive plot. The dots represent observed data points, and the line shows the model's predicted incidence cases. You can adjust the values of $\beta$, $\sigma$ and $\gamma$ using the controls. Your task is to change these parameters and see how the line shifts. Keep tweaking them until the line closely follows the dots - this means the model's predictions align well with the observed data.
+Below you'll find an interactive plot. The dots represent observed data points, and the line shows the model's predicted incidence cases. Drag the sliders for $\beta$, $\sigma$ and $\gamma$ and watch how the curve responds, aiming to pull it through the dots. The readout tells you how well the current parameters score - smaller is better on both the residual sum of squares (RSS) and the negative log-likelihood ($-\log L$). Click **Optimize** to jump to the values a computer picks.
 
 ```{r}
-ojs_define(pred = results_df, data = df)
+ojs_define(ojsdata = df, optim_df = optim_df, optim_pois_df = optim_pois_df)
 ```
 
 ```{ojs}
-ojspred = transpose(pred)
-ojsdata = transpose(data)
+import { createSlider, createButton, injectStyle, styleMathLabel } from "./_slider.js"
+d3 = require("d3@7")
+optim = transpose(optim_df)[0]
+optim_pois = transpose(optim_pois_df)[0]
+```
 
-// Define sliders for beta, sigma, gamma
-viewof betaVal = Inputs.range(
-  [0.001, 0.01], 
-  { label: "Beta", value: 0.001, step: 0.001 }
-)
+```{ojs}
+//| echo: false
+// Shared SEIR simulator (RK4) used by all three illustrations.
+mf_sim = {
+  const S0 = 369, E0 = 0, I0 = 1, R0 = 0;
 
-viewof sigmaVal = Inputs.range(
-  [1, 3], 
-  { label: "Sigma", value: 1, step: 0.1 }
-)
+  function step(state, beta, sigma, gamma, dt) {
+    const [S, E, I, R, C] = state;
+    const d = (S, E, I, R) => [
+      -beta * S * I,
+       beta * S * I - sigma * E,
+       sigma * E - gamma * I,
+       gamma * I,
+       sigma * E
+    ];
+    const k1 = d(S, E, I, R);
+    const k2 = d(S + 0.5*dt*k1[0], E + 0.5*dt*k1[1], I + 0.5*dt*k1[2], R + 0.5*dt*k1[3]);
+    const k3 = d(S + 0.5*dt*k2[0], E + 0.5*dt*k2[1], I + 0.5*dt*k2[2], R + 0.5*dt*k2[3]);
+    const k4 = d(S +     dt*k3[0], E +     dt*k3[1], I +     dt*k3[2], R +     dt*k3[3]);
+    return [
+      S + dt*(k1[0] + 2*k2[0] + 2*k3[0] + k4[0])/6,
+      E + dt*(k1[1] + 2*k2[1] + 2*k3[1] + k4[1])/6,
+      I + dt*(k1[2] + 2*k2[2] + 2*k3[2] + k4[2])/6,
+      R + dt*(k1[3] + 2*k2[3] + 2*k3[3] + k4[3])/6,
+      C + dt*(k1[4] + 2*k2[4] + 2*k3[4] + k4[4])/6
+    ];
+  }
 
-viewof gammaVal = Inputs.range(
-  [1, 3], 
-  { label: "Gamma", value: 1, step: 0.1 }
-)
+  // Returns daily incidence for days 0..days (inclusive).
+  // Day 0 is I0; day k (k>=1) is cumulative incidence from (k-1) to k.
+  function run(beta, sigma, gamma, days) {
+    const dt = 0.02;
+    const perDay = Math.round(1 / dt);
+    let state = [S0, E0, I0, R0, 0];
+    const cInc = new Array(days + 1);
+    cInc[0] = 0;
+    for (let d = 1; d <= days; d++) {
+      for (let k = 0; k < perDay; k++) state = step(state, beta, sigma, gamma, dt);
+      cInc[d] = state[4];
+    }
+    const inc = new Array(days + 1);
+    inc[0] = I0;
+    for (let d = 1; d <= days; d++) inc[d] = cInc[d] - cInc[d - 1];
+    return inc;
+  }
 
-// Filter the big data frame to match the chosen values exactly
-filtered = ojspred.filter(d =>
-  d.beta === betaVal &&
-  d.sigma === sigmaVal &&
-  d.gamma === gammaVal
-)
+  return { run, S0 };
+}
+```
 
-// Plot incidence line and observed data points
-Plot.plot({
-  width: 600,
-  height: 300,
-  grid: true,
-  marks: [
-    // Lines for each compartment
-    Plot.line(filtered, { x: "t", y: "Inc", stroke: "orange", strokeWidth: 2 }),
-    // Points for observed incidence
-    Plot.dot(ojsdata, {
-      x: "day",
-      y: "inc",
-      fill: "black",
-      r: 3,              // point size
-      title: d => `Inc = ${d.inc}`
-    })
-  ],
-  y: {domain: [0, 16]}
-})
+```{ojs}
+//| echo: false
+
+viewof mf_explore = {
+  const data = transpose(ojsdata).filter(d => d.day <= 30);
+  const DAYS = 30;
+
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = "font-family:system-ui,-apple-system,sans-serif;max-width:760px;margin:0 auto;";
+  wrapper.appendChild(injectStyle());
+
+  // ── Sliders ──
+  const SL = {};
+  SL.beta  = createSlider("β",  0.001, 0.010, 0.0001, 0.004, "#3b82f6", "blue");
+  SL.sigma = createSlider("σ",  0.3,   3.0,   0.05,   0.5,   "#7c3aed", "purple");
+  SL.gamma = createSlider("γ",  0.3,   3.0,   0.05,   0.5,   "#0891b2", "teal");
+  styleMathLabel(SL.beta, SL.sigma, SL.gamma);
+
+  const slRow = document.createElement("div");
+  slRow.style.cssText = "display:flex;gap:20px;margin-bottom:12px;";
+  slRow.appendChild(SL.beta.el);
+  slRow.appendChild(SL.sigma.el);
+  slRow.appendChild(SL.gamma.el);
+  wrapper.appendChild(slRow);
+
+  // ── Readout row ──
+  const readRow = document.createElement("div");
+  readRow.style.cssText = "display:flex;gap:20px;margin-bottom:10px;align-items:baseline;font-family:'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;";
+  const mkStat = (label, color) => {
+    const box = document.createElement("div");
+    box.style.cssText = "display:flex;flex-direction:column;gap:2px;flex:1;";
+    const l = document.createElement("span");
+    l.style.cssText = "font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;font-family:system-ui,-apple-system,sans-serif;";
+    l.textContent = label;
+    const v = document.createElement("span");
+    v.style.cssText = `font-size:22px;font-weight:800;color:${color};`;
+    box.appendChild(l);
+    box.appendChild(v);
+    return { el: box, set: t => v.textContent = t };
+  };
+  const rssOut = mkStat("Residual sum of squares", "#d97706");
+  const nllOut = mkStat("Negative log-likelihood", "#7c3aed");
+  readRow.appendChild(rssOut.el);
+  readRow.appendChild(nllOut.el);
+  wrapper.appendChild(readRow);
+
+  // ── Plot ──
+  const W = 720, H = 300;
+  const M = { top: 12, right: 16, bottom: 34, left: 42 };
+  const innerW = W - M.left - M.right;
+  const innerH = H - M.top - M.bottom;
+
+  const svg = d3.create("svg")
+    .attr("viewBox", `0 0 ${W} ${H}`)
+    .style("width", "100%")
+    .style("max-width", `${W}px`)
+    .style("height", "auto")
+    .style("display", "block")
+    .style("background", "#fff");
+
+  const xSc = d3.scaleLinear().domain([0, DAYS]).range([0, innerW]);
+  const ySc = d3.scaleLinear().domain([0, 16]).range([innerH, 0]);
+
+  const g = svg.append("g").attr("transform", `translate(${M.left},${M.top})`);
+
+  // Grid
+  g.append("g")
+    .attr("stroke", "#e2e8f0").attr("stroke-dasharray", "2,3")
+    .selectAll("line.yg").data(ySc.ticks(5)).join("line").attr("class","yg")
+    .attr("x1", 0).attr("x2", innerW).attr("y1", d => ySc(d)).attr("y2", d => ySc(d));
+
+  // Axes
+  g.append("g").attr("transform", `translate(0,${innerH})`)
+    .call(d3.axisBottom(xSc).ticks(7))
+    .attr("font-size", 11);
+  g.append("g")
+    .call(d3.axisLeft(ySc).ticks(5))
+    .attr("font-size", 11);
+  g.append("text")
+    .attr("x", innerW/2).attr("y", innerH + 28)
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px").style("fill", "#475569")
+    .text("Day");
+  g.append("text")
+    .attr("transform", `translate(-32,${innerH/2}) rotate(-90)`)
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px").style("fill", "#475569")
+    .text("Incidence");
+
+  // Residual segments (gray, behind line)
+  const gResid = g.append("g");
+
+  // Fit line
+  const linePath = g.append("path")
+    .attr("fill", "none")
+    .attr("stroke", "#d97706").attr("stroke-width", 2.5);
+
+  // Observed dots (on top)
+  g.selectAll("circle.obs")
+    .data(data).join("circle").attr("class", "obs")
+    .attr("cx", d => xSc(d.day))
+    .attr("cy", d => ySc(d.inc))
+    .attr("r", 3.2)
+    .attr("fill", "#0f172a");
+
+  const lineGen = d3.line().x(d => xSc(d.t)).y(d => ySc(d.inc));
+
+  // ── Buttons ──
+  const btnRow = document.createElement("div");
+  btnRow.style.cssText = "display:flex;gap:10px;margin-top:8px;max-width:320px;";
+  const optBtn = createButton("▶  Optimize", "auto");
+  const resetBtn = createButton("↻  Reset", "reset");
+  btnRow.appendChild(optBtn.el);
+  btnRow.appendChild(resetBtn.el);
+  wrapper.appendChild(svg.node());
+  wrapper.appendChild(btnRow);
+
+  // ── Update ──
+  function update() {
+    const beta = SL.beta.val(), sigma = SL.sigma.val(), gamma = SL.gamma.val();
+    const inc = mf_sim.run(beta, sigma, gamma, DAYS);
+    const pred = inc.map((v, t) => ({ t, inc: v }));
+    linePath.attr("d", lineGen(pred));
+
+    // Residuals and scores (over observed days only)
+    const sdHat = optim.sd;
+    let rss = 0, nll = 0;
+    const resSegs = [];
+    for (const d of data) {
+      const p = inc[d.day];
+      const r = d.inc - p;
+      rss += r * r;
+      // Normal log-likelihood with estimated sd
+      nll += 0.5*Math.log(2*Math.PI*sdHat*sdHat) + (r*r)/(2*sdHat*sdHat);
+      resSegs.push({ day: d.day, yObs: d.inc, yPred: p });
+    }
+
+    gResid.selectAll("line.r")
+      .data(resSegs).join("line").attr("class", "r")
+      .attr("x1", d => xSc(d.day)).attr("x2", d => xSc(d.day))
+      .attr("y1", d => ySc(d.yObs)).attr("y2", d => ySc(d.yPred))
+      .attr("stroke", "#94a3b8").attr("stroke-width", 1.2)
+      .attr("stroke-dasharray", "2,2");
+
+    rssOut.set(rss.toFixed(1));
+    nllOut.set(nll.toFixed(1));
+  }
+
+  SL.beta.input.addEventListener("input",  () => { SL.beta.sync();  update(); });
+  SL.sigma.input.addEventListener("input", () => { SL.sigma.sync(); update(); });
+  SL.gamma.input.addEventListener("input", () => { SL.gamma.sync(); update(); });
+
+  // Animate to target values
+  function animateTo(target, ms = 600) {
+    const start = { beta: SL.beta.val(), sigma: SL.sigma.val(), gamma: SL.gamma.val() };
+    const t0 = performance.now();
+    function frame(now) {
+      const k = Math.min(1, (now - t0) / ms);
+      const e = k < 0.5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2)/2; // easeInOutQuad
+      SL.beta.update( start.beta  + (target.beta  - start.beta)  * e);
+      SL.sigma.update(start.sigma + (target.sigma - start.sigma) * e);
+      SL.gamma.update(start.gamma + (target.gamma - start.gamma) * e);
+      update();
+      if (k < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  optBtn.el.addEventListener("click", () =>
+    animateTo({ beta: optim.beta, sigma: optim.sigma, gamma: optim.gamma }));
+  resetBtn.el.addEventListener("click", () =>
+    animateTo({ beta: 0.004, sigma: 0.5, gamma: 0.5 }));
+
+  update();
+  return wrapper;
+}
 ```
 
 ## Methods
@@ -199,25 +371,203 @@ Model fitting methods typically include [@rui2024]:
 
 ### Least squares estimation {#sec-calib-lse}
 
-```{r}
-#| fig-width: 5
-#| fig-height: 2.5
-#| out-width: "100%"
-ggplot() +
-  # Observed points
-  geom_point(data = df_plot, aes(x = day, y = inc)) +
-  # Fitted incidence line
-  geom_line(data = df_plot, aes(x = day, y = pred),
-            color = "orange", linewidth = 1.2) +
-  # Vertical lines (residuals)
-  geom_segment(
-    data = df_plot,
-    aes(x = day, xend = day, y = inc, yend = pred),
-    color = "blue"
-  ) +
-  coord_cartesian(ylim = c(0, max(upr)), xlim = c(0, 30)) +
-  labs(x = "Day", y = "Incidence") +
-  theme_minimal()
+For each day, the **residual** is the gap between the data point and the model's prediction. Least squares penalises *squared* residuals, so a single large miss is much worse than many small ones. The blue squares below have side length equal to the residual — their total area is the RSS. Slide the parameters until the squares shrink.
+
+```{ojs}
+//| echo: false
+
+viewof mf_lse = {
+  const data = transpose(ojsdata).filter(d => d.day <= 30);
+  const DAYS = 30;
+
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = "font-family:system-ui,-apple-system,sans-serif;max-width:760px;margin:0 auto;";
+  wrapper.appendChild(injectStyle());
+
+  // ── Sliders ──
+  const SL = {};
+  SL.beta  = createSlider("β",  0.001, 0.010, 0.0001, 0.004, "#3b82f6", "blue");
+  SL.sigma = createSlider("σ",  0.3,   3.0,   0.05,   0.5,   "#7c3aed", "purple");
+  SL.gamma = createSlider("γ",  0.3,   3.0,   0.05,   0.5,   "#0891b2", "teal");
+  styleMathLabel(SL.beta, SL.sigma, SL.gamma);
+
+  const slRow = document.createElement("div");
+  slRow.style.cssText = "display:flex;gap:20px;margin-bottom:12px;";
+  slRow.appendChild(SL.beta.el);
+  slRow.appendChild(SL.sigma.el);
+  slRow.appendChild(SL.gamma.el);
+  wrapper.appendChild(slRow);
+
+  // ── Readout ──
+  const readRow = document.createElement("div");
+  readRow.style.cssText = "display:flex;gap:24px;align-items:baseline;margin-bottom:10px;";
+  const rssBox = document.createElement("div");
+  rssBox.style.cssText = "display:flex;flex-direction:column;gap:2px;";
+  const rssLbl = document.createElement("span");
+  rssLbl.style.cssText = "font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;";
+  rssLbl.textContent = "∑ (yᵢ − ŷᵢ)² — RSS";
+  const rssVal = document.createElement("span");
+  rssVal.style.cssText = "font-size:26px;font-weight:800;color:#2563eb;font-family:'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;";
+  rssBox.appendChild(rssLbl);
+  rssBox.appendChild(rssVal);
+  const hoverBox = document.createElement("div");
+  hoverBox.style.cssText = "font-size:13px;color:#475569;margin-left:auto;min-height:18px;";
+  readRow.appendChild(rssBox);
+  readRow.appendChild(hoverBox);
+  wrapper.appendChild(readRow);
+
+  // ── Plot ──
+  // For the squares to look "square" in data units we need matching px/unit
+  // on both axes. Work backwards from a target pixel scale.
+  const unitPx = 14;                // 1 unit of incidence / 1 day = 14 px
+  const innerW = unitPx * DAYS;
+  const innerH = unitPx * 16;
+  const M = { top: 14, right: 20, bottom: 34, left: 44 };
+  const W = innerW + M.left + M.right;
+  const H = innerH + M.top + M.bottom;
+
+  const svg = d3.create("svg")
+    .attr("viewBox", `0 0 ${W} ${H}`)
+    .style("width", "100%").style("max-width", `${W}px`)
+    .style("height", "auto").style("display", "block");
+
+  const xSc = d3.scaleLinear().domain([0, DAYS]).range([0, innerW]);
+  const ySc = d3.scaleLinear().domain([0, 16]).range([innerH, 0]);
+
+  const g = svg.append("g").attr("transform", `translate(${M.left},${M.top})`);
+
+  // Grid
+  g.append("g").attr("stroke", "#e2e8f0").attr("stroke-dasharray", "2,3")
+    .selectAll("line.yg").data(ySc.ticks(8)).join("line").attr("class","yg")
+    .attr("x1", 0).attr("x2", innerW).attr("y1", d => ySc(d)).attr("y2", d => ySc(d));
+
+  g.append("g").attr("transform", `translate(0,${innerH})`)
+    .call(d3.axisBottom(xSc).ticks(7)).attr("font-size", 11);
+  g.append("g").call(d3.axisLeft(ySc).ticks(8)).attr("font-size", 11);
+  g.append("text")
+    .attr("x", innerW/2).attr("y", innerH + 28)
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px").style("fill", "#475569").text("Day");
+  g.append("text")
+    .attr("transform", `translate(-34,${innerH/2}) rotate(-90)`)
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px").style("fill", "#475569").text("Incidence");
+
+  // Squares layer (behind line)
+  const gSq = g.append("g");
+  // Line
+  const linePath = g.append("path")
+    .attr("fill", "none").attr("stroke", "#d97706").attr("stroke-width", 2.5);
+  // Dots
+  const dots = g.selectAll("circle.obs")
+    .data(data).join("circle").attr("class","obs")
+    .attr("cx", d => xSc(d.day)).attr("cy", d => ySc(d.inc))
+    .attr("r", 3.2).attr("fill", "#0f172a");
+
+  const lineGen = d3.line().x(d => xSc(d.t)).y(d => ySc(d.inc));
+
+  // ── Buttons ──
+  const btnRow = document.createElement("div");
+  btnRow.style.cssText = "display:flex;gap:10px;margin-top:8px;max-width:320px;";
+  const optBtn = createButton("▶  Optimize", "auto");
+  const resetBtn = createButton("↻  Reset", "reset");
+  btnRow.appendChild(optBtn.el);
+  btnRow.appendChild(resetBtn.el);
+  wrapper.appendChild(svg.node());
+  wrapper.appendChild(btnRow);
+
+  // ── Update ──
+  let activeHover = null;
+
+  function update() {
+    const beta = SL.beta.val(), sigma = SL.sigma.val(), gamma = SL.gamma.val();
+    const inc = mf_sim.run(beta, sigma, gamma, DAYS);
+    linePath.attr("d", lineGen(inc.map((v, t) => ({ t, inc: v }))));
+
+    const squares = [];
+    let rss = 0;
+    for (const d of data) {
+      const p = inc[d.day];
+      const r = d.inc - p;
+      rss += r * r;
+      const side = Math.abs(r);
+      // Always draw square to the right of the day, baseline at the lower of (yObs, yPred)
+      const yLow = Math.min(d.inc, p);
+      squares.push({
+        day: d.day, yObs: d.inc, yPred: p, resid: r, sqr: r*r,
+        x0: d.day, x1: d.day + side,
+        y0: yLow, y1: yLow + side
+      });
+    }
+
+    rssVal.textContent = rss.toFixed(2);
+
+    const sq = gSq.selectAll("rect.sq").data(squares, d => d.day);
+    sq.join(
+      enter => enter.append("rect").attr("class","sq")
+        .attr("fill", "#3b82f6").attr("fill-opacity", 0.16)
+        .attr("stroke", "#2563eb").attr("stroke-width", 1)
+        .on("mouseenter", function(ev, d) {
+          activeHover = d.day;
+          d3.select(this).attr("fill-opacity", 0.45);
+          hoverBox.innerHTML = `Day <b>${d.day}</b> &nbsp; residual = ${d.resid.toFixed(2)} &nbsp; residual² = <b>${d.sqr.toFixed(2)}</b>`;
+        })
+        .on("mouseleave", function() {
+          activeHover = null;
+          d3.select(this).attr("fill-opacity", 0.16);
+          hoverBox.textContent = "";
+        }),
+      update => update,
+      exit => exit.remove()
+    )
+      .attr("x", d => xSc(d.x0))
+      .attr("y", d => ySc(d.y1))
+      .attr("width",  d => Math.max(0, xSc(d.x1) - xSc(d.x0)))
+      .attr("height", d => Math.max(0, ySc(d.y0) - ySc(d.y1)))
+      .attr("fill-opacity", d => activeHover === d.day ? 0.45 : 0.16);
+
+    // Residual stem (connects data point to its predicted value — always thin)
+    const stem = gSq.selectAll("line.stem").data(squares, d => d.day);
+    stem.join(
+      enter => enter.append("line").attr("class","stem")
+        .attr("stroke", "#2563eb").attr("stroke-width", 1.2),
+      update => update,
+      exit => exit.remove()
+    )
+      .attr("x1", d => xSc(d.day)).attr("x2", d => xSc(d.day))
+      .attr("y1", d => ySc(d.yObs)).attr("y2", d => ySc(d.yPred));
+
+    // Keep dots on top
+    dots.raise();
+  }
+
+  SL.beta.input.addEventListener("input",  () => { SL.beta.sync();  update(); });
+  SL.sigma.input.addEventListener("input", () => { SL.sigma.sync(); update(); });
+  SL.gamma.input.addEventListener("input", () => { SL.gamma.sync(); update(); });
+
+  function animateTo(target, ms = 600) {
+    const start = { beta: SL.beta.val(), sigma: SL.sigma.val(), gamma: SL.gamma.val() };
+    const t0 = performance.now();
+    function frame(now) {
+      const k = Math.min(1, (now - t0) / ms);
+      const e = k < 0.5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2)/2;
+      SL.beta.update( start.beta  + (target.beta  - start.beta)  * e);
+      SL.sigma.update(start.sigma + (target.sigma - start.sigma) * e);
+      SL.gamma.update(start.gamma + (target.gamma - start.gamma) * e);
+      update();
+      if (k < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  optBtn.el.addEventListener("click", () =>
+    animateTo({ beta: optim.beta, sigma: optim.sigma, gamma: optim.gamma }));
+  resetBtn.el.addEventListener("click", () =>
+    animateTo({ beta: 0.004, sigma: 0.5, gamma: 0.5 }));
+
+  update();
+  return wrapper;
+}
 ```
 
 $$RSS = \sum_{i = 1}^{n}[y_i - f(x_i)]^2$$ {#eq-calib-rss}
@@ -226,67 +576,239 @@ Least squares estimation corresponds to maximum likelihood estimation when the n
 
 ### Maximum likelihood estimation {#sec-calib-mle}
 
-```{r}
-#| fig-width: 5
-#| fig-height: 2.5
-#| out-width: "100%"
+Instead of minimising squared distance, **maximum likelihood** asks: *if our model were correct, how probable is the data we actually observed?* For count data like incidence, a natural choice is the **Poisson** distribution — each day's prediction $\hat{y}_i$ plays the role of the Poisson mean $\lambda_i$, and the probability of observing exactly $y_i$ cases is
 
-sd_inc <- params[4]
-k <- 2  # how many SDs on either side of the mean to plot
-scale_factor <- 4
+$$P(Y_i = y_i \mid \lambda_i) = \frac{\lambda_i^{y_i}\, e^{-\lambda_i}}{y_i!}$$
 
-# 1) Build the full pdf line data for each day
-df_bell_line <- df_plot %>%
-  rowwise() %>%
-  do({
-    day_i     <- .$day
-    inc_pred  <- .$pred
-    # Go e.g. ±3 SD around the fitted mean
-    inc_seq   <- seq(inc_pred - k*sd_inc, inc_pred + k*sd_inc, length.out = 200)
-    dens      <- dnorm(inc_seq, mean = inc_pred, sd = sd_inc)
-    
-    # Offset the day coordinate by the pdf * scale_factor
-    day_bump  <- day_i + dens * scale_factor
-    
-    # Return coordinates for geom_line
-    data.frame(
-      day  = day_i,         # to group by day if needed
-      x    = day_bump,
-      y    = inc_seq
-    )
-  }) %>%
-  ungroup()
+The purple lollipops below show each day's Poisson PMF, with one stick per integer count. The **solid** stick sits at the observed $y_i$ — that height *is* its likelihood. Summing the log-likelihoods across days (and flipping sign) gives the negative log-likelihood, which optimisers minimise.
 
-# 2) For each observed data point, compute a short horizontal offset to the pdf curve
-#    at exactly inc = inc_obs.
-df_segments <- df_plot %>%
-  mutate(
-    dens_obs = dnorm(inc, mean = pred, sd = sd_inc),
-    x0 = day,
-    y0 = inc,
-    x1 = day + dens_obs * scale_factor,  # horizontal offset
-    y1 = inc
-  )
+```{ojs}
+//| echo: false
 
-ggplot() +
-  # Normal pdf lines (vertical bumps)
-  geom_line(data = df_bell_line,
-            aes(x = x, y = y, group = day),
-            color = "blue", alpha = 0.1) +
-  # 3) Horizontal segments from each black dot to its pdf line
-  geom_segment(
-    data = df_segments,
-    aes(x = x0, y = y0, xend = x1, yend = y1),
-    color = "blue"
-  ) +
-  # Observed points
-  geom_point(data = df_plot, aes(x = day, y = inc)) +
-  # Fitted incidence line
-  geom_line(data = df_plot, aes(x = day, y = pred),
-            color = "orange", linewidth = 1.2) +
-  coord_cartesian(ylim = c(0, max(upr)), xlim = c(0, 30)) +
-  labs(x = "Day", y = "Incidence") +
-  theme_minimal()
+viewof mf_mle = {
+  const data = transpose(ojsdata).filter(d => d.day <= 30);
+  const DAYS = 30;
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "mf-mle-wrap";
+  wrapper.style.cssText = "font-family:system-ui,-apple-system,sans-serif;max-width:760px;margin:0 auto;";
+  wrapper.appendChild(injectStyle());
+
+  // One-time style sheet: styling via CSS classes so update() doesn't need per-element attr writes
+  const styleTag = document.createElement("style");
+  styleTag.textContent = `
+    .mf-mle-wrap .stem { stroke:#7c3aed; stroke-width:1.4; stroke-opacity:0.38; }
+    .mf-mle-wrap .stem.obs { stroke-width:2.6; stroke-opacity:0.95; }
+    .mf-mle-wrap .head { fill:#a78bfa; fill-opacity:0.7; r:2; }
+    .mf-mle-wrap .head.obs { fill:#7c3aed; fill-opacity:1; r:3.2; }
+  `;
+  wrapper.appendChild(styleTag);
+
+  // Precomputed log-factorials (data counts are small — this covers any practical k)
+  const LOG_FACT = new Float64Array(200);
+  for (let i = 1; i < 200; i++) LOG_FACT[i] = LOG_FACT[i-1] + Math.log(i);
+  const logPois = (k, lam) => {
+    if (lam <= 0) return k === 0 ? 0 : -Infinity;
+    return k * Math.log(lam) - lam - (k < LOG_FACT.length ? LOG_FACT[k] : LOG_FACT[LOG_FACT.length-1]);
+  };
+
+  // ── Sliders ──
+  const SL = {};
+  SL.beta  = createSlider("β",  0.001, 0.010, 0.0001, 0.004, "#3b82f6", "blue");
+  SL.sigma = createSlider("σ",  0.3,   3.0,   0.05,   0.5,   "#7c3aed", "purple");
+  SL.gamma = createSlider("γ",  0.3,   3.0,   0.05,   0.5,   "#0891b2", "teal");
+  styleMathLabel(SL.beta, SL.sigma, SL.gamma);
+
+  const slRow1 = document.createElement("div");
+  slRow1.style.cssText = "display:flex;gap:20px;margin-bottom:12px;flex-wrap:wrap;";
+  slRow1.appendChild(SL.beta.el);
+  slRow1.appendChild(SL.sigma.el);
+  slRow1.appendChild(SL.gamma.el);
+  wrapper.appendChild(slRow1);
+
+  // ── Readout ──
+  const readRow = document.createElement("div");
+  readRow.style.cssText = "display:flex;gap:24px;align-items:baseline;margin-bottom:10px;";
+  const box = document.createElement("div");
+  box.style.cssText = "display:flex;flex-direction:column;gap:2px;";
+  const lbl = document.createElement("span");
+  lbl.style.cssText = "font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;";
+  lbl.textContent = "− log L(θ)  — Poisson";
+  const valEl = document.createElement("span");
+  valEl.style.cssText = "font-size:26px;font-weight:800;color:#7c3aed;font-family:'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;";
+  box.appendChild(lbl);
+  box.appendChild(valEl);
+  readRow.appendChild(box);
+  wrapper.appendChild(readRow);
+
+  // ── Plot ──
+  const W = 720, H = 340;
+  const M = { top: 14, right: 16, bottom: 34, left: 44 };
+  const innerW = W - M.left - M.right;
+  const innerH = H - M.top - M.bottom;
+
+  const svg = d3.create("svg")
+    .attr("viewBox", `0 0 ${W} ${H}`)
+    .style("width", "100%").style("max-width", `${W}px`)
+    .style("height", "auto").style("display", "block");
+
+  const xSc = d3.scaleLinear().domain([0, DAYS]).range([0, innerW]);
+  const ySc = d3.scaleLinear().domain([-1, 28]).range([innerH, 0]);
+
+  const g = svg.append("g").attr("transform", `translate(${M.left},${M.top})`);
+
+  g.append("g").attr("stroke", "#e2e8f0").attr("stroke-dasharray", "2,3")
+    .selectAll("line.yg").data(ySc.ticks(6)).join("line").attr("class","yg")
+    .attr("x1", 0).attr("x2", innerW).attr("y1", d => ySc(d)).attr("y2", d => ySc(d));
+
+  g.append("g").attr("transform", `translate(0,${innerH})`)
+    .call(d3.axisBottom(xSc).ticks(7)).attr("font-size", 11);
+  g.append("g").call(d3.axisLeft(ySc).ticks(7)).attr("font-size", 11);
+  g.append("text")
+    .attr("x", innerW/2).attr("y", innerH + 28)
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px").style("fill", "#475569").text("Day");
+  g.append("text")
+    .attr("transform", `translate(-34,${innerH/2}) rotate(-90)`)
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px").style("fill", "#475569").text("Incidence");
+
+  // Layers (draw order, bottom → top): fit line → stems → heads → observed dots
+  const linePath = g.append("path")
+    .attr("fill", "none").attr("stroke", "#d97706").attr("stroke-width", 2.5)
+    .attr("stroke-opacity", 0.55);
+  const gStems = g.append("g");
+  const gHeads = g.append("g");
+  const dots = g.selectAll("circle.obs")
+    .data(data).join("circle").attr("class","obs")
+    .attr("cx", d => xSc(d.day)).attr("cy", d => ySc(d.inc))
+    .attr("r", 3.2).attr("fill", "#0f172a");
+
+  const lineGen = d3.line().x(d => xSc(d.t)).y(d => ySc(d.inc));
+
+  // ── Buttons ──
+  const btnRow = document.createElement("div");
+  btnRow.style.cssText = "display:flex;gap:10px;margin-top:8px;max-width:320px;";
+  const optBtn = createButton("▶  Optimize", "auto");
+  const resetBtn = createButton("↻  Reset", "reset");
+  btnRow.appendChild(optBtn.el);
+  btnRow.appendChild(resetBtn.el);
+  wrapper.appendChild(svg.node());
+  wrapper.appendChild(btnRow);
+
+  const pxPerDay = xSc(1) - xSc(0);     // horizontal gap per day in SVG user units
+  const maxStickPx = pxPerDay * 0.92;   // keep sticks inside the day's "cell"
+
+  // Pre-allocate a fixed pool of line/circle elements per day; update() only mutates geometry.
+  const MAX_K = 30;
+  const stemGroups = [];
+  const headGroups = [];
+
+  for (let i = 0; i < data.length; i++) {
+    const d = data[i];
+    const stemArr = [];
+    const headArr = [];
+    for (let k = 0; k < MAX_K; k++) {
+      const ln = gStems.append("line").attr("class", "stem").node();
+      const ci = gHeads.append("circle").attr("class", "head").node();
+      stemArr.push(ln);
+      headArr.push(ci);
+    }
+    stemGroups.push(stemArr);
+    headGroups.push(headArr);
+  }
+
+  function update() {
+    const beta = SL.beta.val(), sigma = SL.sigma.val(), gamma = SL.gamma.val();
+    const inc = mf_sim.run(beta, sigma, gamma, DAYS);
+    linePath.attr("d", lineGen(inc.map((v, t) => ({ t, inc: v }))));
+
+    let nll = 0;
+
+    for (let i = 0; i < data.length; i++) {
+      const d  = data[i];
+      const mu = inc[d.day];
+      const lli = logPois(d.inc, mu);
+      nll += -lli;
+
+      // Range of k around the mean to draw
+      const sdApprox = Math.sqrt(Math.max(mu, 1));
+      const kLo = Math.max(0, Math.floor(mu - 3.5 * sdApprox));
+      const kHi = Math.min(MAX_K - 1, Math.ceil(mu + 3.5 * sdApprox) + 1);
+
+      // Probability for each integer; compute peak for per-day scaling
+      const kvals = new Array(MAX_K);
+      let peak = 0;
+      for (let k = kLo; k <= kHi; k++) {
+        const p = Math.exp(logPois(k, mu));
+        kvals[k] = p;
+        if (p > peak) peak = p;
+      }
+      const scale = peak > 0 ? maxStickPx / peak : 0;
+      const xBase = xSc(d.day);
+
+      const stemArr = stemGroups[i];
+      const headArr = headGroups[i];
+      for (let k = 0; k < MAX_K; k++) {
+        const ln = stemArr[k];
+        const ci = headArr[k];
+        if (k < kLo || k > kHi) {
+          ln.setAttribute("visibility", "hidden");
+          ci.setAttribute("visibility", "hidden");
+          continue;
+        }
+        const p  = kvals[k] || 0;
+        const xT = xBase + p * scale;
+        const yP = ySc(k);
+        ln.setAttribute("x1", xBase);
+        ln.setAttribute("x2", xT);
+        ln.setAttribute("y1", yP);
+        ln.setAttribute("y2", yP);
+        ln.removeAttribute("visibility");
+        ci.setAttribute("cx", xT);
+        ci.setAttribute("cy", yP);
+        ci.removeAttribute("visibility");
+        const isObs = (k === d.inc);
+        if (isObs) { ln.classList.add("obs"); ci.classList.add("obs"); }
+        else       { ln.classList.remove("obs"); ci.classList.remove("obs"); }
+      }
+    }
+
+    valEl.textContent = nll.toFixed(2);
+    dots.raise();
+  }
+
+  for (const k of ["beta","sigma","gamma"]) {
+    SL[k].input.addEventListener("input", () => { SL[k].sync(); update(); });
+  }
+
+  function animateTo(target, ms = 600) {
+    const start = {
+      beta:  SL.beta.val(),
+      sigma: SL.sigma.val(),
+      gamma: SL.gamma.val()
+    };
+    const t0 = performance.now();
+    function frame(now) {
+      const k = Math.min(1, (now - t0) / ms);
+      const e = k < 0.5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2)/2;
+      SL.beta.update( start.beta  + (target.beta  - start.beta)  * e);
+      SL.sigma.update(start.sigma + (target.sigma - start.sigma) * e);
+      SL.gamma.update(start.gamma + (target.gamma - start.gamma) * e);
+      update();
+      if (k < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  optBtn.el.addEventListener("click", () =>
+    animateTo({ beta: optim_pois.beta, sigma: optim_pois.sigma, gamma: optim_pois.gamma }));
+  resetBtn.el.addEventListener("click", () =>
+    animateTo({ beta: 0.004, sigma: 0.5, gamma: 0.5 }));
+
+  update();
+  return wrapper;
+}
 ```
 
 A generalization of the least squares idea is the likelihood.
@@ -339,8 +861,8 @@ This looks exactly like the residual sum of squares at @eq-calib-rss.
 
 Nelder-Mead is a numerical algorithm to find the minimum (or maximum) of a multidimentional function. It's a direct search method: calculate the value of the function and compare it to other values. It does not use derivatives.
 
-It use a ***simplex*** for a search. A simplex is a 
+It use a ***simplex*** for a search. A simplex is a
 
+## Uncertainty
 
-
-
+Uncertainties in the parameter estimates are described by confidence intervals [@bolker2008]. A confidence interval $[\sigma_i^-, \sigma_i^+]$ of a parameter estimate $\hat{\theta_i}$ to a confidence level $1 - \alpha$ signifies that the true value $\theta_i^*$ is located within this interval with probability $1 - \alpha$ [@bolker2008].

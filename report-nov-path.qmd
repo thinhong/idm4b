@@ -1,0 +1,53 @@
+---
+title: "report-nov-path"
+format: html
+---
+
+For a quick assessment, use US CDC's Pandemic Severity Assessment Framework (PSAF) [@reed2013], which recommends 2 main factors:
+
+-   transmissibility: how easily the pandemic virus spreads from person-to-person
+-   clinical severity: how serious is the illness associated with infection
+
+WHO recommends 4 indicators [@who2025]:
+
+-   Transmissibility
+-   Seriousness of disease
+-   morbidity and mortality
+-   Impact on health care capacity
+
+## Transmissibility
+
+R0, Rt
+
+attack rate
+
+incubation period [@salzberger2021] Underlying population immunity
+
+## Seriousness
+
+Severity vs seriousness:
+
+-   Severity refers to the outcome of the epidemic
+-   Seriousness refers to the clinical disease state, such as the likelihood of serious infection or death
+
+The seriousness of disease assessed only need once or twice per epidemic, because cumulative proportions only become stable around the peak, seriousness of disease should only be reported around or after the peak. they can be reported once near the peak and, if desired, again at the end of the epidemic [@who2025].
+
+The start and end of the cumulative period needs to be defined before cumulative ratios or proportions can be calculated. the beginning of the epidemic period, as defined by [@who2025]: - The first week with non-zero activity for a selected parameter - Crossing of the epidemic threshold for a selected parameter
+
+based on ratios or proportions:
+
+-   case hospitalization risk: proportion of infected cases requiring hospitalization
+-   case hospitalization to ICU admission risk: proportion of ICU admission among all hospitalized cases
+
+Risk factors
+
+## Morbidity and mortality
+
+-   case fatality rate
+-   infection’s fatality rate
+
+## Impact on healthcare capacity
+
+Proportion of all hospital beds, ICU beds or beds with oxygen support currently occupied
+
+Health care workforce absenteeism

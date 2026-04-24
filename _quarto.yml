@@ -1,8 +1,6 @@
 project:
   type: book
   output-dir: docs
-  post-render:
-    - make-slides.R
 
 book:
   favicon: logo-icon.svg
@@ -31,6 +29,7 @@ book:
     - part: mod-fit.qmd
       chapters:
         - lse.qmd
+        - lik.qmd
         - mle.qmd
         - mcmc.qmd
         - pmcmc.qmd
@@ -55,30 +54,16 @@ book:
         - serocat.qmd
     - part: stat-mod.qmd
       chapters:
-        - glm.qmd
-        - gam.qmd
-        - surv.qmd
-        - bayes.qmd
-        - ar.qmd
-        - distr.qmd
-        - ts.qmd
-    - part: da.qmd
-      chapters: 
-        - smooth.qmd
-    - part: rp.qmd
-      chapters: 
-        - rp-risk.qmd
-        - rp-response.qmd
+        - stat-glm.qmd
+        - stat-gam.qmd
+        - stat-nlin.qmd
+        - stat-surv.qmd
+        - stat-bayes.qmd
+        - stat-ts.qmd
     - references.qmd
   appendices:
     - dict.qmd
     - math.qmd
-    - stat.qmd
-    - odin.qmd
-    - metaprg.qmd
-    - ensemble.qmd
-    - func.qmd
-    - simll.qmd
 
 bibliography: references.bib
 csl: apa.csl
@@ -87,7 +72,6 @@ format:
   html:
     theme: [cosmo, theme.scss]
     code-overflow: wrap
-    code-copy: true
     fig-format: svg
     df-print: paged
     toc-depth: 5

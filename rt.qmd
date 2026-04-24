@@ -1,4 +1,15 @@
+---
+format: html
+execute: 
+  echo: false
+---
+
 # Estimating $R_t$
+
+```{ojs}
+import { createSlider, createButton, injectStyle } from "./_slider.js"
+d3 = require("d3@7")
+```
 
 $R_t$ can be defined in 2 ways: as the **instantaneous reproduction number** (see @sec-rt-inst) or as the **case reproduction number** (see @sec-rt-case).
 
@@ -30,6 +41,502 @@ $$R_t^i = \frac{I_t}{\sum_{s = 1}^{t} I_{t - s} w_s}$$
 Looking back at @def-rt-inst, $R_t^i$ is the expected number of secondary infections occurring at time $t$ ($I_t$), divided by the number of infected individuals ($\sum_{s = 1}^{t} I_{t - s}$), each scaled by their relative infectiousness at time $t$ ($w_s$).
 
 The only parametric assumption required by this method is **the form of the generation interval**. The standard assumption is that $w_s$ follows a **discretized gamma distribution**, but any parametric or empirical discrete distribution also work [@gostic2020].
+
+#### Interactive intuition {#sec-cori-intuition}
+
+The three stacked panels below map one-to-one onto the formula. The **top panel** shows daily incidence: gray bars are past cases $I_{t-s}$, the red bar is today $I_t$ (the **numerator**), and the amber overlays are each past day's **weighted contribution** $I_{t-s}\cdot w_s$. The **middle panel** shows the generation interval $w_s$ in purple — but aligned to day $t-s$ (not a raw lag axis), so each purple bar sits directly under the amber bar it produces. Visually: **gray $\times$ purple $=$ amber**. Summing the amber bars gives the **denominator**. The **bottom panel** shows $R_t$ computed across the whole series (teal), with the dashed line at $R_t=1$ and a red dot marking the day you selected — so you can see how the one-day calculation sits in the broader trajectory.
+
+```{ojs}
+//| echo: false
+coriDemo = {
+  // ─────────────────────────────────────────────────────────────────────────
+  // Setup (runs once). All DOM nodes are created upfront and cached as refs;
+  // draw() only touches attributes on existing nodes — zero allocations in
+  // the hot path, so drag stays smooth.
+  // ─────────────────────────────────────────────────────────────────────────
+  const wrapper = document.createElement("div");
+  wrapper.className = "cori-wrap";
+  wrapper.style.cssText = "font-family:system-ui,-apple-system,sans-serif;max-width:900px;margin:0 auto;";
+  wrapper.appendChild(injectStyle());
+
+  // Data
+  const incidence = [2, 3, 5, 8, 12, 18, 27, 39, 53, 68, 82, 93, 100, 103, 101, 95, 86, 75, 63, 51, 40, 30, 22, 16, 11, 7, 5, 3, 2, 1];
+  const T = incidence.length;
+
+  // Pre-allocated scratch buffers (reused every draw — no GC pressure)
+  const weights  = new Float64Array(T + 1);
+  const contrib  = new Float64Array(T);
+  const wValues  = new Float64Array(T);
+  const rtRaw    = new Float64Array(T);
+  const rtValid  = new Uint8Array(T);
+  const rtPoints = new Array(T);
+  for (let i = 0; i < T; i++) rtPoints[i] = { t: 0, rt: 0 };
+  const rtLineData = []; // mutated, never re-created
+
+  // Gamma pdf helper; fills `weights` in place and normalizes
+  function updateWeights(meanGI, sdGI) {
+    const shape = (meanGI * meanGI) / (sdGI * sdGI);
+    const scale = (sdGI * sdGI) / meanGI;
+    let total = 0;
+    weights[0] = 0;
+    for (let s = 1; s <= T; s++) {
+      const v = Math.pow(s, shape - 1) * Math.exp(-s / scale);
+      weights[s] = v;
+      total += v;
+    }
+    if (total > 0) for (let s = 1; s <= T; s++) weights[s] /= total;
+  }
+
+  // Mutable state
+  let t = 14; // 0-indexed day (= user day 15)
+
+  // Layout
+  const W = 860;
+  const M = { top: 18, right: 20, bottom: 44, left: 55 };
+  const H_INC = 180, H_W = 90, H_RT = 130;
+  const GAP = 10, GAP_RT = 24;
+  const H = M.top + H_INC + GAP + H_W + GAP_RT + H_RT + M.bottom;
+  const innerW = W - M.left - M.right;
+
+  // SVG root
+  const svgSel = d3.create("svg")
+    .attr("viewBox", `0 0 ${W} ${H}`)
+    .style("width", "100%")
+    .style("max-width", `${W}px`)
+    .style("height", "auto")
+    .style("cursor", "ew-resize")
+    .style("touch-action", "none")
+    .style("user-select", "none")
+    .style("-webkit-user-select", "none")
+    .style("outline", "none");
+  const svg = svgSel.node();
+  svg.setAttribute("tabindex", "0");
+
+  // Shared x scale + precomputed positions
+  const xScale = d3.scaleBand().domain(d3.range(T)).range([0, innerW]).padding(0.18);
+  const xBW = xScale.bandwidth();
+  const xStep = xScale.step();
+  const barX  = new Float64Array(T);
+  const barCx = new Float64Array(T);
+  for (let i = 0; i < T; i++) { barX[i] = xScale(i); barCx[i] = barX[i] + xBW / 2; }
+
+  // ────────── Panel 1: Incidence ──────────
+  const gInc = svgSel.append("g").attr("transform", `translate(${M.left}, ${M.top})`);
+  const yMax = d3.max(incidence) * 1.2;
+  const yScale = d3.scaleLinear().domain([0, yMax]).range([H_INC, 0]);
+
+  gInc.append("g")
+    .attr("transform", `translate(0, ${H_INC})`)
+    .call(d3.axisBottom(xScale).tickFormat("").tickValues(d3.range(0, T, 2)));
+  gInc.append("g").style("font-size", "12px")
+    .call(d3.axisLeft(yScale).ticks(4).tickFormat(d3.format("d")));
+  gInc.append("text")
+    .attr("x", 2).attr("y", 13)
+    .style("font-size", "15px").style("font-weight", "700").style("fill", "#1e293b")
+    .text("Incidence Iₜ");
+
+  // Sub-groups so we can dim whole swaths with a single CSS class toggle on
+  // the wrapper — no per-element attribute writes on hover.
+  const gIncBase    = gInc.append("g").attr("class", "dimmable");
+  const gIncContrib = gInc.append("g").attr("class", "dimmable keep-den");
+  const gIncToday   = gInc.append("g").attr("class", "dimmable keep-num");
+
+  const baseBars   = new Array(T);
+  const weightBars = new Array(T);
+  for (let i = 0; i < T; i++) {
+    baseBars[i] = gIncBase.append("rect")
+      .attr("x", barX[i]).attr("width", xBW)
+      .attr("y", yScale(incidence[i]))
+      .attr("height", H_INC - yScale(incidence[i]))
+      .node();
+    weightBars[i] = gIncContrib.append("rect")
+      .attr("x", barX[i]).attr("width", xBW)
+      .attr("fill", "#f59e0b").attr("opacity", 0)
+      .node();
+  }
+  const tBar = gIncToday.append("rect")
+    .attr("width", xBW).attr("fill", "#dc2626").node();
+  const labelIt = gIncToday.append("text")
+    .style("font-size", "15px").style("font-weight", "700")
+    .style("fill", "#dc2626").attr("text-anchor", "middle").node();
+  const labelDenom = gIncContrib.append("text")
+    .style("font-size", "14px").style("font-weight", "700")
+    .style("fill", "#b45309").attr("text-anchor", "middle").node();
+
+  // ────────── Panel 2: Generation interval ──────────
+  const gW = svgSel.append("g")
+    .attr("transform", `translate(${M.left}, ${M.top + H_INC + GAP})`);
+  const wYScale = d3.scaleLinear().domain([0, 0.3]).range([H_W, 0]);
+
+  gW.append("g")
+    .attr("transform", `translate(0, ${H_W})`)
+    .call(d3.axisBottom(xScale).tickFormat("").tickValues(d3.range(0, T, 2)));
+  const wyAxisG = gW.append("g").style("font-size", "12px");
+  const wyAxis  = d3.axisLeft(wYScale).ticks(3).tickFormat(d3.format(".2f"));
+  wyAxisG.call(wyAxis);
+  gW.append("text")
+    .attr("x", 2).attr("y", 13)
+    .style("font-size", "15px").style("font-weight", "700").style("fill", "#7c3aed")
+    .text("Generation interval wₛ");
+
+  // All of Panel 2's dynamic content dims on any hover.
+  const gWContent = gW.append("g").attr("class", "dimmable");
+  const wBars = new Array(T);
+  for (let i = 0; i < T; i++) {
+    wBars[i] = gWContent.append("rect")
+      .attr("x", barX[i]).attr("width", xBW)
+      .attr("fill", "#a78bfa").attr("opacity", 0)
+      .node();
+  }
+  const wRule = gWContent.append("line")
+    .attr("stroke", "#dc2626").attr("stroke-dasharray", "2,2")
+    .attr("stroke-width", 1).attr("y1", 0).attr("y2", H_W).node();
+
+  // ────────── Panel 3: R_t over time ──────────
+  const gRt = svgSel.append("g")
+    .attr("transform", `translate(${M.left}, ${M.top + H_INC + GAP + H_W + GAP_RT})`);
+  const rtY = d3.scaleLinear().domain([0, 3]).range([H_RT, 0]);
+
+  gRt.append("g").style("font-size", "13px")
+    .attr("transform", `translate(0, ${H_RT})`)
+    .call(d3.axisBottom(xScale).tickFormat(d => d + 1).tickValues(d3.range(0, T, 2)));
+  const rtYAxisG = gRt.append("g").style("font-size", "12px");
+  const rtYAxis  = d3.axisLeft(rtY).ticks(5);
+  rtYAxisG.call(rtYAxis);
+  gRt.append("text")
+    .attr("x", 2).attr("y", 13)
+    .style("font-size", "15px").style("font-weight", "700").style("fill", "#0891b2")
+    .text("Rₜ over time");
+  gRt.append("text")
+    .attr("x", innerW / 2).attr("y", H_RT + 36)
+    .style("font-size", "13px").style("fill", "#475569")
+    .attr("text-anchor", "middle")
+    .text("Day  (click or drag the figure to pick t · ← → arrow keys also work)");
+
+  // Curve (dims on num/den hover, also on rt hover so only the marker shines)
+  const gRtCurve = gRt.append("g").attr("class", "dimmable");
+  // Marker (the red dot + dashed rule for the selected day) — stays bright on rt hover
+  const gRtMarker = gRt.append("g").attr("class", "dimmable keep-rt");
+
+  const rOneLine = gRtCurve.append("line")
+    .attr("x1", 0).attr("x2", innerW)
+    .attr("stroke", "#94a3b8").attr("stroke-dasharray", "3,3").node();
+  const rOneLabel = gRtCurve.append("text")
+    .attr("x", innerW - 4).style("font-size", "12px").style("fill", "#94a3b8")
+    .attr("text-anchor", "end").text("R = 1").node();
+
+  const rtPath = gRtCurve.append("path")
+    .attr("fill", "none").attr("stroke", "#0891b2").attr("stroke-width", 2.5).node();
+  const rtDots = new Array(T);
+  for (let i = 0; i < T; i++) {
+    rtDots[i] = gRtCurve.append("circle")
+      .attr("r", 2.8).attr("fill", "#0891b2").attr("opacity", 0).node();
+  }
+  const rtHighlight = gRtMarker.append("circle")
+    .attr("r", 5.5).attr("fill", "#dc2626")
+    .attr("stroke", "#fff").attr("stroke-width", 2).node();
+  const rtRule = gRtMarker.append("line")
+    .attr("stroke", "#dc2626").attr("stroke-dasharray", "2,2")
+    .attr("stroke-width", 1).attr("y1", 0).attr("y2", H_RT).node();
+
+  // Line generator — built once, reads rtY by reference so it always reflects
+  // the current domain.
+  const rtLine = d3.line().x(d => barCx[d.t]).y(d => rtY(d.rt));
+
+  // ────────── Controls (day t is now draggable, so only GI sliders) ──────────
+  const controls = document.createElement("div");
+  controls.style.cssText = "display:flex;gap:20px;margin:0 0 10px;align-items:flex-end;flex-wrap:wrap;";
+  const SL = {};
+  SL.meanGI = createSlider("Mean GI (days)", 1, 10, 0.5, 4, "#7c3aed", "purple");
+  SL.sdGI   = createSlider("SD GI (days)",   0.5, 5, 0.1, 2, "#7c3aed", "purple");
+  controls.appendChild(SL.meanGI.el);
+  controls.appendChild(SL.sdGI.el);
+
+  // Readout — build the static structure once; only mutate text nodes on draw.
+  // Hover a part of the formula → the matching element in the plot lights up.
+  const fStyle = document.createElement("style");
+  fStyle.textContent = `
+    .cori-formula { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+      font-family:'SF Mono',Menlo,Consolas,monospace; font-size:17px; color:#1e293b;
+      justify-content:center; }
+    .cori-formula .op { font-weight:600; color:#64748b; }
+    .cori-formula .frac { display:inline-flex; flex-direction:column; text-align:center;
+      line-height:1.15; }
+    .cori-formula .frac .num { padding:2px 10px 5px; border-bottom:1.5px solid #64748b; }
+    .cori-formula .frac .den { padding:5px 10px 2px; }
+    .cori-formula .hl-num { color:#dc2626; font-weight:700; }
+    .cori-formula .hl-den { color:#b45309; font-weight:700; }
+    .cori-formula .rtv { font-size:24px; font-weight:800; padding:0 6px; }
+    .cori-formula [data-hl] { cursor:help; border-radius:4px; padding:1px 3px;
+      transition:background-color 0.12s, box-shadow 0.12s; }
+    .cori-formula [data-hl]:hover,
+    .cori-wrap[data-hover="num"] .cori-formula [data-hl="num"],
+    .cori-wrap[data-hover="den"] .cori-formula [data-hl="den"],
+    .cori-wrap[data-hover="rt"]  .cori-formula [data-hl="rt"] {
+      background-color:#fef3c7; box-shadow:0 0 0 2px #facc15; }
+
+    /* Plot dimming: one attribute write on .cori-wrap drives everything. */
+    .cori-wrap .dimmable { transition: opacity 0.18s ease; }
+    .cori-wrap[data-hover] .dimmable { opacity: 0.08; }
+    .cori-wrap[data-hover="num"] .dimmable.keep-num,
+    .cori-wrap[data-hover="den"] .dimmable.keep-den,
+    .cori-wrap[data-hover="rt"]  .dimmable.keep-rt  { opacity: 1; }
+  `;
+
+  const formula = document.createElement("div");
+  formula.style.cssText = "margin:0 0 6px;padding:14px 18px;background:#f8fafc;border-radius:6px;border:1px solid #e2e8f0;color:#1e293b;";
+  const fMain = document.createElement("div");
+  fMain.className = "cori-formula";
+  formula.appendChild(fStyle); formula.appendChild(fMain);
+
+  const legend = document.createElement("div");
+  legend.style.cssText = "font-size:13px;color:#64748b;margin-top:12px;line-height:1.8;";
+  legend.innerHTML = `
+    <span style="display:inline-block;width:14px;height:12px;background:#e2e8f0;vertical-align:middle;margin-right:2px;"></span>
+    I<sub>t−s</sub> past incidence &nbsp;·&nbsp;
+    <span style="display:inline-block;width:14px;height:12px;background:#a78bfa;vertical-align:middle;margin-right:2px;"></span>
+    w<sub>s</sub> generation interval &nbsp;·&nbsp;
+    <span style="display:inline-block;width:14px;height:12px;background:#f59e0b;vertical-align:middle;margin-right:2px;"></span>
+    I<sub>t−s</sub>·w<sub>s</sub> product &nbsp;·&nbsp;
+    <span style="display:inline-block;width:14px;height:12px;background:#dc2626;vertical-align:middle;margin-right:2px;"></span>
+    I<sub>t</sub> today &nbsp;·&nbsp;
+    <span style="display:inline-block;width:22px;height:0;border-top:2.5px solid #0891b2;vertical-align:middle;margin-right:2px;"></span>
+    R<sub>t</sub> over time
+  `;
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Draw (hot path): only attribute writes, no allocations, no d3 selections.
+  // Coalesced through requestAnimationFrame so drag at 120 Hz still renders ≤ 1×/frame.
+  // ─────────────────────────────────────────────────────────────────────────
+  let rafPending = false;
+  function requestDraw() {
+    if (rafPending) return;
+    rafPending = true;
+    requestAnimationFrame(() => { rafPending = false; draw(); });
+  }
+
+  function draw() {
+    const meanGI = SL.meanGI.val();
+    const sdGI   = SL.sdGI.val();
+    updateWeights(meanGI, sdGI);
+
+    // Panel 1: contributions
+    let denom = 0, maxContrib = 0, maxContribIdx = -1;
+    for (let i = 0; i < T; i++) contrib[i] = 0;
+    for (let s = 1; s <= t; s++) {
+      const c = incidence[t - s] * weights[s];
+      contrib[t - s] = c;
+      denom += c;
+      if (c > maxContrib) { maxContrib = c; maxContribIdx = t - s; }
+    }
+    const numerator = incidence[t];
+    const Rt = denom > 0 ? numerator / denom : NaN;
+
+    for (let i = 0; i < T; i++) {
+      baseBars[i].setAttribute("fill",
+        i < t ? "#e2e8f0" : i === t ? "#dc2626" : "#f1f5f9");
+      const c = contrib[i];
+      const wb = weightBars[i];
+      if (c > 0 && i < t) {
+        const y = yScale(c);
+        wb.setAttribute("y", y);
+        wb.setAttribute("height", H_INC - y);
+        wb.setAttribute("opacity", "0.92");
+      } else {
+        wb.setAttribute("opacity", "0");
+      }
+    }
+    const tY = yScale(incidence[t]);
+    tBar.setAttribute("x", barX[t]);
+    tBar.setAttribute("y", tY);
+    tBar.setAttribute("height", H_INC - tY);
+
+    labelIt.setAttribute("x", barCx[t]);
+    labelIt.setAttribute("y", Math.max(22, tY - 6));
+    labelIt.textContent = "Iₜ";
+    if (maxContribIdx >= 0) {
+      labelDenom.setAttribute("x", barCx[maxContribIdx]);
+      labelDenom.setAttribute("y", Math.max(22, yScale(maxContrib) - 5));
+      labelDenom.textContent = "Iₜ₋ₛ · wₛ";
+    } else {
+      labelDenom.textContent = "";
+    }
+
+    // Panel 2: w_s placed at day t − s. Use the full distribution's max for a
+    // stable y-axis that only changes with GI, not with t.
+    let wMax = 0;
+    for (let s = 1; s <= T; s++) if (weights[s] > wMax) wMax = weights[s];
+    for (let i = 0; i < T; i++) wValues[i] = 0;
+    for (let s = 1; s <= t; s++) wValues[t - s] = weights[s];
+    wYScale.domain([0, Math.max(0.3, wMax * 1.2)]).nice();
+    wyAxisG.call(wyAxis);
+
+    for (let i = 0; i < T; i++) {
+      const w = wValues[i];
+      const wb = wBars[i];
+      if (w > 0.0005) {
+        const y = wYScale(w);
+        wb.setAttribute("y", y);
+        wb.setAttribute("height", H_W - y);
+        wb.setAttribute("opacity", "0.9");
+      } else {
+        wb.setAttribute("opacity", "0");
+      }
+    }
+    const cx = barCx[t];
+    wRule.setAttribute("x1", cx);
+    wRule.setAttribute("x2", cx);
+
+    // Panel 3: R_t across the whole series — dynamic y domain (never caps).
+    let rtMax = 0;
+    const startT = Math.max(3, Math.ceil(meanGI));
+    for (let tt = 0; tt < T; tt++) {
+      rtValid[tt] = 0;
+      if (tt >= startT) {
+        let d = 0;
+        for (let s = 1; s <= tt; s++) d += incidence[tt - s] * weights[s];
+        if (d > 0.5) {
+          const r = incidence[tt] / d;
+          rtRaw[tt] = r;
+          rtValid[tt] = 1;
+          if (r > rtMax) rtMax = r;
+        }
+      }
+    }
+    rtY.domain([0, Math.max(3, rtMax * 1.1)]).nice();
+    rtYAxisG.call(rtYAxis);
+    const rOneY = rtY(1);
+    rOneLine.setAttribute("y1", rOneY);
+    rOneLine.setAttribute("y2", rOneY);
+    rOneLabel.setAttribute("y", rOneY - 4);
+
+    // Reuse rtLineData & rtPoints — no new object allocation
+    rtLineData.length = 0;
+    for (let i = 0; i < T; i++) {
+      if (rtValid[i]) {
+        rtPoints[i].t = i;
+        rtPoints[i].rt = rtRaw[i];
+        rtLineData.push(rtPoints[i]);
+      }
+    }
+    rtPath.setAttribute("d", rtLine(rtLineData) || "");
+
+    for (let i = 0; i < T; i++) {
+      const dot = rtDots[i];
+      if (rtValid[i]) {
+        dot.setAttribute("cx", barCx[i]);
+        dot.setAttribute("cy", rtY(rtRaw[i]));
+        dot.setAttribute("opacity", "0.75");
+      } else {
+        dot.setAttribute("opacity", "0");
+      }
+    }
+
+    if (rtValid[t]) {
+      rtHighlight.setAttribute("cx", cx);
+      rtHighlight.setAttribute("cy", rtY(rtRaw[t]));
+      rtHighlight.style.display = "";
+    } else {
+      rtHighlight.style.display = "none";
+    }
+    rtRule.setAttribute("x1", cx);
+    rtRule.setAttribute("x2", cx);
+
+    // Readout — proper fraction with hover-linked highlights.
+    // Hovering any [data-hl="num"|"den"|"rt"] lights up its twin in the formula
+    // AND the matching element in the plot above.
+    const rtColor = isNaN(Rt) ? "#64748b" : Rt > 1 ? "#dc2626" : Rt < 1 ? "#2563eb" : "#1e293b";
+    fMain.innerHTML =
+      `<span>R<sub>t</sub></span>` +
+      `<span class="op">=</span>` +
+      `<span class="frac">` +
+        `<span class="num hl-num" data-hl="num">I<sub>t</sub></span>` +
+        `<span class="den hl-den" data-hl="den">Σ<sub>s</sub> I<sub>t−s</sub>·w<sub>s</sub></span>` +
+      `</span>` +
+      `<span class="op">=</span>` +
+      `<span class="frac">` +
+        `<span class="num hl-num" data-hl="num">${numerator}</span>` +
+        `<span class="den hl-den" data-hl="den">${denom.toFixed(2)}</span>` +
+      `</span>` +
+      `<span class="op">=</span>` +
+      `<span class="rtv" data-hl="rt" style="color:${rtColor};">${isNaN(Rt) ? "—" : Rt.toFixed(2)}</span>`;
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Hover → single attribute write on the wrapper. All dimming is driven by
+  // CSS rules (.cori-wrap[data-hover] .dimmable) on <g> sub-groups, so per-
+  // frame work is zero. Event delegation on fMain survives innerHTML swaps.
+  // ─────────────────────────────────────────────────────────────────────────
+  fMain.addEventListener("pointerover", (e) => {
+    const el = e.target.closest("[data-hl]");
+    if (el) wrapper.setAttribute("data-hover", el.dataset.hl);
+  });
+  fMain.addEventListener("pointerout", (e) => {
+    const el = e.target.closest("[data-hl]");
+    if (!el) return;
+    const rel = e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest("[data-hl]");
+    if (rel && rel.dataset.hl === el.dataset.hl) return;
+    wrapper.removeAttribute("data-hover");
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Drag / click / keyboard — uses pointer events + pointer capture so the
+  // drag keeps working even if the cursor leaves the SVG.
+  // ─────────────────────────────────────────────────────────────────────────
+  function eventToT(event) {
+    const rect = svg.getBoundingClientRect();
+    const k = W / rect.width;
+    const localX = (event.clientX - rect.left) * k - M.left;
+    const idx = Math.round(localX / xStep);
+    return idx < 2 ? 2 : idx > T - 1 ? T - 1 : idx;
+  }
+  let dragging = false;
+  function onDown(e) {
+    dragging = true;
+    try { svg.setPointerCapture(e.pointerId); } catch (_) {}
+    const nt = eventToT(e);
+    if (nt !== t) { t = nt; requestDraw(); }
+    svg.focus();
+    e.preventDefault();
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    const nt = eventToT(e);
+    if (nt !== t) { t = nt; requestDraw(); }
+  }
+  function onUp(e) {
+    dragging = false;
+    try { svg.releasePointerCapture(e.pointerId); } catch (_) {}
+  }
+  svg.addEventListener("pointerdown",   onDown);
+  svg.addEventListener("pointermove",   onMove);
+  svg.addEventListener("pointerup",     onUp);
+  svg.addEventListener("pointercancel", onUp);
+
+  svg.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft"  && t > 2)     { t--; requestDraw(); e.preventDefault(); }
+    if (e.key === "ArrowRight" && t < T - 1) { t++; requestDraw(); e.preventDefault(); }
+  });
+
+  SL.meanGI.input.addEventListener("input", () => { SL.meanGI.sync(); requestDraw(); });
+  SL.sdGI.input.addEventListener("input",   () => { SL.sdGI.sync();   requestDraw(); });
+
+  // Controls and formula sit on top of the plot; legend below.
+  wrapper.appendChild(controls);
+  wrapper.appendChild(formula);
+  wrapper.appendChild(svg);
+  wrapper.appendChild(legend);
+
+  draw();
+  return wrapper;
+}
+```
+
+Three things to try:
+
+-   Drag across the epidemic and watch the red dot trace out the $R_t$ panel: $R_t$ starts well above 1 on the rising limb, crosses 1 right around the peak, and falls below 1 as the outbreak declines. At the very start — when only a handful of prior cases exist — $R_t$ can shoot well above 3; the y-axis expands to show the true value.
+-   Increase the **mean GI**: the purple bars shift further to the left, so the amber contributions in the incidence panel come from earlier days. When the epidemic curve is steep, this visibly changes $R_t$ — the accuracy bias discussed below.
+-   Decrease the **SD GI**: the generation-interval panel gets narrower and more peaked, so $R_t$ becomes jumpier from day to day.
 
 ::: {.callout-tip collapse="true"}
 
@@ -109,6 +616,779 @@ $$R_j = \sum_i p_{ij}$$
 **Step 3**. Compute the case reproduction number at time $t$, it is the expected value of $R_j$ for all individuals infected at time $t$.
 
 $$R_t^c = \mathbb{E}(R_j)$$
+
+#### Interactive demonstration {#sec-wt-demo .unnumbered}
+
+Every circle is one infected case. The outbreak is **1–2–3–2–1** — nine cases over five days, with three cases on the peak day. Same-day cases are stacked vertically in each day-column. Click commits a selection, hover explores.
+
+-   **Step 1** (blue) — **click** any case to set $i$ (clicking again swaps to a new $i$). **Hover** an earlier case to preview it as $j$: that node, its arc, and the matching $w_s$ bar all flash red, the $p_{ij}$ symbol in the header formula lights up red, and the readout at the bottom is wrapped in a red pill matching the formula highlight. Leaving the hover restores the "all past arcs with $w$" view.
+-   **Step 2** (green) — **click** any case to set $j$; arcs to every later $i$ are drawn and labelled with their $p_{ij}$, their sum $R_j$ printed next to the node. **Hover** a later case to isolate a single $p_{ij}$ contribution — the hovered arc thickens and darkens while the others fade.
+-   **Step 3** (amber) — every case prints its own $R_j$ (top-slot labels go above, bottom-slot below, middle-slot to the right). Day 3 holds **three** $R_j$ labels and $R_t^c$ below the column is their mean. At day-level the three $R_j$'s are equal, so the mean equals each; the averaging is what formally defines $R_t^c$.
+
+```{ojs}
+//| echo: false
+wtSteps = {
+  // ═══════════════════════════════════════════════════════════════════════
+  // Hover stroke is now proportional (w * 42 or p * 44, with small floors)
+  // so a hovered arc's thickness still reflects its magnitude — just bigger
+  // than its non-hovered scale (w * 28, p * 30). SVG text sizes and chip /
+  // bubble dimensions have been bumped so everything reads at a glance.
+  // ═══════════════════════════════════════════════════════════════════════
+
+  // ── Outbreak: 1-2-3-2-1 (9 cases) ──
+  const perDay = [1, 2, 3, 2, 1];
+  const cases = [];
+  let nxt = 1;
+  for (let d = 0; d < perDay.length; d++)
+    for (let k = 0; k < perDay[d]; k++)
+      cases.push({ id: nxt++, day: d + 1, slot: k, total: perDay[d] });
+  const N = cases.length, T = perDay.length;
+  const SMAX = Math.max(T + 3, 8);
+
+  // ── Discretised gamma weights ──
+  const weights = new Float64Array(SMAX + 1);
+  function updW(m, sd) {
+    const shape = (m * m) / (sd * sd);
+    const scale = (sd * sd) / m;
+    let tot = 0;
+    weights[0] = 0;
+    for (let s = 1; s <= SMAX; s++) {
+      weights[s] = Math.pow(s, shape - 1) * Math.exp(-s / scale);
+      tot += weights[s];
+    }
+    if (tot > 0) for (let s = 1; s <= SMAX; s++) weights[s] /= tot;
+  }
+
+  const computeDenom = i => {
+    const di = cases[i].day;
+    let D = 0;
+    for (let k = 0; k < N; k++) {
+      if (k === i) continue;
+      const g = di - cases[k].day;
+      if (g > 0 && g <= SMAX) D += weights[g];
+    }
+    return D;
+  };
+  const computePij = (i, j) => {
+    const g = cases[i].day - cases[j].day;
+    if (g <= 0 || g > SMAX) return 0;
+    const D = computeDenom(i);
+    return D > 0 ? weights[g] / D : 0;
+  };
+  const computeRj = j => {
+    let r = 0;
+    for (let i = 0; i < N; i++)
+      if (cases[i].day > cases[j].day) r += computePij(i, j);
+    return r;
+  };
+
+  // ── State ──
+  let selI    = 4;
+  let hoverJ  = null;
+  let selJ2   = 1;
+  let hoverI2 = null;
+
+  // ── Layout ──
+  const W = 900;
+  const NODE_R = 22;
+  const netM = { top: 62, right: 54, bottom: 54, left: 54 };
+  const netPlotW = W - netM.left - netM.right;
+  const xSp = netPlotW / (T - 1);
+
+  const slotOffsets = {
+    1: [0],
+    2: [-30, 30],
+    3: [-58, 0, 58]
+  };
+  const slotOff = c => slotOffsets[c.total][c.slot];
+
+  const nodePos = (c, H) => ({
+    x: netM.left + (c.day - 1) * xSp,
+    y: netM.top + (H - netM.top - netM.bottom) / 2 + slotOff(c)
+  });
+
+  function arcGeom(pi, pj, gap) {
+    const lift = Math.min(230, 150 + gap * 28);
+    const mx = (pi.x + pj.x) / 2;
+    const cy = (pi.y + pj.y) / 2 - lift;
+    const py = (pi.y + pj.y) / 2 - lift / 2;
+    return { d: `M ${pj.x} ${pj.y} Q ${mx} ${cy} ${pi.x} ${pi.y}`, px: mx, py };
+  }
+
+  const pairs = [];
+  for (let i = 0; i < N; i++)
+    for (let j = 0; j < N; j++)
+      if (cases[j].day < cases[i].day) pairs.push({ i, j });
+
+  const subD = n => String(n).split("").map(d => "₀₁₂₃₄₅₆₇₈₉"[+d]).join("");
+  const SUM_SYM = "Σₖ≠ᵢ wₜᵢ₋ₜₖ";
+
+  // ── Wrapper & styles ──
+  const wrapper = document.createElement("div");
+  wrapper.className = "wtsteps-wrap";
+  wrapper.style.cssText = "font-family:system-ui,-apple-system,sans-serif;max-width:960px;margin:0 auto;";
+  wrapper.appendChild(injectStyle());
+
+  const style = document.createElement("style");
+  style.textContent = `
+    .wtsteps-wrap { color:#1e293b; }
+    .wtsteps-wrap .panel { border:1px solid #e2e8f0; border-radius:12px;
+      margin-bottom:14px; overflow:hidden; background:#fff;
+      box-shadow:0 1px 3px rgba(15,23,42,0.05); }
+    .wtsteps-wrap .panel-head { display:flex; align-items:center; gap:12px;
+      padding:12px 20px; border-bottom:1px solid #e2e8f0;
+      background:var(--bg); flex-wrap:wrap; }
+    .wtsteps-wrap .badge { background:var(--c); color:#fff; padding:4px 12px;
+      border-radius:14px; font-weight:700; font-size:12px;
+      letter-spacing:0.5px; text-transform:uppercase; white-space:nowrap; }
+    .wtsteps-wrap .pname { font-weight:700; font-size:15px; color:#1e293b;
+      white-space:nowrap; }
+    .wtsteps-wrap .pformula { font-family:'SF Mono',Menlo,Consolas,monospace;
+      color:#475569; font-size:14px; margin-left:auto; }
+    .wtsteps-wrap .panel.step1 { --c:#2563eb; --bg:#eff6ff; }
+    .wtsteps-wrap .panel.step2 { --c:#059669; --bg:#ecfdf5; }
+    .wtsteps-wrap .panel.step3 { --c:#d97706; --bg:#fffbeb; }
+    .wtsteps-wrap svg { display:block; width:100%; height:auto; }
+    .wtsteps-wrap .node-grp { cursor:pointer; }
+    .wtsteps-wrap .node-grp circle { transition: stroke-width 0.12s; }
+    .wtsteps-wrap .node-grp:hover circle { stroke-width: 3.4; }
+    .wtsteps-wrap .hint { font-size:14px; color:#475569; margin:0 0 12px;
+      padding:12px 16px; background:#f8fafc; border-radius:8px;
+      border:1px solid #e2e8f0; line-height:1.6; }
+    .wtsteps-wrap .hint b { color:#1e293b; }
+    .wtsteps-wrap .hint .ibox { color:#2563eb; font-weight:700; }
+    .wtsteps-wrap .hint .jbox { color:#dc2626; font-weight:700; }
+    .wtsteps-wrap .hint .gbox { color:#059669; font-weight:700; }
+    .wtsteps-wrap .hint kbd { font-family:'SF Mono',Menlo,monospace;
+      background:#e2e8f0; padding:1px 6px; border-radius:4px; font-size:12px;
+      border:1px solid #cbd5e1; }
+    .wtsteps-wrap .panel.step1 .fm-pij,
+    .wtsteps-wrap .panel.step1 .fm-w {
+      padding:2px 6px; border-radius:3px;
+      transition:background 0.18s, color 0.18s;
+    }
+    .wtsteps-wrap .panel.step1:not(.hover-j) .fm-w {
+      background:#fde047; color:#1d4ed8; font-weight:800;
+    }
+    .wtsteps-wrap .panel.step1.hover-j .fm-pij {
+      background:#fecaca; color:#991b1b; font-weight:800;
+    }
+  `;
+  wrapper.appendChild(style);
+
+  // ── Controls ──
+  const sliderRow = document.createElement("div");
+  sliderRow.style.cssText = "display:flex;gap:22px;margin:0 0 12px;align-items:flex-end;flex-wrap:wrap;";
+  const SL = {
+    meanGI: createSlider("Mean GI (days)", 1.5, 7,   0.5, 3,   "#7c3aed", "purple"),
+    sdGI:   createSlider("SD GI (days)",   0.5, 2.5, 0.1, 1.2, "#7c3aed", "purple")
+  };
+  sliderRow.appendChild(SL.meanGI.el);
+  sliderRow.appendChild(SL.sdGI.el);
+  wrapper.appendChild(sliderRow);
+
+  const hint = document.createElement("div");
+  hint.className = "hint";
+  hint.innerHTML = `
+    <b>Panel 1</b> — <kbd>click</kbd> any case to set <span class="ibox">i</span>; <kbd>hover</kbd> an earlier case to preview it as <span class="jbox">j</span>. Arc labels show w while idle and switch to p<sub>ij</sub> for the hovered pair.<br>
+    <b>Panel 2</b> — <kbd>click</kbd> any case to set <span class="gbox">j</span>; <kbd>hover</kbd> a later case to isolate one p<sub>ij</sub> contribution.<br>
+    <b>Panel 3</b> — <kbd>click</kbd> any case to share it as <span class="gbox">j</span> with Panel 2.
+  `;
+  wrapper.appendChild(hint);
+
+  // ── R_j label positioning helper ──
+  function applyLabelPos(textEl, c) {
+    let dx = 0, dy = NODE_R + 24, anchor = "middle";
+    if (c.total > 1) {
+      if (c.slot === 0)                    { dy = -(NODE_R + 12); }
+      else if (c.slot === c.total - 1)     { dy = NODE_R + 24; }
+      else { dx = NODE_R + 14; dy = 5; anchor = "start"; }
+    }
+    textEl.setAttribute("dx", dx);
+    textEl.setAttribute("dy", dy);
+    textEl.setAttribute("text-anchor", anchor);
+  }
+
+  // ── Shared builder ──
+  function buildNetwork(svgSel, H, prefix, onClick, onHover) {
+    svgSel.append("defs").html(`
+      <filter id="${prefix}-sh" x="-40%" y="-40%" width="180%" height="180%">
+        <feDropShadow dx="0" dy="1" stdDeviation="1.4" flood-color="#0f172a" flood-opacity="0.14"/>
+      </filter>
+      <filter id="${prefix}-csh" x="-40%" y="-40%" width="180%" height="180%">
+        <feDropShadow dx="0" dy="0.6" stdDeviation="1" flood-color="#0f172a" flood-opacity="0.18"/>
+      </filter>
+    `);
+    const netG = svgSel.append("g");
+
+    for (let d = 1; d <= T; d++) {
+      const x = netM.left + (d - 1) * xSp;
+      netG.append("text")
+        .attr("x", x).attr("y", H - netM.bottom + 28)
+        .attr("text-anchor", "middle")
+        .style("font-size", "15px").style("font-weight", "600")
+        .style("fill", "#64748b").style("letter-spacing", "0.3px")
+        .text("Day " + d);
+    }
+
+    const arcG   = netG.append("g");
+    const nodeG  = netG.append("g");
+    const labelG = netG.append("g");
+
+    const arcPaths = pairs.map(p => {
+      const pi = nodePos(cases[p.i], H);
+      const pj = nodePos(cases[p.j], H);
+      const gap = cases[p.i].day - cases[p.j].day;
+      const g = arcGeom(pi, pj, gap);
+      const path = arcG.append("path")
+        .attr("d", g.d).attr("fill", "none")
+        .attr("stroke-linecap", "round").node();
+      return { path, px: g.px, py: g.py };
+    });
+
+    const nodes = cases.map((c, idx) => {
+      const pos = nodePos(c, H);
+      const grp = nodeG.append("g")
+        .attr("class", "node-grp")
+        .attr("transform", `translate(${pos.x}, ${pos.y})`);
+      const circle = grp.append("circle")
+        .attr("r", NODE_R)
+        .attr("fill", "#fff").attr("stroke", "#94a3b8").attr("stroke-width", 2)
+        .attr("filter", `url(#${prefix}-sh)`);
+      const text = grp.append("text")
+        .attr("text-anchor", "middle").attr("dy", 6)
+        .style("font-size", "18px").style("font-weight", "800")
+        .style("fill", "#475569").style("pointer-events", "none")
+        .text(c.id);
+      const below = grp.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dy", NODE_R + 24)
+        .style("font-size", "15px").style("font-weight", "700")
+        .style("font-family", "'SF Mono',Menlo,monospace")
+        .style("pointer-events", "none")
+        .attr("opacity", 0);
+      const gNode = grp.node();
+      gNode.addEventListener("click", () => onClick(idx));
+      if (onHover) {
+        gNode.addEventListener("mouseenter", () => onHover(idx, true));
+        gNode.addEventListener("mouseleave", () => onHover(idx, false));
+      }
+      return { grp: gNode, circle: circle.node(), text: text.node(),
+               below: below.node(), pos };
+    });
+
+    const arcs = arcPaths.map((a) => {
+      const lgrp = labelG.append("g")
+        .attr("transform", `translate(${a.px}, ${a.py - 12})`)
+        .attr("opacity", 0);
+      const lrect = lgrp.append("rect")
+        .attr("x", -27).attr("y", -14)
+        .attr("width", 54).attr("height", 27)
+        .attr("rx", 5).attr("ry", 5)
+        .attr("fill", "#fff").attr("stroke-width", 1.3)
+        .attr("filter", `url(#${prefix}-csh)`);
+      const ltxt = lgrp.append("text")
+        .attr("text-anchor", "middle").attr("dy", 5)
+        .style("font-size", "15px").style("font-weight", "700")
+        .style("font-family", "'SF Mono',Menlo,monospace");
+      return { path: a.path, lgrp: lgrp.node(),
+               lrect: lrect.node(), ltxt: ltxt.node() };
+    });
+
+    const hdrG = netG.append("g").style("pointer-events", "none");
+    const mkHdr = () => {
+      const rect = hdrG.append("rect").attr("rx", 11).attr("ry", 11)
+        .attr("filter", `url(#${prefix}-csh)`).attr("opacity", 0).node();
+      const txt = hdrG.append("text").attr("text-anchor", "middle")
+        .style("font-size", "14px").style("font-weight", "800")
+        .style("letter-spacing", "0.6px").style("fill", "#fff")
+        .attr("opacity", 0).node();
+      return { rect, txt };
+    };
+    return { arcs, nodes, hdrI: mkHdr(), hdrJ: mkHdr() };
+  }
+
+  function setHdr(hdr, pos, label, color, side = "above") {
+    hdr.txt.textContent = label;
+    const tw = label.length * 8.2 + 22;
+    let yRect, yTxt;
+    if (side === "above") { yRect = pos.y - NODE_R - 38; yTxt = pos.y - NODE_R - 19; }
+    else                  { yRect = pos.y + NODE_R + 10; yTxt = pos.y + NODE_R + 29; }
+    hdr.rect.setAttribute("x", pos.x - tw / 2);
+    hdr.rect.setAttribute("y", yRect);
+    hdr.rect.setAttribute("width", tw);
+    hdr.rect.setAttribute("height", 28);
+    hdr.rect.setAttribute("fill", color);
+    hdr.txt.setAttribute("x", pos.x);
+    hdr.txt.setAttribute("y", yTxt);
+    hdr.rect.setAttribute("opacity", 1);
+    hdr.txt.setAttribute("opacity", 1);
+  }
+  function hdrSide(c) {
+    if (c.total === 1)               return "above";
+    if (c.slot === 0)                return "below";
+    if (c.slot === c.total - 1)      return "above";
+    return "above";
+  }
+  function hideHdr(hdr) {
+    hdr.rect.setAttribute("opacity", 0);
+    hdr.txt.setAttribute("opacity", 0);
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // Panel 1
+  // ═══════════════════════════════════════════════════════════════════════
+  const H1net = 360;
+  const H1gi  = 180;
+  const H1    = H1net + H1gi;
+
+  const p1 = document.createElement("div");
+  p1.className = "panel step1";
+  p1.innerHTML = `
+    <div class="panel-head">
+      <span class="badge">Step 1</span>
+      <span class="pname">Attribution probabilities  p<sub>ij</sub></span>
+      <span class="pformula"><span class="fm-pij">p<sub>ij</sub></span> = <span class="fm-w">w<sub>tᵢ−tⱼ</sub></span> / Σ<sub>k≠i</sub> w<sub>tᵢ−tₖ</sub></span>
+    </div>
+  `;
+  const p1Svg = d3.create("svg").attr("viewBox", `0 0 ${W} ${H1}`);
+
+  function onClickP1(cIdx) {
+    selI = cIdx;
+    if (hoverJ !== null &&
+        (hoverJ === selI || cases[hoverJ].day >= cases[selI].day)) {
+      hoverJ = null;
+    }
+    drawAll();
+  }
+  function onHoverP1(cIdx, entering) {
+    if (!entering) {
+      if (hoverJ === cIdx) hoverJ = null;
+    } else if (selI !== null && cIdx !== selI &&
+               cases[cIdx].day < cases[selI].day) {
+      hoverJ = cIdx;
+    } else {
+      hoverJ = null;
+    }
+    drawAll();
+  }
+  const p1Net = buildNetwork(p1Svg, H1net, "p1", onClickP1, onHoverP1);
+
+  // ── GI sub-panel ──
+  const giG = p1Svg.append("g").attr("transform", `translate(0, ${H1net})`);
+  giG.append("line")
+    .attr("x1", 54).attr("x2", W - 54)
+    .attr("y1", 4).attr("y2", 4)
+    .attr("stroke", "#e2e8f0").attr("stroke-width", 1);
+  giG.append("text")
+    .attr("x", 54).attr("y", 26)
+    .style("font-size", "15px").style("font-weight", "700").style("fill", "#1e293b")
+    .text("Generation interval  wₛ");
+  giG.append("text")
+    .attr("x", 54).attr("y", 46)
+    .style("font-size", "13px").style("fill", "#64748b")
+    .text("weight for each day-gap s between infector and infectee");
+
+  const dReadout = giG.append("text")
+    .attr("x", W - 54).attr("y", 26)
+    .attr("text-anchor", "end")
+    .style("font-size", "15px").style("font-weight", "700")
+    .style("font-family", "'SF Mono',Menlo,monospace").style("fill", "#1d4ed8").node();
+
+  const pBg = giG.append("rect")
+    .attr("rx", 5).attr("ry", 5)
+    .attr("fill", "#fecaca")
+    .attr("opacity", 0).node();
+
+  const pReadout = giG.append("text")
+    .attr("x", W - 54).attr("y", 50)
+    .attr("text-anchor", "end")
+    .style("font-size", "15px").style("font-weight", "800")
+    .style("font-family", "'SF Mono',Menlo,monospace").style("fill", "#991b1b").node();
+
+  const giM = { top: 70, right: 54, bottom: 36, left: 54 };
+  const giPlotW = W - giM.left - giM.right;
+  const giPlotH = H1gi - giM.top - giM.bottom;
+  const giBarG = giG.append("g").attr("transform", `translate(${giM.left}, ${giM.top})`);
+  giBarG.append("line")
+    .attr("x1", 0).attr("x2", giPlotW).attr("y1", giPlotH).attr("y2", giPlotH)
+    .attr("stroke", "#cbd5e1").attr("stroke-width", 1);
+
+  const MAX_S = 6;
+  const giStep = giPlotW / MAX_S;
+  const giBars = [];
+  const giValLabels = [];
+  for (let s = 1; s <= MAX_S; s++) {
+    const bx = (s - 1) * giStep;
+    giBars.push(giBarG.append("rect")
+      .attr("x", bx + giStep * 0.18)
+      .attr("width", giStep * 0.64)
+      .attr("rx", 2).attr("ry", 2).node());
+    giValLabels.push(giBarG.append("text")
+      .attr("x", bx + giStep / 2)
+      .attr("text-anchor", "middle")
+      .style("font-size", "14px").style("font-weight", "700")
+      .style("font-family", "'SF Mono',Menlo,monospace").node());
+    giBarG.append("text").attr("x", bx + giStep / 2).attr("y", giPlotH + 22)
+      .attr("text-anchor", "middle")
+      .style("font-size", "15px").style("font-weight", "600")
+      .style("font-family", "'SF Mono',Menlo,monospace").style("fill", "#64748b")
+      .text("w" + subD(s));
+  }
+  p1.appendChild(p1Svg.node());
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // Panel 2
+  // ═══════════════════════════════════════════════════════════════════════
+  const H2 = 360;
+  const p2 = document.createElement("div");
+  p2.className = "panel step2";
+  p2.innerHTML = `
+    <div class="panel-head">
+      <span class="badge">Step 2</span>
+      <span class="pname">Sum over i:  R<sub>j</sub></span>
+      <span class="pformula">R<sub>j</sub> = Σ<sub>i</sub> p<sub>ij</sub></span>
+    </div>
+  `;
+  const p2Svg = d3.create("svg").attr("viewBox", `0 0 ${W} ${H2}`);
+  function onClickP2(cIdx) {
+    selJ2 = cIdx;
+    if (hoverI2 !== null &&
+        (hoverI2 === selJ2 || cases[hoverI2].day <= cases[selJ2].day)) {
+      hoverI2 = null;
+    }
+    drawAll();
+  }
+  function onHoverP2(cIdx, entering) {
+    if (!entering) {
+      if (hoverI2 === cIdx) hoverI2 = null;
+    } else if (selJ2 !== null && cIdx !== selJ2 &&
+               cases[cIdx].day > cases[selJ2].day) {
+      hoverI2 = cIdx;
+    } else {
+      hoverI2 = null;
+    }
+    drawAll();
+  }
+  const p2Net = buildNetwork(p2Svg, H2, "p2", onClickP2, onHoverP2);
+  p2.appendChild(p2Svg.node());
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // Panel 3 — layout height is H3plot; the SVG is H3 = H3plot + bottom band,
+  // so the R_t^c labels sit in dedicated space below the day ticks instead
+  // of being clipped at the SVG edge.
+  // ═══════════════════════════════════════════════════════════════════════
+  const H3plot = 380;
+  const H3bot  = 48;
+  const H3     = H3plot + H3bot;
+  const p3 = document.createElement("div");
+  p3.className = "panel step3";
+  p3.innerHTML = `
+    <div class="panel-head">
+      <span class="badge">Step 3</span>
+      <span class="pname">Average R<sub>j</sub> per day</span>
+      <span class="pformula">R<sub>t</sub><sup>c</sup> = 𝔼(R<sub>j</sub> | t<sub>j</sub> = t)</span>
+    </div>
+  `;
+  const p3Svg = d3.create("svg").attr("viewBox", `0 0 ${W} ${H3}`);
+
+  const dayBoxes = [];
+  for (let d = 1; d <= T; d++) {
+    const x = netM.left + (d - 1) * xSp;
+    const cnt = perDay[d - 1];
+    const yC = netM.top + (H3plot - netM.top - netM.bottom) / 2;
+    const maxOff = Math.max(...slotOffsets[cnt].map(Math.abs));
+    const boxH = 2 * (maxOff + NODE_R + 36);
+    const hasRight = cnt === 3;
+    const boxLeft  = x - NODE_R - 16;
+    const boxRight = x + NODE_R + (hasRight ? 84 : 16);
+    dayBoxes.push(p3Svg.append("rect")
+      .attr("x", boxLeft).attr("y", yC - boxH / 2)
+      .attr("width", boxRight - boxLeft).attr("height", boxH)
+      .attr("rx", 12).attr("ry", 12)
+      .attr("fill", "#fffbeb").attr("stroke", "#f59e0b").attr("stroke-width", 1.5)
+      .attr("stroke-dasharray", "5,4").attr("opacity", 0.85).node());
+  }
+
+  const p3Net = buildNetwork(p3Svg, H3plot, "p3", (idx) => { selJ2 = idx; drawAll(); });
+
+  const rtcLabels = [];
+  for (let d = 1; d <= T; d++) {
+    const x = netM.left + (d - 1) * xSp;
+    rtcLabels.push(p3Svg.append("text")
+      .attr("x", x).attr("y", H3 - 14)
+      .attr("text-anchor", "middle")
+      .style("font-size", "16px").style("font-weight", "800")
+      .style("font-family", "'SF Mono',Menlo,monospace").style("fill", "#b45309")
+      .node());
+  }
+  p3.appendChild(p3Svg.node());
+
+  // ── Colour palettes ──
+  const C1 = {
+    iFill:"#2563eb", iStroke:"#1d4ed8",
+    jFill:"#dc2626", jStroke:"#991b1b", jAccent:"#b91c1c",
+    pastFill:"#dbeafe", pastStroke:"#60a5fa", pastTxt:"#1e3a8a",
+    arcBlue:"#2563eb", arcRed:"#dc2626"
+  };
+  const C2 = {
+    jFill:"#059669", jStroke:"#065f46",
+    hoverFill:"#047857", hoverStroke:"#064e3b",
+    futFill:"#d1fae5", futStroke:"#34d399", futTxt:"#065f46",
+    arcGreen:"#059669", arcHover:"#064e3b"
+  };
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // Draw
+  // ═══════════════════════════════════════════════════════════════════════
+  function drawPanel1() {
+    const iSet = selI !== null;
+    const jSet = iSet && hoverJ !== null;
+    p1.classList.toggle("hover-j", jSet);
+    const di = iSet ? cases[selI].day : -1;
+    const D  = iSet ? computeDenom(selI) : 0;
+    const gapJ = jSet ? di - cases[hoverJ].day : -1;
+
+    p1Net.nodes.forEach((n, idx) => {
+      const c = cases[idx];
+      let fill = "#fff", stroke = "#94a3b8", txt = "#475569";
+      if (idx === selI)            { fill = C1.iFill; stroke = C1.iStroke; txt = "#fff"; }
+      else if (idx === hoverJ)     { fill = C1.jFill; stroke = C1.jStroke; txt = "#fff"; }
+      else if (iSet && c.day < di) { fill = C1.pastFill; stroke = C1.pastStroke; txt = C1.pastTxt; }
+      n.circle.setAttribute("fill", fill);
+      n.circle.setAttribute("stroke", stroke);
+      n.circle.setAttribute("stroke-width", (idx === selI || idx === hoverJ) ? 3 : 2);
+      n.text.style.fill = txt;
+      n.grp.setAttribute("opacity", 1);
+      n.below.setAttribute("opacity", 0);
+    });
+
+    p1Net.arcs.forEach((a, k) => {
+      const p = pairs[k];
+      if (iSet && p.i === selI) {
+        const g = cases[p.i].day - cases[p.j].day;
+        const w = weights[g] || 0;
+        if (jSet && p.j === hoverJ) {
+          // Hover: proportional width, amplified over the non-hover scale
+          a.path.setAttribute("stroke", C1.arcRed);
+          a.path.setAttribute("stroke-width", Math.max(3.2, w * 42));
+          a.path.setAttribute("opacity", 1);
+          const pij = D > 0 ? w / D : 0;
+          a.ltxt.textContent = pij.toFixed(2);
+          a.ltxt.style.fill = C1.jAccent;
+          a.lrect.setAttribute("stroke", C1.jFill);
+          a.lrect.setAttribute("stroke-width", 2);
+          a.lgrp.setAttribute("opacity", 1);
+        } else {
+          a.path.setAttribute("stroke", C1.arcBlue);
+          a.path.setAttribute("stroke-width", Math.max(2, w * 28));
+          a.path.setAttribute("opacity", jSet ? 0.22 : 0.92);
+          a.ltxt.textContent = w.toFixed(2);
+          a.ltxt.style.fill = "#1d4ed8";
+          a.lrect.setAttribute("stroke", "#60a5fa");
+          a.lrect.setAttribute("stroke-width", 1.3);
+          a.lgrp.setAttribute("opacity", w > 0.005 ? (jSet ? 0.18 : 1) : 0);
+        }
+      } else {
+        a.path.setAttribute("stroke", "#cbd5e1");
+        a.path.setAttribute("stroke-width", 1);
+        a.path.setAttribute("opacity", 0.1);
+        a.lgrp.setAttribute("opacity", 0);
+      }
+    });
+
+    if (iSet) {
+      const pos = nodePos(cases[selI], H1net);
+      setHdr(p1Net.hdrI, pos, "CASE  i = " + cases[selI].id, C1.iFill, hdrSide(cases[selI]));
+    } else hideHdr(p1Net.hdrI);
+    if (jSet) {
+      const pos = nodePos(cases[hoverJ], H1net);
+      setHdr(p1Net.hdrJ, pos, "CASE  j = " + cases[hoverJ].id, C1.jFill, hdrSide(cases[hoverJ]));
+    } else hideHdr(p1Net.hdrJ);
+
+    // GI bars
+    let wMax = 0;
+    for (let s = 1; s <= MAX_S; s++) if (weights[s] > wMax) wMax = weights[s];
+    if (wMax <= 0) wMax = 1;
+    const gapsUsed = new Set();
+    if (iSet) {
+      for (let k = 0; k < N; k++) {
+        if (k === selI) continue;
+        const g = di - cases[k].day;
+        if (g > 0 && g <= MAX_S) gapsUsed.add(g);
+      }
+    }
+    for (let s = 1; s <= MAX_S; s++) {
+      const bar = giBars[s - 1];
+      const val = giValLabels[s - 1];
+      const w = weights[s] || 0;
+      const h = (w / wMax) * giPlotH;
+      bar.setAttribute("y", giPlotH - h);
+      bar.setAttribute("height", h);
+      let fill = "#e2e8f0", opacity = 1, valColor = "#94a3b8";
+      if (s === gapJ)            { fill = C1.jFill; opacity = 1;   valColor = C1.jAccent; }
+      else if (gapsUsed.has(s))  { fill = C1.arcBlue; opacity = 0.9; valColor = "#1d4ed8"; }
+      bar.setAttribute("fill", fill);
+      bar.setAttribute("opacity", opacity);
+      val.setAttribute("y", giPlotH - h - 6);
+      val.textContent = w > 0.005 ? w.toFixed(3) : "";
+      val.style.fill = valColor;
+    }
+
+    // Readouts
+    if (iSet) {
+      const counts = {};
+      for (let k = 0; k < N; k++) {
+        if (k === selI) continue;
+        const g = di - cases[k].day;
+        if (g > 0 && g <= SMAX) counts[g] = (counts[g] || 0) + 1;
+      }
+      const gs = Object.keys(counts).map(Number).sort((a, b) => a - b);
+      const parts = gs.map(g => counts[g] === 1 ? "w" + subD(g) : counts[g] + "·w" + subD(g));
+      dReadout.textContent = parts.length
+        ? SUM_SYM + " = " + parts.join(" + ") + " = " + D.toFixed(3)
+        : SUM_SYM + " = 0   (case " + cases[selI].id + " has no past)";
+      if (jSet) {
+        const w = weights[gapJ] || 0;
+        const p = D > 0 ? w / D : 0;
+        pReadout.textContent = "pᵢⱼ = w" + subD(gapJ) + " / (" + SUM_SYM + ") = "
+          + w.toFixed(3) + " / " + D.toFixed(3) + " = " + p.toFixed(3);
+        const tLen = pReadout.getComputedTextLength();
+        pBg.setAttribute("x", W - 54 - tLen - 12);
+        pBg.setAttribute("y", 34);
+        pBg.setAttribute("width", tLen + 24);
+        pBg.setAttribute("height", 26);
+        pBg.setAttribute("opacity", 1);
+      } else {
+        pReadout.textContent = "(hover an earlier case to preview j)";
+        pBg.setAttribute("opacity", 0);
+      }
+    } else {
+      dReadout.textContent = "";
+      pReadout.textContent = "";
+      pBg.setAttribute("opacity", 0);
+    }
+  }
+
+  function drawPanel2(Rjs) {
+    const selDay = cases[selJ2].day;
+    const Rj = Rjs[selJ2];
+    const anyHover = hoverI2 !== null;
+
+    p2Net.nodes.forEach((n, idx) => {
+      const c = cases[idx];
+      let fill = "#fff", stroke = "#94a3b8", txt = "#475569", op = 1;
+      if (idx === selJ2)         { fill = C2.jFill; stroke = C2.jStroke; txt = "#fff"; }
+      else if (idx === hoverI2)  { fill = C2.hoverFill; stroke = C2.hoverStroke; txt = "#fff"; }
+      else if (c.day > selDay)   { fill = C2.futFill; stroke = C2.futStroke; txt = C2.futTxt;
+                                   if (anyHover) op = 0.45; }
+      else                       { if (anyHover) op = 0.55; }
+      n.circle.setAttribute("fill", fill);
+      n.circle.setAttribute("stroke", stroke);
+      n.circle.setAttribute("stroke-width", (idx === selJ2 || idx === hoverI2) ? 3 : 2);
+      n.text.style.fill = txt;
+      n.grp.setAttribute("opacity", op);
+      if (idx === selJ2) {
+        applyLabelPos(n.below, c);
+        n.below.textContent = "Rⱼ = " + Rj.toFixed(2);
+        n.below.style.fill = C2.jStroke;
+        n.below.setAttribute("opacity", 1);
+      } else {
+        n.below.setAttribute("opacity", 0);
+      }
+    });
+
+    p2Net.arcs.forEach((a, k) => {
+      const p = pairs[k];
+      if (p.j === selJ2) {
+        const pij = computePij(p.i, p.j);
+        const isHover = anyHover && p.i === hoverI2;
+        // Hover stroke also proportional, amplified vs. p * 30 default
+        a.path.setAttribute("stroke", isHover ? C2.arcHover : C2.arcGreen);
+        a.path.setAttribute("stroke-width", isHover ? Math.max(3.2, pij * 44) : Math.max(2, pij * 30));
+        a.path.setAttribute("opacity", isHover ? 1 : (anyHover ? 0.16 : 0.92));
+        a.ltxt.textContent = pij.toFixed(2);
+        a.ltxt.style.fill = isHover ? C2.hoverStroke : C2.jStroke;
+        a.lrect.setAttribute("stroke", isHover ? C2.hoverFill : C2.futStroke);
+        a.lrect.setAttribute("stroke-width", isHover ? 2 : 1.3);
+        const labelOp = pij > 0.005
+          ? (isHover ? 1 : (anyHover ? 0.12 : 1))
+          : 0;
+        a.lgrp.setAttribute("opacity", labelOp);
+      } else {
+        a.path.setAttribute("opacity", 0);
+        a.lgrp.setAttribute("opacity", 0);
+      }
+    });
+
+    setHdr(p2Net.hdrI, nodePos(cases[selJ2], H2), "CASE  j = " + cases[selJ2].id, C2.jFill, hdrSide(cases[selJ2]));
+    if (hoverI2 !== null) {
+      setHdr(p2Net.hdrJ, nodePos(cases[hoverI2], H2), "CASE  i = " + cases[hoverI2].id, C2.hoverFill, hdrSide(cases[hoverI2]));
+    } else {
+      hideHdr(p2Net.hdrJ);
+    }
+  }
+
+  function drawPanel3(Rjs) {
+    const dayRt = new Array(T + 1).fill(0);
+    for (let d = 1; d <= T; d++) {
+      let s = 0, c = 0;
+      for (let j = 0; j < N; j++) if (cases[j].day === d) { s += Rjs[j]; c++; }
+      dayRt[d] = c > 0 ? s / c : 0;
+    }
+    p3Net.nodes.forEach((n, idx) => {
+      const c = cases[idx];
+      n.circle.setAttribute("fill", "#fffbeb");
+      n.circle.setAttribute("stroke", "#d97706");
+      n.circle.setAttribute("stroke-width", 2);
+      n.text.style.fill = "#92400e";
+      n.grp.setAttribute("opacity", 1);
+      applyLabelPos(n.below, c);
+      n.below.textContent = "Rⱼ=" + Rjs[idx].toFixed(2);
+      n.below.style.fill = "#92400e";
+      n.below.setAttribute("opacity", 0.95);
+    });
+    p3Net.arcs.forEach((a, k) => {
+      const p = pairs[k];
+      const pij = computePij(p.i, p.j);
+      a.path.setAttribute("stroke", "#f59e0b");
+      a.path.setAttribute("stroke-width", Math.max(0.5, pij * 10));
+      a.path.setAttribute("opacity", 0.22);
+      a.lgrp.setAttribute("opacity", 0);
+    });
+    hideHdr(p3Net.hdrI);
+    hideHdr(p3Net.hdrJ);
+    for (let d = 1; d <= T; d++) {
+      rtcLabels[d - 1].textContent = "Rₜᶜ = " + dayRt[d].toFixed(2);
+    }
+  }
+
+  function drawAll() {
+    updW(SL.meanGI.val(), SL.sdGI.val());
+    const Rjs = new Float64Array(N);
+    for (let j = 0; j < N; j++) Rjs[j] = computeRj(j);
+    drawPanel1();
+    drawPanel2(Rjs);
+    drawPanel3(Rjs);
+  }
+
+  SL.meanGI.input.addEventListener("input", () => { SL.meanGI.sync(); drawAll(); });
+  SL.sdGI  .input.addEventListener("input", () => { SL.sdGI  .sync(); drawAll(); });
+
+  wrapper.appendChild(p1);
+  wrapper.appendChild(p2);
+  wrapper.appendChild(p3);
+
+  drawAll();
+  return wrapper;
+}
+```
+
+Things to try:
+
+-   **Step 1**: hover an earlier case — the arc thickens proportionally to its $w$ value (scaled up vs. the non-hovered arcs, but still proportional), turns red, and its chip flips from $w$ to the computed $p_{ij}$. The readout underneath is wrapped in a red pill matching the formula highlight.
+-   **Step 2**: hover a later case — the hovered arc's stroke now scales with its $p_{ij}$ magnitude so the chart is numerically honest; the other arcs and their chips dim to ~16% so the isolated contribution is unmistakable.
+-   **Step 3**: day 3 holds three $R_j$ values; $R_t^c$ under the column is their mean.
 
 ## Compare $R_t^i$ and $R_t^c$
 
@@ -231,3 +1511,4 @@ plot(mod)
 
 
 ### EpiNow2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             

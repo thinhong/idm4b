@@ -47,21 +47,7 @@ $R_e(t)$ [@knight2020] or $R_t$ is the average number of **secondary cases** gen
 
 A public health control strategy will end an outbreak if it can keep $R_t$ below 1. The level of immunity at which $R_t = 1$ is the herd immunity threshold [@vegvari2022].
 
-```{r, echo=FALSE, warning=F}
-#| fig-width: 5.5
-#| fig-height: 4
-#| out-width: "100%"
-library(ggplot2)
-
-df <- readRDS("data/rnum-plot.rds")
-tmp <- plot(df)
-
-p1 <- tmp[[2]] + geom_vline(xintercept = as.Date("2020-03-20")) + labs(y = "New infections", tag = NULL)
-
-p2 <- tmp[[3]] + geom_vline(xintercept = as.Date("2020-03-20")) + annotate("text", x = as.Date("2020-02-22"), y = 2.15, label = expression("R"["0"])) + labs(y = expression("R"["t"]), x = NULL, tag = NULL)
-
-p1 / p2
-```
+![](img/rnum/rnum.svg)
 
 At the beginning of an outbreak, we can estimate $R_0$ when the whole population is fully susceptible. As the outbreak progresses, the number of susceptible individuals decreases, leading to a decline in $R_0$. This adjusted value is referred to as $R_t$ (if we want to measure at each time $t$). At the peak of the epidemic curve, $R_t = 1$. After this peak, $R_t$ continues to decrease, resulting in a decline in the number of new cases and the epidemic curve going down.
 

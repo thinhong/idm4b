@@ -92,6 +92,14 @@ head(tmp)
 
 We use function `fit_disc_gamma()` from package `epitrix` to fit a discretised gamma distribution to these serial intervals.
 
+::: {.callout-note collapse=true}
+
+## Why use Gamma distribution to model waiting time
+
+If events occur one-by-one in continuous time at a constant rate $\lambda$, (a homogeneous Poisson process), the gap between events is Exponential($\lambda$). The time until the k-th event is the sum of k independent exponential gaps
+
+:::
+
 ```{r}
 si_fit <- fit_disc_gamma(tmp$si)
 si_fit
@@ -124,22 +132,22 @@ library(epiparameter)
 Step 1. Load the database.
 
 ```{r}
-epi_dist_db <- epidist_db()
+epiparameter_list <- epiparameter_db()
 ```
 
 Step 2. To see a full list of the diseases and distributions, use the `parameter_tbl()` function.
 
 ```{r}
-dt <- parameter_tbl(multi_epidist = epi_dist_db)
+dt <- parameter_tbl(multi_epiparameter = epiparameter_list)
 dt
 ```
 
 Step 3. Get the parameter of the disease you want.
 
 ```{r}
-ebola_si <- epidist_db(
+ebola_si <- epiparameter_db(
   disease = "Ebola",
-  epi_dist = "serial interval"
+  epi_name = "serial interval"
 )
 ebola_si
 ```

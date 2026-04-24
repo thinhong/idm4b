@@ -10,15 +10,15 @@ library(dplyr)
 
 ## Concepts of stochasticity
 
-The dynamics of every population has both deterministic (predictable) and stochastic (unpredictable) forces [@lande2003]. These two processes act at the same time, so real-world data often look "noisy". We can split that noise into three basic forms of stochasticity, that can be classified into 2 groups:
+The dynamics of every population has both deterministic and stochastic forces [@lande2003]. These two processes act at the same time, so real-world data often look "noisy". We can split that noise into three basic forms of stochasticity [@bolker2008], that can be classified into 2 groups:
 
-1.  **Process noise**: the randomness within the process that generates the data. It has two forms of stochasticity:
+1.  **Process noise**: the randomness within the process that generates the data. It has two forms of stochasticity [@bolker2008]:
 
     -   **Demographic stochasticity (statistical noise)**: random events which are usually conceived as being independent among individuals [@lande2003]. For example, **each individual** might die or survive with a certain probability per unit time [@lande2003]. Because this stochasticity operates independently among individuals, it tends to average out in large populations and has a greater impact on small populations [@lande2003].
 
-    -   **Environmental stochasticity**: random temporal changes that affect **all individuals equally**, no matter the population size [@lande2003]. It **overtakes demographic stochasticity in large populations** [@ganyani2021]. Examples include external unpredictable events (temperature, rainfall, humidity) and individual variation (variability in contact patterns, superspreaders). These factors translate into fluctuations in the transmission parameter, often captured by overdispersion in Poisson models [@ganyani2021].
+    -   **Environmental stochasticity**: random temporal changes that affect **all individuals equally**, no matter the population size [@lande2003]. It **overtakes demographic stochasticity in large populations** [@ganyani2021]. Examples include external unpredictable events (temperature, rainfall, humidity) and individual variation (variability in contact patterns, superspreaders). These factors translate into fluctuations in the transmission parameter, often captured by overdispersion in Poisson models [@ganyani2021]. Noted that predictable changes such as seasonal changes in temperature which can be incorporate into our model in deterministic way are not counted as environmental stochasticity [@bolker2008].
 
-2.  **Sampling/observational/measurement error**: refers to errors caused by observation or sampling methods [@dennis2006], because real data collection is never perfect.
+2.  **Sampling/observational/measurement error**: refers to errors caused by observation or sampling methods [@dennis2006], because real data collection is never perfect. It is usually modelled by adding normally distributed variability around a mean value [@bolker2008].
 
 A hidden Markov process (aka state-space model) [@endo2019] can illustrate these noises.
 

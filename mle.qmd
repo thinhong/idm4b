@@ -2,9 +2,15 @@
 
 ## Likelihood
 
-$$\mathbb{L}(\theta | x) = \mathbb{P}(x | \theta)$$
+$$\mathcal{L}(\theta | x) = \mathbb{P}(x | \theta)$$
 
-Likelihood function is the probability of observing the data $x$ assuming that $\theta$ are the true parameters.
+Likelihood function is the probability of observing the data $x$ given the model $\theta$ [@bolker2008]. Statisticians denote it as $\mathcal{L}(\theta | x)$ to make clear that $\theta$ is the variable we are solving for, while $x$ remains fixed.
+
+Identifiability
+
+Profile likelihood
+
+
 
 ## Methods
 
@@ -14,7 +20,7 @@ The maximum likelihood estimation follows 4 steps:
 
 $$\mathbb{L}(\theta) = \prod_{i = 1}^{n} f_Y(y_i| \theta)$$
 
--   **Step 2**. Take the natural log of the likelihood $log L(\theta)$, or log-likelihood. The production in likelihood now becomes the sum in log-likelihood. See @sec-calib-loglik for more details.
+-   **Step 2**. Take the natural log of the likelihood $log L(\theta)$, or log-likelihood. The production now becomes the sum in log-likelihood. See @sec-calib-loglik for more details.
 
 $$log \mathbb{L}(\theta) = \sum_{i = 1}^{n} log \left[ f_Y(y_i| \theta) \right]$$
 
@@ -30,25 +36,25 @@ Choosing the right distribution depends on the nature of your data:
 
 **Count data (number of cases)**
 
-- Poisson: when mean $\approx$ variance.
-- Negative Binomial: if data are overdispersed (variance > mean).
-- Zero-Inflated Poisson/Negative Binomial: if there are excess zeros.
+-   Poisson: when mean $\approx$ variance.
+-   Negative Binomial: if data are overdispersed (variance \> mean).
+-   Zero-Inflated Poisson/Negative Binomial: if there are excess zeros.
 
 **Non-negative continuous (positive real)**
 
-- Gamma: often used for waiting times or skewed data.
-- Weibull: used in reliability and survival analysis.
-- Log-Normal: when the log of the data is normally distributed.
+-   Gamma: often used for waiting times or skewed data.
+-   Weibull: used in reliability and survival analysis.
+-   Log-Normal: when the log of the data is normally distributed.
 
 **Binary or proportions (0 or 1, or strictly between)**
 
-- Binomial: if data are 0 or 1, or aggregated counts out of a total.
-- Beta: if values lie strictly in (0, 1).
+-   Binomial: if data are 0 or 1, or aggregated counts out of a total.
+-   Beta: if values lie strictly in (0, 1).
 
 **Unbounded continuous (all real numbers)**
 
-- Gaussian (Normal): commonly assumed for symmetric data.
-- Student's t: if data have heavier tails or potential outliers.
+-   Gaussian (Normal): commonly assumed for symmetric data.
+-   Student's t: if data have heavier tails or potential outliers.
 
 ## Code
 
@@ -136,7 +142,7 @@ We use the `dnorm()` function to define this likelihood.
 dnorm(x = data, mean = pred, sd = sd_inc)
 ```
 
--   **Step 2**. Take the natural log of the likelihood $log L(\theta)$, product becomes sum.
+-   **Step 2**. Take the natural log of the likelihood $log L(\theta)$, product becomes sum. The `log = T` option gives the log-probability directly, which is more accurate than computing the product of probabilities and then taking its logarithm [@bolker2008].
 
 $$log L(\theta) = \sum_{i = 1}^{n} log \left[ \mathcal{N}(\mu_{inc}, \sigma_{inc}) \right]$$
 
@@ -169,7 +175,24 @@ mll <- function(beta, sigma, gamma, sd_inc) {
   # Return the negative log-likelihood
   - sum(dnorm(x = df$inc, mean = pred, sd = sd_inc, log = T))
 }
+```
 
+```{r}
+beta_val <- seq(from = 0.0001, to = 0.1, by = 0.0001)
+ll_val <- sapply(log(beta_val), mll, sigma = log(1), gamma = log(2), sd_inc = log(2))
+plot(beta_val, ll_val)
+```
+
+```{r}
+# beta_val <- log(seq(from = 0.0001, to = 0.1, by = 0.0001))
+# gamma_val <- log(seq(from = 0.3, to = 1.5, by = 0.001))
+# param_val <- expand.grid(beta_val, gamma_val)
+# ss_val <- with(param_val, Map(mll, Var1, Var2))
+# ll_val <- sapply(log(beta_val), mll, sigma = log(1), gamma = log(2), sd_inc = log(2))
+# plot(beta_val, ll_val)
+```
+
+```{r}
 starting_param_val <- list(beta = 0.004, sigma = 0.5, gamma = 0.5, sd_inc = 3)
 
 estimates <- mle2(minuslogl = mll, start = lapply(starting_param_val, log), method = "Nelder-Mead")
@@ -215,3 +238,7 @@ Let compute $R_0$. For a "closed population" SEIR model, $R_0 = \frac{\beta}{\ga
 rnum0 <- params[1] * S0 / params[3]
 rnum0
 ```
+
+## 
+
+Use `"BFGS"` for a single-parameter fit.

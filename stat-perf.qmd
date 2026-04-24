@@ -1,0 +1,20 @@
+---
+title: "stat-perf"
+format: html
+---
+
+Sensitivity = $\mathbb{P}(+|D)$
+
+1 - Sensitivity = $1 - \mathbb{P}(+|D) = \mathbb{P}(-|D)$
+
+Specificity = $\mathbb{P}(-|ND)$
+
+1 - Specificity = $1 - \mathbb{P}(-|ND) = \mathbb{P}(+|ND)$
+
+Positive likelihood ratio tells you how many times more likely a positive test result is to come from someone with disease than from someone without disease.
+
+$$LR^+ = \frac{\mathbb{P}(+|D)}{\mathbb{P}(+|ND)} = \frac{Sens}{1 - Spec}$$
+
+Likewise, negative likelihood ratio is how many times more likely a **negative** test result is to come from someone with disease than from someone without disease.
+
+$$LR^+ = \frac{\mathbb{P}(-|D)}{\mathbb{P}(-|ND)} = \frac{1 - Sens}{Spec}$$

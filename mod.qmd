@@ -50,6 +50,42 @@ We model using a small fraction sampling from the population, and try to draw so
 
 **Prediction** is about $\hat{y}$. In **prediction**, the key goal is to find a model that can ***accurately predict*** y for new observations of $X$.
 
++------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| Col1                                                                                                                                     | Col2                                                                                                                   |
++==========================================================================================================================================+========================================================================================================================+
+| theoretical: general insight into the working of processes                                                                               | applied: describe and predict how a system functions                                                                   |
+|                                                                                                                                          |                                                                                                                        |
+| mathematically difficult but ecologically oversimplified                                                                                 | mathematically simpler but ecologically complex                                                                        |
++------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| mathematical modelling: deterministic, dynamic model                                                                                     | statistical modelling: stochastic, static model                                                                        |
++------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| mechanistic: focus on the underlying processes, using functions and distributions based on theoretical expectations\*                    | phenomenological: focus on observed patterns in the data, using functions and distributions that are the right shape\* |
+|                                                                                                                                          |                                                                                                                        |
+| more powerful because the underlying process drives the patterns, so it's more correct when extrapolating beyond the observed conditions |                                                                                                                        |
++------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
+
+\*Note: The same function could be either mechanistic or phenomenological depending on why it was chosen.
+
+Technical details
+
++--------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| analytical: equations solved with algebra and calculus (closed-form solution)                                            | computational/numerical: use computer programme to provide approximate solution |
++--------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| dynamic: the response variables (state of the system) at time t feed back to affect the response variables in the future | static                                                                          |
++--------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| continuous                                                                                                               | discrete                                                                        |
++--------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| population-based (Lagrangian)                                                                                            | individual-based (Eulerian)                                                     |
++--------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| deterministic: the expected (average) behaviour of a system in the absence of random variation                           | stochastic: incorporate noise and randomness                                    |
+|                                                                                                                          |                                                                                 |
+| only for qualitative comparison with data because they never match the data exactly                                      |                                                                                 |
++--------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+
+explicit modelling (direct) states the form directly. the model itself is written in a direct form, such as a query that produces an output or a model that defines a density explicitly
+
+implicit modelling (indirect) describes it indirectly through conditions, constraints, or a generating mechanism; by a logical specification or by a transformation process that generates samples without writing the density in closed form
+
 ## Types of model
 
 Models can be classified based on the following attributes [@kim2008]:

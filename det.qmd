@@ -1,1 +1,657 @@
-# Deterministic models
+---
+title: "Deterministic models"
+format:
+  html:
+    code-copy: false
+execute:
+  echo: false
+---
+
+```{ojs}
+import { createSlider, createButton, injectStyle } from "./_slider.js"
+d3 = require("d3@7")
+```
+
+Deterministic models are systems whose future state is fully determined by the current state and the rules. Given the same starting point, they always produce the same trajectory. It is tempting to equate *deterministic* with *predictable*, but even the simplest non-linear rule can generate behaviour that is, for all practical purposes, indistinguishable from randomness.
+
+## A warm-up: the logistic map {.unnumbered}
+
+Before we meet the SIR and its siblings, it is worth spending a moment on a one-line model that already contains most of the surprises deterministic dynamics has to offer. The **logistic map** is
+
+$$x_{t+1} = r\, x_t\, (1 - x_t)$$
+
+where $x_t \in [0, 1]$ is a population at generation $t$ and $r$ is a growth rate. It was popularised by Robert May [@may1976] as a cautionary tale: a deterministic rule this simple can produce stable equilibria, clean periodic cycles, sudden bifurcations, and full-blown deterministic chaos — all by turning a single knob.
+
+#### Interactive demonstration {.unnumbered}
+
+Drag the **r** and **x₀** sliders (or click anywhere on the bifurcation diagram) to set the dynamics.
+
+- The **time series** is your trajectory $x_0, x_1, x_2, \dots$. Drag along it to pick which step the formula explains — the selected step and its predecessor are marked. Horizontal dashed lines show the **attractor values** where the sequence eventually settles.
+- The **formula panel** shows the rule with the numbers from that step plugged in. Hover any value in the computation to see the matching point highlighted on the time series.
+- The **bifurcation diagram** plots the attractor for every $r$. The dots on the vertical marker are exactly the same values drawn as dashed lines in the time series above — **same $r$, same values, same colour**.
+
+```{ojs}
+logisticBifurcation = {
+  // ──────────────────────────────────────────────────────────────────────
+  // Layout (stacked rows, all full width of the wrapper):
+  //   Row 1 · controls     [ r slider ]  [ x₀ slider ]
+  //   Row 2 · formula      x_{t+1} = r · x_t · (1 − x_t)  /  live step
+  //   Row 3 · time series  xₜ vs t + attractor dashed lines (coloured)
+  //   Row 4 · bifurcation  canvas + SVG overlay, click/drag to set r
+  //
+  // Interactions:
+  //   · Drag the time series to pick the step the formula explains (currentT).
+  //     The selected step and its predecessor are drawn as distinct markers.
+  //   · Hover any number in the computation line — each number carries a
+  //     data-hl="prev" or data-hl="curr" attribute; hovering enlarges the
+  //     matching marker on the time series and draws a guide line.
+  //   · Attractor ↔ time-series link is by COLOUR: each distinct long-run
+  //     value gets a palette slot, drawn as a dashed line on the time series
+  //     and a dot on the bifurcation marker in the same colour.
+  // ──────────────────────────────────────────────────────────────────────
+  const wrapper = document.createElement("div");
+  wrapper.className = "bif-wrap";
+  wrapper.style.cssText =
+    "font-family:system-ui,-apple-system,sans-serif;max-width:900px;margin:0 auto;";
+  wrapper.appendChild(injectStyle());
+
+  // Local CSS
+  const style = document.createElement("style");
+  style.textContent = `
+    .bif-wrap .bif-card {
+      background:#fff; border:1px solid #e2e8f0; border-radius:8px;
+      padding:12px 14px; margin-top:12px;
+    }
+    .bif-wrap .panel-title {
+      font-size:13px; font-weight:700; color:#1e293b;
+      letter-spacing:0.2px; margin:0 0 8px;
+    }
+    .bif-wrap .controls {
+      display:flex; gap:20px; margin:0 0 6px;
+      align-items:flex-end; flex-wrap:wrap;
+    }
+    .bif-wrap .btn-row {
+      display:flex; gap:8px; min-width:170px;
+    }
+    /* Formula card */
+    .bif-wrap .formula-card { display:flex; flex-direction:column; gap:10px; }
+    .bif-wrap .formula-row {
+      display:flex; align-items:center; flex-wrap:wrap;
+      gap:14px 22px;
+    }
+    .bif-wrap .big-formula {
+      background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px;
+      padding:10px 16px;
+      font-family:'SF Mono','Menlo','Consolas',monospace;
+      font-size:17px; font-weight:700; color:#1e293b; letter-spacing:0.3px;
+      white-space:nowrap;
+    }
+    .bif-wrap .big-formula .r { color:#dc2626; }
+    .bif-wrap .big-formula .x { color:#0891b2; }
+    .bif-wrap .step-block { flex:1; min-width:300px; }
+    .bif-wrap .step-label {
+      font-size:11px; color:#64748b;
+      letter-spacing:0.4px; text-transform:uppercase; font-weight:700;
+      margin-bottom:4px;
+    }
+    .bif-wrap .step-formula {
+      font-family:'SF Mono','Menlo','Consolas',monospace;
+      font-size:15px; line-height:1.6; color:#334155;
+      display:flex; flex-wrap:wrap; align-items:baseline; gap:6px;
+    }
+    .bif-wrap .step-formula .lhs { color:#1e293b; font-weight:700; }
+    .bif-wrap .step-formula .eq  { color:#64748b; }
+    .bif-wrap .step-formula .r   { color:#dc2626; font-weight:700; }
+    .bif-wrap .step-formula .x   { color:#0891b2; font-weight:700; }
+    .bif-wrap .step-formula .res { color:#b45309; font-weight:700; font-size:17px; }
+    .bif-wrap .step-formula [data-hl] {
+      cursor:help; border-radius:3px; padding:0 3px;
+      transition: background-color 0.12s, box-shadow 0.12s;
+    }
+    .bif-wrap .step-formula [data-hl]:hover {
+      background:#fef3c7; box-shadow:0 0 0 1.5px #facc15;
+    }
+    /* Time series drag cursor */
+    .bif-wrap .ts-svg {
+      cursor:ew-resize; touch-action:none; user-select:none; outline:none;
+    }
+    /* Bifurcation canvas + overlay */
+    .bif-wrap .bif-container {
+      position:relative; width:100%; max-width:860px; margin:0 auto;
+      aspect-ratio: 860 / 280;
+    }
+    .bif-wrap .bif-container canvas {
+      width:100%; height:auto; display:block; border-radius:6px;
+    }
+    .bif-wrap .bif-container svg {
+      position:absolute; top:0; left:0; width:100%; height:100%;
+      cursor:ew-resize; touch-action:none; user-select:none;
+    }
+    /* Status + legend */
+    .bif-wrap .bif-status {
+      display:flex; align-items:center; flex-wrap:wrap; gap:10px 16px;
+      margin:12px 0 0; padding:10px 14px;
+      background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px;
+      font-size:13px; color:#475569;
+    }
+    .bif-wrap .regime {
+      display:inline-block; padding:3px 12px; border-radius:999px;
+      font-size:13px; font-weight:700; letter-spacing:0.2px;
+    }
+    .bif-wrap .regime.reg-0  { background:#e0e7ff; color:#3730a3; }
+    .bif-wrap .regime.reg-fp { background:#d1fae5; color:#065f46; }
+    .bif-wrap .regime.reg-2  { background:#fef3c7; color:#92400e; }
+    .bif-wrap .regime.reg-4  { background:#fed7aa; color:#9a3412; }
+    .bif-wrap .regime.reg-p  { background:#fbcfe8; color:#9d174d; }
+    .bif-wrap .regime.reg-c  { background:#fecaca; color:#991b1b; }
+    .bif-wrap .bif-legend {
+      font-size:12px; color:#64748b; display:flex; flex-wrap:wrap;
+      gap:4px 16px; margin-top:6px;
+    }
+    .bif-wrap .bif-legend .sw {
+      display:inline-block; vertical-align:middle; margin-right:4px;
+    }
+  `;
+  wrapper.appendChild(style);
+
+  // ── Logistic map & helpers ─────────────────────────────────────────────
+  const f = (rv, x) => rv * x * (1 - x);
+
+  function detectPeriod(buf, tol = 1e-4, maxP = 16) {
+    const n = buf.length;
+    if (n < 2 * maxP) return 0;
+    const last = buf[n - 1];
+    for (let p = 1; p <= maxP; p++) {
+      if (Math.abs(buf[n - 1 - p] - last) < tol) {
+        let ok = true;
+        const checks = Math.min(p * 3, n - p);
+        for (let i = 0; i < checks; i++) {
+          if (Math.abs(buf[n - 1 - i] - buf[n - 1 - i - p]) > tol) { ok = false; break; }
+        }
+        if (ok) return p;
+      }
+    }
+    return 0;
+  }
+  function uniqueAttractor(buf, tol = 1e-3) {
+    const vals = [];
+    for (let i = 0; i < buf.length; i++) {
+      const v = buf[i];
+      let has = false;
+      for (let j = 0; j < vals.length; j++) {
+        if (Math.abs(vals[j] - v) < tol) { has = true; break; }
+      }
+      if (!has) vals.push(v);
+    }
+    vals.sort((a, b) => b - a);
+    return vals;
+  }
+
+  // ── State ──────────────────────────────────────────────────────────────
+  let r = 3.2;
+  let x0 = 0.2;
+  const TMAX = 80;
+  const traj = new Float64Array(TMAX);
+  function simulate() {
+    traj[0] = x0;
+    for (let i = 1; i < TMAX; i++) traj[i] = f(r, traj[i - 1]);
+  }
+  simulate();
+
+  const attractor = [];
+  function computeAttractor() {
+    attractor.length = 0;
+    let x = 0.5;
+    for (let i = 0; i < 800; i++) x = f(r, x);
+    for (let i = 0; i < 200; i++) { x = f(r, x); attractor.push(x); }
+  }
+  function regimeFor(rv, buf) {
+    if (rv <= 1) return { key: "0", label: "Extinction · xₜ → 0" };
+    const p = detectPeriod(buf);
+    if (p === 1) return { key: "fp", label: `Stable fixed point · xₜ → ${(1 - 1 / rv).toFixed(3)}` };
+    if (p === 2) return { key: "2",  label: "Period-2 cycle" };
+    if (p === 4) return { key: "4",  label: "Period-4 cycle" };
+    if (p === 3) return { key: "p",  label: "Period-3 window" };
+    if (p > 0)   return { key: "p",  label: `Period-${p} cycle` };
+    return       { key: "c",  label: "Chaos · aperiodic" };
+  }
+
+  // ── Row 1 · Controls ───────────────────────────────────────────────────
+  const controls = document.createElement("div");
+  controls.className = "controls";
+  const SL = {};
+  SL.r  = createSlider("r (growth rate)",   2.5, 4.0, 0.001, r,  "#dc2626", "red");
+  SL.x0 = createSlider("x₀ (initial value)", 0.01, 0.99, 0.01, x0, "#0891b2", "teal");
+  controls.appendChild(SL.r.el);
+  controls.appendChild(SL.x0.el);
+
+  // ── Row 2 · Formula card ───────────────────────────────────────────────
+  const formulaCard = document.createElement("div");
+  formulaCard.className = "bif-card formula-card";
+
+  const fTitle = document.createElement("div");
+  fTitle.className = "panel-title";
+  fTitle.textContent = "How each value is generated";
+  formulaCard.appendChild(fTitle);
+
+  const fRow = document.createElement("div");
+  fRow.className = "formula-row";
+
+  const bigFormula = document.createElement("div");
+  bigFormula.className = "big-formula";
+  bigFormula.innerHTML =
+    'x<sub>t+1</sub> = <span class="r">r</span> · <span class="x">x<sub>t</sub></span> · ' +
+    '(1 − <span class="x">x<sub>t</sub></span>)';
+  fRow.appendChild(bigFormula);
+
+  const stepBlock = document.createElement("div");
+  stepBlock.className = "step-block";
+  const stepLabel = document.createElement("div");
+  stepLabel.className = "step-label";
+  const stepFormula = document.createElement("div");
+  stepFormula.className = "step-formula";
+  stepBlock.appendChild(stepLabel);
+  stepBlock.appendChild(stepFormula);
+  fRow.appendChild(stepBlock);
+
+  formulaCard.appendChild(fRow);
+
+  // ── Row 3 · Time series card ───────────────────────────────────────────
+  const tsW = 860, tsH = 230;
+  const tsM = { top: 26, right: 60, bottom: 32, left: 48 };
+  const tsIW = tsW - tsM.left - tsM.right;
+  const tsIH = tsH - tsM.top - tsM.bottom;
+  const tsSvg = d3.create("svg")
+    .attr("class", "ts-svg")
+    .attr("viewBox", `0 0 ${tsW} ${tsH}`)
+    .style("width", "100%").style("height", "auto");
+  const tsX = d3.scaleLinear().domain([0, TMAX - 1]).range([tsM.left, tsM.left + tsIW]);
+  const tsY = d3.scaleLinear().domain([0, 1]).range([tsM.top + tsIH, tsM.top]);
+
+  tsSvg.append("g")
+    .attr("transform", `translate(0, ${tsM.top + tsIH})`)
+    .style("font-size", "11px")
+    .call(d3.axisBottom(tsX).ticks(10));
+  tsSvg.append("g")
+    .attr("transform", `translate(${tsM.left}, 0)`)
+    .style("font-size", "11px")
+    .call(d3.axisLeft(tsY).ticks(5));
+  tsSvg.append("text")
+    .attr("x", tsM.left + 4).attr("y", 16)
+    .style("font-size", "13px").style("font-weight", "700").style("fill", "#1e293b")
+    .text("Time series xₜ");
+  tsSvg.append("text")
+    .attr("x", tsM.left + tsIW / 2).attr("y", tsH - 4)
+    .attr("text-anchor", "middle").style("font-size", "11px").style("fill", "#475569")
+    .text("generation t");
+
+  const tsAttractorG = tsSvg.append("g").node();
+  const tsLine = d3.line().x((_, i) => tsX(i)).y(d => tsY(d));
+  const tsPath = tsSvg.append("path")
+    .attr("fill", "none").attr("stroke", "#0891b2").attr("stroke-width", 1.8).node();
+  const tsDotsG = tsSvg.append("g").node();
+  const tsMarkerG = tsSvg.append("g").node();   // step markers (prev + curr) & guides
+
+  const tsSvgNode = tsSvg.node();
+  tsSvgNode.setAttribute("tabindex", "0");
+
+  const tsCard = document.createElement("div");
+  tsCard.className = "bif-card";
+  tsCard.appendChild(tsSvgNode);
+
+  // ── Row 4 · Bifurcation (canvas + SVG overlay) ─────────────────────────
+  const bifW = 860, bifH = 280;
+  const bifM = { top: 14, right: 60, bottom: 34, left: 48 };
+  const bifIW = bifW - bifM.left - bifM.right;
+  const bifIH = bifH - bifM.top - bifM.bottom;
+  const rMin = 2.5, rMax = 4.0;
+
+  const bifCard = document.createElement("div");
+  bifCard.className = "bif-card";
+  bifCard.style.padding = "12px";
+
+  const bifContainer = document.createElement("div");
+  bifContainer.className = "bif-container";
+
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const bifCanvas = document.createElement("canvas");
+  bifCanvas.width  = bifW * dpr;
+  bifCanvas.height = bifH * dpr;
+  const cctx = bifCanvas.getContext("2d");
+  cctx.scale(dpr, dpr);
+
+  (function drawBifurcation() {
+    cctx.fillStyle = "#fafafa";
+    cctx.fillRect(0, 0, bifW, bifH);
+    cctx.fillStyle = "#fff";
+    cctx.fillRect(bifM.left, bifM.top, bifIW, bifIH);
+    cctx.fillStyle = "rgba(8, 47, 73, 0.42)";
+    const nR = 900, tr = 500, sh = 150;
+    for (let i = 0; i < nR; i++) {
+      const rv = rMin + (rMax - rMin) * i / (nR - 1);
+      let x = 0.5;
+      for (let j = 0; j < tr; j++) x = f(rv, x);
+      const xp = bifM.left + (rv - rMin) / (rMax - rMin) * bifIW;
+      for (let j = 0; j < sh; j++) {
+        x = f(rv, x);
+        if (x > 0 && x < 1) {
+          const yp = bifM.top + (1 - x) * bifIH;
+          cctx.fillRect(xp, yp, 0.8, 0.8);
+        }
+      }
+    }
+  })();
+  bifContainer.appendChild(bifCanvas);
+
+  const bifSvg = d3.create("svg").attr("viewBox", `0 0 ${bifW} ${bifH}`);
+  const bifX = d3.scaleLinear().domain([rMin, rMax]).range([bifM.left, bifM.left + bifIW]);
+  const bifY = d3.scaleLinear().domain([0, 1]).range([bifM.top + bifIH, bifM.top]);
+  bifSvg.append("g")
+    .attr("transform", `translate(0, ${bifM.top + bifIH})`)
+    .style("font-size", "11px")
+    .call(d3.axisBottom(bifX).ticks(8));
+  bifSvg.append("g")
+    .attr("transform", `translate(${bifM.left}, 0)`)
+    .style("font-size", "11px")
+    .call(d3.axisLeft(bifY).ticks(5));
+  bifSvg.append("text")
+    .attr("x", bifM.left + bifIW / 2).attr("y", bifH - 4)
+    .attr("text-anchor", "middle").style("font-size", "12px").style("fill", "#475569")
+    .text("growth rate  r");
+  bifSvg.append("text")
+    .attr("transform", `translate(14, ${bifM.top + bifIH / 2}) rotate(-90)`)
+    .attr("text-anchor", "middle").style("font-size", "12px").style("fill", "#475569")
+    .text("long-run x");
+  bifSvg.append("text")
+    .attr("x", bifM.left + 6).attr("y", bifM.top + 14)
+    .style("font-size", "13px").style("font-weight", "700").style("fill", "#1e293b")
+    .text("Bifurcation diagram  ·  click or drag to change r");
+
+  const markerLine = bifSvg.append("line")
+    .attr("y1", bifM.top).attr("y2", bifM.top + bifIH)
+    .attr("stroke", "#dc2626").attr("stroke-width", 1.6).attr("opacity", 0.9).node();
+  const bifMarkerG = bifSvg.append("g").node();
+
+  bifContainer.appendChild(bifSvg.node());
+  const bifSvgNode = bifSvg.node();
+  bifCard.appendChild(bifContainer);
+
+  // ── Status + legend ────────────────────────────────────────────────────
+  const statusEl = document.createElement("div");
+  statusEl.className = "bif-status";
+
+  const legend = document.createElement("div");
+  legend.className = "bif-legend";
+  legend.innerHTML = `
+    <span><span class="sw" style="width:22px;height:0;border-top:2px solid #dc2626;"></span>current r</span>
+    <span><span class="sw" style="width:10px;height:10px;border-radius:50%;background:#dc2626;"></span>attractor values (same colour on both panels)</span>
+    <span><span class="sw" style="width:22px;height:0;border-top:2px solid #0891b2;"></span>your trajectory xₜ</span>
+  `;
+
+  // ── Palette for attractor values ───────────────────────────────────────
+  const palette = ["#dc2626", "#d97706", "#7c3aed", "#0ea5e9",
+                   "#059669", "#db2777", "#475569", "#ca8a04"];
+  const CHAOS_COLOUR = "#dc2626";
+
+  // ── Hot-path draw ──────────────────────────────────────────────────────
+  let currentT = TMAX - 1;          // which step the formula explains
+  let hoverHL = null;               // "prev" | "curr" | null — hovered formula piece
+  let rafPending = false;
+  function requestDraw() {
+    if (rafPending) return;
+    rafPending = true;
+    requestAnimationFrame(() => { rafPending = false; draw(); });
+  }
+
+  function draw() {
+    computeAttractor();
+    const period = detectPeriod(attractor);
+    const uniq = period > 0 && period <= 8 ? uniqueAttractor(attractor) : null;
+
+    // ── Bifurcation marker ──
+    const mx = bifX(r);
+    markerLine.setAttribute("x1", mx);
+    markerLine.setAttribute("x2", mx);
+
+    let svgBits = "";
+    if (uniq) {
+      for (let i = 0; i < uniq.length; i++) {
+        const v = uniq[i];
+        const col = palette[i % palette.length];
+        const y = bifY(v);
+        svgBits += `<circle cx="${mx}" cy="${y.toFixed(2)}" r="4" fill="${col}" stroke="#fff" stroke-width="1.2"/>`;
+        if (mx < bifM.left + bifIW - 8) {
+          svgBits += `<text x="${(mx + 7).toFixed(2)}" y="${(y + 3.5).toFixed(2)}"
+            style="font-size:11px;font-weight:700;font-family:'SF Mono',monospace;fill:${col};
+            paint-order:stroke;stroke:#fff;stroke-width:3;">${v.toFixed(3)}</text>`;
+        }
+      }
+    } else {
+      for (let i = 0; i < attractor.length; i++) {
+        svgBits += `<circle cx="${mx}" cy="${bifY(attractor[i]).toFixed(2)}" r="2.2" fill="${CHAOS_COLOUR}" opacity="0.55"/>`;
+      }
+    }
+    bifMarkerG.innerHTML = svgBits;
+
+    // ── Time series attractor lines ──
+    let tsBits = "";
+    if (uniq) {
+      for (let i = 0; i < uniq.length; i++) {
+        const v = uniq[i];
+        const col = palette[i % palette.length];
+        const y = tsY(v);
+        tsBits += `<line x1="${tsM.left}" y1="${y.toFixed(2)}" x2="${tsM.left + tsIW}" y2="${y.toFixed(2)}"
+          stroke="${col}" stroke-dasharray="4,3" stroke-width="1.2" opacity="0.85"/>`;
+        tsBits += `<text x="${tsM.left + tsIW + 5}" y="${(y + 3.5).toFixed(2)}"
+          style="font-size:11px;font-weight:700;font-family:'SF Mono',monospace;fill:${col};">${v.toFixed(3)}</text>`;
+      }
+    } else {
+      let amin = 1, amax = 0;
+      for (let i = 0; i < attractor.length; i++) {
+        const v = attractor[i];
+        if (v < amin) amin = v;
+        if (v > amax) amax = v;
+      }
+      const yT = tsY(amax), yB = tsY(amin);
+      tsBits += `<rect x="${tsM.left}" y="${yT.toFixed(2)}" width="${tsIW}" height="${(yB - yT).toFixed(2)}"
+        fill="${CHAOS_COLOUR}" opacity="0.10"/>`;
+      tsBits += `<text x="${tsM.left + tsIW + 5}" y="${((yT + yB)/2 + 3.5).toFixed(2)}"
+        style="font-size:11px;font-weight:700;font-family:'SF Mono',monospace;fill:${CHAOS_COLOUR};">chaos</text>`;
+    }
+    tsAttractorG.innerHTML = tsBits;
+
+    // ── Time series full trajectory + dots ──
+    const pts = [];
+    for (let i = 0; i < TMAX; i++) pts.push(traj[i]);
+    tsPath.setAttribute("d", tsLine(pts) || "");
+    let dotBits = "";
+    for (let i = 0; i < TMAX; i++) {
+      dotBits += `<circle cx="${tsX(i).toFixed(2)}" cy="${tsY(traj[i]).toFixed(2)}" r="2.2" fill="#0891b2"/>`;
+    }
+    tsDotsG.innerHTML = dotBits;
+
+    // ── Step markers at currentT (and its predecessor), with hover bump ──
+    const PREV_COL = "#0891b2";   // x_{t-1}  (cyan — matches time series / x spans)
+    const CURR_COL = "#b45309";   // x_t      (amber — matches .res)
+    const tCurr = currentT;
+    const tPrev = Math.max(0, currentT - 1);
+    const xC = traj[tCurr];
+    const xP = traj[tPrev];
+    const xCx = tsX(tCurr), xCy = tsY(xC);
+    const xPx = tsX(tPrev), xPy = tsY(xP);
+    const yAxisB = tsY(0);
+    const hasPrev = currentT >= 1;
+    const prevBig = hoverHL === "prev";
+    const currBig = hoverHL === "curr";
+
+    let markerBits = "";
+    // drop-lines to x-axis at t-1 and t (thin, light)
+    if (hasPrev) {
+      markerBits += `<line x1="${xPx.toFixed(2)}" y1="${xPy.toFixed(2)}" x2="${xPx.toFixed(2)}" y2="${yAxisB}"
+        stroke="${PREV_COL}" stroke-width="${prevBig ? 2 : 1}" stroke-dasharray="2,3" opacity="${prevBig ? 0.9 : 0.6}"/>`;
+    }
+    markerBits += `<line x1="${xCx.toFixed(2)}" y1="${xCy.toFixed(2)}" x2="${xCx.toFixed(2)}" y2="${yAxisB}"
+      stroke="${CURR_COL}" stroke-width="${currBig ? 2 : 1}" stroke-dasharray="2,3" opacity="${currBig ? 0.9 : 0.6}"/>`;
+    // t labels floating next to each marker (above if there's room, otherwise below)
+    function tLabel(tx, ty, txt, col) {
+      const above = ty > tsM.top + 22;
+      const yy = above ? (ty - 13) : (ty + 20);
+      return `<text x="${tx.toFixed(2)}" y="${yy.toFixed(2)}" text-anchor="middle"
+        style="font-size:11px;font-weight:700;font-family:'SF Mono',monospace;fill:${col};
+        paint-order:stroke;stroke:#fff;stroke-width:3;">t=${txt}</text>`;
+    }
+    if (hasPrev) markerBits += tLabel(xPx, xPy, tPrev, PREV_COL);
+    markerBits += tLabel(xCx, xCy, tCurr, CURR_COL);
+    // the rings themselves
+    if (hasPrev) {
+      const rr = prevBig ? 9 : 6;
+      markerBits += `<circle cx="${xPx.toFixed(2)}" cy="${xPy.toFixed(2)}" r="${rr}"
+        fill="#fff" stroke="${PREV_COL}" stroke-width="${prevBig ? 3 : 2}"/>`;
+      markerBits += `<circle cx="${xPx.toFixed(2)}" cy="${xPy.toFixed(2)}" r="3" fill="${PREV_COL}"/>`;
+    }
+    {
+      const rr = currBig ? 9 : 6;
+      markerBits += `<circle cx="${xCx.toFixed(2)}" cy="${xCy.toFixed(2)}" r="${rr}"
+        fill="#fff" stroke="${CURR_COL}" stroke-width="${currBig ? 3 : 2}"/>`;
+      markerBits += `<circle cx="${xCx.toFixed(2)}" cy="${xCy.toFixed(2)}" r="3" fill="${CURR_COL}"/>`;
+    }
+    tsMarkerG.innerHTML = markerBits;
+
+    // ── Formula: one-line computation for the selected step ──
+    if (currentT >= 1) {
+      const xt  = traj[currentT - 1];
+      const xt1 = traj[currentT];
+      stepLabel.innerHTML =
+        `Step <b style="color:#b45309;">t = ${currentT}</b> · ` +
+        `<span style="color:#94a3b8;">drag the time series to pick another step · hover any number</span>`;
+      stepFormula.innerHTML =
+        `<span class="lhs" data-hl="curr">x<sub>${currentT}</sub></span>` +
+        `<span class="eq">=</span>` +
+        `<span class="r">${r.toFixed(3)}</span><span class="eq">·</span>` +
+        `<span class="x" data-hl="prev">${xt.toFixed(3)}</span><span class="eq">·</span>` +
+        `(1 − <span class="x" data-hl="prev">${xt.toFixed(3)}</span>)` +
+        `<span class="eq">=</span>` +
+        `<span class="res" data-hl="curr">${xt1.toFixed(3)}</span>`;
+    } else {
+      stepLabel.innerHTML =
+        `Step <b style="color:#b45309;">t = 0</b> · ` +
+        `<span style="color:#94a3b8;">initial condition · drag right to step through iterations</span>`;
+      stepFormula.innerHTML =
+        `<span class="lhs" data-hl="curr">x<sub>0</sub></span>` +
+        `<span class="eq">=</span>` +
+        `<span class="res" data-hl="curr">${x0.toFixed(3)}</span>` +
+        `<span style="color:#94a3b8;margin-left:8px;font-size:13px;">(the starting value you chose)</span>`;
+    }
+
+    // ── Status ──
+    const reg = regimeFor(r, attractor);
+    statusEl.innerHTML = `
+      <span class="regime reg-${reg.key}">${reg.label}</span>
+      <span>r = <b style="color:#dc2626;font-family:'SF Mono',Menlo,monospace;">${r.toFixed(3)}</b></span>
+      <span>x₀ = <b style="color:#0891b2;font-family:'SF Mono',Menlo,monospace;">${x0.toFixed(3)}</b></span>
+      ${uniq ? `<span>attractor: <b>${uniq.length} value${uniq.length > 1 ? "s" : ""}</b></span>`
+             : `<span><b>continuous attractor</b></span>`}
+    `;
+  }
+
+  // ── Slider handlers ────────────────────────────────────────────────────
+  SL.r.input.addEventListener("input", () => {
+    SL.r.sync(); r = SL.r.val(); simulate(); requestDraw();
+  });
+  SL.x0.input.addEventListener("input", () => {
+    SL.x0.sync(); x0 = SL.x0.val(); simulate(); requestDraw();
+  });
+
+  // ── Drag on time series to pick the step the formula explains ─────────
+  let tsDragging = false;
+  function pickT(ev) {
+    const rect = tsSvgNode.getBoundingClientRect();
+    const k = tsW / rect.width;
+    const px = (ev.clientX - rect.left) * k;
+    const raw = tsX.invert(px);
+    const nT = Math.max(0, Math.min(TMAX - 1, Math.round(raw)));
+    if (nT === currentT) return;
+    currentT = nT;
+    requestDraw();
+  }
+  tsSvgNode.addEventListener("pointerdown", (e) => {
+    tsDragging = true;
+    try { tsSvgNode.setPointerCapture(e.pointerId); } catch (_) {}
+    pickT(e); tsSvgNode.focus(); e.preventDefault();
+  });
+  tsSvgNode.addEventListener("pointermove", (e) => { if (tsDragging) pickT(e); });
+  tsSvgNode.addEventListener("pointerup", (e) => {
+    tsDragging = false;
+    try { tsSvgNode.releasePointerCapture(e.pointerId); } catch (_) {}
+  });
+  tsSvgNode.addEventListener("pointercancel", () => { tsDragging = false; });
+  tsSvgNode.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft"  && currentT > 0)        { currentT--; requestDraw(); e.preventDefault(); }
+    if (e.key === "ArrowRight" && currentT < TMAX - 1) { currentT++; requestDraw(); e.preventDefault(); }
+  });
+
+  // ── Hover on formula values → highlight matching time-series point ────
+  stepFormula.addEventListener("pointerover", (e) => {
+    const el = e.target.closest("[data-hl]");
+    if (!el) return;
+    if (hoverHL === el.dataset.hl) return;
+    hoverHL = el.dataset.hl;
+    requestDraw();
+  });
+  stepFormula.addEventListener("pointerout", (e) => {
+    const el = e.target.closest("[data-hl]");
+    if (!el) return;
+    const rel = e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest("[data-hl]");
+    if (rel && rel.dataset.hl === el.dataset.hl) return;
+    hoverHL = null;
+    requestDraw();
+  });
+
+  // ── Click / drag on bifurcation diagram to set r ───────────────────────
+  let dragging = false;
+  function pickR(ev) {
+    const rect = bifSvgNode.getBoundingClientRect();
+    const k = bifW / rect.width;
+    const px = (ev.clientX - rect.left) * k;
+    const nr = Math.max(rMin, Math.min(rMax, bifX.invert(px)));
+    if (Math.abs(nr - r) < 1e-6) return;
+    r = Math.round(nr * 1000) / 1000;
+    SL.r.update(r);
+    simulate();
+    requestDraw();
+  }
+  bifSvgNode.addEventListener("pointerdown", (e) => {
+    dragging = true;
+    try { bifSvgNode.setPointerCapture(e.pointerId); } catch (_) {}
+    pickR(e); e.preventDefault();
+  });
+  bifSvgNode.addEventListener("pointermove", (e) => { if (dragging) pickR(e); });
+  bifSvgNode.addEventListener("pointerup", (e) => {
+    dragging = false;
+    try { bifSvgNode.releasePointerCapture(e.pointerId); } catch (_) {}
+  });
+  bifSvgNode.addEventListener("pointercancel", () => { dragging = false; });
+
+  // ── Assemble rows ──────────────────────────────────────────────────────
+  wrapper.appendChild(controls);     // Row 1: controls
+  wrapper.appendChild(formulaCard);  // Row 2: formula
+  wrapper.appendChild(tsCard);       // Row 3: time series
+  wrapper.appendChild(bifCard);      // Row 4: bifurcation
+  wrapper.appendChild(statusEl);
+  wrapper.appendChild(legend);
+
+  draw();
+  return wrapper;
+}
+```
+
+A few landmarks worth hunting for with the sliders:
+
+- $r \le 3$: a single stable fixed point at $x^{*} = 1 - 1/r$. The time series settles on one dashed line.
+- $r \approx 3$: the **first bifurcation**. The single line splits into two.
+- $r \approx 3.449$, $3.544$, $3.564$, …: **period-doubling cascade** — 4, 8, 16, ... values appear, with the ratio between successive bifurcations converging to the Feigenbaum constant $\delta \approx 4.6692$.
+- $r \approx 3.5699$: end of the cascade, onset of **chaos**. The list of attractor values collapses into a continuous band and the trajectory no longer repeats.
+- $r \approx 3.828$: a conspicuous **period-3 window** in the middle of chaos — a reminder that the chaotic regime is not uniformly chaotic.
+- $r = 4$: the dynamics are conjugate to a fair coin toss on a binary expansion; purely deterministic, yet sampling from it is statistically indistinguishable from randomness.
+
+The moral, and the reason this detour belongs at the start of a deterministic modelling book, is that "deterministic" does not imply "tame". When we turn to epidemic models in the next chapters — where coupling, thresholds, and time-varying parameters quickly outpace the logistic map in complexity — the intuition we have just built is the right one to carry in.

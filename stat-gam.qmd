@@ -1,0 +1,1268 @@
+---
+title: "Generalised additive model"
+format: html
+execute: 
+  echo: false
+---
+
+```{ojs}
+import { createSlider, createButton, injectStyle } from "./_slider.js"
+d3 = require("d3@7")
+```
+
+## Model structure
+
+
+$$\underbrace{g}_{\text{Link function}}(\underbrace{\mathbb{E}(Y)}_{\text{Expected value}}) = \underbrace{\beta_0}_{\text{Intercept}} + \underbrace{f_1(x_1) + f_2(x_2) + \dots + f_m(x_m)}_{\text{Smooth functions}}$$
+
+Smooth functions are represented by basis functions:
+
+$$f(x) = \sum_{j=1}^{k} b_j(x)\beta_j$$
+
+```{ojs}
+//| echo: false
+
+viewof spline_illustration = {
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = "font-family:system-ui,-apple-system,sans-serif;max-width:900px;margin:0 auto;";
+  wrapper.appendChild(injectStyle());
+
+  // ── Deterministic pseudo-random noise (for stable data across reloads) ──
+  function mulberry32(seed) {
+    let s = seed >>> 0;
+    return function() {
+      s = (s + 0x6D2B79F5) | 0;
+      let t = Math.imul(s ^ (s >>> 15), 1 | s);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  const rand = mulberry32(7);
+  const normal = () => Math.sqrt(-2 * Math.log(Math.max(1e-9, rand()))) * Math.cos(2 * Math.PI * rand());
+
+  // ── Noisy observations of a smooth underlying function ──
+  const X_MIN = 0, X_MAX = 10;
+  const trueFn = x => Math.sin(x * 0.7) * 1.5 + 0.4 * Math.cos(x * 1.5);
+  const N_DATA = 50;
+  const data = [];
+  for (let i = 0; i < N_DATA; i++) {
+    const x = X_MIN + (X_MAX - X_MIN) * i / (N_DATA - 1);
+    data.push({ x, y: trueFn(x) + 0.35 * normal() });
+  }
+
+  // ── Interior knots (boundary knots at X_MIN and X_MAX are added automatically) ──
+  const initialKnots = [2, 4, 6, 8];
+  let knots = initialKnots.slice();
+
+  // Local average of data around x — used as the knot's y-value
+  function localMean(kx) {
+    const W = 1.2;
+    const sub = data.filter(d => Math.abs(d.x - kx) <= W);
+    if (sub.length === 0) return trueFn(kx);
+    return sub.reduce((s, d) => s + d.y, 0) / sub.length;
+  }
+
+  // ── Natural cubic spline interpolation through (xs, ys) ──
+  function naturalCubicSpline(xs, ys) {
+    const n = xs.length;
+    const h = new Array(n - 1);
+    for (let i = 0; i < n - 1; i++) h[i] = xs[i + 1] - xs[i];
+    const a = new Array(n).fill(0);
+    const b = new Array(n).fill(1);
+    const c = new Array(n).fill(0);
+    const d = new Array(n).fill(0);
+    for (let i = 1; i < n - 1; i++) {
+      a[i] = h[i - 1];
+      b[i] = 2 * (h[i - 1] + h[i]);
+      c[i] = h[i];
+      d[i] = 6 * ((ys[i + 1] - ys[i]) / h[i] - (ys[i] - ys[i - 1]) / h[i - 1]);
+    }
+    for (let i = 1; i < n; i++) {
+      const w = a[i] / b[i - 1];
+      b[i] -= w * c[i - 1];
+      d[i] -= w * d[i - 1];
+    }
+    const m = new Array(n);
+    m[n - 1] = d[n - 1] / b[n - 1];
+    for (let i = n - 2; i >= 0; i--) m[i] = (d[i] - c[i] * m[i + 1]) / b[i];
+    return function(x) {
+      if (x <= xs[0]) x = xs[0];
+      else if (x >= xs[n - 1]) x = xs[n - 1];
+      let i = 0;
+      while (i < n - 2 && xs[i + 1] < x) i++;
+      const hi = h[i];
+      const A = (xs[i + 1] - x) / hi;
+      const B = (x - xs[i]) / hi;
+      return A * ys[i] + B * ys[i + 1] +
+             ((A * A * A - A) * m[i] + (B * B * B - B) * m[i + 1]) * (hi * hi) / 6;
+    };
+  }
+
+  // ── SVG layout ──
+  const W = 900, H = 420;
+  const margin = { top: 20, right: 20, bottom: 60, left: 44 };
+  const innerW = W - margin.left - margin.right;
+  const innerH = H - margin.top - margin.bottom;
+
+  const svg = d3.create("svg")
+    .attr("viewBox", `0 0 ${W} ${H}`)
+    .attr("width", "100%")
+    .style("max-width", W + "px").style("height", "auto")
+    .style("display", "block")
+    .style("border", "1px solid #e2e8f0")
+    .style("border-radius", "8px")
+    .style("background", "#fff");
+
+  const plotG = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+  const xScale = d3.scaleLinear().domain([X_MIN, X_MAX]).range([0, innerW]);
+  const yScale = d3.scaleLinear().domain([-3, 3]).range([innerH, 0]);
+
+  // ── Grid + axis labels ──
+  const gridG = plotG.append("g");
+  for (const t of [-2, -1, 0, 1, 2]) {
+    gridG.append("line")
+      .attr("x1", 0).attr("x2", innerW)
+      .attr("y1", yScale(t)).attr("y2", yScale(t))
+      .attr("stroke", t === 0 ? "#cbd5e1" : "#e2e8f0")
+      .attr("stroke-width", 1)
+      .attr("stroke-dasharray", t === 0 ? "" : "2,4");
+    gridG.append("text")
+      .attr("x", -6).attr("y", yScale(t))
+      .attr("text-anchor", "end").attr("dominant-baseline", "middle")
+      .attr("font-family", `"SF Mono",Menlo,Consolas,monospace`)
+      .attr("font-size", 10).attr("fill", "#64748b")
+      .text(t);
+  }
+  for (let t = 0; t <= 10; t += 2) {
+    gridG.append("text")
+      .attr("x", xScale(t)).attr("y", innerH + 16)
+      .attr("text-anchor", "middle")
+      .attr("font-family", `"SF Mono",Menlo,Consolas,monospace`)
+      .attr("font-size", 10).attr("fill", "#64748b")
+      .text(t);
+  }
+  gridG.append("text")
+    .attr("x", innerW / 2).attr("y", innerH + 52)
+    .attr("text-anchor", "middle")
+    .attr("font-family", "system-ui").attr("font-size", 11).attr("fill", "#475569")
+    .text("x");
+
+  // ── Layers (drawing order) ──
+  const dataLayer        = plotG.append("g");
+  const segmentsLayer    = plotG.append("g");
+  const knotLinesLayer   = plotG.append("g");
+  const knotPointsLayer  = plotG.append("g");
+  const knotHandlesLayer = plotG.append("g");
+
+  // Scatter of observations (drawn once)
+  dataLayer.selectAll("circle").data(data).join("circle")
+    .attr("cx", d => xScale(d.x)).attr("cy", d => yScale(d.y))
+    .attr("r", 3).attr("fill", "#94a3b8").attr("opacity", 0.65);
+
+  // ── Palette — one colour per piecewise polynomial segment ──
+  const SEG_COLORS = ["#ef4444", "#f59e0b", "#10b981", "#3b82f6", "#8b5cf6", "#ec4899", "#14b8a6"];
+
+  // Knot sequence including the boundary knots
+  function allKnots() {
+    return [X_MIN, ...knots.slice().sort((a, b) => a - b), X_MAX];
+  }
+
+  // ── Drag behaviour (defined once; attached to each new handle) ──
+  const dragBehavior = d3.drag()
+    .on("drag", function(event, d) {
+      let nv = xScale.invert(event.x);
+      nv = Math.max(X_MIN + 0.2, Math.min(X_MAX - 0.2, nv));
+      knots[d.idx] = nv;
+      d.val = nv;
+      draw();
+    });
+
+  function draw() {
+    const ak = allKnots();
+    const ay = ak.map(localMean);
+    const spline = naturalCubicSpline(ak, ay);
+    const line = d3.line().x(d => xScale(d.x)).y(d => yScale(d.y));
+
+    // Piecewise polynomial segments, each in its own colour
+    segmentsLayer.selectAll("*").remove();
+    for (let s = 0; s < ak.length - 1; s++) {
+      const pts = [];
+      const N = 60;
+      for (let j = 0; j <= N; j++) {
+        const x = ak[s] + (ak[s + 1] - ak[s]) * j / N;
+        pts.push({ x, y: spline(x) });
+      }
+      segmentsLayer.append("path").datum(pts).attr("d", line)
+        .attr("fill", "none")
+        .attr("stroke", SEG_COLORS[s % SEG_COLORS.length])
+        .attr("stroke-width", 3.5);
+    }
+
+    const sortedKnots = knots.slice().sort((a, b) => a - b);
+
+    // Dashed vertical lines showing where knots divide the x-axis
+    knotLinesLayer.selectAll("line").data(sortedKnots).join(
+      enter => enter.append("line")
+        .attr("stroke", "#475569").attr("stroke-dasharray", "4,4").attr("stroke-width", 1),
+      update => update,
+      exit => exit.remove()
+    ).attr("x1", d => xScale(d)).attr("x2", d => xScale(d)).attr("y1", 0).attr("y2", innerH);
+
+    // White dots at each knot on the spline — where two pieces join
+    knotPointsLayer.selectAll("circle").data(sortedKnots).join(
+      enter => enter.append("circle").attr("r", 6)
+        .attr("fill", "#fff").attr("stroke", "#0f172a").attr("stroke-width", 2.5),
+      update => update,
+      exit => exit.remove()
+    ).attr("cx", d => xScale(d)).attr("cy", d => yScale(spline(d)));
+
+    // Draggable arrow handles along the bottom axis
+    const handles = knotHandlesLayer.selectAll("g.knot-handle")
+      .data(knots.map((v, idx) => ({ idx, val: v })));
+    const enter = handles.enter().append("g").attr("class", "knot-handle")
+      .style("cursor", "ew-resize");
+    enter.append("rect")
+      .attr("x", -14).attr("y", 0).attr("width", 28).attr("height", 28)
+      .attr("fill", "transparent");
+    enter.append("polygon")
+      .attr("class", "arrow")
+      .attr("points", "-8,0 8,0 0,11")
+      .attr("fill", "#0f172a");
+    enter.append("text")
+      .attr("class", "label")
+      .attr("text-anchor", "middle").attr("y", 26)
+      .attr("font-family", `"SF Mono",Menlo,Consolas,monospace`)
+      .attr("font-size", 10).attr("fill", "#0f172a");
+    enter.call(dragBehavior);
+    handles.exit().remove();
+
+    knotHandlesLayer.selectAll("g.knot-handle")
+      .attr("transform", d => `translate(${xScale(d.val)}, ${innerH})`)
+      .select("text.label").text(d => d.val.toFixed(2));
+  }
+
+  // ── Control buttons ──
+  const controls = document.createElement("div");
+  controls.style.cssText = "display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap;";
+  const addBtn   = createButton("+ Add knot", "go");
+  const rmBtn    = createButton("− Remove knot", "pause");
+  const resetBtn = createButton("Reset", "reset");
+  for (const b of [addBtn, rmBtn, resetBtn]) {
+    b.el.style.flex = "0 0 auto";
+    b.el.style.padding = "6px 14px";
+  }
+  controls.appendChild(addBtn.el);
+  controls.appendChild(rmBtn.el);
+  controls.appendChild(resetBtn.el);
+
+  addBtn.el.addEventListener("click", () => {
+    if (knots.length >= 12) return;
+    // Insert the new knot into the widest existing gap
+    const s = [X_MIN, ...knots.slice().sort((a, b) => a - b), X_MAX];
+    let bestGap = 0, bestMid = (X_MIN + X_MAX) / 2;
+    for (let i = 0; i < s.length - 1; i++) {
+      const gap = s[i + 1] - s[i];
+      if (gap > bestGap) { bestGap = gap; bestMid = (s[i] + s[i + 1]) / 2; }
+    }
+    knots.push(bestMid);
+    draw();
+  });
+  rmBtn.el.addEventListener("click", () => {
+    if (knots.length > 1) { knots.pop(); draw(); }
+  });
+  resetBtn.el.addEventListener("click", () => {
+    knots = initialKnots.slice();
+    draw();
+  });
+
+  const legend = document.createElement("div");
+  legend.style.cssText = "font-size:12px;color:#64748b;margin-top:10px;line-height:1.6;";
+  legend.innerHTML = `
+    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#94a3b8;margin-right:4px;vertical-align:middle;"></span>
+    observed data &nbsp;·&nbsp;
+    <span style="display:inline-block;width:22px;height:3px;background:linear-gradient(90deg,#ef4444,#f59e0b,#10b981,#3b82f6,#8b5cf6);vertical-align:middle;"></span>
+    piecewise polynomial segments &nbsp;·&nbsp;
+    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #0f172a;margin-right:4px;vertical-align:middle;"></span>
+    join point at knot
+  `;
+
+  wrapper.appendChild(svg.node());
+  wrapper.appendChild(controls);
+  wrapper.appendChild(legend);
+
+  draw();
+  return wrapper;
+}
+```
+
+## Basis functions
+
+$$f(x) = \sum_{j=1}^{k} b_j(x)\beta_j$$
+
+For example, if we choose a cubic polynomial as the basis, we set $k=4$ and define the individual basis functions as the powers of $x$:
+
+$b_1(x) = 1$
+
+$b_2(x) = x$
+
+$b_3(x) = x^2$
+
+$b_4(x) = x^3$
+
+$$f(x) = \beta_1 + x\beta_2 + x^2\beta_3 + x^3\beta_4$$
+
+Assuming we have only one covariate $x$, the GAM becomes:
+
+$$g(\mathbb{E}(Y)) = \beta_0 + \beta_1 + x\beta_2 + x^2\beta_3 + x^3\beta_4$$
+
+## Smooth terms in GAM
+
+[Source](https://stat.ethz.ch/R-manual/R-devel/library/mgcv/html/smooth.terms.html)
+
+- isotropic smoothers: rotation of the covariate co-ordinate system will not change the result of smoothing
+
+  - B-splines (basis spline)
+  - P-splines (penalty B-splines)
+  - Thin plate regression splines (default of GAM package)
+
+- Tensor product smooths
+te smooths have one penalty per marginal basis
+
+## B-spline
+
+$$
+B_i^0(x) =
+\begin{cases}
+1 & \text{when } x_i \le x < x_{i+1} \\
+0 & \text{otherwise}
+\end{cases}
+$$
+
+**Recursion** — for degree $m \ge 1$, two adjacent B-splines of degree $m-1$ are blended together via two linear "ramps":
+
+$$
+B_i^m(x) \;=\; \underbrace{\frac{x - x_i}{x_{i+m} - x_i}}_{\alpha(x)} \, B_i^{m-1}(x) \;+\; \underbrace{\frac{x_{i+m+1} - x}{x_{i+m+1} - x_{i+1}}}_{\beta(x)} \, B_{i+1}^{m-1}(x)
+$$
+
+```{ojs}
+//| echo: false
+
+viewof bspline_viz = {
+  // ── Cox–de Boor in degree form (scoped to this cell) ──
+  const safeDiv = (n, d) => d === 0 ? 0 : n / d;
+  const rampUp   = (x, K, i, m) => safeDiv(x - K[i], K[i + m] - K[i]);
+  const rampDown = (x, K, i, m) => safeDiv(K[i + m + 1] - x, K[i + m + 1] - K[i + 1]);
+  function bspline(x, K, i, m) {
+    if (m === 0) return (x >= K[i] && x < K[i + 1]) ? 1 : 0;
+    const a = Math.max(0, rampUp(x, K, i, m));
+    const b = Math.max(0, rampDown(x, K, i, m));
+    return a * bspline(x, K, i, m - 1) + b * bspline(x, K, i + 1, m - 1);
+  }
+  const sub = n => String(n).split("").map(c => /\d/.test(c) ? "₀₁₂₃₄₅₆₇₈₉"[+c] : c).join("");
+  const sup = n => String(n).split("").map(c => /\d/.test(c) ? "⁰¹²³⁴⁵⁶⁷⁸⁹"[+c] : c).join("");
+
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = "font-family:system-ui,-apple-system,sans-serif;max-width:1000px;margin:0 auto;";
+  wrapper.appendChild(injectStyle());
+
+  // Colour key — one per decomposed piece
+  const C = {
+    rampUp:    "#dc2626", leftSub:   "#f59e0b", leftComp:  "#dc2626",
+    rampDown:  "#16a34a", rightSub:  "#0891b2", rightComp: "#16a34a",
+    result:    "#7c3aed", other:     "#94a3b8", knot:      "#1e293b"
+  };
+  const LAYERS = {
+    rampUp: C.rampUp, leftSub: C.leftSub, leftComp: C.leftComp,
+    rampDown: C.rampDown, rightSub: C.rightSub, rightComp: C.rightComp,
+    result: C.result
+  };
+
+  // ── Controls row: degree + index on one line ──
+  const ctrlRow = document.createElement("div");
+  ctrlRow.style.cssText = "display:flex;gap:18px;margin-bottom:10px;align-items:center;flex-wrap:wrap;";
+
+  const makeGroup = (label) => {
+    const g = document.createElement("div");
+    g.style.cssText = "display:flex;gap:6px;align-items:center;flex-wrap:wrap;";
+    const l = document.createElement("span");
+    l.style.cssText = "font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.3px;";
+    l.textContent = label;
+    g.appendChild(l);
+    return g;
+  };
+
+  const degGroup = makeGroup("Degree m:");
+  let degree = 2;
+  const degBtns = {};
+  for (const d of [0, 1, 2, 3]) {
+    const b = createButton(String(d), d === degree ? "go" : "pause");
+    b.el.style.cssText += ";flex:0 0 auto;padding:6px 12px;min-width:34px;";
+    degBtns[d] = b;
+    degGroup.appendChild(b.el);
+  }
+  ctrlRow.appendChild(degGroup);
+
+  const iGroup = makeGroup("Index i:");
+  const initialKnots = [0, 1.2, 2.4, 3.5, 4.8, 6.0, 7.3, 8.5];
+  const knots = initialKnots.slice();
+  const KNOT_MIN = 0, KNOT_MAX = 9;
+  let iIdx = 1;
+  const iBtns = [];
+  const maxIForDegree = m => knots.length - m - 2;
+  function rebuildIButtons() {
+    for (const b of iBtns) iGroup.removeChild(b.el);
+    iBtns.length = 0;
+    const maxI = maxIForDegree(degree);
+    iIdx = Math.max(0, Math.min(maxI, iIdx));
+    for (let i = 0; i <= maxI; i++) {
+      const b = createButton(String(i), i === iIdx ? "go" : "pause");
+      b.el.style.cssText += ";flex:0 0 auto;padding:6px 10px;min-width:30px;";
+      b.el.addEventListener("click", () => { iIdx = i; rebuildIButtons(); draw(); });
+      iBtns.push(b);
+      iGroup.appendChild(b.el);
+    }
+  }
+  ctrlRow.appendChild(iGroup);
+  wrapper.appendChild(ctrlRow);
+  rebuildIButtons();
+
+  // ── Formula (just the formula, no extra prose — the plot and prose above carry the explanation) ──
+  const formulaBox = document.createElement("div");
+  formulaBox.style.cssText = `
+    padding:14px 16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;
+    margin-bottom:12px;font-size:15px;line-height:1.4;
+    font-family:"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+    color:#0f172a;overflow-x:auto;white-space:nowrap;
+  `;
+  wrapper.appendChild(formulaBox);
+
+  let highlighted = null;
+
+  // ── SVG ──
+  const W = 1000, H = 470;
+  const margin = { top: 22, right: 22, bottom: 68, left: 62 };
+  const innerW = W - margin.left - margin.right;
+  const innerH = H - margin.top - margin.bottom;
+
+  const svg = d3.create("svg")
+    .attr("viewBox", `0 0 ${W} ${H}`)
+    .attr("width", "100%").style("max-width", W + "px").style("height", "auto")
+    .style("display", "block")
+    .style("border", "1px solid #e2e8f0")
+    .style("border-radius", "8px")
+    .style("background", "#fff");
+
+  const plotG = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+  plotG.append("rect")
+    .attr("x", -0.5).attr("y", -0.5)
+    .attr("width", innerW + 1).attr("height", innerH + 1)
+    .attr("fill", "#fafbfc").attr("stroke", "#e2e8f0");
+
+  const gridLayer       = plotG.append("g");
+  const knotLayer       = plotG.append("g");
+  const otherBasisLayer = plotG.append("g");
+  const leftSubLayer    = plotG.append("g");
+  const rightSubLayer   = plotG.append("g");
+  const rampUpLayer     = plotG.append("g");
+  const rampDownLayer   = plotG.append("g");
+  const leftCompLayer   = plotG.append("g");
+  const rightCompLayer  = plotG.append("g");
+  const resultLayer     = plotG.append("g");
+  const crosshairLayer  = plotG.append("g").style("pointer-events", "none");
+  const knotDragLayer   = plotG.append("g");
+
+  const xScale = d3.scaleLinear().domain([KNOT_MIN, KNOT_MAX]).range([0, innerW]);
+  const yScale = d3.scaleLinear().domain([-0.05, 1.1]).range([innerH, 0]);
+
+  // Static grid
+  gridLayer.append("line")
+    .attr("x1", 0).attr("x2", innerW)
+    .attr("y1", yScale(0)).attr("y2", yScale(0))
+    .attr("stroke", "#cbd5e1").attr("stroke-width", 1);
+  for (const t of [0.5, 1]) {
+    gridLayer.append("line")
+      .attr("x1", 0).attr("x2", innerW)
+      .attr("y1", yScale(t)).attr("y2", yScale(t))
+      .attr("stroke", "#e2e8f0").attr("stroke-dasharray", "2,4");
+  }
+  for (const t of [0, 0.5, 1]) {
+    gridLayer.append("text")
+      .attr("x", -10).attr("y", yScale(t))
+      .attr("text-anchor", "end").attr("dominant-baseline", "middle")
+      .attr("font-family", `"SF Mono",Menlo,Consolas,monospace`)
+      .attr("font-size", 14).attr("fill", "#475569")
+      .text(t);
+  }
+
+  // Sampling helpers
+  const GRID_N = 800;
+  function sampleFn(fn) {
+    const pts = [];
+    for (let j = 0; j <= GRID_N; j++) {
+      const x = KNOT_MIN + (KNOT_MAX - KNOT_MIN) * j / GRID_N;
+      pts.push({ x, y: fn(x) });
+    }
+    return pts;
+  }
+  const linePath = d3.line().defined(d => isFinite(d.y)).x(d => xScale(d.x)).y(d => yScale(d.y));
+  const areaPath = d3.area().defined(d => isFinite(d.y)).x(d => xScale(d.x)).y0(yScale(0)).y1(d => yScale(d.y));
+
+  // Crosshair
+  const crossX = crosshairLayer.append("line")
+    .attr("y1", 0).attr("y2", innerH)
+    .attr("stroke", "#0f172a").attr("stroke-width", 1)
+    .attr("stroke-dasharray", "3,3").style("opacity", 0);
+  const crossDots = {};
+  for (const key of Object.keys(LAYERS)) {
+    crossDots[key] = crosshairLayer.append("circle")
+      .attr("r", 5.5).attr("fill", LAYERS[key])
+      .attr("stroke", "#fff").attr("stroke-width", 2)
+      .style("opacity", 0);
+  }
+  const crossLabel = crosshairLayer.append("g").style("opacity", 0);
+  const crossLabelBg = crossLabel.append("rect")
+    .attr("fill", "#fff").attr("stroke", "#1e293b").attr("stroke-width", 1)
+    .attr("rx", 4).attr("ry", 4);
+  const crossLabelText = crossLabel.append("text")
+    .attr("font-family", `"SF Mono",Menlo,Consolas,monospace`)
+    .attr("font-size", 15).attr("font-weight", 600).attr("fill", "#0f172a")
+    .attr("dominant-baseline", "hanging");
+
+  // Hover hit area
+  const hitRect = plotG.append("rect")
+    .attr("x", 0).attr("y", 0).attr("width", innerW).attr("height", innerH)
+    .attr("fill", "transparent").style("cursor", "crosshair");
+  let hoverX = null;
+  hitRect.on("mousemove", function(event) {
+    const [mx] = d3.pointer(event, plotG.node());
+    hoverX = Math.max(0, Math.min(innerW, mx));
+    updateCrosshair();
+  }).on("mouseleave", () => { hoverX = null; updateCrosshair(); });
+
+  // Persistent knot drag handles
+  knotDragLayer.selectAll("g.knot-handle")
+    .data(knots.map((v, idx) => ({ idx, val: v })))
+    .join("g")
+    .attr("class", "knot-handle")
+    .style("cursor", "ew-resize")
+    .each(function() {
+      const g = d3.select(this);
+      g.append("rect").attr("x", -14).attr("y", -2).attr("width", 28).attr("height", 32).attr("fill", "transparent");
+      g.append("polygon").attr("class", "arrow").attr("points", "-8,0 8,0 0,13");
+      g.append("text").attr("class", "label").attr("text-anchor", "middle").attr("y", 30)
+        .attr("font-family", `"SF Mono",Menlo,Consolas,monospace`)
+        .attr("font-size", 14).attr("font-weight", 700);
+    })
+    .call(d3.drag().on("drag", function(event, d) {
+      let nv = xScale.invert(event.x);
+      const lo = d.idx === 0 ? KNOT_MIN : knots[d.idx - 1] + 0.05;
+      const hi = d.idx === knots.length - 1 ? KNOT_MAX : knots[d.idx + 1] - 0.05;
+      nv = Math.max(lo, Math.min(hi, nv));
+      knots[d.idx] = nv;
+      d.val = nv;
+      draw();
+    }));
+
+  function drawKnotLines() {
+    const m = degree, i = iIdx;
+    const supStart = i, supEnd = i + m + 1;
+    knotLayer.selectAll("line.knot-line")
+      .data(knots.map((v, idx) => ({ idx, val: v, inSup: idx >= supStart && idx <= supEnd })))
+      .join(
+        enter => enter.append("line").attr("class", "knot-line"),
+        update => update,
+        exit => exit.remove()
+      )
+      .attr("x1", d => xScale(d.val)).attr("x2", d => xScale(d.val))
+      .attr("y1", 0).attr("y2", innerH)
+      .attr("stroke", d => d.inSup ? "#475569" : "#cbd5e1")
+      .attr("stroke-width", d => d.inSup ? 1 : 0.5)
+      .attr("stroke-dasharray", d => d.inSup ? "3,3" : "1,3");
+
+    knotDragLayer.selectAll("g.knot-handle")
+      .data(knots.map((v, idx) => ({ idx, val: v })))
+      .attr("transform", d => `translate(${xScale(d.val)}, ${innerH})`);
+    knotDragLayer.selectAll("g.knot-handle polygon.arrow")
+      .attr("fill", d => (d.idx >= supStart && d.idx <= supEnd) ? C.knot : "#94a3b8");
+    knotDragLayer.selectAll("g.knot-handle text.label")
+      .attr("fill", d => (d.idx >= supStart && d.idx <= supEnd) ? "#0f172a" : "#94a3b8")
+      .text(d => `x${sub(d.idx)}`);
+  }
+
+  function draw() {
+    const m = degree, i = iIdx;
+    const maxI = maxIForDegree(m);
+
+    // Other basis functions (grey background)
+    otherBasisLayer.selectAll("path").remove();
+    for (let k = 0; k <= maxI; k++) {
+      if (k === i) continue;
+      otherBasisLayer.append("path")
+        .datum(sampleFn(x => bspline(x, knots, k, m)))
+        .attr("d", linePath)
+        .attr("fill", "none").attr("stroke", C.other).attr("stroke-width", 1.2)
+        .attr("opacity", 0.55);
+    }
+
+    for (const L of [leftSubLayer, rightSubLayer, rampUpLayer, rampDownLayer, leftCompLayer, rightCompLayer, resultLayer]) {
+      L.selectAll("*").remove();
+    }
+
+    if (m >= 1) {
+      const leftSubFn  = x => bspline(x, knots, i, m - 1);
+      const rightSubFn = x => bspline(x, knots, i + 1, m - 1);
+      const rampUpFn   = x => (x < knots[i] || x > knots[i + m]) ? NaN : Math.max(0, Math.min(1, rampUp(x, knots, i, m)));
+      const rampDownFn = x => (x < knots[i + 1] || x > knots[i + m + 1]) ? NaN : Math.max(0, Math.min(1, rampDown(x, knots, i, m)));
+      const leftCompFn  = x => Math.max(0, rampUp(x, knots, i, m)) * leftSubFn(x);
+      const rightCompFn = x => Math.max(0, rampDown(x, knots, i, m)) * rightSubFn(x);
+
+      leftSubLayer.append("path").attr("data-key", "leftSub").attr("data-role", "line")
+        .datum(sampleFn(leftSubFn)).attr("d", linePath)
+        .attr("fill", "none").attr("stroke", C.leftSub).attr("stroke-width", 2).attr("stroke-dasharray", "3,4");
+      rightSubLayer.append("path").attr("data-key", "rightSub").attr("data-role", "line")
+        .datum(sampleFn(rightSubFn)).attr("d", linePath)
+        .attr("fill", "none").attr("stroke", C.rightSub).attr("stroke-width", 2).attr("stroke-dasharray", "3,4");
+
+      rampUpLayer.append("path").attr("data-key", "rampUp").attr("data-role", "line")
+        .datum(sampleFn(rampUpFn)).attr("d", linePath)
+        .attr("fill", "none").attr("stroke", C.rampUp).attr("stroke-width", 2).attr("stroke-dasharray", "7,4");
+      rampDownLayer.append("path").attr("data-key", "rampDown").attr("data-role", "line")
+        .datum(sampleFn(rampDownFn)).attr("d", linePath)
+        .attr("fill", "none").attr("stroke", C.rampDown).attr("stroke-width", 2).attr("stroke-dasharray", "7,4");
+
+      leftCompLayer.append("path").attr("data-key", "leftComp").attr("data-role", "area")
+        .datum(sampleFn(leftCompFn)).attr("d", areaPath)
+        .attr("fill", C.leftComp).attr("fill-opacity", 0.22);
+      leftCompLayer.append("path").attr("data-key", "leftComp").attr("data-role", "line")
+        .datum(sampleFn(leftCompFn)).attr("d", linePath)
+        .attr("fill", "none").attr("stroke", C.leftComp).attr("stroke-width", 2.8);
+      rightCompLayer.append("path").attr("data-key", "rightComp").attr("data-role", "area")
+        .datum(sampleFn(rightCompFn)).attr("d", areaPath)
+        .attr("fill", C.rightComp).attr("fill-opacity", 0.22);
+      rightCompLayer.append("path").attr("data-key", "rightComp").attr("data-role", "line")
+        .datum(sampleFn(rightCompFn)).attr("d", linePath)
+        .attr("fill", "none").attr("stroke", C.rightComp).attr("stroke-width", 2.8);
+    }
+
+    resultLayer.append("path").attr("data-key", "result").attr("data-role", "line")
+      .datum(sampleFn(x => bspline(x, knots, i, m))).attr("d", linePath)
+      .attr("fill", "none").attr("stroke", C.result).attr("stroke-width", 3.5);
+
+    drawKnotLines();
+    attachCurveHover();
+    applyHighlight();
+    updateCrosshair();
+    updateFormula();
+  }
+
+  // Highlight sync between formula and curves
+  const setHighlight = k => { highlighted = k; applyHighlight(); updateFormulaHighlight(); };
+
+  // Base stroke widths by key — used to compute "boost" on hover
+  const BASE_SW = {
+    rampUp: 2, rampDown: 2,
+    leftSub: 2, rightSub: 2,
+    leftComp: 2.8, rightComp: 2.8,
+    result: 3.5
+  };
+  function applyHighlight() {
+    plotG.selectAll("path[data-key]").each(function() {
+      const el = d3.select(this);
+      const key  = el.attr("data-key");
+      const role = el.attr("data-role");
+      const isHi = key === highlighted;
+      const hasHi = highlighted != null;
+      // Opacity: fade non-highlighted strongly; highlighted gets 1.0
+      el.style("opacity", hasHi ? (isHi ? 1 : 0.08) : null);
+      if (role === "line") {
+        const base = BASE_SW[key] || 2;
+        el.attr("stroke-width", isHi ? base + 2.5 : base);
+      } else if (role === "area") {
+        el.attr("fill-opacity", isHi ? 0.45 : 0.22);
+      }
+    });
+    otherBasisLayer.selectAll("path").style("opacity", highlighted ? 0.08 : 0.55);
+  }
+  function attachCurveHover() {
+    plotG.selectAll("path[data-key]")
+      .style("cursor", "pointer")
+      .on("mouseenter", function() { setHighlight(d3.select(this).attr("data-key")); })
+      .on("mouseleave", () => setHighlight(null));
+  }
+
+  function updateFormula() {
+    const m = degree, i = iIdx;
+    // Plain labelled term (inline)
+    const S = (key, text) => `<span data-key="${key}" style="color:${LAYERS[key]};font-weight:700;cursor:pointer;padding:1px 3px;border-radius:3px;">${text}</span>`;
+    // Stacked fraction — numerator over denominator with a dividing bar, aligned to the middle of the line
+    const F = (key, num, den) => `<span data-key="${key}" style="display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;color:${LAYERS[key]};font-weight:700;cursor:pointer;padding:1px 4px;border-radius:3px;line-height:1.15;"><span style="padding:0 6px 2px;">${num}</span><span style="padding:2px 6px 0;border-top:1.5px solid currentColor;">${den}</span></span>`;
+    if (m === 0) {
+      formulaBox.innerHTML = `${S("result", `B${sub(i)}⁰(x)`)} = 1 when x${sub(i)} ≤ x &lt; x${sub(i+1)}, otherwise 0`;
+      attachFormulaHover();
+      return;
+    }
+    const xi = knots[i].toFixed(2), xi1 = knots[i+1].toFixed(2);
+    const xim = knots[i+m].toFixed(2), xim1 = knots[i+m+1].toFixed(2);
+    formulaBox.innerHTML = `
+      ${S("result", `B${sub(i)}${sup(m)}(x)`)}
+      &nbsp;=&nbsp;
+      ${F("rampUp", `x − ${xi}`, `${xim} − ${xi}`)}
+      &nbsp;·&nbsp;
+      ${S("leftSub", `B${sub(i)}${sup(m-1)}(x)`)}
+      &nbsp;+&nbsp;
+      ${F("rampDown", `${xim1} − x`, `${xim1} − ${xi1}`)}
+      &nbsp;·&nbsp;
+      ${S("rightSub", `B${sub(i+1)}${sup(m-1)}(x)`)}
+    `;
+    attachFormulaHover();
+  }
+  function attachFormulaHover() {
+    formulaBox.querySelectorAll("[data-key]").forEach(el => {
+      el.addEventListener("mouseenter", () => setHighlight(el.getAttribute("data-key")));
+      el.addEventListener("mouseleave", () => setHighlight(null));
+    });
+  }
+  function updateFormulaHighlight() {
+    formulaBox.querySelectorAll("[data-key]").forEach(el => {
+      const on = highlighted === el.getAttribute("data-key");
+      el.style.background = on ? "#fef3c7" : "";
+    });
+  }
+
+  // Crosshair — show the identity α·B_left + β·B_right = B, nothing extra
+  function updateCrosshair() {
+    if (hoverX == null) {
+      crossX.style("opacity", 0);
+      for (const k of Object.keys(crossDots)) crossDots[k].style("opacity", 0);
+      crossLabel.style("opacity", 0);
+      return;
+    }
+    const x = xScale.invert(hoverX);
+    const m = degree, i = iIdx;
+    crossX.attr("x1", hoverX).attr("x2", hoverX).style("opacity", 0.6);
+
+    const vals = { result: bspline(x, knots, i, m) };
+    if (m >= 1) {
+      vals.leftSub  = bspline(x, knots, i, m - 1);
+      vals.rightSub = bspline(x, knots, i + 1, m - 1);
+      const a = rampUp(x, knots, i, m), b = rampDown(x, knots, i, m);
+      vals.rampUp   = (x >= knots[i]     && x <= knots[i + m])     ? Math.max(0, Math.min(1, a)) : null;
+      vals.rampDown = (x >= knots[i + 1] && x <= knots[i + m + 1]) ? Math.max(0, Math.min(1, b)) : null;
+      vals.leftComp  = Math.max(0, a) * vals.leftSub;
+      vals.rightComp = Math.max(0, b) * vals.rightSub;
+    }
+    for (const k of Object.keys(crossDots)) {
+      const v = vals[k];
+      if (v == null || !isFinite(v)) crossDots[k].style("opacity", 0);
+      else crossDots[k].attr("cx", hoverX).attr("cy", yScale(v)).style("opacity", 0.95);
+    }
+
+    // Tight readout: just the identity, no per-piece ramp/sub-spline values
+    const lines = [`x = ${x.toFixed(3)}`];
+    if (m === 0) {
+      lines.push(`B${sub(i)}⁰ = ${vals.result.toFixed(3)}`);
+    } else {
+      lines.push(`α·B${sub(i)}${sup(m-1)}   = ${vals.leftComp.toFixed(3)}`);
+      lines.push(`β·B${sub(i+1)}${sup(m-1)} = ${vals.rightComp.toFixed(3)}`);
+      lines.push(`──────────`);
+      lines.push(`B${sub(i)}${sup(m)}     = ${vals.result.toFixed(3)}`);
+    }
+    crossLabelText.selectAll("tspan").remove();
+    lines.forEach((ln, k) => crossLabelText.append("tspan").attr("x", 0).attr("dy", k === 0 ? 0 : 13).text(ln));
+    const flip = hoverX > innerW * 0.65;
+    crossLabel.attr("transform", `translate(${flip ? hoverX - 150 : hoverX + 12}, 8)`).style("opacity", 1);
+    const bbox = crossLabelText.node().getBBox();
+    crossLabelBg.attr("x", bbox.x - 6).attr("y", bbox.y - 4)
+      .attr("width", bbox.width + 12).attr("height", bbox.height + 8).attr("opacity", 0.94);
+  }
+
+  // Wire degree buttons
+  for (const k of Object.keys(degBtns)) {
+    degBtns[k].el.addEventListener("click", () => {
+      degree = +k;
+      for (const dk of Object.keys(degBtns)) {
+        degBtns[dk].el.className = "sl-btn " + (+dk === degree ? "sl-btn-go" : "sl-btn-pause");
+      }
+      rebuildIButtons();
+      draw();
+    });
+  }
+
+  // Reset
+  const resetRow = document.createElement("div");
+  resetRow.style.cssText = "margin-top:12px;display:flex;justify-content:flex-end;";
+  const resetBtn = createButton("Reset knots", "reset");
+  resetBtn.el.style.cssText += ";flex:0 0 auto;padding:6px 14px;";
+  resetBtn.el.addEventListener("click", () => {
+    for (let k = 0; k < initialKnots.length; k++) knots[k] = initialKnots[k];
+    draw();
+  });
+  resetRow.appendChild(resetBtn.el);
+
+  wrapper.appendChild(svg.node());
+  wrapper.appendChild(resetRow);
+
+  draw();
+  return wrapper;
+}
+```
+
+**Key properties.** The recursion is what makes B-splines so widely used as a GAM basis:
+
+- **Local support.** $B_i^m(x)$ is non-zero only on $[x_i,\, x_{i+m+1}]$ — the $m+2$ adjacent knot intervals. Moving a single coefficient $\beta_j$ only perturbs $f$ in a small neighbourhood.
+- **Non-negative and partition of unity.** $B_i^m(x) \ge 0$ and $\sum_i B_i^m(x) = 1$ inside the domain, so $f(x)$ behaves like a local weighted average of the $\beta_j$.
+- **Smoothness.** At simple knots, a degree-$m$ B-spline is $C^{m-1}$. The usual default is cubic ($m=3$) — $C^2$ curves that look smooth to the eye.
+- **Count.** Given $K$ knots (boundary and interior), there are $K - m - 1$ basis functions of degree $m$.
+
+The GAM smooth is then
+$$f(x) = \sum_{j=1}^{K-m-1} \beta_j\, B_j^m(x),$$
+and the $\beta_j$ are estimated by *penalised* least squares — a roughness penalty (e.g. on $\int f''^2$) keeps the fit from over-wiggling as the number of basis functions grows.
+
+## Thin plate spline
+
+B-splines require the user to place knots. **Thin plate splines (TPS)** instead build the basis straight from the data — the fit "bends like a thin metal sheet" pinned at the observations, with the tension controlled by a single smoothing parameter.
+
+**Penalised criterion.** For data $(\mathbf{x}_i, y_i)$ with $\mathbf{x}_i \in \mathbb{R}^d$, TPS minimises
+$$\sum_{i=1}^{n} \{y_i - f(\mathbf{x}_i)\}^2 \;+\; \lambda \, J(f),$$
+
+where $J(f)$ is the **bending energy** — the integrated squared second derivatives. In 2D,
+$$J(f) = \iint \left( f_{x_1x_1}^2 + 2\,f_{x_1x_2}^2 + f_{x_2x_2}^2 \right)\, dx_1\, dx_2.$$
+
+**Closed-form minimiser.** The solution is a sum of radial basis functions centred on the data points plus a low-order polynomial:
+$$f(\mathbf{x}) = \sum_{i=1}^{n} \alpha_i\, \eta\!\left(\|\mathbf{x} - \mathbf{x}_i\|\right) + \beta_0 + \sum_{k=1}^{d} \beta_k\, x_k,$$
+
+with the thin-plate radial basis
+$$\eta(r) = \begin{cases} |r|^3 & d = 1 \\[2pt] r^2 \log r & d = 2 \end{cases} \qquad (\eta(0) \equiv 0).$$
+
+The coefficients solve one linear system; the constraint $\sum_i \alpha_i = \sum_i \alpha_i x_{ki} = 0$ makes the fit coincide with the polynomial part when $\lambda \to \infty$.
+
+**Key properties.**
+
+- **No knot placement.** Basis centres are the data locations — no user choice needed.
+- **$\lambda$ tunes smoothness.** $\lambda \to 0$ interpolates every point; $\lambda \to \infty$ collapses the fit to the polynomial null space (plain OLS on the linear part).
+- **Isotropic.** Bending is the same in every direction — natural for spatial ($d=2$) smoothing.
+- **Works in any dimension.** Change $\eta$ and the polynomial part to match $d$; the rest carries over.
+
+Full TPS is $O(n^3)$; in practice, `mgcv` uses a *thin plate regression spline* — a truncated-eigendecomposition basis that keeps these properties but scales.
+
+Illustration — the 1D case with $\eta(r) = |r|^3/12$. Slide $\lambda$ to watch the fit morph from interpolation (small $\lambda$) to a straight line (large $\lambda$).
+
+```{ojs}
+//| echo: false
+
+viewof tps_illustration = {
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = "font-family:system-ui,-apple-system,sans-serif;max-width:900px;margin:0 auto;";
+  wrapper.appendChild(injectStyle());
+
+  // ── Deterministic pseudo-random noise ──
+  function mulberry32(seed) {
+    let s = seed >>> 0;
+    return function() {
+      s = (s + 0x6D2B79F5) | 0;
+      let t = Math.imul(s ^ (s >>> 15), 1 | s);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  const rand = mulberry32(13);
+  const normal = () => Math.sqrt(-2 * Math.log(Math.max(1e-9, rand()))) * Math.cos(2 * Math.PI * rand());
+
+  // ── Noisy observations of a smooth underlying function ──
+  const X_MIN = 0, X_MAX = 10;
+  const trueFn = x => Math.sin(x * 0.7) * 1.5 + 0.3 * Math.cos(x * 1.8);
+  const N_DATA = 25;
+  const data = [];
+  for (let i = 0; i < N_DATA; i++) {
+    const x = X_MIN + (X_MAX - X_MIN) * (i + 0.5) / N_DATA;
+    data.push({ x, y: trueFn(x) + 0.45 * normal() });
+  }
+
+  // ── 1D thin-plate RBF: η(r) = |r|³ / 12 ──
+  const eta = r => Math.abs(r) ** 3 / 12;
+
+  // Gaussian elimination with partial pivoting
+  function solveLinear(A, b) {
+    const n = A.length;
+    const M = A.map((row, i) => row.concat([b[i]]));
+    for (let i = 0; i < n; i++) {
+      let pr = i;
+      for (let k = i + 1; k < n; k++)
+        if (Math.abs(M[k][i]) > Math.abs(M[pr][i])) pr = k;
+      [M[i], M[pr]] = [M[pr], M[i]];
+      const piv = M[i][i];
+      if (Math.abs(piv) < 1e-14) continue;
+      for (let k = i + 1; k < n; k++) {
+        const f = M[k][i] / piv;
+        if (f === 0) continue;
+        for (let j = i; j <= n; j++) M[k][j] -= f * M[i][j];
+      }
+    }
+    const x = new Array(n).fill(0);
+    for (let i = n - 1; i >= 0; i--) {
+      let s = M[i][n];
+      for (let j = i + 1; j < n; j++) s -= M[i][j] * x[j];
+      x[i] = s / (M[i][i] || 1);
+    }
+    return x;
+  }
+
+  // Fit TPS given λ; returns evaluator x ↦ f(x)
+  function fitTPS(lambda) {
+    const n = data.length;
+    const N = n + 2;
+    const A = Array.from({ length: N }, () => new Array(N).fill(0));
+    const bvec = new Array(N).fill(0);
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < n; j++) A[i][j] = eta(data[i].x - data[j].x);
+      A[i][i] += lambda;                 // (E + λI)
+      A[i][n]     = 1;                    // T: intercept column
+      A[i][n + 1] = data[i].x;            // T: linear column
+      bvec[i] = data[i].y;
+    }
+    for (let i = 0; i < n; i++) {
+      A[n    ][i] = 1;                    // Tᵀ rows enforce Σαᵢ = 0, Σαᵢxᵢ = 0
+      A[n + 1][i] = data[i].x;
+    }
+    const sol = solveLinear(A, bvec);
+    const alpha = sol.slice(0, n);
+    const beta  = sol.slice(n);
+    return function(x) {
+      let v = beta[0] + beta[1] * x;
+      for (let i = 0; i < n; i++) v += alpha[i] * eta(x - data[i].x);
+      return v;
+    };
+  }
+
+  // ── SVG layout ──
+  const W = 900, H = 400;
+  const margin = { top: 20, right: 20, bottom: 50, left: 44 };
+  const innerW = W - margin.left - margin.right;
+  const innerH = H - margin.top - margin.bottom;
+
+  const svg = d3.create("svg")
+    .attr("viewBox", `0 0 ${W} ${H}`)
+    .attr("width", "100%")
+    .style("max-width", W + "px").style("height", "auto")
+    .style("display", "block")
+    .style("border", "1px solid #e2e8f0")
+    .style("border-radius", "8px")
+    .style("background", "#fff");
+
+  const plotG = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+  const xScale = d3.scaleLinear().domain([X_MIN, X_MAX]).range([0, innerW]);
+  const yScale = d3.scaleLinear().domain([-3, 3]).range([innerH, 0]);
+
+  // Grid + axis labels
+  for (const t of [-2, -1, 0, 1, 2]) {
+    plotG.append("line")
+      .attr("x1", 0).attr("x2", innerW)
+      .attr("y1", yScale(t)).attr("y2", yScale(t))
+      .attr("stroke", t === 0 ? "#cbd5e1" : "#e2e8f0")
+      .attr("stroke-dasharray", t === 0 ? "" : "2,4");
+    plotG.append("text")
+      .attr("x", -6).attr("y", yScale(t))
+      .attr("text-anchor", "end").attr("dominant-baseline", "middle")
+      .attr("font-family", `"SF Mono",Menlo,Consolas,monospace`)
+      .attr("font-size", 10).attr("fill", "#64748b")
+      .text(t);
+  }
+  for (let t = 0; t <= 10; t += 2) {
+    plotG.append("text")
+      .attr("x", xScale(t)).attr("y", innerH + 16)
+      .attr("text-anchor", "middle")
+      .attr("font-family", `"SF Mono",Menlo,Consolas,monospace`)
+      .attr("font-size", 10).attr("fill", "#64748b")
+      .text(t);
+  }
+  plotG.append("text")
+    .attr("x", innerW / 2).attr("y", innerH + 40)
+    .attr("text-anchor", "middle")
+    .attr("font-family", "system-ui").attr("font-size", 11).attr("fill", "#475569")
+    .text("x");
+
+  // True function (faint dashed)
+  const truePts = [];
+  for (let i = 0; i <= 300; i++) {
+    const x = X_MIN + (X_MAX - X_MIN) * i / 300;
+    truePts.push({ x, y: trueFn(x) });
+  }
+  plotG.append("path")
+    .datum(truePts)
+    .attr("d", d3.line().x(d => xScale(d.x)).y(d => yScale(d.y)))
+    .attr("fill", "none").attr("stroke", "#cbd5e1")
+    .attr("stroke-width", 1.5).attr("stroke-dasharray", "4,4");
+
+  // Data scatter
+  plotG.selectAll("circle.obs").data(data).join("circle").attr("class", "obs")
+    .attr("cx", d => xScale(d.x)).attr("cy", d => yScale(d.y))
+    .attr("r", 3).attr("fill", "#94a3b8").attr("opacity", 0.75);
+
+  // TPS fit curve
+  const fitPath = plotG.append("path")
+    .attr("fill", "none").attr("stroke", "#7c3aed").attr("stroke-width", 3.5);
+
+  // ── λ slider ──
+  const controls = document.createElement("div");
+  controls.style.cssText = "display:flex;gap:16px;margin-top:14px;align-items:center;";
+  const SL = {};
+  SL.loglam = createSlider("log₁₀ λ", -4, 4, 0.05, -1, "#7c3aed", "purple");
+  controls.appendChild(SL.loglam.el);
+
+  const lamReadout = document.createElement("div");
+  lamReadout.style.cssText = "font-family:'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#475569;margin-top:6px;";
+
+  function draw() {
+    const lambda = 10 ** SL.loglam.val();
+    const f = fitTPS(lambda);
+    const pts = [];
+    for (let i = 0; i <= 400; i++) {
+      const x = X_MIN + (X_MAX - X_MIN) * i / 400;
+      pts.push({ x, y: f(x) });
+    }
+    fitPath.datum(pts).attr("d", d3.line().x(d => xScale(d.x)).y(d => yScale(d.y)));
+    lamReadout.textContent = `λ ≈ ${lambda.toPrecision(3)}`;
+  }
+
+  SL.loglam.input.addEventListener("input", () => { SL.loglam.sync(); draw(); });
+
+  const legend = document.createElement("div");
+  legend.style.cssText = "font-size:12px;color:#64748b;margin-top:10px;line-height:1.6;";
+  legend.innerHTML = `
+    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#94a3b8;margin-right:4px;vertical-align:middle;"></span>
+    observed data &nbsp;·&nbsp;
+    <span style="display:inline-block;width:22px;height:2px;background:#cbd5e1;vertical-align:middle;"></span>
+    true function &nbsp;·&nbsp;
+    <span style="display:inline-block;width:22px;height:3px;background:#7c3aed;vertical-align:middle;"></span>
+    TPS fit
+  `;
+
+  wrapper.appendChild(svg.node());
+  wrapper.appendChild(controls);
+  wrapper.appendChild(lamReadout);
+  wrapper.appendChild(legend);
+
+  draw();
+  return wrapper;
+}
+```
+
+## Tensor product smooth
+
+When a GAM smooth involves **two or more covariates at once**, there are two standard constructions:
+
+- **Isotropic smooth** (`s(x1, x2)`). A single distance metric, one smoothness — TPS is the canonical example. Natural when the covariates share units (spatial coordinates, image pixels).
+- **Tensor product smooth** (`te(x1, x2)`). Built from per-direction 1D bases and — crucially — equipped with **one penalty per marginal basis**. Natural when covariates live on different scales (time vs temperature, age vs income).
+
+**Marginal basis — the 1D building blocks.** Each input direction gets its own 1D basis, chosen independently:
+
+- Direction 1: $\{b_j(x_1)\}_{j=1}^{k_1}$ — say, a cubic regression spline with $k_1$ knots.
+- Direction 2: $\{c_\ell(x_2)\}_{\ell=1}^{k_2}$ — possibly a different type of basis.
+
+These "marginal" bases don't depend on each other — each only describes shape along its own direction.
+
+**Tensor product basis — outer product of the marginals.** The 2D basis takes all pairwise products of the marginal functions:
+$$B_{j\ell}(x_1, x_2) \;=\; b_j(x_1) \cdot c_\ell(x_2), \qquad j = 1, \dots, k_1, \;\; \ell = 1, \dots, k_2.$$
+
+That's $k_1 k_2$ bumps tiling the 2D input rectangle, and the smooth is
+$$f(x_1, x_2) \;=\; \sum_{j=1}^{k_1} \sum_{\ell=1}^{k_2} \beta_{j\ell}\, b_j(x_1)\, c_\ell(x_2).$$
+
+**One penalty per marginal — what makes `te` distinctive.** Each marginal carries its own 1D roughness penalty matrix $S_k$ (e.g. on the second derivative). In the 2D basis these are lifted using Kronecker products:
+$$S_1^{(te)} \;=\; S_1 \otimes I_{k_2}, \qquad S_2^{(te)} \;=\; I_{k_1} \otimes S_2,$$
+
+giving the penalised least-squares criterion
+$$\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 \;+\; \lambda_1\, \boldsymbol{\beta}^{\top} S_1^{(te)} \boldsymbol{\beta} \;+\; \lambda_2\, \boldsymbol{\beta}^{\top} S_2^{(te)} \boldsymbol{\beta}.$$
+
+Here $\lambda_1$ penalises wiggliness *in the $x_1$ direction only*, $\lambda_2$ does the same for $x_2$, and the two are estimated independently.
+
+**Why tensor products?**
+
+- **Different units / scales.** If $x_1$ is in seconds and $x_2$ in °C, an isotropic smoother must pick *some* distance in $(x_1, x_2)$-space — an arbitrary choice. `te` sidesteps this: each direction has its own $\lambda_k$.
+- **Anisotropic smoothness.** A fit can be very smooth in one direction and bumpy in the other when the data support it — impossible with a single smoothness parameter.
+- **Scale invariance.** Rescaling $x_1 \to a x_1$ leaves the estimated surface unchanged; only $\lambda_1$ absorbs the change.
+- **Modular marginals.** The two marginals can be different bases — e.g. a **cyclic** spline for time-of-day with a cubic regression spline for temperature.
+
+Illustration — each tensor product basis function $B_{j\ell}(x_1, x_2)$ is literally the outer product of a marginal-1 curve and a marginal-2 curve. Pick $j$ and $\ell$: the selected curve is bold in each marginal panel, and the middle panel shows the corresponding tensor basis function as a heatmap.
+
+```{ojs}
+//| echo: false
+
+viewof te_illustration = {
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = "font-family:system-ui,-apple-system,sans-serif;max-width:1000px;margin:0 auto;";
+  wrapper.appendChild(injectStyle());
+
+  // ── Marginal bases: Gaussian bumps on [0,1] for visual clarity ──
+  //    (In practice `te()` uses 1D splines — cubic regression, P-spline, etc.)
+  const k1 = 4, k2 = 4;
+  const centres1 = [0.15, 0.38, 0.62, 0.85];
+  const centres2 = [0.15, 0.38, 0.62, 0.85];
+  const sigma = 0.13;
+  const gauss  = (x, c) => Math.exp(-((x - c) ** 2) / (2 * sigma * sigma));
+  const marg1  = (x, j) => gauss(x, centres1[j]);
+  const marg2  = (x, l) => gauss(x, centres2[l]);
+  const tensor = (x1, x2, j, l) => marg1(x1, j) * marg2(x2, l);
+
+  let jIdx = 1, lIdx = 2;
+
+  // ── Controls: j and ℓ button groups ──
+  const ctrlRow = document.createElement("div");
+  ctrlRow.style.cssText = "display:flex;gap:24px;margin-bottom:12px;align-items:center;flex-wrap:wrap;";
+  const makeGroup = (label) => {
+    const g = document.createElement("div");
+    g.style.cssText = "display:flex;gap:6px;align-items:center;flex-wrap:wrap;";
+    const lbl = document.createElement("span");
+    lbl.style.cssText = "font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.3px;";
+    lbl.textContent = label;
+    g.appendChild(lbl);
+    return g;
+  };
+  const jGroup = makeGroup("Marg. 1 index j:");
+  const lGroup = makeGroup("Marg. 2 index ℓ:");
+  const jBtns = [], lBtns = [];
+  for (let j = 0; j < k1; j++) {
+    const b = createButton(String(j), j === jIdx ? "go" : "pause");
+    b.el.style.cssText += ";flex:0 0 auto;padding:6px 10px;min-width:30px;";
+    b.el.addEventListener("click", () => {
+      jIdx = j;
+      jBtns.forEach((bb, k) => bb.el.className = "sl-btn " + (k === jIdx ? "sl-btn-go" : "sl-btn-pause"));
+      draw();
+    });
+    jBtns.push(b); jGroup.appendChild(b.el);
+  }
+  for (let l = 0; l < k2; l++) {
+    const b = createButton(String(l), l === lIdx ? "go" : "pause");
+    b.el.style.cssText += ";flex:0 0 auto;padding:6px 10px;min-width:30px;";
+    b.el.addEventListener("click", () => {
+      lIdx = l;
+      lBtns.forEach((bb, k) => bb.el.className = "sl-btn " + (k === lIdx ? "sl-btn-go" : "sl-btn-pause"));
+      draw();
+    });
+    lBtns.push(b); lGroup.appendChild(b.el);
+  }
+  ctrlRow.appendChild(jGroup);
+  ctrlRow.appendChild(lGroup);
+  wrapper.appendChild(ctrlRow);
+
+  // ── SVG layout: three panels side-by-side ──
+  const pW = 310, pH = 300, gap = 12;
+  const W = 3 * pW + 2 * gap, H = pH;
+  const margin = { top: 30, right: 12, bottom: 34, left: 36 };
+  const innerW = pW - margin.left - margin.right;
+  const innerH = pH - margin.top - margin.bottom;
+
+  const svg = d3.create("svg")
+    .attr("viewBox", `0 0 ${W} ${H}`)
+    .attr("width", "100%").style("max-width", W + "px").style("height", "auto")
+    .style("display", "block");
+
+  const makePanel = (xOffset, title) => {
+    const g = svg.append("g").attr("transform", `translate(${xOffset},0)`);
+    g.append("rect").attr("x", 0).attr("y", 0).attr("width", pW).attr("height", pH)
+      .attr("fill", "#fff").attr("stroke", "#e2e8f0").attr("rx", 8);
+    g.append("text").attr("x", pW / 2).attr("y", 18)
+      .attr("text-anchor", "middle").attr("font-family", "system-ui")
+      .attr("font-size", 13).attr("font-weight", 600).attr("fill", "#334155")
+      .text(title);
+    return g.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+  };
+  const panel1 = makePanel(0, "marginal 1:  b_j(x₁)");
+  const panel2 = makePanel(pW + gap, "tensor basis:  B_jℓ(x₁, x₂)");
+  const panel3 = makePanel(2 * (pW + gap), "marginal 2:  c_ℓ(x₂)");
+
+  const xScale = d3.scaleLinear().domain([0, 1]).range([0, innerW]);
+  const yScale = d3.scaleLinear().domain([-0.05, 1.05]).range([innerH, 0]);
+
+  const COLORS1 = ["#ef4444", "#f59e0b", "#10b981", "#3b82f6"];
+  const COLORS2 = ["#ec4899", "#f97316", "#14b8a6", "#0ea5e9"];
+
+  function drawMargPanel(panel, margFn, idx, colors, kCount, xLabel) {
+    panel.selectAll("*").remove();
+    // baseline + dashed grid
+    panel.append("line").attr("x1", 0).attr("x2", innerW)
+      .attr("y1", yScale(0)).attr("y2", yScale(0)).attr("stroke", "#cbd5e1");
+    for (const t of [0.5, 1.0]) {
+      panel.append("line").attr("x1", 0).attr("x2", innerW)
+        .attr("y1", yScale(t)).attr("y2", yScale(t))
+        .attr("stroke", "#e2e8f0").attr("stroke-dasharray", "2,4");
+    }
+    for (const t of [0, 0.5, 1]) {
+      panel.append("text").attr("x", -6).attr("y", yScale(t))
+        .attr("text-anchor", "end").attr("dominant-baseline", "middle")
+        .attr("font-family", `"SF Mono",Menlo,Consolas,monospace`)
+        .attr("font-size", 10).attr("fill", "#64748b").text(t);
+      panel.append("text").attr("x", xScale(t)).attr("y", innerH + 14)
+        .attr("text-anchor", "middle")
+        .attr("font-family", `"SF Mono",Menlo,Consolas,monospace`)
+        .attr("font-size", 10).attr("fill", "#64748b").text(t);
+    }
+    panel.append("text").attr("x", innerW / 2).attr("y", innerH + 28)
+      .attr("text-anchor", "middle").attr("font-family", "system-ui")
+      .attr("font-size", 11).attr("fill", "#475569").text(xLabel);
+    // curves: all in light, selected in bold
+    for (let i = 0; i < kCount; i++) {
+      const pts = [];
+      for (let s = 0; s <= 200; s++) {
+        const x = s / 200;
+        pts.push([xScale(x), yScale(margFn(x, i))]);
+      }
+      panel.append("path").attr("d", d3.line()(pts))
+        .attr("fill", "none").attr("stroke", colors[i])
+        .attr("stroke-width", i === idx ? 3.5 : 1.5)
+        .attr("opacity", i === idx ? 1 : 0.28);
+    }
+  }
+
+  function drawHeat(panel, j, l) {
+    panel.selectAll("*").remove();
+    const NX = 40, NY = 40;
+    const cellW = innerW / NX, cellH = innerH / NY;
+    // vMax = max product of marginal maxima (== 1·1 for Gaussian centred bumps) → use 1 for consistent scale
+    const vMax = 1;
+    for (let iy = 0; iy < NY; iy++) {
+      for (let ix = 0; ix < NX; ix++) {
+        const v = tensor((ix + 0.5) / NX, (iy + 0.5) / NY, j, l) / vMax;
+        panel.append("rect")
+          .attr("x", ix * cellW).attr("y", (NY - 1 - iy) * cellH)
+          .attr("width", cellW + 0.6).attr("height", cellH + 0.6)
+          .attr("fill", d3.interpolateViridis(Math.max(0, Math.min(1, v))));
+      }
+    }
+    for (const t of [0, 0.5, 1]) {
+      panel.append("text").attr("x", -6).attr("y", yScale(t))
+        .attr("text-anchor", "end").attr("dominant-baseline", "middle")
+        .attr("font-family", `"SF Mono",Menlo,Consolas,monospace`)
+        .attr("font-size", 10).attr("fill", "#64748b").text(t);
+      panel.append("text").attr("x", xScale(t)).attr("y", innerH + 14)
+        .attr("text-anchor", "middle")
+        .attr("font-family", `"SF Mono",Menlo,Consolas,monospace`)
+        .attr("font-size", 10).attr("fill", "#64748b").text(t);
+    }
+    panel.append("text").attr("x", innerW / 2).attr("y", innerH + 28)
+      .attr("text-anchor", "middle").attr("font-family", "system-ui")
+      .attr("font-size", 11).attr("fill", "#475569").text("x₁");
+    panel.append("text")
+      .attr("transform", `translate(${-24}, ${innerH / 2}) rotate(-90)`)
+      .attr("text-anchor", "middle").attr("font-family", "system-ui")
+      .attr("font-size", 11).attr("fill", "#475569").text("x₂");
+  }
+
+  function draw() {
+    drawMargPanel(panel1, marg1, jIdx, COLORS1, k1, "x₁");
+    drawHeat(panel2, jIdx, lIdx);
+    drawMargPanel(panel3, marg2, lIdx, COLORS2, k2, "x₂");
+  }
+
+  wrapper.appendChild(svg.node());
+
+  const note = document.createElement("div");
+  note.style.cssText = "font-size:12px;color:#64748b;margin-top:10px;line-height:1.5;";
+  note.innerHTML = `Marginal bases are drawn as Gaussian bumps here for visual clarity; in practice <code>te()</code> uses 1D splines. The centre panel is the selected tensor-product basis function, <em>B_jℓ = b_j · c_ℓ</em> — brighter = larger value.`;
+  wrapper.appendChild(note);
+
+  draw();
+  return wrapper;
+}
+```
+
