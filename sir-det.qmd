@@ -1,4 +1,13 @@
-# SIR
+---
+title: "SIR"
+---
+
+```{ojs}
+//| echo: false
+import { createSlider, createButton, injectStyle, styleMathLabel } from "./_slider.js"
+d3 = require("d3@7")
+```
+
 
 ## Model {#sec-sir-mod}
 
@@ -25,39 +34,970 @@ $$\frac{dR}{dt} = \gamma I$$ {#eq-sir-dr}
 -   Infectious disease properties are for a single pathogen [@becker2017].
 -   Recovered individuals gain lifelong immunity.
 
+```{ojs}
+//| echo: false
+
+viewof sir_sim = (() => {
+  // ══════════════════════════════════════════════════════
+  // 1. WRAPPER + SHARED STYLE FROM _slider.js
+  // ══════════════════════════════════════════════════════
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = `
+    display:flex;flex-direction:column;align-items:center;
+    width:100%;max-width:960px;margin:0 auto;
+  `;
+
+  wrapper.appendChild(injectStyle());
+
+  // ══════════════════════════════════════════════════════
+  // 2. SLIDERS  (initial S, I, R + β, γ)
+  // ══════════════════════════════════════════════════════
+  const SL = {};
+  SL.s0    = createSlider("Initial Susceptible", 50, 400, 10, 200, "#3b82f6", "blue");
+  SL.i0    = createSlider("Initial Infected",     1,  50,  1,   5, "#dc2626", "red");
+  SL.r0    = createSlider("Initial Recovered",    0, 100,  5,   0, "#16a34a", "green");
+  SL.beta  = createSlider("β", 0.05, 1.00, 0.05, 0.40, "#d97706", "amber");
+  SL.gamma = createSlider("γ", 0.05, 0.50, 0.05, 0.10, "#7c3aed", "purple");
+  styleMathLabel(SL.beta, SL.gamma);
+
+  const r1 = document.createElement("div");
+  r1.style.cssText = "display:flex;gap:24px;width:100%;margin-bottom:10px;";
+  r1.appendChild(SL.s0.el); r1.appendChild(SL.i0.el); r1.appendChild(SL.r0.el);
+  wrapper.appendChild(r1);
+
+  const r2 = document.createElement("div");
+  r2.style.cssText = "display:flex;gap:24px;width:100%;margin-bottom:12px;";
+  r2.appendChild(SL.beta.el); r2.appendChild(SL.gamma.el);
+  wrapper.appendChild(r2);
+
+  const r3 = document.createElement("div");
+  r3.style.cssText = "display:flex;gap:10px;width:100%;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #e2e8f0;";
+  const btnStep  = createButton("▶  Step",  "step");
+  const btnAuto  = createButton("⏩  Auto",  "auto");
+  const btnReset = createButton("↺  Reset", "reset");
+  r3.appendChild(btnStep.el); r3.appendChild(btnAuto.el); r3.appendChild(btnReset.el);
+  wrapper.appendChild(r3);
+
+  // ══════════════════════════════════════════════════════
+  // 3. STATS LINE  (Day · R₀ · N)
+  // ══════════════════════════════════════════════════════
+  const stats = document.createElement("div");
+  stats.style.cssText = `display:flex;justify-content:space-between;width:100%;font-size:13px;color:#334155;margin:0 4px 12px;font-family:"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;`;
+  const dayLabel = document.createElement("span"); dayLabel.style.fontWeight = "700";
+  const r0Label  = document.createElement("span");
+  const popLabel = document.createElement("span");
+  stats.appendChild(dayLabel); stats.appendChild(r0Label); stats.appendChild(popLabel);
+  wrapper.appendChild(stats);
+
+  // ══════════════════════════════════════════════════════
+  // 4. SVG HELPERS
+  // ══════════════════════════════════════════════════════
+  const NS = "http://www.w3.org/2000/svg";
+  function el(tag, a) {
+    const e = document.createElementNS(NS, tag);
+    if (a) for (const [k, v] of Object.entries(a)) e.setAttribute(k, v);
+    return e;
+  }
+
+  // ══════════════════════════════════════════════════════
+  // 5. COMPARTMENT SVG  (S · I · R boxes — one dot group per box)
+  // ══════════════════════════════════════════════════════
+  const W = 760, H = 300, BOX_GAP = 12;
+  const boxW = Math.floor((W - 2 * BOX_GAP) / 3);
+  const boxY = 6, boxH = H - 2 * boxY;
+
+  const compartments = [
+    { key: "S", label: "SUSCEPTIBLE", color: "#3b82f6", border: "#bfdbfe", bg: "#eff6ff", x: 0 },
+    { key: "I", label: "INFECTED",    color: "#dc2626", border: "#fecaca", bg: "#fef2f2", x: boxW + BOX_GAP },
+    { key: "R", label: "RECOVERED",   color: "#16a34a", border: "#bbf7d0", bg: "#f0fdf4", x: 2 * (boxW + BOX_GAP) },
+  ];
+
+  const compSvg = el("svg");
+  compSvg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  compSvg.style.cssText = `width:100%;max-width:${W}px;margin-bottom:14px;`;
+
+  const counts = {}, overflow = {}, dotG = {};
+  for (const c of compartments) {
+    compSvg.appendChild(el("rect", { x: c.x, y: boxY, width: boxW, height: boxH, rx: 12, fill: c.bg, stroke: c.border, "stroke-width": 2 }));
+
+    const lbl = el("text", { x: c.x + 14, y: 26, fill: c.color, "font-size": 12, "font-weight": 700, "font-family": "system-ui, -apple-system, sans-serif" });
+    lbl.style.letterSpacing = "0.6px"; lbl.textContent = c.label;
+    compSvg.appendChild(lbl);
+
+    const cnt = el("text", { x: c.x + boxW - 14, y: 32, fill: c.color, "font-size": 24, "font-weight": 800, "font-family": "'SF Mono',monospace", "text-anchor": "end" });
+    cnt.textContent = "0"; counts[c.key] = cnt;
+    compSvg.appendChild(cnt);
+
+    compSvg.appendChild(el("line", { x1: c.x + 10, x2: c.x + boxW - 10, y1: 42, y2: 42, stroke: c.border }));
+
+    const ov = el("text", { x: c.x + boxW - 10, y: H - 10, fill: c.color, "font-size": 10, "font-family": "'SF Mono',monospace", "text-anchor": "end", opacity: 0.65 });
+    overflow[c.key] = ov;
+    compSvg.appendChild(ov);
+
+    // Per-compartment dot group — dots only ever belong to one box, no flying across.
+    const g = el("g");
+    dotG[c.key] = g;
+    compSvg.appendChild(g);
+  }
+  wrapper.appendChild(compSvg);
+
+  // ══════════════════════════════════════════════════════
+  // 6. TIME-SERIES SVG  (S, I, R lines vs day)
+  // ══════════════════════════════════════════════════════
+  const TW = 760, TH = 280;
+  const tmg = { t: 16, r: 96, b: 40, l: 56 };
+  const tcw = TW - tmg.l - tmg.r, tch = TH - tmg.t - tmg.b;
+
+  const tsSvg = el("svg");
+  tsSvg.setAttribute("viewBox", `0 0 ${TW} ${TH}`);
+  tsSvg.style.cssText = `width:100%;max-width:${TW}px;background:#fafbfc;border-radius:10px;border:1px solid #e2e8f0;`;
+
+  const gridLines = [], yLabels = [];
+  for (let i = 0; i <= 5; i++) {
+    gridLines.push(tsSvg.appendChild(el("line", { stroke: "#e2e8f0", "stroke-width": 0.7 })));
+    yLabels.push(tsSvg.appendChild(el("text", { "text-anchor": "end", fill: "#94a3b8", "font-size": 10, "font-family": "'SF Mono',monospace" })));
+  }
+  const xAx = tsSvg.appendChild(el("line", { stroke: "#94a3b8" }));
+  const yAx = tsSvg.appendChild(el("line", { stroke: "#94a3b8" }));
+
+  const xTickPool = [];
+  for (let i = 0; i < 24; i++) {
+    const ln = tsSvg.appendChild(el("line", { stroke: "#94a3b8", y2: 5 }));
+    const t  = tsSvg.appendChild(el("text", { "text-anchor": "middle", fill: "#64748b", "font-size": 11, "font-family": "'SF Mono',monospace", dy: 16 }));
+    ln.style.display = "none"; t.style.display = "none";
+    xTickPool.push({ ln, t });
+  }
+  const xLbl = tsSvg.appendChild(el("text", { "text-anchor": "middle", fill: "#64748b", "font-size": 12, y: TH - 6 }));
+  xLbl.textContent = "Day";
+  const yLbl = tsSvg.appendChild(el("text", { "text-anchor": "middle", fill: "#64748b", "font-size": 12, x: 14, y: tmg.t + tch / 2 }));
+  yLbl.setAttribute("transform", `rotate(-90,14,${tmg.t + tch / 2})`);
+  yLbl.textContent = "Number of individuals";
+
+  // Draw R first, then S, then I on top (I is the line viewers track most)
+  const pathR_ = tsSvg.appendChild(el("path", { fill: "none", stroke: "#16a34a", "stroke-width": 2.5, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+  const pathS_ = tsSvg.appendChild(el("path", { fill: "none", stroke: "#3b82f6", "stroke-width": 2.5, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+  const pathI_ = tsSvg.appendChild(el("path", { fill: "none", stroke: "#dc2626", "stroke-width": 2.5, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+
+  // "Now" reference line  (subtle dashed vertical at current day)
+  const nowLine = tsSvg.appendChild(el("line", { stroke: "#cbd5e1", "stroke-dasharray": "3 3", "stroke-width": 1 }));
+  nowLine.style.display = "none";
+
+  // End-of-line labels stamped on the right edge of the visible data
+  const endDots = {}, endTexts = {};
+  ['S', 'I', 'R'].forEach(k => {
+    const color = { S: '#3b82f6', I: '#dc2626', R: '#16a34a' }[k];
+    const dot = tsSvg.appendChild(el("circle", { r: 3.5, fill: color }));
+    dot.style.display = "none"; endDots[k] = dot;
+    const t = tsSvg.appendChild(el("text", { fill: color, "font-size": 12, "font-weight": 700, "font-family": "system-ui,sans-serif", dy: 4, dx: 8 }));
+    t.textContent = k; t.style.display = "none"; endTexts[k] = t;
+  });
+
+  // Legend (right margin)
+  [
+    { label: "Susceptible", color: "#3b82f6" },
+    { label: "Infected",    color: "#dc2626" },
+    { label: "Recovered",   color: "#16a34a" },
+  ].forEach((d, i) => {
+    const ly = tmg.t + 14 + i * 20;
+    const lx = TW - tmg.r + 14;
+    tsSvg.appendChild(el("line", { x1: lx, x2: lx + 18, y1: ly, y2: ly, stroke: d.color, "stroke-width": 3 }));
+    const t = tsSvg.appendChild(el("text", { x: lx + 24, y: ly + 4, fill: "#475569", "font-size": 11, "font-family": "system-ui,sans-serif" }));
+    t.textContent = d.label;
+  });
+
+  wrapper.appendChild(tsSvg);
+
+  // ══════════════════════════════════════════════════════
+  // 7. DOT GEOMETRY  (small dots so we can pack many)
+  // ══════════════════════════════════════════════════════
+  const DOT_R = 3, DOT_GAP = 1.6;
+  const STRIDE = 2 * DOT_R + DOT_GAP;
+  const PADX = 10, PAD_TOP = 50, PAD_BOT = 18;
+  const innerW = boxW - 2 * PADX;
+  const innerH = boxH - PAD_TOP - PAD_BOT;
+  const COLS = Math.floor(innerW / STRIDE);
+  const ROWS = Math.floor(innerH / STRIDE);
+  const MAX_PER_BOX = COLS * ROWS;
+  const Y0 = boxY + PAD_TOP + DOT_R;
+
+  // ══════════════════════════════════════════════════════
+  // 8. SIMULATION STATE  (deterministic — S, I, R as continuous values)
+  // ══════════════════════════════════════════════════════
+  let S = 0, I = 0, R = 0;
+  let day = 0;
+  let history = [];          // {t, S, I, R}
+  let autoId = 0, running = false;
+  let totalN = 0;
+
+  // Round S, I, R to integers that still sum to N (largest-remainder method),
+  // so the dot counts in the boxes are always exactly N together.
+  function getCounts() {
+    const vals = [S, I, R];
+    const floors = vals.map(Math.floor);
+    let remaining = totalN - (floors[0] + floors[1] + floors[2]);
+    const fracs = vals.map((v, idx) => ({ idx, frac: v - floors[idx] }))
+                      .sort((a, b) => b.frac - a.frac);
+    const out = floors.slice();
+    for (let k = 0; k < remaining && k < 3; k++) out[fracs[k].idx]++;
+    return { S: out[0], I: out[1], R: out[2] };
+  }
+
+  // ══════════════════════════════════════════════════════
+  // 9. RENDER  (no flying — dots only appear / disappear in place)
+  // ══════════════════════════════════════════════════════
+  function render(animate = true) {
+    const cnt = getCounts();
+    counts.S.textContent = cnt.S;
+    counts.I.textContent = cnt.I;
+    counts.R.textContent = cnt.R;
+
+    for (const c of compartments) {
+      const n = cnt[c.key];
+      const visible = Math.min(n, MAX_PER_BOX);
+      const data = [];
+      for (let i = 0; i < visible; i++) {
+        const row = Math.floor(i / COLS), col = i % COLS;
+        data.push({
+          i,
+          x: c.x + PADX + DOT_R + col * STRIDE,
+          y: Y0 + row * STRIDE,
+        });
+      }
+      overflow[c.key].textContent = n > MAX_PER_BOX ? "+" + (n - MAX_PER_BOX) + " hidden" : "";
+
+      // Index-keyed join: dots that were already present keep their circle,
+      // dots that no longer fit fade out, new dots fade in at the next free slot.
+      const sel = d3.select(dotG[c.key]).selectAll("circle").data(data, d => d.i);
+
+      if (animate) {
+        sel.exit()
+          .interrupt()
+          .transition().duration(320).ease(d3.easeCubicIn)
+          .attr("r", 0).style("opacity", 0)
+          .remove();
+
+        sel.enter().append("circle")
+          .attr("cx", d => d.x).attr("cy", d => d.y)
+          .attr("fill", c.color).attr("r", 0).style("opacity", 0)
+          .transition().delay(220).duration(380).ease(d3.easeCubicOut)
+          .attr("r", DOT_R).style("opacity", 1);
+      } else {
+        sel.exit().remove();
+        sel.enter().append("circle")
+          .attr("cx", d => d.x).attr("cy", d => d.y)
+          .attr("fill", c.color).attr("r", DOT_R).style("opacity", 1);
+      }
+    }
+
+    // Stats line
+    const beta = SL.beta.val(), gamma = SL.gamma.val();
+    const ended = I < 0.5 && day > 0;
+    dayLabel.textContent = ended ? `Day ${day} — Epidemic ended` : `Day ${day}`;
+    r0Label.textContent  = `R₀ = β / γ = ${(beta / gamma).toFixed(2)}`;
+    popLabel.textContent = `N = ${totalN}`;
+
+    drawTimeSeries();
+  }
+
+  // ══════════════════════════════════════════════════════
+  // 10. TIME-SERIES DRAW
+  // ══════════════════════════════════════════════════════
+  let tsHiX = 30, tsHiY = 100, tsSx, tsSy;
+
+  function niceCeil(n) {
+    if (n <= 100) return Math.ceil(n / 20) * 20;
+    if (n <= 500) return Math.ceil(n / 50) * 50;
+    return Math.ceil(n / 100) * 100;
+  }
+
+  function updateAxes() {
+    tsHiX = Math.max(20, Math.ceil((day + 5) / 10) * 10);
+    tsHiY = niceCeil(totalN || 100);
+
+    tsSx = t => tmg.l + (t / tsHiX) * tcw;
+    tsSy = v => tmg.t + tch - (v / tsHiY) * tch;
+
+    for (let i = 0; i <= 5; i++) {
+      const v = (tsHiY / 5) * i, yy = tsSy(v);
+      gridLines[i].setAttribute("x1", tmg.l);
+      gridLines[i].setAttribute("x2", TW - tmg.r);
+      gridLines[i].setAttribute("y1", yy);
+      gridLines[i].setAttribute("y2", yy);
+      yLabels[i].setAttribute("x", tmg.l - 8);
+      yLabels[i].setAttribute("y", yy + 4);
+      yLabels[i].textContent = Math.round(v);
+    }
+
+    xAx.setAttribute("x1", tmg.l);
+    xAx.setAttribute("x2", TW - tmg.r);
+    xAx.setAttribute("y1", tsSy(0));
+    xAx.setAttribute("y2", tsSy(0));
+    yAx.setAttribute("x1", tmg.l);
+    yAx.setAttribute("x2", tmg.l);
+    yAx.setAttribute("y1", tmg.t);
+    yAx.setAttribute("y2", tmg.t + tch);
+    xLbl.setAttribute("x", tmg.l + tcw / 2);
+
+    const tsStep = tsHiX > 100 ? 20 : tsHiX > 50 ? 10 : tsHiX > 20 ? 5 : 2;
+    let ti = 0;
+    for (let x = 0; x <= tsHiX && ti < 24; x += tsStep) {
+      const xx = tsSx(x);
+      xTickPool[ti].ln.setAttribute("x1", xx);
+      xTickPool[ti].ln.setAttribute("x2", xx);
+      xTickPool[ti].ln.setAttribute("y1", tsSy(0));
+      xTickPool[ti].ln.setAttribute("y2", tsSy(0) + 5);
+      xTickPool[ti].ln.style.display = "";
+      xTickPool[ti].t.setAttribute("x", xx);
+      xTickPool[ti].t.setAttribute("y", tsSy(0) + 5);
+      xTickPool[ti].t.textContent = x;
+      xTickPool[ti].t.style.display = "";
+      ti++;
+    }
+    for (; ti < 24; ti++) {
+      xTickPool[ti].ln.style.display = "none";
+      xTickPool[ti].t.style.display = "none";
+    }
+  }
+
+  function drawTimeSeries() {
+    if (history.length === 0) {
+      pathS_.setAttribute("d", ""); pathI_.setAttribute("d", ""); pathR_.setAttribute("d", "");
+      nowLine.style.display = "none";
+      ['S','I','R'].forEach(k => { endDots[k].style.display = "none"; endTexts[k].style.display = "none"; });
+      return;
+    }
+
+    updateAxes();
+
+    let ds = "", di = "", dr = "";
+    for (let i = 0; i < history.length; i++) {
+      const h = history[i];
+      const x = tsSx(h.t).toFixed(1);
+      const cmd = i === 0 ? "M" : "L";
+      ds += cmd + x + "," + tsSy(h.S).toFixed(1);
+      di += cmd + x + "," + tsSy(h.I).toFixed(1);
+      dr += cmd + x + "," + tsSy(h.R).toFixed(1);
+    }
+    pathS_.setAttribute("d", ds);
+    pathI_.setAttribute("d", di);
+    pathR_.setAttribute("d", dr);
+
+    if (day > 0) {
+      const xNow = tsSx(day);
+      nowLine.setAttribute("x1", xNow);
+      nowLine.setAttribute("x2", xNow);
+      nowLine.setAttribute("y1", tmg.t);
+      nowLine.setAttribute("y2", tmg.t + tch);
+      nowLine.style.display = "";
+    } else {
+      nowLine.style.display = "none";
+    }
+
+    const last = history[history.length - 1];
+    ['S','I','R'].forEach(k => {
+      const x = tsSx(last.t), y = tsSy(last[k]);
+      endDots[k].setAttribute("cx", x);
+      endDots[k].setAttribute("cy", y);
+      endDots[k].style.display = "";
+      endTexts[k].setAttribute("x", x);
+      endTexts[k].setAttribute("y", y);
+      endTexts[k].style.display = "";
+    });
+  }
+
+  // ══════════════════════════════════════════════════════
+  // 11. STEP / INIT  (deterministic discrete-time SIR, Δt = 1 day)
+  // ══════════════════════════════════════════════════════
+  //
+  //   ΔS = −β · S · I / N      (people leaving S to I)
+  //   ΔI =  β · S · I / N − γ · I
+  //   ΔR =                       γ · I
+  //
+  // S, I, R are tracked as floats so the dynamics stay smooth even when
+  // dot counts are small; we only round when drawing the dots.
+  function initSim() {
+    clearInterval(autoId); running = false; btnAuto.setText("⏩  Auto");
+    S = SL.s0.val(); I = SL.i0.val(); R = SL.r0.val();
+    totalN = S + I + R;
+    day = 0;
+    history = [{ t: 0, S, I, R }];
+    render(false);
+  }
+
+  function stepSim() {
+    if (I < 0.5 && day > 0) return;
+
+    const beta = SL.beta.val(), gamma = SL.gamma.val(), N = totalN;
+    const newInf = beta * S * I / N;   // S → I flow this day
+    const newRec = gamma * I;          // I → R flow this day
+
+    S = Math.max(0, S - newInf);
+    I = Math.max(0, I + newInf - newRec);
+    R = Math.max(0, R + newRec);
+
+    day++;
+    history.push({ t: day, S, I, R });
+    render(true);
+  }
+
+  // ══════════════════════════════════════════════════════
+  // 12. EVENT WIRING
+  // ══════════════════════════════════════════════════════
+  function onStep() { stepSim(); }
+  function onAuto() {
+    if (running) {
+      clearInterval(autoId); running = false; btnAuto.setText("⏩  Auto"); return;
+    }
+    running = true; btnAuto.setText("⏸  Pause");
+    autoId = setInterval(() => {
+      if (I < 0.5 && day > 0) {
+        clearInterval(autoId); running = false; btnAuto.setText("⏩  Auto"); return;
+      }
+      stepSim();
+    }, 800);
+  }
+  function onReset() { initSim(); }
+
+  btnStep.el.addEventListener("click", onStep);
+  btnAuto.el.addEventListener("click", onAuto);
+  btnReset.el.addEventListener("click", onReset);
+
+  function onParam() {
+    SL.s0.sync(); SL.i0.sync(); SL.r0.sync(); SL.beta.sync(); SL.gamma.sync();
+    if (!running) {
+      initSim();
+    } else {
+      // β / γ can be tuned mid-run — refresh the R₀ readout immediately.
+      const beta = SL.beta.val(), gamma = SL.gamma.val();
+      r0Label.textContent = `R₀ = β / γ = ${(beta / gamma).toFixed(2)}`;
+    }
+  }
+  SL.s0.input.addEventListener("input", onParam);
+  SL.i0.input.addEventListener("input", onParam);
+  SL.r0.input.addEventListener("input", onParam);
+  SL.beta.input.addEventListener("input", onParam);
+  SL.gamma.input.addEventListener("input", onParam);
+
+  // ══════════════════════════════════════════════════════
+  // 13. BOOT + CLEANUP
+  // ══════════════════════════════════════════════════════
+  initSim();
+
+  invalidation.then(() => {
+    clearInterval(autoId);
+    btnStep.el.removeEventListener("click", onStep);
+    btnAuto.el.removeEventListener("click", onAuto);
+    btnReset.el.removeEventListener("click", onReset);
+    SL.s0.input.removeEventListener("input", onParam);
+    SL.i0.input.removeEventListener("input", onParam);
+    SL.r0.input.removeEventListener("input", onParam);
+    SL.beta.input.removeEventListener("input", onParam);
+    SL.gamma.input.removeEventListener("input", onParam);
+    history = [];
+  });
+
+  wrapper.value = {};
+  return wrapper;
+})()
+```
+
 ## Density or frequency-dependent
 
-![](img/mod/density-frequency.webp)
+Both models compute the **force of infection** $\lambda$ on a susceptible the same way — the **effective contact rate** times the prevalence $I/N$:
 
-> Source: Density-dependent vs. Frequency-dependent Disease Transmission - [Parasite Ecology](https://parasiteecology.wordpress.com/2013/10/17/density-dependent-vs-frequency-dependent-disease-transmission/).
+$$\lambda \;=\; (\text{effective contact rate}) \;\times\; \frac{I}{N}$$
 
-:::: {.columns}
+They differ only in how the effective contact rate is defined:
 
-::: {.column width="50%"}
+-   **Density-dependent**: the rate scales with crowd size, $\beta N$. The $N$ cancels the $/N$ from prevalence, so $\lambda = \beta I$. Fits aerosol contacts (e.g. COVID-19).
+-   **Frequency-dependent**: the rate is a constant, $\beta$. The $/N$ has nothing to cancel, so $\lambda = \beta I / N$. Fits sexually-transmitted diseases.
 
-**Density-dependent**
+```{ojs}
+//| echo: false
 
-$$\frac{dS}{dt} = -\beta SI$$
+viewof df_compare = (() => {
+  // ══════════════════════════════════════════════════════
+  // 1. WRAPPER + STYLE
+  // ══════════════════════════════════════════════════════
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = `display:flex;flex-direction:column;align-items:center;width:100%;max-width:960px;margin:0 auto;`;
+  wrapper.appendChild(injectStyle());
 
-- The unit of $\beta$ is $\frac{1}{\text{time} \times \text{people}}$.
+  // ── Geometry & timing ──
+  const ROOM_W = 350, ROOM_H = 260;
+  const CENTER_X = ROOM_W / 2, CENTER_Y = ROOM_H / 2;
+  const DOT_R = 3, FOCAL_R = 7;
+  const PREVALENCE = 0.30;     // ~30% of others are infected (red)
+  const DD_RADIUS = 65;        // physical reach of the focal (DD)
+  const FD_PARTNERS = 5;       // number of fixed closest contacts (FD)
+  const PULSE_INTERVAL = 1700;
+  const PULSE_DURATION = 750;
+
+  // β for the DD model: probability a uniformly-placed dot lands inside
+  // the reach circle = (reach area) / (room area). The displayed contact
+  // rate β·N depends only on N (not on where the focal happens to be).
+  const BETA_DD = (Math.PI * DD_RADIUS * DD_RADIUS) / (ROOM_W * ROOM_H);
+
+  // ══════════════════════════════════════════════════════
+  // 2. SLIDER (N is the only knob)
+  // ══════════════════════════════════════════════════════
+  const SL = {};
+  SL.N = createSlider("N (people sharing the same fixed area)", 30, 500, 10, 200, "#475569", "gray");
+
+  const sliderRow = document.createElement("div");
+  sliderRow.style.cssText = "display:flex;justify-content:center;width:100%;margin-bottom:18px;";
+  const sliderBox = document.createElement("div");
+  sliderBox.style.cssText = "width:100%;max-width:520px;";
+  sliderBox.appendChild(SL.N.el);
+  sliderRow.appendChild(sliderBox);
+  wrapper.appendChild(sliderRow);
+
+  // ══════════════════════════════════════════════════════
+  // 3. SVG + MATH HELPERS
+  // ══════════════════════════════════════════════════════
+  const NS = "http://www.w3.org/2000/svg";
+  function el(tag, a) {
+    const e = document.createElementNS(NS, tag);
+    if (a) for (const [k, v] of Object.entries(a)) e.setAttribute(k, v);
+    return e;
+  }
+
+  // Render numerator-over-denominator as a real stacked fraction (so I/N
+  // looks like math, not text division).
+  function frac(num, denom) {
+    return `<span style="display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.05;font-size:0.92em;font-style:italic;margin:0 1px;">` +
+           `<span style="border-bottom:1px solid currentColor;padding:0 4px;">${num}</span>` +
+           `<span style="padding:0 4px;">${denom}</span>` +
+           `</span>`;
+  }
+
+  // ══════════════════════════════════════════════════════
+  // 4. TWO SIDE-BY-SIDE PANELS  (HTML for the chrome, SVG for the room)
+  // ══════════════════════════════════════════════════════
+  const panels = [
+    {
+      key: 'DD', label: 'DENSITY-DEPENDENT', color: '#d97706',
+      contactExpr: '<em>β</em> · <em>N</em>',
+      // Step-3 algebra with strikethrough on the cancelling N's
+      infMathHTML: `<em>β</em> · <s style="color:#dc2626;text-decoration-thickness:2px"><em>N</em></s> · ${frac('I', '<s style="color:#dc2626;text-decoration-thickness:2px">N</s>')} &nbsp;=&nbsp; <strong><em>β</em> · <em>I</em></strong>`,
+      cancelNote: () => `The <strong style="color:#dc2626"><em>N</em></strong> in the contact rate <em>cancels</em> the <strong style="color:#dc2626"><em>N</em></strong> in ${frac('I', 'N')} — only <em>I</em> remains in the equation.`,
+      eqnHTML: `${frac('dS', 'dt')} = −<em>β</em> · <em>S</em> · <em>I</em>`,
+    },
+    {
+      key: 'FD', label: 'FREQUENCY-DEPENDENT', color: '#0891b2',
+      contactExpr: '<em>β</em>',
+      infMathHTML: `<em>β</em> · ${frac('I', '<strong style="color:#7c3aed">N</strong>')} &nbsp;=&nbsp; <strong><em>β</em> · ${frac('I', '<span style="color:#7c3aed">N</span>')}</strong>`,
+      cancelNote: () => `The contact rate has no <em>N</em> to cancel — the <strong style="color:#7c3aed">${frac('1', 'N')}</strong> from ${frac('I', 'N')} stays in the equation.`,
+      eqnHTML: `${frac('dS', 'dt')} = −<em>β</em> · <em>S</em> · ${frac('I', 'N')}`,
+    },
+  ];
+
+  const panelRow = document.createElement("div");
+  panelRow.style.cssText = "display:flex;gap:20px;width:100%;";
+
+  const ref = {};   // per-panel handles for animation
+
+  for (const p of panels) {
+    const panel = document.createElement("div");
+    panel.style.cssText = `flex:1;display:flex;flex-direction:column;border-radius:12px;overflow:hidden;border:2px solid ${p.color};background:#fff;`;
+
+    // Header — just the panel label.
+    const header = document.createElement("div");
+    header.style.cssText = `padding:14px;background:${p.color}14;text-align:center;color:${p.color};font-size:13px;font-weight:800;letter-spacing:0.6px;`;
+    header.textContent = p.label;
+    panel.appendChild(header);
+
+    // SVG room
+    const svgEl = el("svg");
+    svgEl.setAttribute("viewBox", `0 0 ${ROOM_W} ${ROOM_H}`);
+    svgEl.style.cssText = `width:100%;display:block;background:#fafbfc;`;
+
+    // For DD: faint dashed reach circle (moves with the focal blue dot).
+    // Drawn in the focal's blue so it visually belongs to the focal — it's
+    // *your* reach, not a property of the panel.
+    let reachCircle = null;
+    if (p.key === 'DD') {
+      reachCircle = svgEl.appendChild(el("circle", {
+        cx: CENTER_X, cy: CENTER_Y, r: DD_RADIUS,
+        fill: '#3b82f6', "fill-opacity": 0.07,
+        stroke: '#3b82f6', "stroke-width": 1, "stroke-dasharray": "4 3", "stroke-opacity": 0.45,
+      }));
+    }
+
+    // For FD: persistent dashed lines to the current closest-k partners
+    const partnerLinesG = (p.key === 'FD') ? svgEl.appendChild(el("g")) : null;
+
+    const dotsG    = svgEl.appendChild(el("g"));   // population (red infected + gray susceptible)
+    const overlayG = svgEl.appendChild(el("g"));   // pulses + lines
+
+    // Focal "YOU" — a single susceptible (blue, draggable)
+    const focal = svgEl.appendChild(el("circle", {
+      cx: CENTER_X, cy: CENTER_Y, r: FOCAL_R,
+      fill: '#3b82f6', stroke: 'white', "stroke-width": 1.5,
+    }));
+    const focalLabel = svgEl.appendChild(el("text", {
+      x: CENTER_X, y: CENTER_Y - FOCAL_R - 6,
+      "text-anchor": "middle", fill: '#3b82f6', "font-size": 9, "font-weight": 800,
+      "font-family": "system-ui,sans-serif", "pointer-events": "none",
+    }));
+    focalLabel.style.letterSpacing = "0.5px";
+    focalLabel.textContent = 'YOU';
+
+    panel.appendChild(svgEl);
+
+    // Math display: contact rate × I/N = infection rate, with cancellation
+    const math = document.createElement("div");
+    math.style.cssText = `padding:14px 16px;border-top:1px solid #e2e8f0;font-size:12px;color:#334155;display:flex;flex-direction:column;gap:10px;background:#fff;`;
+    math.innerHTML = `
+      <div>
+        <div style="color:#64748b;font-size:10.5px;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:3px;">Effective contact rate</div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;font-family:'Latin Modern Math','STIX Two Math',serif;">
+          <span style="color:#1e293b;">${p.contactExpr}</span>
+          <span style="color:${p.color};font-weight:700;font-family:'SF Mono',monospace;">≈ <span class="rate-val">--</span></span>
+        </div>
+      </div>
+      <div>
+        <div style="color:#64748b;font-size:10.5px;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:3px;">× <em>P</em>(contact is <em>I</em>)</div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <span style="color:#1e293b;">${frac('I', 'N')}</span>
+          <span style="color:#7c3aed;font-weight:700;font-family:'SF Mono',monospace;">= ${PREVALENCE.toFixed(2)}</span>
+        </div>
+      </div>
+      <div style="border-top:1px dashed #e2e8f0;padding-top:8px;">
+        <div style="color:#64748b;font-size:10.5px;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px;">Force of infection</div>
+        <div style="font-family:'Latin Modern Math','STIX Two Math',serif;font-size:14px;text-align:center;color:#1e293b;line-height:1.7;">${p.infMathHTML}</div>
+        <div style="text-align:center;margin-top:6px;font-family:'SF Mono',monospace;color:${p.color};font-weight:800;font-size:14px;">
+          ≈ <span class="inf-val">--</span>
+        </div>
+      </div>
+    `;
+    panel.appendChild(math);
+
+    // Mechanism note. `flex-grow:1` lets this section absorb any height
+    // difference between the two panels — whichever panel has shorter
+    // content stretches its (tinted) note instead of leaving a white gap
+    // above the equation footer. The inner text is vertically centred so
+    // it sits nicely in the expanded area.
+    const mech = document.createElement("div");
+    mech.style.cssText = `padding:12px 16px;background:${p.color}10;border-top:1px solid #e2e8f0;flex-grow:1;display:flex;align-items:center;`;
+    mech.innerHTML = `<div style="font-size:11px;color:#475569;line-height:1.55;">${p.cancelNote()}</div>`;
+    panel.appendChild(mech);
+
+    // Equation footer
+    const eqn = document.createElement("div");
+    eqn.style.cssText = `padding:11px 14px;background:${p.color}1c;text-align:center;border-top:1px solid ${p.color}40;`;
+    eqn.innerHTML = `<div style="font-size:14px;color:#1e293b;font-family:'Latin Modern Math','STIX Two Math',serif;">${p.eqnHTML}</div>`;
+    panel.appendChild(eqn);
+
+    panelRow.appendChild(panel);
+
+    ref[p.key] = {
+      svgEl, dotsG, overlayG, focal, focalLabel, partnerLinesG, reachCircle,
+      rateVal: math.querySelector('.rate-val'),
+      infVal:  math.querySelector('.inf-val'),
+    };
+  }
+  wrapper.appendChild(panelRow);
+
+  // ══════════════════════════════════════════════════════
+  // 5. CAPTION
+  // ══════════════════════════════════════════════════════
+  const note = document.createElement("div");
+  note.style.cssText = `font-size:12px;color:#64748b;margin-top:14px;text-align:center;line-height:1.7;max-width:760px;`;
+  note.innerHTML = `Both rooms hold the <em>same fixed area</em>. The blue dot is "you" — one focal susceptible — and ~30% of the others are red (infected). Every ${(PULSE_INTERVAL/1000).toFixed(1)}s "you" make contact with people: <strong style="color:#d97706">DD</strong> reaches everyone in the dashed circle (denser room ⇒ more contacts), <strong style="color:#0891b2">FD</strong> reaches your ${FD_PARTNERS} closest neighbours (dashed teal lines) regardless of crowd size. Drag the slider, or <strong>grab the blue dot</strong> and walk through the crowd. Then read the math underneath each panel: it's the same recipe in both — (contact rate) × (chance contact is with <em>I</em>) = infection rate. The only difference is whether the contact rate has an <em>N</em> in it that cancels with the <em>N</em> in <em>I/N</em>.`;
+  wrapper.appendChild(note);
+
+  // ══════════════════════════════════════════════════════
+  // 6. POPULATION (focal at index 0, ~30% of others infected)
+  // ══════════════════════════════════════════════════════
+  let positions = [];   // index 0 is the focal blue dot
+  let fdPartners = [];  // indices into positions for current closest-k partners
+
+  let rngSeed = 12345;
+  function rng() {
+    rngSeed = (rngSeed * 16807) % 2147483647;
+    return (rngSeed - 1) / 2147483646;
+  }
+
+  function regeneratePositions(N) {
+    rngSeed = 12345;
+    positions = [{ x: CENTER_X, y: CENTER_Y, infected: false }];
+    const margin = DOT_R + 2;
+    const minDistFromFocal = FOCAL_R + DOT_R + 4;
+    for (let i = 1; i < N; i++) {
+      let x, y, tries = 0;
+      do {
+        x = margin + rng() * (ROOM_W - 2 * margin);
+        y = margin + rng() * (ROOM_H - 2 * margin);
+      } while (Math.hypot(x - CENTER_X, y - CENTER_Y) < minDistFromFocal && ++tries < 25);
+      positions.push({ x, y, infected: false });
+    }
+    // Mark ~30% of others as infected (random subset, deterministic via seed)
+    const N_others = positions.length - 1;
+    const I_count = Math.round(PREVALENCE * N_others);
+    const idx = [];
+    for (let i = 1; i < positions.length; i++) idx.push(i);
+    for (let i = idx.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [idx[i], idx[j]] = [idx[j], idx[i]];
+    }
+    for (let i = 0; i < I_count; i++) positions[idx[i]].infected = true;
+  }
+
+  // FD picks the k *closest* dots to the focal — when the user drags the
+  // blue dot toward a cluster, those dots become its partners; drag away
+  // and a different set takes over.
+  function recomputeFDPartners() {
+    const cx = positions[0].x, cy = positions[0].y;
+    const dists = [];
+    for (let i = 1; i < positions.length; i++) {
+      dists.push({ i, d: Math.hypot(positions[i].x - cx, positions[i].y - cy) });
+    }
+    dists.sort((a, b) => a.d - b.d);
+    fdPartners = dists.slice(0, Math.min(FD_PARTNERS, dists.length)).map(x => x.i);
+  }
+
+  // ══════════════════════════════════════════════════════
+  // 7. RENDER  (dots + persistent FD partner lines + stats)
+  // ══════════════════════════════════════════════════════
+  function redrawFDPartnerLines() {
+    const g = ref.FD.partnerLinesG;
+    if (!g) return;
+    while (g.firstChild) g.removeChild(g.firstChild);
+    const cx = positions[0].x, cy = positions[0].y;
+    for (const i of fdPartners) {
+      if (i >= positions.length) continue;
+      const t = positions[i];
+      g.appendChild(el("line", {
+        x1: cx, y1: cy, x2: t.x, y2: t.y,
+        stroke: '#0891b2', "stroke-width": 1.8, "stroke-dasharray": "4 3", opacity: 0.55,
+      }));
+    }
+  }
+
+  // Sync the focal blue dot (and DD's reach circle) to positions[0] in both panels.
+  function syncFocal() {
+    const cx = positions[0].x, cy = positions[0].y;
+    for (const p of panels) {
+      ref[p.key].focal.setAttribute("cx", cx);
+      ref[p.key].focal.setAttribute("cy", cy);
+      ref[p.key].focalLabel.setAttribute("x", cx);
+      ref[p.key].focalLabel.setAttribute("y", cy - FOCAL_R - 6);
+      if (ref[p.key].reachCircle) {
+        ref[p.key].reachCircle.setAttribute("cx", cx);
+        ref[p.key].reachCircle.setAttribute("cy", cy);
+      }
+    }
+  }
+
+  // Drag handler on the focal blue dot. Both panels share positions[0], so
+  // dragging either moves both. The focal can't be dragged onto another dot
+  // (it gets pushed off), so every closest-k partner stays visually distinct.
+  function attachFocalDrag(panelKey) {
+    const focal = ref[panelKey].focal;
+    focal.style.cursor = "grab";
+    d3.select(focal).call(d3.drag()
+      .on("start", function(event) {
+        event.sourceEvent.stopPropagation();
+        this.style.cursor = "grabbing";
+        for (const p of panels) {
+          d3.select(ref[p.key].focal).interrupt().attr("r", FOCAL_R + 1.5);
+        }
+      })
+      .on("drag", function(event) {
+        const [x, y] = d3.pointer(event.sourceEvent, this.ownerSVGElement);
+        const margin = FOCAL_R + 2;
+        let nx = Math.max(margin, Math.min(ROOM_W - margin, x));
+        let ny = Math.max(margin, Math.min(ROOM_H - margin, y));
+        // Push focal away from any dot it would overlap. A few iterations
+        // handle the case where pushing off one dot lands on another.
+        const minD = FOCAL_R + DOT_R + 1;
+        for (let it = 0; it < 4; it++) {
+          let pushed = false;
+          for (let i = 1; i < positions.length; i++) {
+            const dx = nx - positions[i].x, dy = ny - positions[i].y;
+            const d = Math.hypot(dx, dy);
+            if (d < minD) {
+              const ang = (d > 0.01) ? Math.atan2(dy, dx) : (rng() * Math.PI * 2);
+              nx = positions[i].x + Math.cos(ang) * minD;
+              ny = positions[i].y + Math.sin(ang) * minD;
+              pushed = true;
+            }
+          }
+          if (!pushed) break;
+        }
+        nx = Math.max(margin, Math.min(ROOM_W - margin, nx));
+        ny = Math.max(margin, Math.min(ROOM_H - margin, ny));
+        positions[0].x = nx;
+        positions[0].y = ny;
+        syncFocal();
+        recomputeFDPartners();
+        redrawFDPartnerLines();
+        updateStats();
+      })
+      .on("end", function() {
+        this.style.cursor = "grab";
+        for (const p of panels) {
+          d3.select(ref[p.key].focal).attr("r", FOCAL_R);
+        }
+      })
+    );
+  }
+
+  function renderDots() {
+    syncFocal();   // re-centre focal + reach circle when N changes
+    for (const p of panels) {
+      const { dotsG, overlayG } = ref[p.key];
+      while (dotsG.firstChild)    dotsG.removeChild(dotsG.firstChild);
+      while (overlayG.firstChild) overlayG.removeChild(overlayG.firstChild);
+
+      for (let i = 1; i < positions.length; i++) {
+        const dot = el("circle", {
+          cx: positions[i].x, cy: positions[i].y, r: DOT_R,
+          fill: positions[i].infected ? '#64748b' : '#cbd5e1',
+        });
+        dot.dataset.idx = i;
+        dotsG.appendChild(dot);
+      }
+    }
+  }
+
+  function updateStats() {
+    // Theoretical contact rates — depend only on N, not on where the
+    // focal happens to be standing right now.
+    const N = positions.length;
+    const ddRate = BETA_DD * N;          // β · N  (DD)
+    const fdRate = FD_PARTNERS;          // β       (FD, constant)
+    ref.DD.rateVal.textContent = ddRate.toFixed(1);
+    ref.DD.infVal.textContent  = (ddRate * PREVALENCE).toFixed(1);
+    ref.FD.rateVal.textContent = String(fdRate);
+    ref.FD.infVal.textContent  = (fdRate * PREVALENCE).toFixed(1);
+  }
+
+  // ══════════════════════════════════════════════════════
+  // 8. PULSE ANIMATIONS
+  // ══════════════════════════════════════════════════════
+  function flashFocal(panelKey) {
+    const focal = ref[panelKey].focal;
+    d3.select(focal).interrupt()
+      .transition().duration(120).attr("r", FOCAL_R + 2.5)
+      .transition().duration(280).attr("r", FOCAL_R);
+  }
+
+  // Flash a contacted dot — just an enlarge-then-shrink pulse, no colour
+  // change. Keeps the room visually quiet; the only motion is the size pop.
+  function flashDot(panelKey, i, delay) {
+    const dotEl = ref[panelKey].dotsG.querySelector(`[data-idx="${i}"]`);
+    if (!dotEl) return;
+    d3.select(dotEl).interrupt()
+      .transition().delay(delay).duration(120).attr("r", DOT_R + 1.5)
+      .transition().duration(450).delay(280).attr("r", DOT_R);
+  }
+
+  function pulseDD() {
+    flashFocal('DD');
+    const { overlayG } = ref.DD;
+    const cx = positions[0].x, cy = positions[0].y;
+
+    // Expanding wave from the focal's current position
+    const wave = el("circle", {
+      cx, cy, r: FOCAL_R,
+      fill: 'none', stroke: '#3b82f6', "stroke-width": 2.5, opacity: 0.7,
+    });
+    overlayG.appendChild(wave);
+    d3.select(wave).transition().duration(PULSE_DURATION).ease(d3.easeQuadOut)
+      .attr("r", DD_RADIUS).style("opacity", 0).remove();
+
+    // Each in-reach dot flashes when the wave reaches it
+    for (let i = 1; i < positions.length; i++) {
+      const dist = Math.hypot(positions[i].x - cx, positions[i].y - cy);
+      if (dist > DD_RADIUS) continue;
+      const delay = (dist / DD_RADIUS) * PULSE_DURATION * 0.7;
+      flashDot('DD', i, delay);
+    }
+  }
+
+  function pulseFD() {
+    flashFocal('FD');
+    const { overlayG } = ref.FD;
+    const cx = positions[0].x, cy = positions[0].y;
+
+    // Lines fan out from the focal to each closest-k partner. Start at the
+    // focal's edge (not its centre) so even a partner snug against the focal
+    // gets a visible line.
+    for (const i of fdPartners) {
+      if (i >= positions.length) continue;
+      const target = positions[i];
+      const dx = target.x - cx, dy = target.y - cy;
+      const d  = Math.hypot(dx, dy);
+      if (d < 0.5) continue;
+      const x1 = cx + (dx / d) * FOCAL_R;
+      const y1 = cy + (dy / d) * FOCAL_R;
+
+      const line = el("line", {
+        x1, y1, x2: x1, y2: y1,
+        stroke: '#3b82f6', "stroke-width": 2.2, opacity: 0.9,
+      });
+      overlayG.appendChild(line);
+      d3.select(line)
+        .transition().duration(280).ease(d3.easeQuadOut)
+        .attr("x2", target.x).attr("y2", target.y)
+        .transition().delay(180).duration(380)
+        .style("opacity", 0).remove();
+
+      flashDot('FD', i, 280);
+    }
+  }
+
+  let pulseTimer = null;
+  function tick() { pulseDD(); pulseFD(); }
+
+  // ══════════════════════════════════════════════════════
+  // 9. WIRING
+  // ══════════════════════════════════════════════════════
+  function update() {
+    SL.N.sync();
+    regeneratePositions(SL.N.val());
+    recomputeFDPartners();
+    renderDots();
+    redrawFDPartnerLines();
+    updateStats();
+  }
+
+  SL.N.input.addEventListener("input", update);
+
+  update();
+  attachFocalDrag('DD');
+  attachFocalDrag('FD');
+  setTimeout(tick, 250);                          // first pulse soon after mount
+  pulseTimer = setInterval(tick, PULSE_INTERVAL); // then every PULSE_INTERVAL ms
+
+  invalidation.then(() => {
+    clearInterval(pulseTimer);
+    SL.N.input.removeEventListener("input", update);
+  });
+
+  wrapper.value = {};
+  return wrapper;
+})()
+```
+
 - Transmission increases as density increases.
 - Aerosol contacts (COVID-19).
 
-:::
-
-::: {.column width="50%"}
-
-**Frequency-dependent**
-
-$$\frac{dS}{dt} = -\beta S \frac{I}{N}$$
-
-- The unit of $\beta$ is $\frac{1}{\text{time}}$.
 - Transmission does not increase as density increases.
 - Sexually-transmitted diseases.
 
-:::
 
-::::
+The two models differ in how a single susceptible "feels" the infectives. Define the **force of infection** $\lambda$ — the rate at which any one susceptible becomes infected:
+
+$$\lambda_{\text{DD}} = \beta I, \qquad \lambda_{\text{FD}} = \beta \frac{I}{N}$$
+
+Hold the prevalence $I/N$ fixed and grow $N$: the DD force of infection grows with $N$ (more bodies in the same space → more contacts), while the FD force is unchanged (each person makes the same number of contacts regardless of crowd size). The same ratio carries through to the basic reproduction number:
+
+$$R_0^{\text{DD}} = \frac{\beta N}{\gamma}, \qquad R_0^{\text{FD}} = \frac{\beta}{\gamma}$$
+
+The two parameterisations agree at exactly one population size; move $N$ away from that calibration point and the predicted epidemics diverge sharply. The illustration below makes this concrete.
 
 ## Code
 
