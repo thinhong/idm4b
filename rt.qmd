@@ -262,18 +262,40 @@ coriDemo = {
     .cori-formula .op { font-weight:600; color:#64748b; }
     .cori-formula .frac { display:inline-flex; flex-direction:column; text-align:center;
       line-height:1.15; }
-    .cori-formula .frac .num { padding:2px 10px 5px; border-bottom:1.5px solid #64748b; }
-    .cori-formula .frac .den { padding:5px 10px 2px; }
     .cori-formula .hl-num { color:#dc2626; font-weight:700; }
     .cori-formula .hl-den { color:#b45309; font-weight:700; }
-    .cori-formula .rtv { font-size:24px; font-weight:800; padding:0 6px; }
-    .cori-formula [data-hl] { cursor:help; border-radius:4px; padding:1px 3px;
-      transition:background-color 0.12s, box-shadow 0.12s; }
+    /* Each [data-hl] piece is a tappable chip — visible affordance at rest
+       (subtle bg fill), active fill on hover OR when sticky-locked by tap. */
+    .cori-formula [data-hl] {
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      background-color: rgba(148, 163, 184, 0.12);
+      transition: background-color 0.15s, box-shadow 0.15s;
+    }
+    .cori-formula .frac .num {
+      padding: 4px 10px 5px;
+      border-bottom: 1.5px solid #64748b;
+      border-radius: 6px 6px 0 0;
+    }
+    .cori-formula .frac .den {
+      padding: 5px 10px 4px;
+      border-radius: 0 0 6px 6px;
+    }
+    .cori-formula .rtv {
+      font-size: 24px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
     .cori-formula [data-hl]:hover,
     .cori-wrap[data-hover="num"] .cori-formula [data-hl="num"],
     .cori-wrap[data-hover="den"] .cori-formula [data-hl="den"],
     .cori-wrap[data-hover="rt"]  .cori-formula [data-hl="rt"] {
-      background-color:#fef3c7; box-shadow:0 0 0 2px #facc15; }
+      background-color: #fef3c7;
+      box-shadow: 0 0 0 2px #facc15;
+    }
 
     /* Plot dimming: one attribute write on .cori-wrap drives everything. */
     .cori-wrap .dimmable { transition: opacity 0.18s ease; }
@@ -463,20 +485,41 @@ coriDemo = {
   }
 
   // ─────────────────────────────────────────────────────────────────────────
-  // Hover → single attribute write on the wrapper. All dimming is driven by
-  // CSS rules (.cori-wrap[data-hover] .dimmable) on <g> sub-groups, so per-
-  // frame work is zero. Event delegation on fMain survives innerHTML swaps.
+  // Hover (desktop) + tap-to-toggle (touch). Two state variables:
+  //   hoverPart : transient — set on pointerover, cleared on pointerout
+  //   stickyPart: persistent — toggled by click; survives pointerout
+  // The visible state is hoverPart || stickyPart, so on desktop a hover
+  // "previews" over a locked sticky and the sticky restores when the cursor
+  // leaves. On touch, pointerover/pointerout fire briefly during a tap; the
+  // click handler then flips sticky on or off. Tapping outside a chip clears
+  // sticky — including taps on the plot, sliders, or legend.
   // ─────────────────────────────────────────────────────────────────────────
+  let hoverPart = null;
+  let stickyPart = null;
+  function applyHover() {
+    const active = hoverPart || stickyPart;
+    if (active) wrapper.setAttribute("data-hover", active);
+    else wrapper.removeAttribute("data-hover");
+  }
   fMain.addEventListener("pointerover", (e) => {
     const el = e.target.closest("[data-hl]");
-    if (el) wrapper.setAttribute("data-hover", el.dataset.hl);
+    if (el) { hoverPart = el.dataset.hl; applyHover(); }
   });
   fMain.addEventListener("pointerout", (e) => {
     const el = e.target.closest("[data-hl]");
     if (!el) return;
     const rel = e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest("[data-hl]");
     if (rel && rel.dataset.hl === el.dataset.hl) return;
-    wrapper.removeAttribute("data-hover");
+    hoverPart = null; applyHover();
+  });
+  wrapper.addEventListener("click", (e) => {
+    const el = e.target.closest("[data-hl]");
+    if (el) {
+      stickyPart = (stickyPart === el.dataset.hl) ? null : el.dataset.hl;
+    } else {
+      stickyPart = null;
+    }
+    applyHover();
   });
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -683,9 +726,13 @@ wtSteps = {
   };
 
   // ── State ──
-  let selI    = 4;
+  // Click-committed state (works on desktop + mobile via tap)
+  let selI    = 4;     // Panel 1 i
+  let selJ1   = null;  // Panel 1 j — set by tap on an earlier case (toggle)
+  let selJ2   = 1;     // Panel 2 j
+  let stickI2 = null;  // Panel 2 isolated i — set by tap on a later case (toggle)
+  // Hover-only transients (desktop only; ignored on touch devices)
   let hoverJ  = null;
-  let selJ2   = 1;
   let hoverI2 = null;
 
   // ── Layout ──
@@ -790,9 +837,9 @@ wtSteps = {
   const hint = document.createElement("div");
   hint.className = "hint";
   hint.innerHTML = `
-    <b>Panel 1</b> — <kbd>click</kbd> any case to set <span class="ibox">i</span>; <kbd>hover</kbd> an earlier case to preview it as <span class="jbox">j</span>. Arc labels show w while idle and switch to p<sub>ij</sub> for the hovered pair.<br>
-    <b>Panel 2</b> — <kbd>click</kbd> any case to set <span class="gbox">j</span>; <kbd>hover</kbd> a later case to isolate one p<sub>ij</sub> contribution.<br>
-    <b>Panel 3</b> — <kbd>click</kbd> any case to share it as <span class="gbox">j</span> with Panel 2.
+    <b>Panel 1</b> — <kbd>tap</kbd>/<kbd>click</kbd> a case to set <span class="ibox">i</span>; tap an earlier case to set <span class="jbox">j</span> (tap again to clear). On desktop, <kbd>hover</kbd> an earlier case for a transient preview. Arc labels show w while idle and p<sub>ij</sub> for the chosen pair.<br>
+    <b>Panel 2</b> — <kbd>tap</kbd>/<kbd>click</kbd> a case to set <span class="gbox">j</span>; tap a later case to isolate one p<sub>ij</sub> (tap again to unisolate). On desktop, <kbd>hover</kbd> a later case for a transient isolate.<br>
+    <b>Panel 3</b> — <kbd>tap</kbd>/<kbd>click</kbd> a case to share it as <span class="gbox">j</span> with Panel 2.
   `;
   wrapper.appendChild(hint);
 
@@ -953,14 +1000,28 @@ wtSteps = {
   `;
   const p1Svg = d3.create("svg").attr("viewBox", `0 0 ${W} ${H1}`);
 
+  // Click rules (work on both desktop and mobile):
+  //  • no i yet            → clicked becomes i
+  //  • click current i     → drop j first; if no j, drop i too (full reset)
+  //  • click earlier case  → toggle selJ1 (lock / unlock j)
+  //  • click later case    → that becomes new i, j cleared
   function onClickP1(cIdx) {
-    selI = cIdx;
-    if (hoverJ !== null &&
-        (hoverJ === selI || cases[hoverJ].day >= cases[selI].day)) {
-      hoverJ = null;
+    if (selI === null) { selI = cIdx; selJ1 = null; drawAll(); return; }
+    if (cIdx === selI) {
+      if (selJ1 !== null) selJ1 = null;
+      else                selI  = null;
+      drawAll(); return;
     }
+    if (cases[cIdx].day < cases[selI].day) {
+      selJ1 = (selJ1 === cIdx) ? null : cIdx;
+      drawAll(); return;
+    }
+    selI = cIdx; selJ1 = null;
     drawAll();
   }
+  // Hover only fires on devices with hover capability — gives desktop users
+  // a transient preview that overrides the clicked selJ1 while the cursor is
+  // over the case. Mobile users rely on the click toggle above.
   function onHoverP1(cIdx, entering) {
     if (!entering) {
       if (hoverJ === cIdx) hoverJ = null;
@@ -1051,11 +1112,14 @@ wtSteps = {
     </div>
   `;
   const p2Svg = d3.create("svg").attr("viewBox", `0 0 ${W} ${H2}`);
+  // Click rules:
+  //  • click a case at/before j → that case becomes new j, isolation cleared
+  //  • click a case after j      → toggle stickI2 (isolate / unisolate that arc)
   function onClickP2(cIdx) {
-    selJ2 = cIdx;
-    if (hoverI2 !== null &&
-        (hoverI2 === selJ2 || cases[hoverI2].day <= cases[selJ2].day)) {
-      hoverI2 = null;
+    if (selJ2 !== null && cases[cIdx].day > cases[selJ2].day) {
+      stickI2 = (stickI2 === cIdx) ? null : cIdx;
+    } else {
+      selJ2 = cIdx; stickI2 = null;
     }
     drawAll();
   }
@@ -1079,7 +1143,7 @@ wtSteps = {
   // of being clipped at the SVG edge.
   // ═══════════════════════════════════════════════════════════════════════
   const H3plot = 380;
-  const H3bot  = 48;
+  const H3bot  = 12;          // small band — Rₜᶜ sits ~13 px below the day ticks
   const H3     = H3plot + H3bot;
   const p3 = document.createElement("div");
   p3.className = "panel step3";
@@ -1110,7 +1174,11 @@ wtSteps = {
       .attr("stroke-dasharray", "5,4").attr("opacity", 0.85).node());
   }
 
-  const p3Net = buildNetwork(p3Svg, H3plot, "p3", (idx) => { selJ2 = idx; drawAll(); });
+  const p3Net = buildNetwork(p3Svg, H3plot, "p3", (idx) => {
+    if (selJ2 !== idx) stickI2 = null;
+    selJ2 = idx;
+    drawAll();
+  });
 
   const rtcLabels = [];
   for (let d = 1; d <= T; d++) {
@@ -1143,21 +1211,24 @@ wtSteps = {
   // ═══════════════════════════════════════════════════════════════════════
   function drawPanel1() {
     const iSet = selI !== null;
-    const jSet = iSet && hoverJ !== null;
+    // Effective j: a fresh hover (desktop only) takes priority over the
+    // click-committed selJ1, which is sticky on both desktop and mobile.
+    const effJ = iSet ? (hoverJ !== null ? hoverJ : selJ1) : null;
+    const jSet = effJ !== null;
     p1.classList.toggle("hover-j", jSet);
     const di = iSet ? cases[selI].day : -1;
     const D  = iSet ? computeDenom(selI) : 0;
-    const gapJ = jSet ? di - cases[hoverJ].day : -1;
+    const gapJ = jSet ? di - cases[effJ].day : -1;
 
     p1Net.nodes.forEach((n, idx) => {
       const c = cases[idx];
       let fill = "#fff", stroke = "#94a3b8", txt = "#475569";
       if (idx === selI)            { fill = C1.iFill; stroke = C1.iStroke; txt = "#fff"; }
-      else if (idx === hoverJ)     { fill = C1.jFill; stroke = C1.jStroke; txt = "#fff"; }
+      else if (idx === effJ)       { fill = C1.jFill; stroke = C1.jStroke; txt = "#fff"; }
       else if (iSet && c.day < di) { fill = C1.pastFill; stroke = C1.pastStroke; txt = C1.pastTxt; }
       n.circle.setAttribute("fill", fill);
       n.circle.setAttribute("stroke", stroke);
-      n.circle.setAttribute("stroke-width", (idx === selI || idx === hoverJ) ? 3 : 2);
+      n.circle.setAttribute("stroke-width", (idx === selI || idx === effJ) ? 3 : 2);
       n.text.style.fill = txt;
       n.grp.setAttribute("opacity", 1);
       n.below.setAttribute("opacity", 0);
@@ -1168,7 +1239,7 @@ wtSteps = {
       if (iSet && p.i === selI) {
         const g = cases[p.i].day - cases[p.j].day;
         const w = weights[g] || 0;
-        if (jSet && p.j === hoverJ) {
+        if (jSet && p.j === effJ) {
           // Hover: proportional width, amplified over the non-hover scale
           a.path.setAttribute("stroke", C1.arcRed);
           a.path.setAttribute("stroke-width", Math.max(3.2, w * 42));
@@ -1202,8 +1273,8 @@ wtSteps = {
       setHdr(p1Net.hdrI, pos, "CASE  i = " + cases[selI].id, C1.iFill, hdrSide(cases[selI]));
     } else hideHdr(p1Net.hdrI);
     if (jSet) {
-      const pos = nodePos(cases[hoverJ], H1net);
-      setHdr(p1Net.hdrJ, pos, "CASE  j = " + cases[hoverJ].id, C1.jFill, hdrSide(cases[hoverJ]));
+      const pos = nodePos(cases[effJ], H1net);
+      setHdr(p1Net.hdrJ, pos, "CASE  j = " + cases[effJ].id, C1.jFill, hdrSide(cases[effJ]));
     } else hideHdr(p1Net.hdrJ);
 
     // GI bars
@@ -1260,7 +1331,7 @@ wtSteps = {
         pBg.setAttribute("height", 26);
         pBg.setAttribute("opacity", 1);
       } else {
-        pReadout.textContent = "(hover an earlier case to preview j)";
+        pReadout.textContent = "(tap or hover an earlier case to set j)";
         pBg.setAttribute("opacity", 0);
       }
     } else {
@@ -1273,19 +1344,22 @@ wtSteps = {
   function drawPanel2(Rjs) {
     const selDay = cases[selJ2].day;
     const Rj = Rjs[selJ2];
-    const anyHover = hoverI2 !== null;
+    // Effective i to isolate: hover (desktop) wins; otherwise the
+    // click-committed stickI2 (sticky on desktop and mobile).
+    const effI = hoverI2 !== null ? hoverI2 : stickI2;
+    const anyHover = effI !== null;
 
     p2Net.nodes.forEach((n, idx) => {
       const c = cases[idx];
       let fill = "#fff", stroke = "#94a3b8", txt = "#475569", op = 1;
       if (idx === selJ2)         { fill = C2.jFill; stroke = C2.jStroke; txt = "#fff"; }
-      else if (idx === hoverI2)  { fill = C2.hoverFill; stroke = C2.hoverStroke; txt = "#fff"; }
+      else if (idx === effI)     { fill = C2.hoverFill; stroke = C2.hoverStroke; txt = "#fff"; }
       else if (c.day > selDay)   { fill = C2.futFill; stroke = C2.futStroke; txt = C2.futTxt;
                                    if (anyHover) op = 0.45; }
       else                       { if (anyHover) op = 0.55; }
       n.circle.setAttribute("fill", fill);
       n.circle.setAttribute("stroke", stroke);
-      n.circle.setAttribute("stroke-width", (idx === selJ2 || idx === hoverI2) ? 3 : 2);
+      n.circle.setAttribute("stroke-width", (idx === selJ2 || idx === effI) ? 3 : 2);
       n.text.style.fill = txt;
       n.grp.setAttribute("opacity", op);
       if (idx === selJ2) {
@@ -1302,7 +1376,7 @@ wtSteps = {
       const p = pairs[k];
       if (p.j === selJ2) {
         const pij = computePij(p.i, p.j);
-        const isHover = anyHover && p.i === hoverI2;
+        const isHover = anyHover && p.i === effI;
         // Hover stroke also proportional, amplified vs. p * 30 default
         a.path.setAttribute("stroke", isHover ? C2.arcHover : C2.arcGreen);
         a.path.setAttribute("stroke-width", isHover ? Math.max(3.2, pij * 44) : Math.max(2, pij * 30));
@@ -1322,8 +1396,8 @@ wtSteps = {
     });
 
     setHdr(p2Net.hdrI, nodePos(cases[selJ2], H2), "CASE  j = " + cases[selJ2].id, C2.jFill, hdrSide(cases[selJ2]));
-    if (hoverI2 !== null) {
-      setHdr(p2Net.hdrJ, nodePos(cases[hoverI2], H2), "CASE  i = " + cases[hoverI2].id, C2.hoverFill, hdrSide(cases[hoverI2]));
+    if (effI !== null) {
+      setHdr(p2Net.hdrJ, nodePos(cases[effI], H2), "CASE  i = " + cases[effI].id, C2.hoverFill, hdrSide(cases[effI]));
     } else {
       hideHdr(p2Net.hdrJ);
     }
