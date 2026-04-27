@@ -1,0 +1,839 @@
+---
+title: "SIR"
+format: html
+execute: 
+  echo: false
+---
+
+```{ojs}
+//| echo: false
+import { createSlider, createButton, injectStyle, styleMathLabel } from "./_slider.js"
+d3 = require("d3@7")
+```
+
+Recall the deterministic SIR is this:
+
+![](img/det/sir.svg)
+
+$$\begin{aligned}
+\frac{dS(t)}{dt} &= -\frac{\beta S(t)I(t)}{N} \\
+\frac{dI(t)}{dt} &= \frac{\beta S(t)I(t)}{N} - \alpha I(t) \\
+\frac{dR(t)}{dt} &= \alpha I(t),
+\end{aligned}$$
+
+A discrete approximation of this model will be:
+
+$$\begin{aligned}
+S(t+h) &= S(t) - \frac{\beta S(t)I(t)}{N}h \\
+I(t+h) &= I(t) + \frac{\beta S(t)I(t)}{N}h - \alpha I(t)h \\
+R(t+h) &= R(t) + \alpha I(t)h,
+\end{aligned}$$
+
+where $h > 0$ represents the discrete time step.
+
+$$\begin{aligned}
+\text{P}(\Delta I(t) = 1|I(t)) &= \frac{\beta S(t)I(t)}{N}h + o(h) \\
+\text{P}(\Delta R(t) = 1|R(t)) &= \alpha I(t)h + o(h),
+\end{aligned}$$
+
+new infections and new recoveries occur at the points of two nonhomogeneous Poisson processes with rates $\frac{\beta S(t)I(t)}{N}h$ and $\alpha I(t)$, respectively
+
+## Kolmogorov Forward Equations
+
+
+
+## The Gillespie Stochastic Simulation Algorithm (Gillespie SSA)
+
+The algorithm proceeds in two steps:
+
+1. Simulate time at which the next event will occur; in this case an event refers to the movement of one individual either from $S$ to $I$ or from $I$ to $R$. The time $Z$ until the next event occurs follows an exponential distribution with a rate equal to the sum of the rates over all possible events (in this case two events are possible, i.e., movement from $S$ to $I$ and $I$ to $R$). Denoting $c_1=\beta S(t)I(t)/N$ and $c_2=\alpha I(t)$ (note there are as many $c$s as there are reactions), $Z$ is distributed as:
+
+$$g_Z(z)=\left(\sum_{i=1}^2 c_i\right)\exp\left(-z\sum_{i=1}^2 c_i\right).$$
+
+2. When the event time has been simulated, next simulate which event occurs. Event rates $c_i$ are converted into probabilities; one of the events is then selected at random according to:
+
+$$\text{P}(\text{Event}=v)=\frac{c_v}{\sum_{i=1}^2 c_i}.$$
+
+### Interactive illustration
+
+The widget below makes both Gillespie steps visible. Move the sliders to set the population state $(S, I, R)$ and the rates $\beta, \gamma$ — the two **distributions** on the left react instantly. Hit **Step** to draw one event: panel ① shows where the random waiting time $\Delta t$ landed under the exponential density $\text{Exp}(\lambda)$, panel ② shows where a uniform draw $u$ landed on the $[0, 1]$ probability bar (left of the divider ⇒ infection, right ⇒ recovery), and the trajectory below records the step.
+
+```{ojs}
+//| echo: false
+
+viewof gillespie_sim = (() => {
+  // ══════════════════════════════════════════════════════
+  // 1. WRAPPER + SHARED STYLE
+  // ══════════════════════════════════════════════════════
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = `
+    display:flex;flex-direction:column;align-items:center;
+    width:100%;max-width:960px;margin:0 auto;
+  `;
+  wrapper.appendChild(injectStyle());
+
+  // ══════════════════════════════════════════════════════
+  // 2. SLIDERS (initial S, I, R + β, γ)
+  // ══════════════════════════════════════════════════════
+  const SL = {};
+  SL.s0    = createSlider("Initial Susceptible", 50, 400, 10, 200, "#3b82f6", "blue");
+  SL.i0    = createSlider("Initial Infected",     1,  50,  1,   5, "#dc2626", "red");
+  SL.r0    = createSlider("Initial Recovered",    0, 100,  5,   0, "#16a34a", "green");
+  SL.beta  = createSlider("β", 0.05, 1.00, 0.05, 0.40, "#d97706", "amber");
+  SL.gamma = createSlider("γ", 0.05, 0.50, 0.05, 0.10, "#7c3aed", "purple");
+  SL.speed = createSlider("Speed", 0.5, 3.0, 0.25, 1.0, "#0891b2", "teal");
+  styleMathLabel(SL.beta, SL.gamma);
+
+  const r1 = document.createElement("div");
+  r1.style.cssText = "display:flex;gap:24px;width:100%;margin-bottom:10px;flex-wrap:wrap;";
+  r1.appendChild(SL.s0.el); r1.appendChild(SL.i0.el); r1.appendChild(SL.r0.el);
+  wrapper.appendChild(r1);
+
+  const r2 = document.createElement("div");
+  r2.style.cssText = "display:flex;gap:24px;width:100%;margin-bottom:12px;flex-wrap:wrap;";
+  r2.appendChild(SL.beta.el); r2.appendChild(SL.gamma.el);
+  wrapper.appendChild(r2);
+
+  const r3 = document.createElement("div");
+  r3.style.cssText = "display:flex;gap:18px;width:100%;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #e2e8f0;align-items:flex-end;flex-wrap:wrap;";
+
+  // Speed slider sits next to the buttons — it's a meta-control over the
+  // animation/auto cadence, not a model parameter, so it lives on the same
+  // row as the controls.
+  const speedBox = document.createElement("div");
+  speedBox.style.cssText = "flex:1 1 220px;min-width:180px;";
+  speedBox.appendChild(SL.speed.el);
+  r3.appendChild(speedBox);
+
+  const btnStep  = createButton("▶  Step",  "step");
+  const btnAuto  = createButton("⏩  Auto",  "auto");
+  const btnReset = createButton("↺  Reset", "reset");
+  const btnGroup = document.createElement("div");
+  btnGroup.style.cssText = "display:flex;gap:10px;flex:1 1 260px;min-width:240px;";
+  btnGroup.appendChild(btnStep.el); btnGroup.appendChild(btnAuto.el); btnGroup.appendChild(btnReset.el);
+  r3.appendChild(btnGroup);
+  wrapper.appendChild(r3);
+
+  // ══════════════════════════════════════════════════════
+  // 3. STATS LINE  (t · step · counts)
+  // ══════════════════════════════════════════════════════
+  const stats = document.createElement("div");
+  stats.style.cssText = `display:flex;justify-content:space-between;width:100%;font-size:13px;color:#334155;margin:0 4px 14px;font-family:"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;flex-wrap:wrap;gap:10px;`;
+  const tLabel    = document.createElement("span"); tLabel.style.fontWeight = "700";
+  const stepLabel = document.createElement("span");
+  const popLabel  = document.createElement("span");
+  stats.appendChild(tLabel); stats.appendChild(stepLabel); stats.appendChild(popLabel);
+  wrapper.appendChild(stats);
+
+  // ══════════════════════════════════════════════════════
+  // 4. SVG NS HELPER + COLORS
+  // ══════════════════════════════════════════════════════
+  const NS = "http://www.w3.org/2000/svg";
+  function el(tag, a) {
+    const e = document.createElementNS(NS, tag);
+    if (a) for (const [k, v] of Object.entries(a)) e.setAttribute(k, v);
+    return e;
+  }
+  const COLORS = { S:"#3b82f6", I:"#dc2626", R:"#16a34a",
+                   inf:"#dc2626", rec:"#16a34a", accent:"#0891b2" };
+
+  // Re-usable header builder for the three panels
+  function makePanelHeader(badge, title, subtitle) {
+    const h = document.createElement("div");
+    h.style.cssText = `padding:11px 14px;background:linear-gradient(135deg,#1e293b,#334155);color:#fff;display:flex;justify-content:space-between;align-items:center;gap:10px;`;
+    h.innerHTML = `
+      <span style="font-size:12px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;display:flex;align-items:center;gap:8px;">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:${COLORS.accent};color:#fff;font-size:11px;font-weight:800;">${badge}</span>
+        <span>${title}</span>
+      </span>
+      <span style="font-style:italic;font-family:'Latin Modern Math','STIX Two Math',serif;font-size:14px;opacity:0.92;text-align:right;">${subtitle}</span>
+    `;
+    return h;
+  }
+
+  // ══════════════════════════════════════════════════════
+  // 5. PANELS ① TIME DENSITY  +  ② EVENT BAR  (side by side)
+  // ══════════════════════════════════════════════════════
+  // The two panels stay strictly side-by-side at all viewport widths — both
+  // children shrink (min-width:0) so they never wrap onto separate rows.
+  const dualRow = document.createElement("div");
+  dualRow.style.cssText = "display:flex;gap:12px;width:100%;margin-bottom:16px;flex-wrap:nowrap;";
+
+  // ── ① TIME DENSITY PANEL ──
+  const timePanel = document.createElement("div");
+  timePanel.style.cssText = `flex:1 1 0;min-width:0;background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow 0.25s ease;`;
+  timePanel.appendChild(makePanelHeader("1", "Sample time", "Z ~ Exp(λ)"));
+
+  const TW = 380, TH = 230;
+  const tmg = { t: 32, r: 18, b: 42, l: 22 };
+  const tcw = TW - tmg.l - tmg.r, tch = TH - tmg.t - tmg.b;
+
+  const timeSvg = el("svg");
+  timeSvg.setAttribute("viewBox", `0 0 ${TW} ${TH}`);
+  timeSvg.style.cssText = "width:100%;display:block;background:#fafbfc;";
+
+  // Gradient fill for density
+  const tDefs = el("defs");
+  const tGrad = el("linearGradient", { id: "gillTimeGrad", x1: 0, y1: 0, x2: 0, y2: 1 });
+  tGrad.appendChild(el("stop", { offset: "0%",  "stop-color": COLORS.accent, "stop-opacity": 0.32 }));
+  tGrad.appendChild(el("stop", { offset: "100%","stop-color": COLORS.accent, "stop-opacity": 0.04 }));
+  tDefs.appendChild(tGrad);
+  timeSvg.appendChild(tDefs);
+
+  const tArea  = timeSvg.appendChild(el("path", { fill: "url(#gillTimeGrad)", d: "" }));
+  const tCurve = timeSvg.appendChild(el("path", { fill: "none", stroke: COLORS.accent, "stroke-width": 2.5, "stroke-linejoin": "round", d: "" }));
+
+  const tXAx = timeSvg.appendChild(el("line", { stroke: "#94a3b8", "stroke-width": 1 }));
+
+  const tXTickPool = [];
+  for (let i = 0; i < 6; i++) {
+    const ln = timeSvg.appendChild(el("line", { stroke: "#94a3b8", "stroke-width": 1 }));
+    const t  = timeSvg.appendChild(el("text", { "text-anchor": "middle", fill: "#64748b", "font-size": 10, "font-family": "'SF Mono',monospace", dy: 14 }));
+    tXTickPool.push({ ln, t });
+  }
+  const tXLabel = timeSvg.appendChild(el("text", { "text-anchor": "middle", fill: "#475569", "font-size": 11, "font-family": "system-ui,sans-serif", "font-weight": 600 }));
+  tXLabel.textContent = "z   (waiting time)";
+
+  // Sampled-time marker (vertical drop line + dot on the curve + label pill)
+  const tMarker     = timeSvg.appendChild(el("g"));
+  tMarker.style.opacity = "0";
+  const tMarkerLine  = tMarker.appendChild(el("line",   { stroke: COLORS.accent, "stroke-width": 2, "stroke-dasharray": "3 3" }));
+  const tMarkerBg    = tMarker.appendChild(el("rect",   { fill: COLORS.accent, rx: 4, ry: 4 }));
+  const tMarkerLabel = tMarker.appendChild(el("text",   { "text-anchor": "middle", fill: "#fff", "font-size": 11, "font-weight": 800, "font-family": "'SF Mono',monospace" }));
+  const tMarkerDot   = tMarker.appendChild(el("circle", { r: 6, fill: "#fff", stroke: COLORS.accent, "stroke-width": 2.5 }));
+
+  timePanel.appendChild(timeSvg);
+
+  // Info bar at bottom
+  const timeInfo = document.createElement("div");
+  timeInfo.style.cssText = `padding:9px 14px;font-size:11px;color:#475569;background:#f8fafc;border-top:1px solid #e2e8f0;font-family:'SF Mono',monospace;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;`;
+  timeInfo.innerHTML = `
+    <span>λ = c₁+c₂ = <span class="lam-val" style="color:#1e293b;font-weight:800;">--</span></span>
+    <span>Δt sampled = <span class="dt-val" style="color:${COLORS.accent};font-weight:800;">--</span></span>
+  `;
+  timePanel.appendChild(timeInfo);
+  dualRow.appendChild(timePanel);
+
+  // ── ② EVENT-PROBABILITY BAR PANEL ──
+  const eventPanel = document.createElement("div");
+  eventPanel.style.cssText = `flex:1 1 0;min-width:0;background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow 0.25s ease;`;
+  eventPanel.appendChild(makePanelHeader("2", "Sample event", "U ~ Uniform(0,1)"));
+
+  const EW = 380, EH = 230;
+  const eventSvg = el("svg");
+  eventSvg.setAttribute("viewBox", `0 0 ${EW} ${EH}`);
+  eventSvg.style.cssText = "width:100%;display:block;background:#fafbfc;";
+
+  // Bar geometry
+  const ebmg = { l: 24, r: 24 };
+  const ebW  = EW - ebmg.l - ebmg.r;
+  const ebH  = 38;            // bar height
+  const ebY  = 84;            // bar top
+
+  // Bar gradients
+  const eDefs = el("defs");
+  const infGrad = el("linearGradient", { id: "gillInfGrad", x1: 0, y1: 0, x2: 1, y2: 0 });
+  infGrad.appendChild(el("stop", { offset: "0%",  "stop-color": "#fee2e2" }));
+  infGrad.appendChild(el("stop", { offset: "100%","stop-color": COLORS.inf }));
+  const recGrad = el("linearGradient", { id: "gillRecGrad", x1: 0, y1: 0, x2: 1, y2: 0 });
+  recGrad.appendChild(el("stop", { offset: "0%",  "stop-color": COLORS.rec }));
+  recGrad.appendChild(el("stop", { offset: "100%","stop-color": "#bbf7d0" }));
+  eDefs.appendChild(infGrad); eDefs.appendChild(recGrad);
+  eventSvg.appendChild(eDefs);
+
+  // Two coloured segments
+  const infRect = eventSvg.appendChild(el("rect", { x: ebmg.l, y: ebY, height: ebH, fill: "url(#gillInfGrad)" }));
+  const recRect = eventSvg.appendChild(el("rect",            { y: ebY, height: ebH, fill: "url(#gillRecGrad)" }));
+
+  // Outline + divider
+  eventSvg.appendChild(el("rect", { x: ebmg.l, y: ebY, width: ebW, height: ebH, fill: "none", stroke: "#475569", "stroke-width": 1.2, rx: 6, ry: 6 }));
+  const divider = eventSvg.appendChild(el("line", { y1: ebY, y2: ebY + ebH, stroke: "#fff", "stroke-width": 2 }));
+
+  // Segment labels
+  const infLabel = eventSvg.appendChild(el("text", { "text-anchor": "middle", fill: COLORS.inf, "font-size": 11, "font-weight": 800, "font-family": "system-ui,sans-serif" }));
+  infLabel.textContent = "INFECTION  S→I";
+  infLabel.style.letterSpacing = "0.4px";
+  const recLabel = eventSvg.appendChild(el("text", { "text-anchor": "middle", fill: COLORS.rec, "font-size": 11, "font-weight": 800, "font-family": "system-ui,sans-serif" }));
+  recLabel.textContent = "RECOVERY  I→R";
+  recLabel.style.letterSpacing = "0.4px";
+
+  // Probabilities below bar
+  const p1Text = eventSvg.appendChild(el("text", { "text-anchor": "middle", fill: COLORS.inf, "font-size": 11, "font-weight": 700, "font-family": "'SF Mono',monospace" }));
+  const p2Text = eventSvg.appendChild(el("text", { "text-anchor": "middle", fill: COLORS.rec, "font-size": 11, "font-weight": 700, "font-family": "'SF Mono',monospace" }));
+
+  // Axis ticks: 0 / boundary p₁ / 1
+  const tick0 = eventSvg.appendChild(el("line", { y2: 5, stroke: "#94a3b8" }));
+  const text0 = eventSvg.appendChild(el("text", { "text-anchor": "start", fill: "#64748b", "font-size": 10, "font-family": "'SF Mono',monospace" })); text0.textContent = "0";
+  const tick1 = eventSvg.appendChild(el("line", { y2: 5, stroke: "#94a3b8" }));
+  const text1 = eventSvg.appendChild(el("text", { "text-anchor": "end",   fill: "#64748b", "font-size": 10, "font-family": "'SF Mono',monospace" })); text1.textContent = "1";
+
+  // Sampled-event marker (drop line + dot + label pill)
+  const eMarker      = eventSvg.appendChild(el("g")); eMarker.style.opacity = "0";
+  const eMarkerLine  = eMarker.appendChild(el("line",   { stroke: "#1e293b", "stroke-width": 2 }));
+  const eMarkerBg    = eMarker.appendChild(el("rect",   { fill: "#1e293b", rx: 4, ry: 4 }));
+  const eMarkerLabel = eMarker.appendChild(el("text",   { "text-anchor": "middle", fill: "#fff", "font-size": 11, "font-weight": 800, "font-family": "'SF Mono',monospace" }));
+  const eMarkerDot   = eMarker.appendChild(el("circle", { r: 7, fill: "#fff", stroke: "#1e293b", "stroke-width": 2.5 }));
+
+  // Result indicator (under the bar)
+  const eventResult = eventSvg.appendChild(el("text", { "text-anchor": "middle", "font-size": 14, "font-weight": 800, "font-family": "system-ui,sans-serif", x: EW/2, y: EH - 14 }));
+  eventResult.style.letterSpacing = "0.3px";
+
+  eventPanel.appendChild(eventSvg);
+
+  const eventInfo = document.createElement("div");
+  eventInfo.style.cssText = `padding:9px 14px;font-size:11px;color:#475569;background:#f8fafc;border-top:1px solid #e2e8f0;font-family:'SF Mono',monospace;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;`;
+  eventInfo.innerHTML = `
+    <span>c₁ = βSI/N = <span class="c1-val" style="color:${COLORS.inf};font-weight:800;">--</span></span>
+    <span>c₂ = γI = <span class="c2-val" style="color:${COLORS.rec};font-weight:800;">--</span></span>
+  `;
+  eventPanel.appendChild(eventInfo);
+  dualRow.appendChild(eventPanel);
+  wrapper.appendChild(dualRow);
+
+  // ══════════════════════════════════════════════════════
+  // 6. PANEL ③  STOCHASTIC TRAJECTORY (step-function S, I, R)
+  // ══════════════════════════════════════════════════════
+  const tsPanel = document.createElement("div");
+  tsPanel.style.cssText = "width:100%;background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;";
+  tsPanel.appendChild(makePanelHeader("3", "Trajectory", "each step is one event"));
+
+  const TSW = 760, TSH = 280;
+  const tsmg = { t: 18, r: 96, b: 42, l: 56 };
+  const tscw = TSW - tsmg.l - tsmg.r, tsch = TSH - tsmg.t - tsmg.b;
+
+  const tsSvg = el("svg");
+  tsSvg.setAttribute("viewBox", `0 0 ${TSW} ${TSH}`);
+  tsSvg.style.cssText = "width:100%;display:block;background:#fafbfc;";
+
+  const tsGridLines = [], tsYLabels = [];
+  for (let i = 0; i <= 5; i++) {
+    tsGridLines.push(tsSvg.appendChild(el("line", { stroke: "#e2e8f0", "stroke-width": 0.7 })));
+    tsYLabels.push(tsSvg.appendChild(el("text", { "text-anchor": "end", fill: "#94a3b8", "font-size": 10, "font-family": "'SF Mono',monospace" })));
+  }
+  const tsXAx = tsSvg.appendChild(el("line", { stroke: "#94a3b8" }));
+  const tsYAx = tsSvg.appendChild(el("line", { stroke: "#94a3b8" }));
+
+  const tsXTickPool = [];
+  for (let i = 0; i < 16; i++) {
+    const ln = tsSvg.appendChild(el("line", { stroke: "#94a3b8", y2: 5 }));
+    const t  = tsSvg.appendChild(el("text", { "text-anchor": "middle", fill: "#64748b", "font-size": 10, "font-family": "'SF Mono',monospace", dy: 16 }));
+    ln.style.display = "none"; t.style.display = "none";
+    tsXTickPool.push({ ln, t });
+  }
+  const tsXLbl = tsSvg.appendChild(el("text", { "text-anchor": "middle", fill: "#475569", "font-size": 12, "font-weight": 600, y: TSH - 8 }));
+  tsXLbl.textContent = "Time   t";
+  const tsYLbl = tsSvg.appendChild(el("text", { "text-anchor": "middle", fill: "#475569", "font-size": 12, "font-weight": 600, x: 14, y: tsmg.t + tsch / 2 }));
+  tsYLbl.setAttribute("transform", `rotate(-90,14,${tsmg.t + tsch / 2})`);
+  tsYLbl.textContent = "Number of individuals";
+
+  // Step-function paths (R first, S, I on top — I is the line viewers track most)
+  const pathR = tsSvg.appendChild(el("path", { fill: "none", stroke: COLORS.R, "stroke-width": 2.2, "stroke-linejoin": "miter", "stroke-linecap": "butt" }));
+  const pathS = tsSvg.appendChild(el("path", { fill: "none", stroke: COLORS.S, "stroke-width": 2.2, "stroke-linejoin": "miter", "stroke-linecap": "butt" }));
+  const pathI = tsSvg.appendChild(el("path", { fill: "none", stroke: COLORS.I, "stroke-width": 2.6, "stroke-linejoin": "miter", "stroke-linecap": "butt" }));
+
+  // Pulse marker on the most recent event
+  const tsLastEvent = tsSvg.appendChild(el("circle", { r: 5, fill: "#fff", stroke: "#000", "stroke-width": 2, opacity: 0 }));
+
+  // "Now" reference line (subtle dashed vertical at current t)
+  const tsNowLine = tsSvg.appendChild(el("line", { stroke: "#cbd5e1", "stroke-dasharray": "3 3", "stroke-width": 1 }));
+  tsNowLine.style.display = "none";
+
+  // End-of-line dots and labels
+  const endDots = {}, endTexts = {};
+  ['S','I','R'].forEach(k => {
+    const dot = tsSvg.appendChild(el("circle", { r: 3.5, fill: COLORS[k] }));
+    dot.style.display = "none"; endDots[k] = dot;
+    const t = tsSvg.appendChild(el("text", { fill: COLORS[k], "font-size": 12, "font-weight": 700, "font-family": "system-ui,sans-serif", dy: 4, dx: 8 }));
+    t.textContent = k; t.style.display = "none"; endTexts[k] = t;
+  });
+
+  // Legend
+  [
+    { label: "Susceptible", color: COLORS.S },
+    { label: "Infected",    color: COLORS.I },
+    { label: "Recovered",   color: COLORS.R },
+  ].forEach((d, i) => {
+    const ly = tsmg.t + 14 + i * 20;
+    const lx = TSW - tsmg.r + 14;
+    tsSvg.appendChild(el("line", { x1: lx, x2: lx + 18, y1: ly, y2: ly, stroke: d.color, "stroke-width": 3 }));
+    const t = tsSvg.appendChild(el("text", { x: lx + 24, y: ly + 4, fill: "#475569", "font-size": 11, "font-family": "system-ui,sans-serif" }));
+    t.textContent = d.label;
+  });
+
+  tsPanel.appendChild(tsSvg);
+  wrapper.appendChild(tsPanel);
+
+  // ══════════════════════════════════════════════════════
+  // 7. SIMULATION STATE
+  // ══════════════════════════════════════════════════════
+  let S = 0, I = 0, R = 0, t = 0;
+  let stepCount = 0, totalN = 0;
+  let history = [];                         // [{t, S, I, R, eventType}]
+  let autoId = 0, running = false, busy = false;
+  let lastEventType = null;
+
+  // Animation/auto cadence — all timings scale by 1/speed, with floors so
+  // even at the fastest setting the markers remain perceptible.
+  // Phases ① and ② run sequentially: ① fades in, then after `phase2Delay`
+  // the focus shifts to ②, then after `applyDelay` the trajectory commits.
+  function timing() {
+    const spd = SL.speed.val();
+    return {
+      markerFade:  Math.max(100, 420 / spd),   // each marker's fade-in
+      phase2Delay: Math.max(220, 700 / spd),   // when panel ② glows / its marker drops
+      applyDelay:  Math.max(380, 1300 / spd),  // when the trajectory updates
+      interval:    Math.max(420, 1500 / spd),  // auto-mode step cadence
+    };
+  }
+
+  // Convenience: derived rates / probabilities at the current state
+  function rates() {
+    if (totalN === 0) return { c1: 0, c2: 0, lam: 0, p1: 0.5, p2: 0.5 };
+    const beta = SL.beta.val(), gamma = SL.gamma.val();
+    const c1 = (S > 0 && I > 0) ? beta * S * I / totalN : 0;
+    const c2 = gamma * I;
+    const lam = c1 + c2;
+    const p1 = lam > 0 ? c1 / lam : 0.5;
+    return { c1, c2, lam, p1, p2: 1 - p1 };
+  }
+
+  // ══════════════════════════════════════════════════════
+  // 8. UPDATE PANEL ① (TIME DENSITY)
+  // ══════════════════════════════════════════════════════
+  let tXMax = 1, tYMax = 1;   // current axis maxima for marker placement
+
+  function updateTimeDensity() {
+    const r = rates();
+    timePanel.querySelector('.lam-val').textContent = r.lam.toFixed(3);
+
+    if (r.lam <= 0) {
+      tCurve.setAttribute("d", ""); tArea.setAttribute("d", "");
+      tXAx.setAttribute("x1", tmg.l); tXAx.setAttribute("x2", TW - tmg.r);
+      tXAx.setAttribute("y1", tmg.t + tch); tXAx.setAttribute("y2", tmg.t + tch);
+      for (const tk of tXTickPool) { tk.ln.style.display = "none"; tk.t.style.display = "none"; }
+      tXLabel.setAttribute("x", tmg.l + tcw / 2);
+      tXLabel.setAttribute("y", TH - 10);
+      tXMax = 1; tYMax = 1;
+      return;
+    }
+
+    tXMax = 5 / r.lam;
+    tYMax = r.lam * 1.05;
+
+    const xToPix = z => tmg.l + (z / tXMax) * tcw;
+    const yToPix = y => tmg.t + tch - (y / tYMax) * tch;
+
+    let d = "", dArea = `M ${xToPix(0).toFixed(1)} ${yToPix(0).toFixed(1)} `;
+    const N = 80;
+    for (let i = 0; i <= N; i++) {
+      const z = (i / N) * tXMax;
+      const y = r.lam * Math.exp(-r.lam * z);
+      const xp = xToPix(z), yp = yToPix(y);
+      d += (i === 0 ? "M " : "L ") + xp.toFixed(1) + " " + yp.toFixed(1) + " ";
+      dArea += "L " + xp.toFixed(1) + " " + yp.toFixed(1) + " ";
+    }
+    dArea += `L ${xToPix(tXMax).toFixed(1)} ${yToPix(0).toFixed(1)} Z`;
+    tCurve.setAttribute("d", d);
+    tArea.setAttribute("d", dArea);
+
+    tXAx.setAttribute("x1", tmg.l);
+    tXAx.setAttribute("x2", TW - tmg.r);
+    tXAx.setAttribute("y1", tmg.t + tch);
+    tXAx.setAttribute("y2", tmg.t + tch);
+
+    for (let i = 0; i < tXTickPool.length; i++) {
+      const tk = tXTickPool[i];
+      if (i <= 5) {
+        const z  = (i / 5) * tXMax;
+        const xp = xToPix(z);
+        tk.ln.setAttribute("x1", xp); tk.ln.setAttribute("x2", xp);
+        tk.ln.setAttribute("y1", tmg.t + tch); tk.ln.setAttribute("y2", tmg.t + tch + 5);
+        tk.ln.style.display = "";
+        tk.t.setAttribute("x", xp); tk.t.setAttribute("y", tmg.t + tch + 5);
+        tk.t.textContent = z >= 10 ? z.toFixed(0) : z >= 1 ? z.toFixed(1) : z.toFixed(2);
+        tk.t.style.display = "";
+      } else {
+        tk.ln.style.display = "none"; tk.t.style.display = "none";
+      }
+    }
+    tXLabel.setAttribute("x", tmg.l + tcw / 2);
+    tXLabel.setAttribute("y", TH - 10);
+  }
+
+  // ══════════════════════════════════════════════════════
+  // 9. UPDATE PANEL ② (EVENT BAR)
+  // ══════════════════════════════════════════════════════
+  function updateEventBar() {
+    const r = rates();
+    eventPanel.querySelector('.c1-val').textContent = r.c1.toFixed(3);
+    eventPanel.querySelector('.c2-val').textContent = r.c2.toFixed(3);
+
+    const w1 = ebW * r.p1, w2 = ebW * r.p2;
+
+    // Round caps look weird when one segment shrinks to ~0; just compose the
+    // two rectangles flush together and let the outline rect provide the rounded corners.
+    infRect.setAttribute("x", ebmg.l);
+    infRect.setAttribute("width", Math.max(0.001, w1).toFixed(2));
+    recRect.setAttribute("x", (ebmg.l + w1).toFixed(2));
+    recRect.setAttribute("width", Math.max(0.001, w2).toFixed(2));
+
+    if (w1 > 1 && w2 > 1) {
+      divider.setAttribute("x1", (ebmg.l + w1).toFixed(2));
+      divider.setAttribute("x2", (ebmg.l + w1).toFixed(2));
+      divider.style.display = "";
+    } else { divider.style.display = "none"; }
+
+    // Segment labels above
+    if (r.p1 > 0.18) {
+      infLabel.setAttribute("x", ebmg.l + w1 / 2);
+      infLabel.setAttribute("y", ebY - 10);
+      infLabel.style.display = "";
+    } else infLabel.style.display = "none";
+    if (r.p2 > 0.18) {
+      recLabel.setAttribute("x", ebmg.l + w1 + w2 / 2);
+      recLabel.setAttribute("y", ebY - 10);
+      recLabel.style.display = "";
+    } else recLabel.style.display = "none";
+
+    // Probability values inside the bar
+    if (r.p1 > 0.10) {
+      p1Text.setAttribute("x", ebmg.l + w1 / 2);
+      p1Text.setAttribute("y", ebY + ebH / 2 + 4);
+      p1Text.setAttribute("fill", "#fff");
+      p1Text.textContent = r.p1.toFixed(2);
+      p1Text.style.display = "";
+    } else p1Text.style.display = "none";
+    if (r.p2 > 0.10) {
+      p2Text.setAttribute("x", ebmg.l + w1 + w2 / 2);
+      p2Text.setAttribute("y", ebY + ebH / 2 + 4);
+      p2Text.setAttribute("fill", "#065f46");
+      p2Text.textContent = r.p2.toFixed(2);
+      p2Text.style.display = "";
+    } else p2Text.style.display = "none";
+
+    // Axis ticks (0 / 1)
+    tick0.setAttribute("x1", ebmg.l);          tick0.setAttribute("x2", ebmg.l);
+    tick0.setAttribute("y1", ebY + ebH);       tick0.setAttribute("y2", ebY + ebH + 5);
+    text0.setAttribute("x", ebmg.l);           text0.setAttribute("y", ebY + ebH + 18);
+
+    tick1.setAttribute("x1", ebmg.l + ebW);    tick1.setAttribute("x2", ebmg.l + ebW);
+    tick1.setAttribute("y1", ebY + ebH);       tick1.setAttribute("y2", ebY + ebH + 5);
+    text1.setAttribute("x", ebmg.l + ebW);     text1.setAttribute("y", ebY + ebH + 18);
+  }
+
+  // ══════════════════════════════════════════════════════
+  // 10. UPDATE PANEL ③ (TIME SERIES) — step-function paths
+  // ══════════════════════════════════════════════════════
+  let tsHiX = 30, tsHiY = 100;
+  function tsX(time) { return tsmg.l + (time / tsHiX) * tscw; }
+  function tsY(v)    { return tsmg.t + tsch - (v / tsHiY) * tsch; }
+
+  function niceCeil(n) {
+    if (n <= 100) return Math.ceil(n / 20) * 20;
+    if (n <= 500) return Math.ceil(n / 50) * 50;
+    return Math.ceil(n / 100) * 100;
+  }
+
+  function updateAxes() {
+    const lastT = history.length ? history[history.length - 1].t : 0;
+    tsHiX = Math.max(8, Math.ceil((lastT + 4) / 4) * 4);
+    tsHiY = niceCeil(totalN || 100);
+
+    for (let i = 0; i <= 5; i++) {
+      const v = (tsHiY / 5) * i, y = tsY(v);
+      tsGridLines[i].setAttribute("x1", tsmg.l);
+      tsGridLines[i].setAttribute("x2", TSW - tsmg.r);
+      tsGridLines[i].setAttribute("y1", y);
+      tsGridLines[i].setAttribute("y2", y);
+      tsYLabels[i].setAttribute("x", tsmg.l - 8);
+      tsYLabels[i].setAttribute("y", y + 4);
+      tsYLabels[i].textContent = Math.round(v);
+    }
+    tsXAx.setAttribute("x1", tsmg.l); tsXAx.setAttribute("x2", TSW - tsmg.r);
+    tsXAx.setAttribute("y1", tsY(0)); tsXAx.setAttribute("y2", tsY(0));
+    tsYAx.setAttribute("x1", tsmg.l); tsYAx.setAttribute("x2", tsmg.l);
+    tsYAx.setAttribute("y1", tsmg.t); tsYAx.setAttribute("y2", tsmg.t + tsch);
+    tsXLbl.setAttribute("x", tsmg.l + tscw / 2);
+
+    const tsStep = tsHiX > 100 ? 20 : tsHiX > 50 ? 10 : tsHiX > 20 ? 5 : tsHiX > 10 ? 2 : 1;
+    let ti = 0;
+    for (let x = 0; x <= tsHiX && ti < 16; x += tsStep) {
+      const xp = tsX(x);
+      tsXTickPool[ti].ln.setAttribute("x1", xp); tsXTickPool[ti].ln.setAttribute("x2", xp);
+      tsXTickPool[ti].ln.setAttribute("y1", tsY(0)); tsXTickPool[ti].ln.setAttribute("y2", tsY(0) + 5);
+      tsXTickPool[ti].ln.style.display = "";
+      tsXTickPool[ti].t.setAttribute("x", xp); tsXTickPool[ti].t.setAttribute("y", tsY(0) + 5);
+      tsXTickPool[ti].t.textContent = (tsStep < 1) ? x.toFixed(1) : String(x);
+      tsXTickPool[ti].t.style.display = "";
+      ti++;
+    }
+    for (; ti < 16; ti++) { tsXTickPool[ti].ln.style.display = "none"; tsXTickPool[ti].t.style.display = "none"; }
+  }
+
+  function drawTimeSeries(animatePulse = false) {
+    if (history.length === 0) {
+      pathS.setAttribute("d", ""); pathI.setAttribute("d", ""); pathR.setAttribute("d", "");
+      tsNowLine.style.display = "none";
+      ['S','I','R'].forEach(k => { endDots[k].style.display = "none"; endTexts[k].style.display = "none"; });
+      tsLastEvent.setAttribute("opacity", 0);
+      return;
+    }
+    updateAxes();
+
+    // Step-function path: between event i-1 and event i, hold the previous
+    // value (horizontal segment), then jump to the new value (vertical segment).
+    let dS = "", dI = "", dR = "";
+    for (let i = 0; i < history.length; i++) {
+      const h = history[i];
+      const x = tsX(h.t);
+      if (i === 0) {
+        dS = `M ${x.toFixed(1)} ${tsY(h.S).toFixed(1)} `;
+        dI = `M ${x.toFixed(1)} ${tsY(h.I).toFixed(1)} `;
+        dR = `M ${x.toFixed(1)} ${tsY(h.R).toFixed(1)} `;
+      } else {
+        const prev = history[i - 1];
+        dS += `L ${x.toFixed(1)} ${tsY(prev.S).toFixed(1)} L ${x.toFixed(1)} ${tsY(h.S).toFixed(1)} `;
+        dI += `L ${x.toFixed(1)} ${tsY(prev.I).toFixed(1)} L ${x.toFixed(1)} ${tsY(h.I).toFixed(1)} `;
+        dR += `L ${x.toFixed(1)} ${tsY(prev.R).toFixed(1)} L ${x.toFixed(1)} ${tsY(h.R).toFixed(1)} `;
+      }
+    }
+    pathS.setAttribute("d", dS);
+    pathI.setAttribute("d", dI);
+    pathR.setAttribute("d", dR);
+
+    if (t > 0) {
+      const xn = tsX(t);
+      tsNowLine.setAttribute("x1", xn); tsNowLine.setAttribute("x2", xn);
+      tsNowLine.setAttribute("y1", tsmg.t); tsNowLine.setAttribute("y2", tsmg.t + tsch);
+      tsNowLine.style.display = "";
+    } else { tsNowLine.style.display = "none"; }
+
+    const last = history[history.length - 1];
+    ['S','I','R'].forEach(k => {
+      const x = tsX(last.t), y = tsY(last[k]);
+      endDots[k].setAttribute("cx", x); endDots[k].setAttribute("cy", y); endDots[k].style.display = "";
+      endTexts[k].setAttribute("x", x); endTexts[k].setAttribute("y", y); endTexts[k].style.display = "";
+    });
+
+    if (animatePulse && (lastEventType === 'inf' || lastEventType === 'rec')) {
+      const x = tsX(last.t);
+      const v = lastEventType === 'inf' ? last.I : last.R;
+      const y = tsY(v);
+      tsLastEvent.setAttribute("cx", x);
+      tsLastEvent.setAttribute("cy", y);
+      tsLastEvent.setAttribute("stroke", lastEventType === 'inf' ? COLORS.inf : COLORS.rec);
+      d3.select(tsLastEvent).interrupt()
+        .attr("r", 5).style("opacity", 1)
+        .transition().duration(750).ease(d3.easeCubicOut)
+        .attr("r", 14).style("opacity", 0);
+    } else {
+      tsLastEvent.setAttribute("opacity", 0);
+    }
+  }
+
+  function updateStats() {
+    const ended = (I === 0 && stepCount > 0);
+    tLabel.textContent    = ended ? `t = ${t.toFixed(2)} — epidemic ended` : `t = ${t.toFixed(2)}`;
+    stepLabel.textContent = `step = ${stepCount}`;
+    popLabel.textContent  = `S=${S}  I=${I}  R=${R}`;
+  }
+
+  function renderStatic() { updateTimeDensity(); updateEventBar(); drawTimeSeries(false); updateStats(); }
+
+  // ══════════════════════════════════════════════════════
+  // 11. INIT  +  ONE STEP  (with phased animation)
+  // ══════════════════════════════════════════════════════
+  function initSim() {
+    clearInterval(autoId); running = false; busy = false;
+    btnAuto.setText("⏩  Auto");
+    S = SL.s0.val(); I = SL.i0.val(); R = SL.r0.val();
+    totalN = S + I + R;
+    t = 0; stepCount = 0; lastEventType = null;
+    history = [{ t: 0, S, I, R, eventType: 'init' }];
+
+    tMarker.style.opacity = "0";
+    eMarker.style.opacity = "0";
+    eventResult.textContent = "";
+    timePanel.style.boxShadow = "";
+    eventPanel.style.boxShadow = "";
+    timePanel.querySelector('.dt-val').textContent = "--";
+
+    renderStatic();
+  }
+
+  function placeTimeMarker(z, lam) {
+    const xMaxLocal = 5 / lam, yMaxLocal = lam * 1.05;
+    const zClamped  = Math.min(z, xMaxLocal);
+    const fz = lam * Math.exp(-lam * z);
+    const xp = tmg.l + (zClamped / xMaxLocal) * tcw;
+    const yp = tmg.t + tch - (fz / yMaxLocal) * tch;
+
+    tMarkerLine.setAttribute("x1", xp); tMarkerLine.setAttribute("x2", xp);
+    tMarkerLine.setAttribute("y1", yp); tMarkerLine.setAttribute("y2", tmg.t + tch);
+    tMarkerDot.setAttribute("cx", xp);  tMarkerDot.setAttribute("cy", yp);
+
+    const labelStr = "Δt = " + (z >= 10 ? z.toFixed(1) : z.toFixed(2));
+    const bgW = 9 + labelStr.length * 6.4, bgH = 18;
+    const labelX = Math.max(tmg.l + bgW/2 + 2, Math.min(TW - tmg.r - bgW/2 - 2, xp));
+    const labelY = 14;
+    tMarkerBg.setAttribute("x", labelX - bgW / 2);
+    tMarkerBg.setAttribute("y", labelY - 13);
+    tMarkerBg.setAttribute("width", bgW);
+    tMarkerBg.setAttribute("height", bgH);
+    tMarkerLabel.setAttribute("x", labelX);
+    tMarkerLabel.setAttribute("y", labelY);
+    tMarkerLabel.textContent = labelStr;
+  }
+
+  function placeEventMarker(u, eventType) {
+    const xu = ebmg.l + u * ebW;
+    eMarkerLine.setAttribute("x1", xu); eMarkerLine.setAttribute("x2", xu);
+    eMarkerLine.setAttribute("y1", ebY - 18); eMarkerLine.setAttribute("y2", ebY + ebH + 6);
+    eMarkerDot.setAttribute("cx", xu); eMarkerDot.setAttribute("cy", ebY - 22);
+
+    const labelStr = "u = " + u.toFixed(2);
+    const bgW = 9 + labelStr.length * 6.4, bgH = 18;
+    const labelX = Math.max(ebmg.l + bgW/2 + 2, Math.min(EW - ebmg.r - bgW/2 - 2, xu));
+    const labelY = ebY - 40;
+    eMarkerBg.setAttribute("x", labelX - bgW / 2);
+    eMarkerBg.setAttribute("y", labelY - 13);
+    eMarkerBg.setAttribute("width", bgW);
+    eMarkerBg.setAttribute("height", bgH);
+    eMarkerLabel.setAttribute("x", labelX);
+    eMarkerLabel.setAttribute("y", labelY);
+    eMarkerLabel.textContent = labelStr;
+
+    eventResult.textContent = eventType === 'inf' ? "→  INFECTION   (S → I)" : "→  RECOVERY   (I → R)";
+    eventResult.setAttribute("fill", eventType === 'inf' ? COLORS.inf : COLORS.rec);
+  }
+
+  function stepSim(animate = true) {
+    if (busy) return;
+    if (I <= 0) return;
+    const r = rates();
+    if (r.lam <= 0) return;
+
+    // Standard inverse-CDF samples
+    const u1 = Math.random(), u2 = Math.random();
+    const z = -Math.log(1 - u1) / r.lam;             // ~ Exp(λ)
+    const eventType = u2 < r.p1 ? 'inf' : 'rec';
+
+    const apply = () => {
+      if (eventType === 'inf') { S = Math.max(0, S - 1); I = I + 1; }
+      else                     { I = Math.max(0, I - 1); R = R + 1; }
+      t = t + z; stepCount++; lastEventType = eventType;
+      history.push({ t, S, I, R, eventType });
+      updateTimeDensity(); updateEventBar();
+      drawTimeSeries(true); updateStats();
+      busy = false;
+    };
+
+    if (!animate) { apply(); return; }
+
+    busy = true;
+    tMarker.style.opacity = "0";
+    eMarker.style.opacity = "0";
+    eventResult.textContent = "";
+
+    const T = timing();
+
+    // Phase ① — focus the time-density panel + drop in Δt marker
+    timePanel.style.boxShadow = `0 0 0 3px ${COLORS.accent}66`;
+    placeTimeMarker(z, r.lam);
+    timePanel.querySelector('.dt-val').textContent = z.toFixed(3);
+    d3.select(tMarker).interrupt().style("opacity", 0)
+      .transition().duration(T.markerFade).ease(d3.easeCubicOut).style("opacity", 1);
+
+    // Phase ② — focus event-bar panel + slide in u marker (glow hand-off)
+    setTimeout(() => {
+      timePanel.style.boxShadow  = "";
+      eventPanel.style.boxShadow = `0 0 0 3px ${COLORS.accent}66`;
+      placeEventMarker(u2, eventType);
+      d3.select(eMarker).interrupt().style("opacity", 0)
+        .transition().duration(T.markerFade).ease(d3.easeCubicOut).style("opacity", 1);
+    }, T.phase2Delay);
+
+    // Phase ③ — apply the event, time series gets a new step
+    setTimeout(() => {
+      eventPanel.style.boxShadow = "";
+      apply();
+    }, T.applyDelay);
+  }
+
+  // ══════════════════════════════════════════════════════
+  // 12. EVENT WIRING
+  // ══════════════════════════════════════════════════════
+  function autoTick() {
+    if (busy) return;
+    if (I <= 0) {
+      clearInterval(autoId); running = false; btnAuto.setText("⏩  Auto"); return;
+    }
+    stepSim(true);
+  }
+  function onStep()  { stepSim(true); }
+  function onAuto()  {
+    if (running) {
+      clearInterval(autoId); running = false; btnAuto.setText("⏩  Auto"); return;
+    }
+    running = true; btnAuto.setText("⏸  Pause");
+    autoId = setInterval(autoTick, timing().interval);
+  }
+  function onReset() { initSim(); }
+
+  btnStep.el .addEventListener("click", onStep);
+  btnAuto.el .addEventListener("click", onAuto);
+  btnReset.el.addEventListener("click", onReset);
+
+  // Initial S/I/R only matter at reset. β/γ can be adjusted mid-run — they
+  // re-shape both distributions immediately and take effect from the next event.
+  function onParam() {
+    SL.s0.sync(); SL.i0.sync(); SL.r0.sync(); SL.beta.sync(); SL.gamma.sync();
+    if (!running && stepCount === 0) {
+      initSim();
+    } else {
+      updateTimeDensity();
+      updateEventBar();
+    }
+  }
+  // Speed is purely a cadence knob — no need to touch the rate panels, but
+  // if Auto is running we re-arm the interval so the new tempo applies right away.
+  function onSpeed() {
+    SL.speed.sync();
+    if (running) {
+      clearInterval(autoId);
+      autoId = setInterval(autoTick, timing().interval);
+    }
+  }
+  SL.s0.input   .addEventListener("input", onParam);
+  SL.i0.input   .addEventListener("input", onParam);
+  SL.r0.input   .addEventListener("input", onParam);
+  SL.beta.input .addEventListener("input", onParam);
+  SL.gamma.input.addEventListener("input", onParam);
+  SL.speed.input.addEventListener("input", onSpeed);
+
+  // ══════════════════════════════════════════════════════
+  // 13. BOOT + CLEANUP
+  // ══════════════════════════════════════════════════════
+  initSim();
+
+  invalidation.then(() => {
+    clearInterval(autoId);
+    btnStep.el .removeEventListener("click", onStep);
+    btnAuto.el .removeEventListener("click", onAuto);
+    btnReset.el.removeEventListener("click", onReset);
+    SL.s0.input   .removeEventListener("input", onParam);
+    SL.i0.input   .removeEventListener("input", onParam);
+    SL.r0.input   .removeEventListener("input", onParam);
+    SL.beta.input .removeEventListener("input", onParam);
+    SL.gamma.input.removeEventListener("input", onParam);
+    SL.speed.input.removeEventListener("input", onSpeed);
+    history = [];
+  });
+
+  wrapper.value = {};
+  return wrapper;
+})()
+```
+
+**How to read the panels.**  Panel ① is the density of the inter-event waiting time $Z$: a tall thin curve when $\lambda = c_1 + c_2$ is large (events fire quickly), a wide flat curve when $\lambda$ is small (events are rare). The dot drops onto the curve at the sampled $\Delta t$, and the new $t$ on the trajectory advances by exactly that amount. Panel ② splits the $[0,1]$ interval into two coloured segments whose widths are the event probabilities $c_1/\lambda$ and $c_2/\lambda$; the marker is the uniform draw, and which side of the divider it lands on selects the event. Drag $\beta$ up and the red segment grows; drag $\gamma$ up and the green segment grows.
+

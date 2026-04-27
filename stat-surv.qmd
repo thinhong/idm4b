@@ -1,5 +1,11 @@
 # Survival analysis
 
+```{ojs}
+//| echo: false
+import { createSlider, createButton, injectStyle, styleMathLabel } from "./_slider.js"
+d3 = require("d3@7")
+```
+
 ## Time-to-event data
 
 ![](img/surv/time-to-event.svg)
@@ -88,6 +94,305 @@ $$
 $$
 
 So the jump from S to I shares the same mathematics as any "time-to-event" clock, here the "event" is infection instead of death.
+
+### Illustration
+
+Below is a cohort of $N$ individuals, each running their own private "infection clock" with constant hazard $\lambda$. When a person's clock fires, they flip from susceptible (blue) to infected (red) — exactly the role "death" plays in survival analysis.
+
+Two equivalent views of the same process appear on the right:
+
+-   The **survival curve** $S(t)=\mathbb{P}(T>t)$, i.e. the probability an individual is still event-free.
+-   The **proportion susceptible** in the cohort, $\dfrac{S(t)}{N}$, which is the SIR variable when $\lambda$ is the force of infection.
+
+For constant hazard, the empirical step curve hugs the analytic $e^{-\lambda t}$ — *the* survival function and *the* solution of $\dot S = -\lambda S$ are the same object.
+
+```{ojs}
+//| echo: false
+
+viewof surv_idm_illustration = {
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = "font-family:system-ui,-apple-system,sans-serif;max-width:900px;margin:0 auto;touch-action:manipulation;";
+  wrapper.appendChild(injectStyle());
+
+  // ── Controls ──
+  const SL_lambda = createSlider("λ  (hazard / force of infection)", 0.05, 1.0, 0.05, 0.30, "#dc2626", "red");
+  const SL_N      = createSlider("N  (cohort size)",                 25,   200, 25,   100,   "#3b82f6", "blue");
+  styleMathLabel(SL_lambda, SL_N);
+
+  const ctrlRow = document.createElement("div");
+  ctrlRow.style.cssText = "display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin:8px 0 14px 0;";
+  ctrlRow.appendChild(SL_lambda.el);
+  ctrlRow.appendChild(SL_N.el);
+
+  const runBtn   = createButton("▶  Run",   "go");
+  const resetBtn = createButton("Reset",    "reset");
+  const btnRow = document.createElement("div");
+  btnRow.style.cssText = "display:flex;gap:10px;flex:0 0 200px;min-width:160px;";
+  btnRow.appendChild(runBtn.el);
+  btnRow.appendChild(resetBtn.el);
+  ctrlRow.appendChild(btnRow);
+
+  // ── SVG layout — two panels side by side ──
+  const W = 900, H = 380;
+  const PAD = 16;
+  const LEFT_W  = 340;
+  const RIGHT_W = W - LEFT_W - PAD;
+  const margin = { top: 30, right: 14, bottom: 44, left: 44 };
+  const innerW = RIGHT_W - margin.left - margin.right;
+  const innerH = H - margin.top - margin.bottom;
+
+  const svg = d3.create("svg")
+    .attr("viewBox", `0 0 ${W} ${H}`)
+    .attr("width", "100%")
+    .style("max-width", W + "px")
+    .style("height", "auto")
+    .style("display", "block")
+    .style("border", "1px solid #e2e8f0")
+    .style("border-radius", "8px")
+    .style("background", "#fff");
+
+  // Left panel: cohort of individuals
+  const leftG = svg.append("g").attr("transform", `translate(0,0)`);
+  leftG.append("text")
+    .attr("x", LEFT_W / 2).attr("y", 20)
+    .attr("text-anchor", "middle")
+    .attr("font-family", "system-ui").attr("font-size", 13).attr("font-weight", 600)
+    .attr("fill", "#0f172a")
+    .text("Cohort of individuals");
+
+  const dotsG = leftG.append("g").attr("transform", `translate(${PAD}, ${36})`);
+
+  // Right panel: survival / proportion-susceptible curve
+  const rightG = svg.append("g").attr("transform", `translate(${LEFT_W + PAD}, 0)`);
+  rightG.append("text")
+    .attr("x", margin.left + innerW / 2).attr("y", 20)
+    .attr("text-anchor", "middle")
+    .attr("font-family", "system-ui").attr("font-size", 13).attr("font-weight", 600)
+    .attr("fill", "#0f172a")
+    .text("S(t) / N  =  proportion still susceptible");
+
+  const plotG = rightG.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+  const T_MAX = 15;
+  const xScale = d3.scaleLinear().domain([0, T_MAX]).range([0, innerW]);
+  const yScale = d3.scaleLinear().domain([0, 1]).range([innerH, 0]);
+
+  // Grid + axes
+  const gridG = plotG.append("g");
+  for (const t of [0, 0.25, 0.5, 0.75, 1]) {
+    gridG.append("line")
+      .attr("x1", 0).attr("x2", innerW)
+      .attr("y1", yScale(t)).attr("y2", yScale(t))
+      .attr("stroke", "#e2e8f0")
+      .attr("stroke-dasharray", t === 0 || t === 1 ? "" : "2,4");
+    gridG.append("text")
+      .attr("x", -6).attr("y", yScale(t))
+      .attr("text-anchor", "end").attr("dominant-baseline", "middle")
+      .attr("font-family", `"SF Mono",Menlo,Consolas,monospace`)
+      .attr("font-size", 10).attr("fill", "#64748b")
+      .text(t);
+  }
+  for (let t = 0; t <= T_MAX; t += 3) {
+    gridG.append("line")
+      .attr("x1", xScale(t)).attr("x2", xScale(t))
+      .attr("y1", 0).attr("y2", innerH)
+      .attr("stroke", "#f1f5f9");
+    gridG.append("text")
+      .attr("x", xScale(t)).attr("y", innerH + 16)
+      .attr("text-anchor", "middle")
+      .attr("font-family", `"SF Mono",Menlo,Consolas,monospace`)
+      .attr("font-size", 10).attr("fill", "#64748b")
+      .text(t);
+  }
+  plotG.append("text")
+    .attr("x", innerW / 2).attr("y", innerH + 36)
+    .attr("text-anchor", "middle")
+    .attr("font-family", "system-ui").attr("font-size", 11).attr("fill", "#475569")
+    .text("time t");
+
+  // Layers in plot
+  const theoryPath  = plotG.append("path")
+    .attr("fill", "none").attr("stroke", "#0f172a")
+    .attr("stroke-width", 2).attr("stroke-dasharray", "5,5");
+  const empiricalPath = plotG.append("path")
+    .attr("fill", "none").attr("stroke", "#dc2626")
+    .attr("stroke-width", 2.5);
+  const cursor = plotG.append("line")
+    .attr("y1", 0).attr("y2", innerH)
+    .attr("stroke", "#94a3b8").attr("stroke-width", 1).attr("stroke-dasharray", "3,3");
+  const cursorDot = plotG.append("circle")
+    .attr("r", 4).attr("fill", "#dc2626").attr("stroke", "#fff").attr("stroke-width", 1.5);
+
+  // Legend (inside plot)
+  const lg = plotG.append("g").attr("transform", `translate(${innerW - 200}, 6)`);
+  lg.append("line").attr("x1", 0).attr("x2", 22).attr("y1", 6).attr("y2", 6)
+    .attr("stroke", "#0f172a").attr("stroke-width", 2).attr("stroke-dasharray", "5,5");
+  lg.append("text").attr("x", 28).attr("y", 9)
+    .attr("font-family", "system-ui").attr("font-size", 11).attr("fill", "#334155")
+    .text("e^(−λt) — analytic S(t)");
+  lg.append("line").attr("x1", 0).attr("x2", 22).attr("y1", 24).attr("y2", 24)
+    .attr("stroke", "#dc2626").attr("stroke-width", 2.5);
+  lg.append("text").attr("x", 28).attr("y", 27)
+    .attr("font-family", "system-ui").attr("font-size", 11).attr("fill", "#334155")
+    .text("empirical cohort fraction");
+
+  // ── Cohort state ──
+  let people = [];     // { idx, cx, cy, tEvent }
+  let history = [];    // { t, frac }
+  let tNow   = 0;
+  let raf    = null;
+  let lastFrame = null;
+  let running = false;
+
+  function laidOutGrid(N) {
+    // Square-ish grid that fits the left panel
+    const availW = LEFT_W - PAD * 2;
+    const availH = H - 36 - PAD;
+    const cols = Math.ceil(Math.sqrt(N * availW / availH));
+    const rows = Math.ceil(N / cols);
+    const cellW = availW / cols;
+    const cellH = availH / rows;
+    const r = Math.max(3, Math.min(9, Math.min(cellW, cellH) / 2 - 2));
+    const out = [];
+    for (let i = 0; i < N; i++) {
+      const c = i % cols, rr = Math.floor(i / cols);
+      out.push({
+        idx: i,
+        cx: cellW * (c + 0.5),
+        cy: cellH * (rr + 0.5),
+        r
+      });
+    }
+    return out;
+  }
+
+  function reset() {
+    cancelAnimationFrame(raf);
+    raf = null;
+    running = false;
+    runBtn.setText("▶  Run");
+    tNow = 0;
+    const N = SL_N.val();
+    const lam = SL_lambda.val();
+    const grid = laidOutGrid(N);
+    people = grid.map(g => ({
+      ...g,
+      // Exponential waiting time with rate λ; deterministic-ish via Math.random
+      tEvent: -Math.log(1 - Math.random()) / lam
+    }));
+    history = [{ t: 0, frac: 1 }];
+    drawDots();
+    drawCurves();
+  }
+
+  function drawDots() {
+    const sel = dotsG.selectAll("circle").data(people, d => d.idx);
+    sel.enter().append("circle")
+      .merge(sel)
+      .attr("cx", d => d.cx).attr("cy", d => d.cy).attr("r", d => d.r)
+      .attr("fill", d => d.tEvent <= tNow ? "#dc2626" : "#3b82f6")
+      .attr("opacity", d => d.tEvent <= tNow ? 0.95 : 0.85)
+      .attr("stroke", "#fff").attr("stroke-width", 0.8);
+    sel.exit().remove();
+  }
+
+  function drawCurves() {
+    const lam = SL_lambda.val();
+
+    // Analytic survival curve
+    const N_PTS = 200;
+    const theory = [];
+    for (let i = 0; i <= N_PTS; i++) {
+      const t = T_MAX * i / N_PTS;
+      theory.push({ t, s: Math.exp(-lam * t) });
+    }
+    const lineFn = d3.line().x(d => xScale(d.t)).y(d => yScale(d.s));
+    theoryPath.datum(theory).attr("d", lineFn);
+
+    // Empirical step curve
+    const stepFn = d3.line()
+      .curve(d3.curveStepAfter)
+      .x(d => xScale(d.t)).y(d => yScale(d.frac));
+    empiricalPath.datum(history).attr("d", stepFn);
+
+    // Cursor at current t
+    const cur = history.length ? history[history.length - 1] : { t: 0, frac: 1 };
+    cursor.attr("x1", xScale(cur.t)).attr("x2", xScale(cur.t));
+    cursorDot.attr("cx", xScale(cur.t)).attr("cy", yScale(cur.frac));
+  }
+
+  function tick(now) {
+    if (!running) return;
+    if (lastFrame == null) lastFrame = now;
+    const dt = Math.min(0.25, (now - lastFrame) / 1000) * 1.0; // 1 sim sec / wall sec
+    lastFrame = now;
+    tNow = Math.min(T_MAX, tNow + dt);
+
+    // Count survivors
+    let surv = 0;
+    for (const p of people) if (p.tEvent > tNow) surv++;
+    const frac = surv / people.length;
+    history.push({ t: tNow, frac });
+
+    drawDots();
+    drawCurves();
+
+    if (tNow >= T_MAX) {
+      running = false;
+      runBtn.setText("▶  Run");
+      raf = null;
+      return;
+    }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function toggleRun() {
+    if (tNow >= T_MAX) reset();
+    if (running) {
+      running = false;
+      runBtn.setText("▶  Resume");
+      cancelAnimationFrame(raf);
+      raf = null;
+    } else {
+      running = true;
+      lastFrame = null;
+      runBtn.setText("⏸  Pause");
+      raf = requestAnimationFrame(tick);
+    }
+  }
+
+  // ── Wire up controls ──
+  SL_lambda.input.addEventListener("input", () => {
+    SL_lambda.sync();
+    // Re-sample event times so the cohort respects the new hazard
+    reset();
+  });
+  SL_N.input.addEventListener("input", () => {
+    SL_N.sync();
+    reset();
+  });
+  runBtn.el.addEventListener("click", toggleRun);
+  resetBtn.el.addEventListener("click", reset);
+
+  wrapper.appendChild(ctrlRow);
+  wrapper.appendChild(svg.node());
+
+  const caption = document.createElement("div");
+  caption.style.cssText = "font-size:12px;color:#64748b;margin-top:10px;line-height:1.55;";
+  caption.innerHTML = `
+    Each <span style="color:#3b82f6;font-weight:600;">blue</span> dot is a susceptible whose
+    waiting time to infection is drawn from <span style="font-style:italic;">Exp</span>(λ).
+    When the clock fires, the dot turns <span style="color:#dc2626;font-weight:600;">red</span>.
+    The red step curve is the cohort fraction still susceptible — the survival function S(t).
+    The dashed black curve is e<sup>−λt</sup>, the analytic solution of both the survival ODE
+    Ṡ = −λS and the SIR susceptible equation when the force of infection λ is constant.
+  `;
+  wrapper.appendChild(caption);
+
+  reset();
+  return wrapper;
+}
+```
 
 | Survival analysis | Infectious disease modelling | Explanation |
 |-----------------|---------------------|----------------------------------|

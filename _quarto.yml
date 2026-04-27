@@ -25,6 +25,7 @@ book:
     - part: sto.qmd
       chapters:
         - ar.qmd
+        - sir-sto.qmd
         - seir-sto.qmd
     - part: mod-fit.qmd
       chapters:
