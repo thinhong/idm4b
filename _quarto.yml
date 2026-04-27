@@ -27,6 +27,7 @@ book:
         - ar.qmd
         - sir-sto.qmd
         - seir-sto.qmd
+        - branch-proc.qmd
     - part: mod-fit.qmd
       chapters:
         - lse.qmd

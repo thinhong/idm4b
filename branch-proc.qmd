@@ -1,0 +1,898 @@
+---
+title: "Branching process"
+format: html
+execute: 
+  echo: false
+---
+
+```{ojs}
+import { createSlider, createButton, injectStyle, styleMathLabel } from "./_slider.js"
+d3 = require("d3@7")
+```
+
+Branching process is also called the Galton-Watson Process, because some of the early theoretical results about the process derive from a correspondence between Sir Francis Galton and the Reverend Henry William Watson in 1873. It is used to model **reproduction**.
+
+Consider a population of reproducing individuals.
+
+- Start at time $t = 0$ with a single individual.
+
+- This individual lives for 1 unit of time, at time $t = 1$, it produces a family of offspring, and immediately dies.
+
+- Each offspring lives for 1 unit of time, at time $t = 1$, it produces its own family of offspring, and immediately dies.
+
+- And so on...
+
+A branching process is defined as follows:
+
+- Single individual at time $t = 0$.
+
+- Every individual lives exactly one unit of time, then produces $Y$ offspring, and dies.
+
+- The number of offspring $Y$ (stands for **Young**) takes values $Y = 0, 1, 2, \dots$ and the probability of producing $k$ offspring is $\mathbb{P}(Y = k) = p_k$
+
+- Assuming all individuals reproduce independently. Individuals $0, 1, 2, \dots$ have family
+sizes $Y_1, Y_2, \dots, Y_n$ where each $Y_i$ has the same distribution as $Y$.
+
+- Because the lifespan is strictly fixed to one unit of time, we can treat each time step as one generation.
+
+- Let $Z_n$ be the total number of individuals born at generation $n$, for $n = 0, 1, 2, \dots$. You can interpret $Z_n$ as the **siZe** of generation $n$.
+
+- Then the branching process is the sequence of of random variables $Z_n$:
+
+$$\{Z_0, Z_1, Z_2, Z_3, \dots\} = \{Z_n : n \in \mathbb{N}\}$$
+
+Now if we replace reproduction with infection.
+
+- Single individual at time $t = 0$.
+
+- Every individual is infectious for exactly one unit of time, then infects $Y$ new people, and is removed from the transmission chain (e.g., recovers, isolates, or dies).
+
+- The number of secondary infections $Y$ takes values $Y = 0, 1, 2, \dots$ and the probability of infecting exactly $k$ people is $\mathbb{P}(Y = k) = p_k$. (Note: The expected value or mean of this distribution is the basic reproduction number, $R_0$).
+
+- Assuming all infected individuals transmit independently, patients $1, 2, \dots, n$ generate secondary case clusters of size $Y_1, Y_2, \dots, Y_n$, where each $Y_i$ follows the exact same underlying distribution as $Y$.
+
+- Because the infectious period (or serial interval) is strictly fixed to one unit of time, we can treat each discrete time step as one transmission generation.
+
+- Let $Z_n$ be the total number of new individuals infected at generation $n$, for $n = 0, 1, 2, \dots$. You can interpret $Z_n$ as the siZe of the outbreak at generation $n$.
+
+- Then the epidemic branching process is the sequence of random variables $Z_n$:
+
+$$\{Z_0, Z_1, Z_2, Z_3, \dots\} = \{Z_n : n \in \mathbb{N}\}$$
+
+## Simulate an outbreak with branching process
+
+- Initialise index cases: Start with $n$ index cases at time $t = 0$ (or at explicitly sampled onset times).
+
+- Draw offspring distribution: For each case $i$, draw the number of secondary infections, $Z_i$. The dominant choice in modern outbreak work is the negative binomial distribution, $Z_i \sim \text{NB}(R, k)$, where $R$ is the reproduction number and $k$ is the dispersion parameter capturing superspreading.
+
+- Assign timelines: For each offspring, draw a generation interval or serial interval from a Gamma or Log-normal distribution. Add an incubation period to calculate the onset date, and a reporting delay to get the notification date.
+
+- Iterate and terminate: Repeat this process generation by generation until the transmission chain goes extinct, or until a predefined stopping rule is triggered (e.g., maximum cases, maximum generations, or a calendar cut-off)
+
+- Compile the line list: Record each new case as a single row in the output data frame containing `id`, `infector_id`, `generation`, `t_infection`, `t_onset`, and `t_report`
+
+### Interactive simulation
+
+The simulation always starts with one index case at $t=0$. Tune the **offspring distribution** $Z\sim\text{NB}(R,\ k)$ and the gamma **generation interval** in their own boxes. Each press of **Step** alternates between two clearly separated draws for the case currently ringed in dashed teal:
+
+1. **Sample $Y$** from $\text{NB}(R, k)$ — the tree immediately spawns $Y$ dashed offspring placeholders at the parent's time;
+2. **Sample $Y$ generation intervals at once** — one dot per child lands on the gamma curve, every placeholder slides to its true $t_\text{infection}$, and one row per child appears in the line list.
+
+When the current parent is done, the simulation moves to the next individual. **Hover or tap** any case in the tree to highlight the matching row in the line list (and vice versa). At the bottom, type a calendar date for case 1 and click **Generate dates** to convert every numeric `t_infection` into a real `date_infection` — that is all it takes to turn a branching-process simulation into a fully-formed outbreak line list.
+
+```{ojs}
+//| echo: false
+
+viewof bp_sim = {
+  // ── 1. WRAPPER + STYLE ─────────────────────────────────────
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = `
+    display:flex;flex-direction:column;width:100%;max-width:980px;
+    margin:0 auto;font-family:system-ui,-apple-system,sans-serif;
+    touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  `;
+  wrapper.appendChild(injectStyle());
+
+  // ── 2. RANDOM-NUMBER + DENSITY HELPERS ─────────────────────
+  function randn() {
+    let u = 0, v = 0;
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
+    return Math.sqrt(-2*Math.log(u)) * Math.cos(2*Math.PI*v);
+  }
+  // Marsaglia–Tsang. Returns Gamma(shape, scale) — mean = shape*scale.
+  function sampleGamma(shape, scale) {
+    if (shape < 1) return sampleGamma(shape + 1, scale) * Math.pow(Math.random(), 1/shape);
+    const d = shape - 1/3, c = 1/Math.sqrt(9*d);
+    while (true) {
+      let x, v;
+      do { x = randn(); v = 1 + c*x; } while (v <= 0);
+      v = v*v*v;
+      const u = Math.random();
+      if (u < 1 - 0.0331*Math.pow(x, 4)) return d*v*scale;
+      if (Math.log(u) < 0.5*x*x + d*(1 - v + Math.log(v))) return d*v*scale;
+    }
+  }
+  function samplePoisson(lambda) {
+    if (lambda <= 0) return 0;
+    if (lambda < 30) {
+      const L = Math.exp(-lambda);
+      let kk = 0, p = 1;
+      do { kk++; p *= Math.random(); } while (p > L);
+      return kk - 1;
+    }
+    return Math.max(0, Math.round(lambda + Math.sqrt(lambda)*randn()));
+  }
+  // Negative binomial NB(mean=R, dispersion=k) via the Poisson–Gamma mixture:
+  //   λ ~ Gamma(shape=k, scale=R/k),  Y | λ ~ Poisson(λ).
+  // Then E[Y] = R and Var[Y] = R + R²/k — the Lloyd-Smith parameterisation.
+  function sampleNB(R, k) {
+    if (R <= 0) return 0;
+    if (k > 100) return samplePoisson(R);
+    const lambda = sampleGamma(k, R/k);
+    return samplePoisson(lambda);
+  }
+  function logGamma(z) {
+    const p = [0.99999999999980993, 676.5203681218851, -1259.1392167224028,
+               771.32342877765313, -176.61502916214059, 12.507343278686905,
+               -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+    if (z < 0.5) return Math.log(Math.PI/Math.sin(Math.PI*z)) - logGamma(1 - z);
+    z -= 1;
+    let x = p[0];
+    for (let i = 1; i < 9; i++) x += p[i]/(z + i);
+    const t = z + 7.5;
+    return 0.5*Math.log(2*Math.PI) + (z + 0.5)*Math.log(t) - t + Math.log(x);
+  }
+  function gammaPdf(x, shape, scale) {
+    if (x <= 0) return 0;
+    const lp = (shape - 1)*Math.log(x) - x/scale - shape*Math.log(scale) - logGamma(shape);
+    return Math.exp(lp);
+  }
+  // P(Y=y) = Γ(y+k)/(Γ(k) y!) · (k/(k+R))^k · (R/(k+R))^y  — same NB parameterisation as the sampler.
+  function nbPmf(y, R, k) {
+    if (R <= 0) return y === 0 ? 1 : 0;
+    const lp = logGamma(y + k) - logGamma(k) - logGamma(y + 1)
+               + k*Math.log(k/(k+R)) + y*Math.log(R/(k+R));
+    return Math.exp(lp);
+  }
+  function meanSdToShapeScale(m, s) {
+    return { shape: (m*m)/(s*s), scale: (s*s)/m };
+  }
+
+  // ── 3. TOP CONTROL ROW — Step / Auto / Reset ────────────────
+  // The simulation always starts with exactly one index case (case id = 1) at t = 0.
+  const SL = {};
+  const btnStep  = createButton("▶  Step",  "step");
+  const btnAuto  = createButton("⏩  Auto",  "auto");
+  const btnReset = createButton("↺  Reset", "reset");
+  const btnGroup = document.createElement("div");
+  btnGroup.style.cssText = "display:flex;gap:10px;width:100%;margin-bottom:14px;";
+  btnGroup.appendChild(btnStep.el);
+  btnGroup.appendChild(btnAuto.el);
+  btnGroup.appendChild(btnReset.el);
+  wrapper.appendChild(btnGroup);
+
+  // ── 4. DIST ROW — NB box + GI box, ALWAYS side by side ─────
+  // Pattern lifted from sir-sto.qmd: flex-wrap:nowrap on the parent + flex:1 1 0;min-width:0
+  // on each child forces the two boxes to share the row equally at every viewport width.
+  const distRow = document.createElement("div");
+  distRow.style.cssText = "display:flex;gap:14px;width:100%;margin-bottom:14px;flex-wrap:nowrap;";
+  wrapper.appendChild(distRow);
+
+  // helper to make a panel with a coloured header. `mode` controls layout:
+  //   "half"  — sits inside distRow; flex:1 1 0 + min-width:0 so two boxes share the row
+  //   "full"  — full-width block (tree, line list)
+  function makeBox(badge, title, subtitle, color, mode) {
+    const p = document.createElement("div");
+    const flexCss = mode === "half"
+      ? "flex:1 1 0;min-width:0;"
+      : "width:100%;";
+    p.style.cssText = `${flexCss}background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(15,23,42,0.04);`;
+    const h = document.createElement("div");
+    h.style.cssText = "padding:10px 14px;background:linear-gradient(135deg,#1e293b,#334155);color:#fff;display:flex;justify-content:space-between;align-items:center;gap:6px;";
+    h.innerHTML = `
+      <span style="font-size:12px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;display:flex;align-items:center;gap:8px;min-width:0;">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:${color};color:#fff;font-size:11px;font-weight:800;flex-shrink:0;">${badge}</span>
+        <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${title}</span>
+      </span>
+      <span style="font-style:italic;font-family:'Latin Modern Math','STIX Two Math',serif;font-size:13px;opacity:0.92;flex-shrink:0;">${subtitle}</span>
+    `;
+    p.appendChild(h);
+    return p;
+  }
+
+  // ── 4a. OFFSPRING (NB) BOX — sliders R/k + pmf ─────────────
+  const nbPanel = makeBox("1", "Offspring distribution", "Z ~ NB(R, k)", "#7c3aed", "half");
+  SL.R = createSlider("R", 0.1, 5.0, 0.1, 2.7, "#7c3aed", "purple");
+  SL.k = createSlider("k", 0.1, 10.0, 0.1, 7.0, "#d97706", "amber");
+  styleMathLabel(SL.R, SL.k);
+  const nbCtl = document.createElement("div");
+  nbCtl.style.cssText = "padding:14px;display:flex;gap:18px;border-bottom:1px solid #e2e8f0;flex-wrap:wrap;";
+  nbCtl.appendChild(SL.R.el);
+  nbCtl.appendChild(SL.k.el);
+  nbPanel.appendChild(nbCtl);
+
+  const NBW = 460, NBH = 200, nbM = { t: 14, r: 14, b: 26, l: 30 };
+  const nbSvg = d3.create("svg").attr("viewBox", `0 0 ${NBW} ${NBH}`).attr("width", "100%").style("display","block").style("background","#fafbfc");
+  const nbG  = nbSvg.append("g").attr("transform", `translate(${nbM.l}, ${nbM.t})`);
+  const nbInnerW = NBW - nbM.l - nbM.r, nbInnerH = NBH - nbM.t - nbM.b;
+  const nbBarsG  = nbG.append("g");
+  const nbAxisG  = nbG.append("g").attr("transform", `translate(0, ${nbInnerH})`);
+  const nbMarker = nbG.append("g").style("opacity", 0);
+  nbMarker.append("rect").attr("class", "nbHL").attr("y", 0).attr("height", nbInnerH)
+    .attr("fill", "#7c3aed").attr("opacity", 0.22);
+  nbMarker.append("text").attr("class", "nbLbl").attr("text-anchor", "middle")
+    .attr("font-family", `"SF Mono",monospace`).attr("font-size", 11).attr("font-weight", 800).attr("fill", "#6d28d9");
+  nbPanel.appendChild(nbSvg.node());
+  distRow.appendChild(nbPanel);
+
+  // ── 4b. GI BOX — sliders mean/sd + gamma curve ─────────────
+  const giPanel = makeBox("2", "Generation interval", "GI ~ Gamma", "#3b82f6", "half");
+  SL.gim = createSlider("GI mean", 1.0, 15.0, 0.5, 5.0, "#3b82f6", "blue");
+  SL.gis = createSlider("GI sd",   0.5,  8.0, 0.1, 2.0, "#3b82f6", "blue");
+  const giCtl = document.createElement("div");
+  giCtl.style.cssText = "padding:14px;display:flex;gap:18px;border-bottom:1px solid #e2e8f0;flex-wrap:wrap;";
+  giCtl.appendChild(SL.gim.el);
+  giCtl.appendChild(SL.gis.el);
+  giPanel.appendChild(giCtl);
+
+  const GIW = 460, GIH = 200, giM = { t: 14, r: 14, b: 26, l: 30 };
+  const giSvg = d3.create("svg").attr("viewBox", `0 0 ${GIW} ${GIH}`).attr("width", "100%").style("display","block").style("background","#fafbfc");
+  const giSvgG = giSvg.append("g").attr("transform", `translate(${giM.l}, ${giM.t})`);
+  const giInnerW = GIW - giM.l - giM.r, giInnerH = GIH - giM.t - giM.b;
+  const giDefs = giSvg.append("defs");
+  const giGrad = giDefs.append("linearGradient").attr("id", "bp-gi-grad").attr("x1",0).attr("y1",0).attr("x2",0).attr("y2",1);
+  giGrad.append("stop").attr("offset","0%").attr("stop-color","#3b82f6").attr("stop-opacity",0.32);
+  giGrad.append("stop").attr("offset","100%").attr("stop-color","#3b82f6").attr("stop-opacity",0.04);
+  const giArea  = giSvgG.append("path").attr("fill", "url(#bp-gi-grad)");
+  const giCurve = giSvgG.append("path").attr("fill", "none").attr("stroke", "#3b82f6").attr("stroke-width", 2.5).attr("stroke-linejoin","round");
+  const giAxisG = giSvgG.append("g").attr("transform", `translate(0, ${giInnerH})`);
+  // Multi-marker group: one batch of GI samples at a time (one dot per offspring of the
+  // current parent), all drawn together so the user sees the whole "draw N times" step.
+  const giMarkersG = giSvgG.append("g").attr("class", "gi-markers");
+  giPanel.appendChild(giSvg.node());
+  distRow.appendChild(giPanel);
+
+  // ── 5. BRANCHING TREE PANEL ────────────────────────────────
+  const treePanel = makeBox("3", "Branching tree", "node placed at t_infection", "#0891b2", "full");
+  treePanel.style.marginBottom = "14px";
+
+  const TW = 960, TH = 300;
+  const tMargin = { t: 26, r: 18, b: 32, l: 18 };
+  const treeSvg = d3.create("svg")
+    .attr("viewBox", `0 0 ${TW} ${TH}`)
+    .attr("width", "100%")
+    .style("display", "block")
+    .style("background", "#fafbfc");
+  const tInner = treeSvg.append("g").attr("transform", `translate(${tMargin.l}, ${tMargin.t})`);
+  const tInnerW = TW - tMargin.l - tMargin.r;
+  const tInnerH = TH - tMargin.t - tMargin.b;
+  // Layer order (back→front): grid, axis ticks, edges, nodes
+  const gridG  = tInner.append("g").attr("class", "grid");
+  const xAxisG = tInner.append("g").attr("transform", `translate(0, ${tInnerH})`);
+  const edgesG = tInner.append("g");
+  const nodesG = tInner.append("g");
+  treeSvg.append("text")
+    .attr("x", TW/2).attr("y", TH - 8)
+    .attr("text-anchor", "middle")
+    .attr("font-family", "system-ui").attr("font-size", 11).attr("fill", "#475569")
+    .text("infection time t (days from t = 0)");
+  treePanel.appendChild(treeSvg.node());
+  wrapper.appendChild(treePanel);
+
+  // ── 6. STATUS LINE ─────────────────────────────────────────
+  const status = document.createElement("div");
+  status.style.cssText = `font-family:"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;color:#475569;margin-bottom:10px;display:flex;gap:18px;flex-wrap:wrap;`;
+  wrapper.appendChild(status);
+
+  // ── 7. LINE LIST PANEL (with date input + button) ──────────
+  const tablePanel = makeBox("4", "Line list", "one row per case", "#0891b2", "full");
+
+  const dateRow = document.createElement("div");
+  dateRow.style.cssText = "padding:10px 14px;border-bottom:1px solid #e2e8f0;background:#f8fafc;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13px;color:#475569;";
+  const dateLabel = document.createElement("label");
+  dateLabel.textContent = "Start date (case 1):";
+  dateLabel.style.cssText = "font-weight:600;color:#334155;";
+  const dateInput = document.createElement("input");
+  dateInput.type = "date";
+  dateInput.value = "2026-01-01";
+  dateInput.style.cssText = "padding:6px 10px;border:1px solid #cbd5e1;border-radius:6px;font-family:'SF Mono',monospace;font-size:13px;color:#0f172a;background:#fff;";
+  const dateBtn = document.createElement("button");
+  dateBtn.textContent = "Generate dates";
+  dateBtn.style.cssText = "padding:7px 14px;border:1px solid #2563eb;background:#3b82f6;color:#fff;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.12s;";
+  dateBtn.addEventListener("mouseover", () => dateBtn.style.background = "#2563eb");
+  dateBtn.addEventListener("mouseout",  () => dateBtn.style.background = "#3b82f6");
+  const dateHint = document.createElement("span");
+  dateHint.style.cssText = "font-size:12px;color:#64748b;";
+  dateHint.textContent = "→ converts t_infection (days) into calendar dates";
+  dateRow.appendChild(dateLabel);
+  dateRow.appendChild(dateInput);
+  dateRow.appendChild(dateBtn);
+  dateRow.appendChild(dateHint);
+  tablePanel.appendChild(dateRow);
+
+  const tableScroll = document.createElement("div");
+  // position:relative makes child <tr>.offsetTop be measured relative to this
+  // scroll container, which lets scrollTableToCase() jump to a row precisely.
+  tableScroll.style.cssText = "max-height:300px;overflow:auto;position:relative;";
+  const table = document.createElement("table");
+  table.style.cssText = `width:100%;border-collapse:collapse;font-family:"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;`;
+  table.innerHTML = `
+    <thead style="background:#f1f5f9;color:#334155;position:sticky;top:0;z-index:1;">
+      <tr>
+        <th style="padding:8px 10px;text-align:left;border-bottom:1px solid #e2e8f0;">id</th>
+        <th style="padding:8px 10px;text-align:left;border-bottom:1px solid #e2e8f0;">infector_id</th>
+        <th style="padding:8px 10px;text-align:right;border-bottom:1px solid #e2e8f0;">generation</th>
+        <th style="padding:8px 10px;text-align:right;border-bottom:1px solid #e2e8f0;">t_infection</th>
+        <th style="padding:8px 10px;text-align:right;border-bottom:1px solid #e2e8f0;">date_infection</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  `;
+  tableScroll.appendChild(table);
+  tablePanel.appendChild(tableScroll);
+  wrapper.appendChild(tablePanel);
+  const tbody = table.querySelector("tbody");
+
+  // ── 8. STATE ───────────────────────────────────────────────
+  const MAX_CASES = 60;
+  let cases = [];                 // every node ever created (incl. pending placeholders)
+  let processingQueue = [];       // case indices waiting to be a parent (BFS order)
+  let parentIdx = null;           // current parent being processed
+  let pendingChildren = [];       // child case indices waiting for GI sample
+  let phase = "idle";             // "offspring" | "gi" | "idle"
+  let auto = false, autoTimer = null;
+  let hoverId = null, stickyId = null;
+  let lastStartDate = null;       // remembered after Generate dates
+  let nbInfo = null, giInfo = null;
+
+  function curParams() {
+    return {
+      R: SL.R.val(), k: SL.k.val(),
+      gi: meanSdToShapeScale(SL.gim.val(), SL.gis.val())
+    };
+  }
+  function curHighId() { return stickyId !== null ? stickyId : hoverId; }
+
+  // ── 9. DRAW HELPERS ────────────────────────────────────────
+  function drawNB() {
+    const { R, k } = curParams();
+    nbBarsG.selectAll("*").remove();
+    nbAxisG.selectAll("*").remove();
+    const yMax = Math.min(20, Math.max(8, Math.round(R + 4*Math.sqrt(R + R*R/Math.max(0.1,k)))));
+    const ys = d3.range(0, yMax + 1);
+    const pmf = ys.map(y => nbPmf(y, R, k));
+    const pmax = Math.max(0.01, d3.max(pmf));
+    const bw = nbInnerW / ys.length;
+    nbBarsG.selectAll("rect").data(ys).enter().append("rect")
+      .attr("x", (d, i) => i*bw + 1)
+      .attr("y", (d, i) => nbInnerH - (pmf[i]/pmax)*nbInnerH)
+      .attr("width", Math.max(2, bw - 2))
+      .attr("height", (d, i) => (pmf[i]/pmax)*nbInnerH)
+      .attr("fill", "#7c3aed").attr("opacity", 0.55);
+    const tickStep = ys.length > 12 ? Math.ceil(ys.length / 8) : 1;
+    for (let i = 0; i < ys.length; i += tickStep) {
+      nbAxisG.append("text")
+        .attr("x", i*bw + bw/2).attr("y", 14)
+        .attr("text-anchor", "middle")
+        .attr("font-family", `"SF Mono",monospace`).attr("font-size", 10).attr("fill", "#64748b")
+        .text(ys[i]);
+    }
+    nbAxisG.append("text")
+      .attr("x", nbInnerW).attr("y", 14)
+      .attr("text-anchor", "end")
+      .attr("font-family", "system-ui").attr("font-size", 10).attr("fill", "#475569")
+      .text("y (offspring)");
+    return { ys, bw };
+  }
+
+  function drawGI() {
+    const { gi } = curParams();
+    const mean = gi.shape * gi.scale;
+    const sd   = Math.sqrt(gi.shape) * gi.scale;
+    const xMax = Math.max(4, mean + 4*sd);
+    const N = 100;
+    const data = d3.range(N + 1).map(i => {
+      const x = xMax * i / N;
+      return { x, y: gammaPdf(x, gi.shape, gi.scale) };
+    });
+    const yMax = Math.max(1e-6, d3.max(data, d => d.y));
+    const xS = d3.scaleLinear().domain([0, xMax]).range([0, giInnerW]);
+    const yS = d3.scaleLinear().domain([0, yMax * 1.05]).range([giInnerH, 0]);
+    const lineFn = d3.line().x(d => xS(d.x)).y(d => yS(d.y));
+    const areaFn = d3.area().x(d => xS(d.x)).y0(giInnerH).y1(d => yS(d.y));
+    giCurve.datum(data).attr("d", lineFn);
+    giArea .datum(data).attr("d", areaFn);
+    giAxisG.selectAll("*").remove();
+    const ticks = xS.ticks(6);
+    for (const t of ticks) {
+      giAxisG.append("text")
+        .attr("x", xS(t)).attr("y", 14)
+        .attr("text-anchor", "middle")
+        .attr("font-family", `"SF Mono",monospace`).attr("font-size", 10).attr("fill", "#64748b")
+        .text(t);
+    }
+    giAxisG.append("text")
+      .attr("x", giInnerW).attr("y", 14)
+      .attr("text-anchor", "end")
+      .attr("font-family", "system-ui").attr("font-size", 10).attr("fill", "#475569")
+      .text("days");
+    return { xS, yS, shape: gi.shape, scale: gi.scale };
+  }
+
+  function rebuildDistributions() {
+    nbInfo = drawNB();
+    giInfo = drawGI();
+    nbMarker.style("opacity", 0);
+    giMarkersG.selectAll("*").remove();
+  }
+
+  function flashNBMarker(Y) {
+    if (!nbInfo) return;
+    const { ys, bw } = nbInfo;
+    if (Y > ys[ys.length - 1]) return;
+    const x = Y*bw + bw/2;
+    nbMarker.select(".nbHL").attr("x", Y*bw + 1).attr("width", Math.max(2, bw - 2));
+    nbMarker.select(".nbLbl").attr("x", x).attr("y", 12).text(`Y=${Y}`);
+    nbMarker.style("opacity", 0).transition().duration(220).style("opacity", 1);
+  }
+
+  // Show one dot per GI sample for the current parent's litter — all at once.
+  // Old markers from the previous parent are cleared so the plot always shows
+  // exactly the most-recent batch.
+  function flashGIMarkers(values) {
+    giMarkersG.selectAll("*").remove();
+    if (!giInfo || values.length === 0) return;
+    const xS = giInfo.xS, yS = giInfo.yS;
+    const xMaxDomain = xS.domain()[1];
+    values.forEach((v, i) => {
+      const vClamped = Math.max(0, Math.min(v, xMaxDomain));
+      const xC = xS(vClamped);
+      const yC = yS(gammaPdf(vClamped, giInfo.shape, giInfo.scale));
+      const m = giMarkersG.append("g").attr("opacity", 0);
+      m.append("line")
+        .attr("x1", xC).attr("x2", xC)
+        .attr("y1", yC).attr("y2", giInnerH)
+        .attr("stroke", "#1d4ed8").attr("stroke-width", 1.6)
+        .attr("stroke-dasharray", "3 3").attr("opacity", 0.75);
+      m.append("circle")
+        .attr("cx", xC).attr("cy", yC).attr("r", 5)
+        .attr("fill", "#3b82f6")
+        .attr("stroke", "#fff").attr("stroke-width", 1.8);
+      m.append("text")
+        .attr("x", xC).attr("y", yC - 9)
+        .attr("text-anchor", "middle")
+        .attr("font-family", `"SF Mono",monospace`).attr("font-size", 10)
+        .attr("font-weight", 700).attr("fill", "#1e3a8a")
+        .text(v.toFixed(1));
+      m.transition().duration(220).delay(i * 70).attr("opacity", 1);
+    });
+  }
+
+  // ── 9b. TREE DRAW (handles pending placeholders + slide-in) ─
+  function drawTree() {
+    if (cases.length === 0) {
+      gridG.selectAll("*").remove();
+      edgesG.selectAll("*").remove();
+      nodesG.selectAll("*").remove();
+      xAxisG.selectAll("*").remove();
+      return;
+    }
+    const tMax = Math.max(1, d3.max(cases, c => c.t_inf));
+    const xS = d3.scaleLinear().domain([0, tMax * 1.1 + 0.5]).range([0, tInnerW]);
+
+    // Grid + bottom axis
+    gridG.selectAll("*").remove();
+    xAxisG.selectAll("*").remove();
+    const ticks = xS.ticks(8);
+    for (const t of ticks) {
+      gridG.append("line")
+        .attr("x1", xS(t)).attr("x2", xS(t))
+        .attr("y1", 0).attr("y2", tInnerH)
+        .attr("stroke", "#eef2f6").attr("stroke-width", 1);
+      xAxisG.append("line")
+        .attr("x1", xS(t)).attr("x2", xS(t)).attr("y1", 0).attr("y2", 4)
+        .attr("stroke", "#94a3b8");
+      xAxisG.append("text")
+        .attr("x", xS(t)).attr("y", 17).attr("text-anchor", "middle")
+        .attr("font-family", `"SF Mono",monospace`).attr("font-size", 10).attr("fill", "#64748b")
+        .text(t);
+    }
+    xAxisG.append("line")
+      .attr("x1", 0).attr("x2", tInnerW).attr("y1", 0).attr("y2", 0)
+      .attr("stroke", "#cbd5e1");
+
+    // Edges — pending edges dashed/lighter, finalized solid mid-grey
+    const edgeData = cases.filter(c => c.infectorId !== null);
+    const eSel = edgesG.selectAll("path").data(edgeData, c => c.id);
+    eSel.exit().remove();
+    eSel.enter().append("path")
+      .attr("fill", "none")
+      .attr("stroke-width", 1.6)
+      .attr("opacity", 0.9)
+      .attr("stroke-linecap", "round")
+      .merge(eSel)
+      .attr("stroke", c => c.pending ? "#cbd5e1" : "#94a3b8")
+      .attr("stroke-dasharray", c => c.pending ? "3 3" : null)
+      .transition().duration(350)
+      .attr("d", c => {
+        const p = cases.find(x => x.id === c.infectorId);
+        if (!p) return "";
+        const x1 = xS(p.t_inf), y1 = p.y;
+        const x2 = xS(c.t_inf), y2 = c.y;
+        const mx = (x1 + x2) / 2;
+        return `M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`;
+      });
+
+    // Nodes — translate the whole g so the slide-in transition is one attr.
+    // Every visual attribute is set up-front on append (fill, stroke, r) so the
+    // dot is *always* visible even before applyVisualState runs. applyVisualState
+    // is only used to update those attributes when state (highlight / pending /
+    // active-parent) changes.
+    const sel = nodesG.selectAll("g.case-row").data(cases, c => c.id);
+    sel.exit().remove();
+    const enter = sel.enter().append("g")
+      .attr("class", "case-row")
+      .attr("data-id", c => c.id)
+      .style("cursor", "pointer")
+      .attr("transform", c => `translate(${xS(c.t_inf)}, ${c.y})`);
+    // Active-parent dashed ring (drawn behind the dot)
+    enter.append("circle").attr("class", "ring")
+      .attr("r", 12).attr("fill", "none")
+      .attr("stroke", "#0891b2").attr("stroke-width", 1.5)
+      .attr("stroke-dasharray", "2 3").attr("opacity", 0);
+    // The dot itself — fill set explicitly at creation
+    enter.append("circle").attr("class", "inf")
+      .attr("r", 6)
+      .attr("fill",   c => c.pending ? "#ffffff" : "#7c3aed")
+      .attr("stroke", c => c.pending ? "#7c3aed" : "#ffffff")
+      .attr("stroke-width", c => c.pending ? 2 : 1.8)
+      .attr("stroke-dasharray", c => c.pending ? "2,2" : null);
+    enter.append("text").attr("class", "lbl")
+      .attr("dy", -10).attr("text-anchor", "middle")
+      .attr("font-family", `"SF Mono",monospace`).attr("font-size", 10)
+      .attr("font-weight", 700).attr("fill", "#334155")
+      .text(c => c.id);
+    // Generous transparent hit-area for easy hover/touch
+    enter.append("circle").attr("class", "hit")
+      .attr("r", 16).attr("fill", "transparent");
+
+    enter
+      .on("pointerenter", (e, c) => { hoverId = c.id; applyVisualState(); })
+      .on("pointerleave", () => { hoverId = null; applyVisualState(); })
+      .on("click", (e, c) => {
+        stickyId = (stickyId === c.id) ? null : c.id;
+        hoverId = null;
+        applyVisualState();
+        // When the user picks a node, jump the line list straight to its row
+        // so they don't have to hunt for it in a long table.
+        if (stickyId !== null) scrollTableToCase(stickyId);
+      });
+
+    enter.merge(sel)
+      .transition().duration(350)
+      .attr("transform", c => `translate(${xS(c.t_inf)}, ${c.y})`);
+
+    applyVisualState();
+  }
+
+  // Applies the highlight (sticky or hover) and pending styles to tree + table.
+  // Also lights up the "active parent" — the case currently being processed —
+  // with a dashed teal ring so the user can see who Step is about to act on.
+  // We use .each() and walk children explicitly so attribute callbacks always
+  // see the correct datum, regardless of how d3 propagates data through select().
+  function applyVisualState() {
+    const id = curHighId();
+    const lastFinal = [...cases].reverse().find(c => !c.pending);
+    const activeParentId = (parentIdx !== null && cases[parentIdx]) ? cases[parentIdx].id : null;
+
+    nodesG.selectAll("g.case-row").each(function(c) {
+      const g = d3.select(this);
+      const isHigh   = c.id === id;
+      const isActive = c.id === activeParentId && phase !== "idle";
+      g.select(".ring").attr("opacity", isActive ? 0.85 : 0);
+      g.select(".inf")
+        .attr("fill",   isHigh ? "#f59e0b" : (c.pending ? "#ffffff" : "#7c3aed"))
+        .attr("stroke", isHigh ? "#0f172a" : (c.pending ? "#7c3aed" : "#ffffff"))
+        .attr("stroke-width", isHigh ? 3 : (c.pending ? 2 : 1.8))
+        .attr("stroke-dasharray", c.pending && !isHigh ? "2,2" : null)
+        .attr("r", isHigh ? 8 : (lastFinal && c.id === lastFinal.id ? 7 : 6));
+      g.select(".lbl").text(c.id);
+    });
+
+    // Table rows — only override background when highlighted; otherwise let any
+    // active "flash" (newly inserted row) keep its CSS transition uninterrupted.
+    tbody.querySelectorAll("tr[data-id]").forEach(tr => {
+      const matches = id !== null && +tr.dataset.id === id;
+      if (matches) {
+        tr.style.background = "#fde68a";
+        tr.style.fontWeight = "700";
+      } else {
+        tr.style.fontWeight = "";
+        if (tr.dataset.flashing !== "1") tr.style.background = "";
+      }
+    });
+  }
+
+  // Format a JS Date in dd-mm-yyyy using UTC fields. UTC throughout (in both
+  // parse and format) means the displayed date never drifts from the typed one.
+  function fmtUTCDate(d) {
+    const yyyy = d.getUTCFullYear();
+    const mm   = String(d.getUTCMonth() + 1).padStart(2, "0");
+    const dd   = String(d.getUTCDate()).padStart(2, "0");
+    return `${dd}-${mm}-${yyyy}`;
+  }
+  // Round t_infection to the nearest whole day before adding it to the start
+  // date — so a sample like 3.99 days lands on day 4 (start + 4), not day 3.
+  function dateForCase(c) {
+    if (!lastStartDate) return null;
+    const days = Math.round(c.t_inf);
+    const d = new Date(lastStartDate.getTime() + days * 86400000);
+    return fmtUTCDate(d);
+  }
+
+  // Smooth-scroll the line-list scroll container so the row for `id` lands
+  // near the vertical centre of the visible area. Used when the user clicks a
+  // node in the tree — long line lists no longer require manual scrolling.
+  function scrollTableToCase(id) {
+    const tr = tbody.querySelector(`tr[data-id="${id}"]`);
+    if (!tr) return;
+    const target = tr.offsetTop - tableScroll.clientHeight / 2 + tr.offsetHeight / 2;
+    tableScroll.scrollTo({
+      top: Math.max(0, target),
+      behavior: "smooth"
+    });
+  }
+
+  function addTableRow(c) {
+    if (c.pending) return;
+    const tr = document.createElement("tr");
+    tr.dataset.id = c.id;
+    tr.dataset.flashing = "1";
+    tr.style.cssText = "transition:background 1.4s ease;cursor:pointer;background:#fef3c7;";
+
+    let dateText = "—";
+    if (lastStartDate) { c.date_infection = dateForCase(c); dateText = c.date_infection; }
+
+    const cells = [
+      { text: String(c.id),                                       align: "left"  },
+      { text: c.infectorId === null ? "—" : String(c.infectorId), align: "left"  },
+      { text: String(c.gen),                                      align: "right" },
+      { text: c.t_inf.toFixed(2),                                 align: "right" },
+      { text: dateText,                                           align: "right", cls: "date-cell" }
+    ];
+    cells.forEach(cell => {
+      const td = document.createElement("td");
+      td.style.cssText = `padding:6px 10px;border-bottom:1px solid #f1f5f9;text-align:${cell.align};`;
+      if (cell.cls === "date-cell") {
+        td.className = "date-cell";
+        td.style.color = lastStartDate ? "#0f172a" : "#94a3b8";
+        td.style.fontWeight = lastStartDate ? "600" : "400";
+      }
+      td.textContent = cell.text;
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+
+    tr.addEventListener("pointerenter", () => { hoverId = c.id; applyVisualState(); });
+    tr.addEventListener("pointerleave", () => { hoverId = null; applyVisualState(); });
+    tr.addEventListener("click", () => {
+      stickyId = (stickyId === c.id) ? null : c.id;
+      hoverId = null;
+      applyVisualState();
+    });
+
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (curHighId() !== c.id) tr.style.background = "";
+    }));
+    setTimeout(() => {
+      tr.dataset.flashing = "0";
+      if (curHighId() !== c.id) tr.style.background = "";
+    }, 1400);
+
+    tableScroll.scrollTop = tableScroll.scrollHeight;
+  }
+
+  function rebuildTable() {
+    tbody.innerHTML = "";
+    cases.forEach(c => addTableRow(c));
+  }
+
+  function setStatus() {
+    const dp = curParams();
+    const finalCount = cases.filter(c => !c.pending).length;
+    let phaseText;
+    if (phase === "idle")           phaseText = "(idle — press Step to start, or Reset)";
+    else if (phase === "offspring") phaseText = `next step: sample Y from NB(R, k) for case ${cases[parentIdx].id}`;
+    else if (phase === "gi") {
+      const total = cases[parentIdx].Y;
+      phaseText = `next step: sample GI for all ${total} offspring of case ${cases[parentIdx].id}`;
+    }
+    status.innerHTML = `
+      <span><b>cases:</b> ${finalCount}/${MAX_CASES}</span>
+      <span><b>phase:</b> ${phaseText}</span>
+      <span><b>R</b>=${dp.R.toFixed(2)} · <b>k</b>=${dp.k.toFixed(2)}</span>
+      <span><b>GI</b> ~ Γ(shape=${dp.gi.shape.toFixed(2)}, scale=${dp.gi.scale.toFixed(2)})</span>
+    `;
+  }
+
+  function generateDates() {
+    const v = dateInput.value;     // "YYYY-MM-DD"
+    if (!v) return;
+    const parts = v.split("-").map(Number);
+    if (parts.length !== 3 || parts.some(isNaN)) return;
+    // Anchor the start date at UTC midnight so it never drifts when fmtUTCDate
+    // reads it back. (Date.UTC takes month as 0-indexed.)
+    const d = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+    if (isNaN(d.getTime())) return;
+    lastStartDate = d;
+    cases.forEach(c => { if (!c.pending) c.date_infection = dateForCase(c); });
+    tbody.querySelectorAll("tr[data-id]").forEach(tr => {
+      const id = +tr.dataset.id;
+      const c  = cases.find(x => x.id === id);
+      if (!c || !c.date_infection) return;
+      const cell = tr.querySelector(".date-cell");
+      if (cell) {
+        cell.textContent = c.date_infection;
+        cell.style.color = "#0f172a";
+        cell.style.fontWeight = "600";
+      }
+    });
+  }
+
+  // ── 10. SIM LOGIC ──────────────────────────────────────────
+  function pickNextParent() {
+    if (processingQueue.length > 0) {
+      parentIdx = processingQueue.shift();
+      phase = "offspring";
+    } else {
+      parentIdx = null;
+      phase = "idle";
+      stopAuto();
+    }
+  }
+
+  function reset() {
+    stopAuto();
+    cases = [];
+    processingQueue = [];
+    pendingChildren = [];
+    parentIdx = null;
+    phase = "idle";
+    hoverId = null;
+    stickyId = null;
+    rebuildDistributions();
+
+    // Always exactly one index case at t = 0, centred vertically in the tree.
+    const indexBudget = tInnerH;
+    cases.push({
+      id: 1,
+      infectorId: null,
+      gen: 0,
+      gi: 0,
+      t_inf: 0,
+      Y: 0,
+      y: indexBudget * 0.5,
+      yBudget: indexBudget,
+      pending: false
+    });
+    processingQueue.push(0);
+    pickNextParent();
+    drawTree();
+    rebuildTable();
+    setStatus();
+  }
+
+  function step() {
+    const finalCount = cases.filter(c => !c.pending).length;
+    if (finalCount >= MAX_CASES) { stopAuto(); return false; }
+    if (phase === "idle") return false;
+
+    const dp = curParams();
+
+    if (phase === "offspring") {
+      // 1) Sample Y for the current parent and immediately spawn Y placeholder
+      // children at the parent's time. The user sees the tree branch out before
+      // any GI is sampled — exactly the "first count, then time" decomposition.
+      const parent = cases[parentIdx];
+      const Y = sampleNB(dp.R, dp.k);
+      parent.Y = Y;
+      flashNBMarker(Y);
+      pendingChildren = [];
+      if (Y > 0) {
+        const slice = parent.yBudget / Y;
+        for (let j = 0; j < Y; j++) {
+          const childY = parent.y - parent.yBudget/2 + (j + 0.5) * slice;
+          cases.push({
+            id: cases.length + 1,
+            infectorId: parent.id,
+            gen: parent.gen + 1,
+            gi: null,
+            t_inf: parent.t_inf,    // placeholder — will slide right when GI is drawn
+            Y: 0,
+            y: Math.max(4, Math.min(tInnerH - 4, childY)),
+            yBudget: slice,
+            pending: true
+          });
+          pendingChildren.push(cases.length - 1);
+        }
+      }
+      drawTree();
+      if (pendingChildren.length > 0) phase = "gi";
+      else                            pickNextParent();
+      setStatus();
+      return true;
+    }
+
+    if (phase === "gi") {
+      // 2) Sample one GI per pending child of the current parent — all at once.
+      // The user sees a small swarm of dots land on the gamma curve simultaneously,
+      // and every placeholder slides to its true t_infection in the same beat.
+      const parent = cases[parentIdx];
+      const giSamples = [];
+      while (pendingChildren.length > 0) {
+        const childIdx = pendingChildren.shift();
+        const child = cases[childIdx];
+        const gi = sampleGamma(dp.gi.shape, dp.gi.scale);
+        child.gi = gi;
+        child.t_inf = parent.t_inf + gi;
+        child.pending = false;
+        processingQueue.push(childIdx);
+        giSamples.push(gi);
+        addTableRow(child);
+      }
+      flashGIMarkers(giSamples);
+      drawTree();
+      pickNextParent();
+      setStatus();
+      return true;
+    }
+    return false;
+  }
+
+  function startAuto() {
+    if (auto) return;
+    auto = true;
+    btnAuto.setText("⏸  Pause");
+    const tick = () => {
+      if (!auto) return;
+      const ok = step();
+      if (!ok) { stopAuto(); return; }
+      autoTimer = setTimeout(tick, 600);
+    };
+    tick();
+  }
+  function stopAuto() {
+    auto = false;
+    if (autoTimer) clearTimeout(autoTimer);
+    autoTimer = null;
+    btnAuto.setText("⏩  Auto");
+  }
+  function toggleAuto() { if (auto) stopAuto(); else startAuto(); }
+
+  // ── 11. WIRE-UP ────────────────────────────────────────────
+  for (const key of ["R", "k", "gim", "gis"]) {
+    SL[key].input.addEventListener("input", () => { SL[key].sync(); reset(); });
+  }
+  btnStep.el .addEventListener("click", () => { stopAuto(); step(); });
+  btnAuto.el .addEventListener("click", toggleAuto);
+  btnReset.el.addEventListener("click", reset);
+  dateBtn    .addEventListener("click", generateDates);
+
+  reset();
+  return wrapper;
+}
+```
+
+::: {.callout-tip}
+
+## Reading the simulation
+
+* **Box 1 — Offspring distribution** — the bar chart is the $\text{NB}(R, k)$ pmf, sampled exactly as $\lambda \sim \text{Gamma}(k, R/k)$, $Y \mid \lambda \sim \text{Poisson}(\lambda)$ so $\mathbb E[Y]=R$ and $\text{Var}[Y]=R+R^2/k$. Each "sample $Y$" step highlights the bar at the drawn value.
+* **Box 2 — Generation interval** — the gamma curve is parameterised by mean and sd. On the *single* "sample GI" step that follows, **one dot per offspring** lands on the curve at the same time so you can see the whole batch of intervals being drawn together.
+* **Branching tree** — every press of **Step** alternates between two beats for the case ringed in dashed teal: first beat samples $Y$ and spawns $Y$ dashed placeholder offspring at the parent's time; the very next beat samples all $Y$ generation intervals at once, slides every placeholder to its true $t_\text{infection}$, and appends one row per child to the line list. The next parent is then picked in BFS order.
+* **Tree ↔ Line list linkage** — hover or tap any case in either view; the matching node and row light up in amber. Tap again to clear the selection.
+* **Date generation** — type a real-world calendar date for case 1 and click **Generate dates**: the `date_infection` column instantly fills in for every case as `start_date + t_infection days`. Any cases generated afterwards inherit the same conversion automatically — that's how a numeric simulation becomes a real line list.
+
+:::
+
