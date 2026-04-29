@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>20&nbsp; Vaccination – Infectious disease modelling for babies</title>
+<title>14&nbsp; Cross validation – Infectious disease modelling for babies</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -50,8 +30,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./vax-perf.html" rel="next">
-<link href="./ftc.html" rel="prev">
+<link href="./rnum.html" rel="next">
+<link href="./mod-sel.html" rel="prev">
 <link href="./logo-icon.svg" rel="icon" type="image/svg+xml">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -142,7 +122,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intv.html">Interventions</a></li><li class="breadcrumb-item"><a href="./vax.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Vaccination</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mod-sel.html">Model selection</a></li><li class="breadcrumb-item"><a href="./cv.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Cross validation</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -294,14 +274,14 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="./mod-sel.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Model selection</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./cv.html" class="sidebar-item-text sidebar-link">
+  <a href="./cv.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Cross validation</span></span></a>
   </div>
 </li>
@@ -346,11 +326,11 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="./intv.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Interventions</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ftc.html" class="sidebar-item-text sidebar-link">
@@ -359,7 +339,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./vax.html" class="sidebar-item-text sidebar-link active">
+  <a href="./vax.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Vaccination</span></span></a>
   </div>
 </li>
@@ -498,29 +478,15 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="3">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#vaccines" id="toc-vaccines" class="nav-link active" data-scroll-target="#vaccines"><span class="header-section-number">20.1</span> Vaccines</a>
-  <ul>
-  <li><a href="#definitions" id="toc-definitions" class="nav-link" data-scroll-target="#definitions"><span class="header-section-number">20.1.1</span> Definitions</a></li>
-  <li><a href="#classification" id="toc-classification" class="nav-link" data-scroll-target="#classification"><span class="header-section-number">20.1.2</span> Classification</a></li>
-  </ul></li>
-  <li><a href="#innate-vs-adaptive-immune-system" id="toc-innate-vs-adaptive-immune-system" class="nav-link" data-scroll-target="#innate-vs-adaptive-immune-system"><span class="header-section-number">20.2</span> Innate vs adaptive immune system</a></li>
-  <li><a href="#prevent-infection-vs-disease" id="toc-prevent-infection-vs-disease" class="nav-link" data-scroll-target="#prevent-infection-vs-disease"><span class="header-section-number">20.3</span> Prevent infection vs disease</a></li>
-  <li><a href="#non-specific-effects" id="toc-non-specific-effects" class="nav-link" data-scroll-target="#non-specific-effects"><span class="header-section-number">20.4</span> Non-specific effects</a></li>
-  <li><a href="#factors-affecting-vaccine-protection" id="toc-factors-affecting-vaccine-protection" class="nav-link" data-scroll-target="#factors-affecting-vaccine-protection"><span class="header-section-number">20.5</span> Factors affecting vaccine protection</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intv.html">Interventions</a></li><li class="breadcrumb-item"><a href="./vax.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Vaccination</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mod-sel.html">Model selection</a></li><li class="breadcrumb-item"><a href="./cv.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Cross validation</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Vaccination</span></h1>
+<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Cross validation</span></h1>
 </div>
 
 
@@ -537,73 +503,8 @@ window.Quarto = {
 </header>
 
 
-<section id="vaccines" class="level2" data-number="20.1">
-<h2 data-number="20.1" class="anchored" data-anchor-id="vaccines"><span class="header-section-number">20.1</span> Vaccines</h2>
-<section id="definitions" class="level3" data-number="20.1.1">
-<h3 data-number="20.1.1" class="anchored" data-anchor-id="definitions"><span class="header-section-number">20.1.1</span> Definitions</h3>
-<p>A vaccine is a biological product that can be used to safely induce an <strong>immune response</strong> that confers protection against infection and/or disease on subsequent exposure to a pathogen <span class="citation" data-cites="pollard2021">(<a href="references.html#ref-pollard2021" role="doc-biblioref">Pollard &amp; Bijker, 2021</a>)</span>.</p>
-</section>
-<section id="classification" class="level3" data-number="20.1.2">
-<h3 data-number="20.1.2" class="anchored" data-anchor-id="classification"><span class="header-section-number">20.1.2</span> Classification</h3>
-<p>Over the past few decades, new vaccine platforms have been developed including viral vectors, nucleic acid-based RNA and DNA vaccines, and virus-like particles. However, traditionally vaccines are classified as live or non-live:</p>
-<ol type="1">
-<li>Live:</li>
-</ol>
-<ul>
-<li><p>Are developed so that, in an immunocompetent host, they replicate sufficiently to produce a strong immune response, but not so much as to cause significant disease manifestations.</p></li>
-<li><p>Trade-off between strong immune response and avoid symptomatic disease, therefore some live attenuated vaccines require multiple doses and induce relatively short-lived immunity. For example, 5% of children will develop a rash and up to 15% fever after measles vaccination</p></li>
-<li><p>Potentially replicate in an uncontrolled manner in immuno-compromised individuals.</p></li>
-<li><p>Examples: measles, mumps, rubella and rotavirus, oral polio vaccine, the Mycobacterium bovis bacillus Calmette–Guérin (BCG) vaccine for TB and live attenuated influenza vaccine</p></li>
-</ul>
-<ol start="2" type="1">
-<li>Non-live: no risk to immunocompromised individuals (although may not confer protection in those with B cell or combined immunodeficiency).</li>
-</ol>
-<p>B cells</p>
-<ul>
-<li>Produce antibodies (<strong>humoral</strong> immunity).</li>
-</ul>
-<p>T cells</p>
-<ul>
-<li>Directly attack infected cells (<strong>cellular</strong> immunity).</li>
-</ul>
-<ol type="1">
-<li><p>Killer (cytotoxic):</p></li>
-<li><p>Helper: subtypes by profiles of cytokine production</p></li>
-</ol>
-</section>
-</section>
-<section id="innate-vs-adaptive-immune-system" class="level2" data-number="20.2">
-<h2 data-number="20.2" class="anchored" data-anchor-id="innate-vs-adaptive-immune-system"><span class="header-section-number">20.2</span> Innate vs adaptive immune system</h2>
-</section>
-<section id="prevent-infection-vs-disease" class="level2" data-number="20.3">
-<h2 data-number="20.3" class="anchored" data-anchor-id="prevent-infection-vs-disease"><span class="header-section-number">20.3</span> Prevent infection vs disease</h2>
-<p>Some evidence showed that BCG vaccine can prevent both infection and disease <span class="citation" data-cites="pollard2021">(<a href="references.html#ref-pollard2021" role="doc-biblioref">Pollard &amp; Bijker, 2021</a>)</span>.</p>
-<ul>
-<li>Infection: BCG-vaccinated children had a memory T-cell response to infection, as indicated by a positive interferon-<span class="math inline">\(\gamma\)</span> release assay.</li>
-<li>Disease: BCG vaccination reduces the spread of <em>M. tuberculosis</em> bacteria in the blood, mediated by T-cell immunity.</li>
-</ul>
-</section>
-<section id="non-specific-effects" class="level2" data-number="20.4">
-<h2 data-number="20.4" class="anchored" data-anchor-id="non-specific-effects"><span class="header-section-number">20.4</span> Non-specific effects</h2>
-<p>Measles disease casts a prolonged ‘shadow’ over the immune system, with depletion of existing immune memory, such that children who have had the disease have an increased risk of death from other causes over the next few years <span class="citation" data-cites="pollard2021">(<a href="references.html#ref-pollard2021" role="doc-biblioref">Pollard &amp; Bijker, 2021</a>)</span>.</p>
-</section>
-<section id="factors-affecting-vaccine-protection" class="level2" data-number="20.5">
-<h2 data-number="20.5" class="anchored" data-anchor-id="factors-affecting-vaccine-protection"><span class="header-section-number">20.5</span> Factors affecting vaccine protection</h2>
-<ul>
-<li>Maternal antibody levels</li>
-<li>Prior antigen exposure</li>
-<li>Age of vaccination</li>
-<li>Vaccine schedule</li>
-<li>Vaccine dose: intradermal vaccination has been shown to be immunogenic at much lower (fractional) doses than intramuscular vaccination for influenza, rabies and HBV vaccines <span class="citation" data-cites="pollard2021">(<a href="references.html#ref-pollard2021" role="doc-biblioref">Pollard &amp; Bijker, 2021</a>)</span>.</li>
-</ul>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
-<div id="ref-pollard2021" class="csl-entry" role="listitem">
-Pollard, A. J., &amp; Bijker, E. M. (2021). A guide to vaccinology: from basic principles to new developments. <em>Nature Reviews Immunology</em>, <em>21</em>(2), 83–100. <a href="https://doi.org/10.1038/s41577-020-00479-7">https://doi.org/10.1038/s41577-020-00479-7</a>
-</div>
-</div>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1037,13 +938,13 @@ Pollard, A. J., &amp; Bijker, E. M. (2021). A guide to vaccinology: from basic p
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./ftc.html" class="pagination-link" aria-label="Flattening the curve">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Flattening the curve</span></span>
+      <a href="./mod-sel.html" class="pagination-link" aria-label="Model selection">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Model selection</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./vax-perf.html" class="pagination-link" aria-label="Vaccine performance">
-        <span class="nav-page-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Vaccine performance</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./rnum.html" class="pagination-link" aria-label="Reproduction number">
+        <span class="nav-page-text">Reproduction number</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

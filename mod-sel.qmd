@@ -730,25 +730,30 @@ viewof bv_demo = {
 }
 ```
 
-### Bias
+The MSE compares each $\hat{\theta}$ with the true $\theta$. When we decompose it, it splits into 2 steps via the mediator $\mathbf{E}(\hat{\theta})$:
 
-**Bias** is a systematic tendency for an estimator to give an inaccurate depiction of reality. Formally, the bias of $\hat{\theta}$ for $\theta$ is
-
-$$\text{Bias}(\hat{\theta}, \theta) = \mathbf{E}[\hat{\theta}] - \theta$$ {#eq-bias}
-
-where the expectation is with respect to the sampling distribution of $\hat{\theta}$. An estimator with zero bias is called **unbiased**: on average, across repeated samples, it lands on $\theta$.
-
-Bias captures one failure mode — a tendency to land systematically off-target. But unbiasedness alone is not enough. An estimator can be unbiased on average and still be useless if it varies wildly from sample to sample.
+- Variance: compare each $\hat{\theta}$ with the mediator $\mathbf{E}(\hat{\theta})$
+- Bias: then compare this $\mathbf{E}(\hat{\theta})$ with the true $\theta$
 
 ### Variance
 
-**Variance** captures this second failure mode: the spread of $\hat{\theta}$ around its own mean,
+**Variance** is the spread of $\hat{\theta}$ around its own mean:
 
 $$\text{Var}(\hat{\theta}) = \mathbf{E}\big[(\hat{\theta} - \mathbf{E}[\hat{\theta}])^2\big]$$ {#eq-variance}
 
-A high-variance estimator may be correct on average but unreliable in any single sample — which is the only sample you have.
+A high-variance estimator jumps around from sample to sample. It might be right on average, but you only have one sample.
 
-The four scenarios below sketch every combination. Click a scenario to switch, and use the **Side / From above** toggle to swap viewpoints: the side view is the axis picture you've been working with, and the *from-above* view treats each estimate as an arrow on a target, with the bullseye at the true $\theta$.
+### Bias
+
+**Bias** is how far the estimator lands from the truth on average:
+
+$$\text{Bias}(\hat{\theta}, \theta) = \mathbf{E}[\hat{\theta}] - \theta$$ {#eq-bias}
+
+An estimator with zero bias is **unbiased**: across repeated samples, it lands on $\theta$ on average.
+
+But unbiased is not enough. An estimator can be unbiased on average and still useless if its variance is high.
+
+With both terms defined, we can see how they play out together. The four scenarios below cover every combination. Click one to switch. Use the **Side / Above** toggle to swap viewpoints: the *side* view is the axis we've been using, and the *above* view shows each estimate as an arrow on a target, with the bullseye at the true $\theta$.
 
 ```{ojs}
 //| echo: false
