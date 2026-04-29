@@ -1,0 +1,1750 @@
+---
+title: "Model selection"
+format: html
+execute:
+  echo: false
+---
+
+```{ojs}
+//| echo: false
+import { createSlider, createButton, injectStyle, styleMathLabel } from "./_slider.js"
+d3 = require("d3@7")
+```
+
+## Bias and variance
+
+Suppose we want to estimate the true parameter $\theta$ of a distribution. We collect some samples and use them to construct an estimator $\hat{\theta}$ (the hat denotes an estimated quantity). How do we know whether $\hat{\theta}$ is any good?
+
+The **mean squared error (MSE)** answers this:
+
+$$\text{MSE}(\hat{\theta}) = \mathbf{E}\big[(\hat{\theta} - \theta)^2\big]$$
+
+The MSE is the expected squared distance from $\hat{\theta}$ to the truth. It penalises any deviation, regardless of source. Lower MSE means a more accurate estimator overall.
+
+A single number is convenient, but it hides the question of *why* an estimator misses. Two estimators can have the same MSE for very different reasons: one might be systematically off-target, another might be on-target on average but jump around from sample to sample. Decomposing the MSE makes these two failure modes visible.
+
+### Decomposing the MSE
+
+Add and subtract $\mathbf{E}[\hat{\theta}]$ inside the square:
+
+$$
+\begin{aligned}
+\text{MSE}(\hat{\theta})
+&= \mathbf{E}\big[(\hat{\theta} - \mathbf{E}[\hat{\theta}] + \mathbf{E}[\hat{\theta}] - \theta)^2\big] \\[6pt]
+&= \mathbf{E}\big[(\hat{\theta} - \mathbf{E}[\hat{\theta}])^2\big]
+ + 2\,(\mathbf{E}[\hat{\theta}] - \theta)\,\underbrace{\mathbf{E}\big[\hat{\theta} - \mathbf{E}[\hat{\theta}]\big]}_{\substack{=\, \mathbf{E}[\hat{\theta}] - \mathbf{E}[\mathbf{E}[\hat{\theta}]] \\ =\, \mathbf{E}[\hat{\theta}] - \mathbf{E}[\hat{\theta}] =\, 0}}
+ + (\mathbf{E}[\hat{\theta}] - \theta)^2 \\[12pt]
+&= \underbrace{\mathbf{E}\big[(\hat{\theta} - \mathbf{E}[\hat{\theta}])^2\big]}_{\text{variance}}
+ + \underbrace{(\mathbf{E}[\hat{\theta}] - \theta)^2}_{\text{bias}^2}
+\end{aligned}
+$$ {#eq-mse-theta}
+
+The MSE splits into two non-negative pieces. The first measures how much $\hat{\theta}$ scatters around its own mean. The second measures how far that mean sits from the truth.
+
+The plot below walks through this.
+
+- The truth is $\theta = 0$ (red dashed line) and the population is $\mathcal{N}(\theta, 2)$.
+
+- Each click of **Draw a new dataset** is one experiment: $n$ points are drawn from the population and the estimator $\hat{\theta} = \overline{x}$ (the sample mean) is computed. Each dataset gets a unique colour, so you can read off how much they vary from one experiment to the next.
+
+- The second panel zooms into the slice of row 1's axis around $\theta$: you can still see each $\hat{\theta}$ and the the distance whose square gets averaged into the **MSE**. 
+- The third panel uses the same axis, but switches the deviation arms to run from $\mathrm{mean}(\hat{\theta})$, which together make up the **variance**. A red bracket at the top showing the gap between $\theta$ and $\mathrm{mean}(\hat{\theta})$, which squared is the **bias²**.
+
+```{ojs}
+//| echo: false
+
+viewof bv_demo = {
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = "font-family:system-ui,-apple-system,sans-serif;max-width:760px;margin:0 auto;";
+  wrapper.appendChild(injectStyle());
+
+  const styleTag = document.createElement("style");
+  styleTag.textContent = `
+    .bv-row-title { font-size:13px; font-weight:700; color:#0f172a; margin: 18px 0 4px; }
+    .bv-row-sub { font-size:11.5px; color:#475569; margin-bottom:8px; line-height:1.45; }
+    .bv-readout { display:flex; align-items:baseline; gap:8px; margin-top:4px; flex-wrap:wrap; }
+    .bv-readout-label { font-size:11px; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; }
+    .bv-readout-val { font-size:20px; font-weight:800; font-variant-numeric:tabular-nums; font-family:'SF Mono',SFMono-Regular,Menlo,Consolas,monospace; }
+    .bv-readout-note { font-size:11px; color:#64748b; }
+    .bv-stat-bar { transition: width 0.25s ease; }
+  `;
+  wrapper.appendChild(styleTag);
+
+  // ── Constants ──
+  const THETA_TRUE = 0;
+  const SIGMA_POP  = 2;            // wider population → more spread, larger MSE
+  const X_MIN = -5, X_MAX = 5;     // plot range widened to cover the population
+  const W = 720;
+  const M = { left: 16, right: 16 };
+  const innerW = W - M.left - M.right;
+  const xSc = d3.scaleLinear().domain([X_MIN, X_MAX]).range([0, innerW]);
+  const PALETTE = d3.schemeTableau10;
+  const POP_PEAK = 1 / (SIGMA_POP * Math.sqrt(2 * Math.PI));
+
+  // ── Slider ──
+  const SL = {};
+  SL.n = createSlider("n", 3, 80, 1, 10, "#7c3aed", "purple");
+  styleMathLabel(SL.n);
+
+  const slRow = document.createElement("div");
+  slRow.style.cssText = "display:flex;gap:24px;margin-bottom:12px;flex-wrap:wrap;";
+  slRow.appendChild(SL.n.el);
+  wrapper.appendChild(slRow);
+
+  // ── Buttons ──
+  const btnRow = document.createElement("div");
+  btnRow.style.cssText = "display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;";
+  const drawBtn  = createButton("✚  Draw a new dataset", "step");
+  const draw5Btn = createButton("✚  Draw ×5",            "step");
+  const resetBtn = createButton("↻  Reset",              "reset");
+  for (const b of [drawBtn, draw5Btn, resetBtn]) {
+    b.el.style.minWidth = "108px";
+    btnRow.appendChild(b.el);
+  }
+  wrapper.appendChild(btnRow);
+
+  // ── State ──
+  const datasets = [];
+  let nextDatasetId = 0;
+
+  function randn() {
+    let u = 0, v = 0;
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
+    return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  }
+
+  function sampleDataset() {
+    const n = +SL.n.input.value;
+    const samples = [];
+    for (let i = 0; i < n; i++) samples.push(THETA_TRUE + SIGMA_POP * randn());
+    const mean = samples.reduce((a, b) => a + b, 0) / n;
+    let varEst = 0;
+    for (const s of samples) varEst += (s - mean) ** 2;
+    const sdEst = Math.sqrt(varEst / Math.max(n - 1, 1));
+    const id = nextDatasetId++;
+    // Color is bound to creation order, so existing datasets never re-colour
+    // when a new one is added (or when the oldest is dropped at MAX).
+    return { samples, theta_hat: mean, sd_hat: Math.max(sdEst, 0.15), id, color: PALETTE[id % PALETTE.length] };
+  }
+
+  let suppressRender = false;
+  // Compute the lollipop's stable beeswarm position once at creation time, so
+  // adding more datasets never moves existing dots around. Stacking is capped
+  // at the top of the density area; if a new dot can't find a free slot it
+  // simply overlaps at the highest possible y rather than going off-canvas.
+  function placeLollipop(d) {
+    const minDist = 13;
+    const cx = xSc(d.theta_hat);
+    let cy = r1_hatBaseY;
+    const minCy = r1_popY0 + 6;
+    while (cy > minCy && datasets.some(d2 => Math.hypot(d2.cx - cx, d2.cy - cy) < minDist)) {
+      cy -= minDist - 1;       // stack upward
+    }
+    d.cx = cx;
+    d.cy = cy;
+  }
+
+  // Every dataset is an estimator and should remain — no cap, no FIFO. The
+  // user controls the count via the Reset button.
+  function addDataset() {
+    const d = sampleDataset();
+    placeLollipop(d);
+    datasets.push(d);
+    if (!suppressRender) renderAll();
+  }
+  function clearAll() { datasets.length = 0; renderAll(); }
+
+  function statsCompute() {
+    const n = datasets.length;
+    if (n === 0) return null;
+    const hats = datasets.map(d => d.theta_hat);
+    const mean = hats.reduce((a, b) => a + b, 0) / n;
+    const mse  = hats.reduce((a, b) => a + (b - THETA_TRUE) ** 2, 0) / n;
+    const variance = n > 1 ? hats.reduce((a, b) => a + (b - mean) ** 2, 0) / n : 0;
+    const biasSq = (mean - THETA_TRUE) ** 2;
+    return { n, hats, mean, mse, variance, biasSq };
+  }
+
+  function kde(samples, x, h) {
+    let s = 0;
+    for (const xi of samples) s += Math.exp(-0.5 * ((x - xi) / h) ** 2);
+    return s / (samples.length * h * Math.sqrt(2 * Math.PI));
+  }
+  function bandwidth(d) {
+    return Math.max(0.12, 1.06 * d.sd_hat * Math.pow(d.samples.length, -0.2));
+  }
+
+  function makeSvg(height) {
+    const svg = d3.create("svg")
+      .attr("viewBox", `0 0 ${W} ${height}`)
+      .style("width", "100%").style("max-width", `${W}px`)
+      .style("height", "auto").style("display", "block")
+      .style("touch-action", "manipulation");
+    const g = svg.append("g").attr("transform", `translate(${M.left},0)`);
+    return { svg, g };
+  }
+
+  // ─────────────────────────────────────────
+  //  ROW 1 — sampling and densities
+  // ─────────────────────────────────────────
+
+  const r1_popY0 = 18;
+  const r1_popH  = 144;
+  const r1_axisY = r1_popY0 + r1_popH + 8;       // axis sits right under the density area
+  const R1_H     = r1_axisY + 18;                // just enough room for axis tick labels
+                                                 // — keeps row 2's mini-context flush below
+  const r1 = makeSvg(R1_H);
+  const r1_hatBaseY = r1_axisY - 14;             // lollipops sit *above* the axis so they
+                                                 // can never fall off the bottom of the row
+
+  // Population (drawn once) — very subtle backdrop so KDEs pop.
+  {
+    const N = 220;
+    const path = d3.path();
+    path.moveTo(xSc(X_MIN), r1_popY0 + r1_popH);
+    for (let i = 0; i <= N; i++) {
+      const x = X_MIN + (X_MAX - X_MIN) * (i / N);
+      const y = Math.exp(-0.5 * ((x - THETA_TRUE) / SIGMA_POP) ** 2) / (SIGMA_POP * Math.sqrt(2 * Math.PI));
+      path.lineTo(xSc(x), r1_popY0 + r1_popH - (y / POP_PEAK) * r1_popH);
+    }
+    path.lineTo(xSc(X_MAX), r1_popY0 + r1_popH);
+    path.closePath();
+    r1.g.append("path")
+      .attr("d", path.toString())
+      .attr("fill", "#cbd5e1").attr("fill-opacity", 0.18)
+      .attr("stroke", "#94a3b8").attr("stroke-opacity", 0.45)
+      .attr("stroke-width", 1)
+      .attr("stroke-dasharray", "2,3");
+  }
+
+  // True θ line (same dashed style as rows 2 and 3) + the "θ" symbol just
+  // above the line — y is chosen so the glyph never gets clipped by the SVG
+  // top edge regardless of font metrics.
+  r1.g.append("text")
+    .attr("x", xSc(THETA_TRUE)).attr("y", 14)
+    .attr("text-anchor", "middle")
+    .style("font-size", "15px").style("font-style", "italic")
+    .style("font-family", '"Latin Modern Math","STIX Two Math","Cambria Math",serif')
+    .style("fill", "#dc2626").style("font-weight", 700)
+    .text("θ");
+  r1.g.append("line")
+    .attr("x1", xSc(THETA_TRUE)).attr("x2", xSc(THETA_TRUE))
+    .attr("y1", r1_popY0).attr("y2", r1_axisY)
+    .attr("stroke", "#dc2626").attr("stroke-width", 2.5)
+    .attr("stroke-dasharray", "6,4")
+    .attr("stroke-opacity", 0.9);
+
+  r1.g.append("g").attr("transform", `translate(0,${r1_axisY})`)
+    .call(d3.axisBottom(xSc).ticks(7))
+    .attr("font-size", 10);
+
+  const r1_kdeG  = r1.g.append("g");
+  const r1_hatsG = r1.g.append("g");
+  wrapper.appendChild(r1.svg.node());
+
+  function renderRow1() {
+    r1_kdeG.selectAll("*").remove();
+    r1_hatsG.selectAll("*").remove();
+    if (datasets.length === 0) return;
+
+    for (const d of datasets) {
+      const h = bandwidth(d);
+      const N = 220;
+      const path = d3.path();
+      path.moveTo(xSc(X_MIN), r1_popY0 + r1_popH);
+      for (let i = 0; i <= N; i++) {
+        const x = X_MIN + (X_MAX - X_MIN) * (i / N);
+        // Cap at the population peak so sharp KDEs (small n, narrow bandwidth)
+        // don't shoot above the density area.
+        const yRatio = Math.min(kde(d.samples, x, h) / POP_PEAK, 1.0);
+        path.lineTo(xSc(x), r1_popY0 + r1_popH - yRatio * r1_popH);
+      }
+      path.lineTo(xSc(X_MAX), r1_popY0 + r1_popH);
+      path.closePath();
+      // KDE: thin translucent strokes so a big stack of curves reads as a
+      // soft "fog" rather than a spaghetti tangle. Fill is barely there.
+      r1_kdeG.append("path")
+        .attr("d", path.toString())
+        .attr("fill", d.color).attr("fill-opacity", 0.035)
+        .attr("stroke", d.color).attr("stroke-opacity", 0.55)
+        .attr("stroke-width", 1.1);
+    }
+
+    // Lollipops — positions are computed once at creation time (see
+    // placeLollipop) so adding new datasets can never shift existing ones.
+    for (const d of datasets) {
+      r1_hatsG.append("line")
+        .attr("x1", d.cx).attr("x2", d.cx)
+        .attr("y1", r1_axisY).attr("y2", d.cy)
+        .attr("stroke", d.color).attr("stroke-width", 1.5)
+        .attr("stroke-opacity", 0.7);
+      r1_hatsG.append("circle")
+        .attr("cx", d.cx).attr("cy", d.cy)
+        .attr("r", 6)
+        .attr("fill", d.color)
+        .attr("stroke", "#fff").attr("stroke-width", 1.6);
+    }
+  }
+
+  // ─────────────────────────────────────────
+  //  Shared layout for rows 2 / 3 / 4
+  // ─────────────────────────────────────────
+  const R_CTX_H  = 30;       // top "mini-context" band with zoom trapezoid
+  const R_AXIS_H = 110;      // zoomed θ-axis strip — tall enough for lollipops
+                             // + bias bracket (no more squares panel below)
+  const R_H_WITH_CTX = R_CTX_H + R_AXIS_H;
+  const R_H_NO_CTX   = R_AXIS_H;
+
+  // Compute the half-range used for a row's zoomed axis around `refValue`.
+  function zoomHalfRange(refValue, extraMarkers = []) {
+    const hatOffsets = datasets.map(d => d.theta_hat - refValue);
+    const extraOffsets = extraMarkers.map(m => m.x - refValue);
+    const all = [...hatOffsets, ...extraOffsets, 0];
+    return Math.max(0.4, 1.25 * d3.max(all.map(Math.abs)));
+  }
+
+  // Render a "zoom trapezoid" connecting row 1's axis directly to row 2's
+  // zoomed axis. No parent axis line — row 1's actual axis sits right above
+  // this group, so we only need the bracket marking the slice and the
+  // diagonals fanning out to the full width below.
+  function renderMiniContext(g, refValue, halfRange, color) {
+    g.selectAll("*").remove();
+    const yTop = 0;
+    const yBottom = R_CTX_H;
+
+    const x0 = xSc(refValue - halfRange);
+    const x1 = xSc(refValue + halfRange);
+
+    // Frustum fill (faint), so the eye reads "this slice expands to fill below"
+    const path = d3.path();
+    path.moveTo(x0, yTop);
+    path.lineTo(0, yBottom);
+    path.lineTo(innerW, yBottom);
+    path.lineTo(x1, yTop);
+    path.closePath();
+    g.append("path")
+      .attr("d", path.toString())
+      .attr("fill", color).attr("fill-opacity", 0.07)
+      .attr("stroke", "none");
+
+    // Diagonal edges
+    g.append("line")
+      .attr("x1", x0).attr("x2", 0)
+      .attr("y1", yTop).attr("y2", yBottom)
+      .attr("stroke", color).attr("stroke-opacity", 0.55).attr("stroke-width", 1);
+    g.append("line")
+      .attr("x1", x1).attr("x2", innerW)
+      .attr("y1", yTop).attr("y2", yBottom)
+      .attr("stroke", color).attr("stroke-opacity", 0.55).attr("stroke-width", 1);
+
+    // Bracket along the top showing the slice of the parent axis being zoomed
+    g.append("line")
+      .attr("x1", x0).attr("x2", x1)
+      .attr("y1", yTop + 1).attr("y2", yTop + 1)
+      .attr("stroke", color).attr("stroke-width", 2);
+  }
+
+  // Render the zoomed axis strip with named sub-groups so the row-3 highlight
+  // can dim the right pieces:
+  //   .bv-theta-group  — θ vertical line (+ optional "θ" label)
+  //   .bv-mean-group   — extra markers (e.g. mean(θ̂)) + their labels
+  //   .bv-bias-group   — bias bracket + bracket end ticks
+  //   .bv-var-group    — deviation arms (one per dataset)
+  // Stems and heads are always at full opacity.
+  // When `biasArrow` is set, two transparent hit-zone rectangles are appended
+  // at the very top so hovering/tapping the bias band or the variance band
+  // *on the plot itself* (not just the readout) triggers the highlight.
+  function renderZoomedAxis(g, refValue, refColor, halfRange, opts = {}) {
+    g.selectAll("*").remove();
+    const {
+      extraMarkers   = [],
+      showHats       = true,
+      showDeviations = false,
+      devAnchor      = refValue,
+      dashedArm      = false,
+      biasArrow      = null,
+      showRefLabels  = false       // adds θ and E[θ̂] labels above the bias bracket
+    } = opts;
+
+    const xSc2  = d3.scaleLinear().domain([refValue - halfRange, refValue + halfRange]).range([0, innerW]);
+    const axisY = R_AXIS_H - 18;
+
+    // Bias / variance band geometry — computed up front so the highlight
+    // backgrounds know where to sit.
+    const yLabel = 13;
+    const yB     = 26;
+    const biasYBottom = biasArrow ? yB + 8 : 6;
+
+    // 0. Highlight backgrounds (sit at the very back, hidden by default —
+    //    setR3Highlight reveals one of them when its mode is active). The
+    //    fills match the readout pairs exactly: red-50 for bias, blue-50
+    //    for variance.
+    if (biasArrow) {
+      g.append("rect")
+        .attr("class", "bv-bias-bg")
+        .attr("x", 0).attr("y", 0)
+        .attr("width", innerW).attr("height", biasYBottom)
+        .attr("fill", "#fee2e2").attr("rx", 4).attr("ry", 4)
+        .attr("opacity", 0)
+        .style("pointer-events", "none");
+      g.append("rect")
+        .attr("class", "bv-var-bg")
+        .attr("x", 0).attr("y", biasYBottom + 2)
+        .attr("width", innerW).attr("height", axisY - biasYBottom - 2)
+        .attr("fill", "#dbeafe").attr("rx", 4).attr("ry", 4)
+        .attr("opacity", 0)
+        .style("pointer-events", "none");
+    }
+
+    // 1. Axis ticks
+    g.append("g").attr("transform", `translate(0,${axisY})`)
+      .call(d3.axisBottom(xSc2).ticks(7)).attr("font-size", 10);
+
+    // 2. Variance arms — and the lollipops themselves (stems + heads), since
+    //    each θ̂ is a sample contributing to the variance. In bias mode the
+    //    whole variance side dims together.
+    const gArms  = g.append("g").attr("class", "bv-var-group");
+    const gStems = g.append("g").attr("class", "bv-var-group");
+    const gHeads = g.append("g").attr("class", "bv-var-group");
+
+    // 4. θ reference line (drawn AFTER stems/heads so it's never obscured)
+    const gTheta = g.append("g").attr("class", "bv-theta-group");
+    // 5. mean(θ̂) reference line (and any other extras) — never dims
+    const gMean  = g.append("g").attr("class", "bv-mean-group");
+    // 6. Bias bracket on top — and gets dimmed in variance mode
+    const gBias  = g.append("g").attr("class", "bv-bias-group");
+
+    // ── Bias bracket + reference labels (used by row 3 only) ─────────────
+    if (biasArrow) {
+      const xA = xSc2(biasArrow.from), xB = xSc2(biasArrow.to);
+
+      // θ and E[θ̂] labels above the bracket. θ goes in gTheta (dims in
+      // variance mode), E[θ̂] goes in gMean (never dims).
+      if (showRefLabels) {
+        gTheta.append("text")
+          .attr("x", xA).attr("y", yLabel)
+          .attr("text-anchor", "middle")
+          .style("font-size", "13px").style("font-style", "italic")
+          .style("font-family", '"Latin Modern Math","STIX Two Math","Cambria Math",serif')
+          .style("fill", refColor).style("font-weight", 700)
+          .text("θ");
+        gMean.append("text")
+          .attr("x", xB).attr("y", yLabel)
+          .attr("text-anchor", "middle")
+          .style("font-size", "12px").style("font-style", "italic")
+          .style("font-family", '"Latin Modern Math","STIX Two Math","Cambria Math",serif')
+          .style("fill", "#475569").style("font-weight", 700)
+          .text("E[θ̂]");
+      }
+
+      // Bracket itself
+      gBias.append("line")
+        .attr("x1", xA).attr("x2", xB)
+        .attr("y1", yB).attr("y2", yB)
+        .attr("stroke", biasArrow.color).attr("stroke-width", 3);
+      for (const x of [xA, xB]) {
+        gBias.append("line")
+          .attr("x1", x).attr("x2", x)
+          .attr("y1", yB - 5).attr("y2", yB + 5)
+          .attr("stroke", biasArrow.color).attr("stroke-width", 3);
+      }
+    }
+
+    // ── Reference vertical lines (drawn last so they sit on top) ─────────
+    gTheta.append("line")
+      .attr("x1", xSc2(refValue)).attr("x2", xSc2(refValue))
+      .attr("y1", biasYBottom - 2).attr("y2", axisY)
+      .attr("stroke", refColor).attr("stroke-width", 2.5)
+      .attr("stroke-dasharray", "6,4")
+      .attr("stroke-opacity", 0.95);
+    for (const m of extraMarkers) {
+      gMean.append("line")
+        .attr("x1", xSc2(m.x)).attr("x2", xSc2(m.x))
+        .attr("y1", biasYBottom - 2).attr("y2", axisY)
+        .attr("stroke", m.color).attr("stroke-width", 2.5)
+        .attr("stroke-dasharray", "6,4")
+        .attr("stroke-opacity", 0.95);
+    }
+
+    // ── Lollipops + deviation arms ───────────────────────────────────────
+    if (showHats && datasets.length > 0) {
+      const lolliTop    = biasYBottom + 4;
+      const lolliBottom = axisY - 6;
+      const range       = Math.max(lolliBottom - lolliTop, 4);
+      const stagger     = datasets.length > 1
+        ? Math.min(range / (datasets.length - 1), 9)
+        : 0;
+      const xDev = xSc2(devAnchor);
+
+      datasets.forEach((d, i) => {
+        const xH = xSc2(d.theta_hat);
+        const yTop = lolliTop + i * stagger;
+
+        if (showDeviations) {
+          const arm = gArms.append("line")
+            .attr("x1", xDev).attr("x2", xH)
+            .attr("y1", yTop).attr("y2", yTop)
+            .attr("stroke", d.color).attr("stroke-width", 2);
+          if (dashedArm) arm.attr("stroke-dasharray", "5,3");
+        }
+
+        gStems.append("line")
+          .attr("x1", xH).attr("x2", xH)
+          .attr("y1", axisY).attr("y2", yTop)
+          .attr("stroke", d.color).attr("stroke-width", 1.5)
+          .attr("stroke-opacity", 0.65);
+
+        gHeads.append("circle")
+          .attr("cx", xH).attr("cy", yTop)
+          .attr("r", 4.5)
+          .attr("fill", d.color)
+          .attr("stroke", "#fff").attr("stroke-width", 1.5);
+      });
+    }
+
+    // ── Hit zones for hover/click on the plot itself ─────────────────────
+    if (biasArrow) {
+      g.append("rect")
+        .attr("class", "bv-bias-hit")
+        .attr("x", 0).attr("y", 0)
+        .attr("width", innerW).attr("height", biasYBottom)
+        .attr("fill", "rgba(0,0,0,0)")
+        .style("cursor", "pointer");
+      g.append("rect")
+        .attr("class", "bv-var-hit")
+        .attr("x", 0).attr("y", biasYBottom)
+        .attr("width", innerW).attr("height", axisY - biasYBottom)
+        .attr("fill", "rgba(0,0,0,0)")
+        .style("cursor", "pointer");
+    }
+
+    return xSc2;
+  }
+
+
+  // Helper: build a row 2/3-style SVG. Pass `withContext: true` to leave room
+  // at the top for the zoom-from-row-1 frustum.
+  function makeRow({ withContext = false } = {}) {
+    const ctxH = withContext ? R_CTX_H : 0;
+    const r = makeSvg(ctxH + R_AXIS_H);
+    return {
+      ...r,
+      gContext: withContext ? r.g.append("g") : null,
+      gAxis:    r.g.append("g").attr("transform", `translate(0,${ctxH})`)
+    };
+  }
+
+  // ─────────────────────────────────────────
+  //  ROW 2 — MSE  (zoom from row 1 happens in this row's mini-context)
+  // ─────────────────────────────────────────
+  const r2 = makeRow({ withContext: true });
+  wrapper.appendChild(r2.svg.node());
+
+  const r2Read = document.createElement("div"); r2Read.className = "bv-readout";
+  const r2Lbl  = document.createElement("span"); r2Lbl.className = "bv-readout-label"; r2Lbl.textContent = "MSE";
+  const r2Val  = document.createElement("span"); r2Val.className = "bv-readout-val";  r2Val.style.color = "#d97706"; r2Val.textContent = "—";
+  r2Read.append(r2Lbl, r2Val);
+  wrapper.appendChild(r2Read);
+
+  // ─────────────────────────────────────────
+  //  ROW 3 — Variance + Bias² together. Bias is just the horizontal gap
+  //  between θ and the mean of θ̂; one extra bracket on the same axis.
+  // ─────────────────────────────────────────
+  const r3 = makeRow();   // no mini-context — same axis as row 2 (aligned)
+  wrapper.appendChild(r3.svg.node());
+
+  const r3Read = document.createElement("div"); r3Read.className = "bv-readout";
+  r3Read.style.cssText += "gap:24px;";
+  // Each "pair" wraps a label + its value into one hoverable / tappable target
+  const pairCss = "display:inline-flex;gap:8px;align-items:baseline;cursor:pointer;user-select:none;padding:2px 6px;border-radius:4px;transition:background 0.15s;";
+
+  const r3VarBox = document.createElement("span");
+  r3VarBox.style.cssText = pairCss;
+  const r3Lbl  = document.createElement("span"); r3Lbl.className = "bv-readout-label"; r3Lbl.textContent = "Variance";
+  const r3Val  = document.createElement("span"); r3Val.className = "bv-readout-val";  r3Val.style.color = "#3b82f6"; r3Val.textContent = "—";
+  r3VarBox.append(r3Lbl, r3Val);
+
+  const r3BiasBox = document.createElement("span");
+  r3BiasBox.style.cssText = pairCss;
+  const r3Lbl2 = document.createElement("span"); r3Lbl2.className = "bv-readout-label"; r3Lbl2.textContent = "Bias²";
+  const r3Val2 = document.createElement("span"); r3Val2.className = "bv-readout-val"; r3Val2.style.color = "#dc2626"; r3Val2.textContent = "—";
+  r3BiasBox.append(r3Lbl2, r3Val2);
+
+  r3Read.append(r3VarBox, r3BiasBox);
+  wrapper.appendChild(r3Read);
+
+  // Hover (transient) and click (sticky) interactivity. Hover takes priority
+  // over sticky, so a sticky selection still lets you preview the other side.
+  //
+  // Highlight semantics:
+  //   variance mode → dim θ line  + bias bracket
+  //                   (E[θ̂] line + variance arms stay full)
+  //   bias     mode → dim variance arms
+  //                   (θ line + E[θ̂] line + bias bracket all stay full)
+  let r3Sticky = null;
+  function setR3Highlight(hoverMode) {
+    const mode = hoverMode || r3Sticky;
+    const svgNode = r3.svg.node();
+    if (!svgNode) return;
+    const setOpacity = (selector, dim) => {
+      svgNode.querySelectorAll(selector).forEach(el => el.style.opacity = dim ? "0.15" : "1");
+    };
+    setOpacity(".bv-theta-group", mode === "variance");
+    setOpacity(".bv-bias-group",  mode === "variance");
+    setOpacity(".bv-var-group",   mode === "bias");
+    setOpacity(".bv-mean-group",  false);   // mean is relevant to both — never dims
+    // Show the matching tinted band on the plot itself, identical in colour
+    // to the readout pair backgrounds below.
+    const setBg = (selector, show) => {
+      svgNode.querySelectorAll(selector).forEach(el => el.setAttribute("opacity", show ? "1" : "0"));
+    };
+    setBg(".bv-bias-bg", mode === "bias");
+    setBg(".bv-var-bg",  mode === "variance");
+    r3VarBox.style.background  = (r3Sticky === "variance") ? "#dbeafe" : "transparent";
+    r3BiasBox.style.background = (r3Sticky === "bias")     ? "#fee2e2" : "transparent";
+  }
+  function toggleSticky(mode) {
+    r3Sticky = (r3Sticky === mode) ? null : mode;
+    setR3Highlight(null);
+  }
+  r3VarBox.addEventListener("mouseenter", () => setR3Highlight("variance"));
+  r3VarBox.addEventListener("mouseleave", () => setR3Highlight(null));
+  r3VarBox.addEventListener("click",      () => toggleSticky("variance"));
+  r3BiasBox.addEventListener("mouseenter", () => setR3Highlight("bias"));
+  r3BiasBox.addEventListener("mouseleave", () => setR3Highlight(null));
+  r3BiasBox.addEventListener("click",      () => toggleSticky("bias"));
+
+  // Hit-zone handlers on the plot itself are wired up after each renderAll
+  // (since the SVG nodes get rebuilt every time). See attachR3PlotHandlers.
+  function attachR3PlotHandlers() {
+    const svgNode = r3.svg.node();
+    const biasHit = svgNode && svgNode.querySelector(".bv-bias-hit");
+    const varHit  = svgNode && svgNode.querySelector(".bv-var-hit");
+    if (biasHit) {
+      biasHit.onmouseenter = () => setR3Highlight("bias");
+      biasHit.onmouseleave = () => setR3Highlight(null);
+      biasHit.onclick      = () => toggleSticky("bias");
+    }
+    if (varHit) {
+      varHit.onmouseenter  = () => setR3Highlight("variance");
+      varHit.onmouseleave  = () => setR3Highlight(null);
+      varHit.onclick       = () => toggleSticky("variance");
+    }
+  }
+
+  // ─────────────────────────────────────────
+  //  Decomposition bar
+  // ─────────────────────────────────────────
+  const decompTitle = document.createElement("div");
+  decompTitle.className = "bv-row-title";
+  decompTitle.style.marginTop = "22px";
+  decompTitle.innerHTML = `<span style="color:#d97706;">MSE</span> = <span style="color:#3b82f6;">Variance</span> + <span style="color:#dc2626;">Bias²</span>`;
+  wrapper.appendChild(decompTitle);
+
+  const bar = document.createElement("div");
+  bar.style.cssText = "display:flex;height:24px;background:#f1f5f9;border-radius:4px;overflow:hidden;border:1px solid #e2e8f0;margin-bottom:6px;";
+  const biasBar = document.createElement("div");
+  biasBar.className = "bv-stat-bar";
+  biasBar.style.cssText = "background:#dc2626;height:100%;width:0;";
+  const varBar = document.createElement("div");
+  varBar.className = "bv-stat-bar";
+  varBar.style.cssText = "background:#3b82f6;height:100%;width:0;";
+  bar.append(varBar, biasBar);   // variance on the left, bias² on the right
+  wrapper.appendChild(bar);
+
+
+  // ─────────────────────────────────────────
+  //  Decomposition
+  // ─────────────────────────────────────────
+  function renderDecomp(stats) {
+    if (!stats || stats.mse === 0) {
+      biasBar.style.width = "0%"; varBar.style.width = "0%";
+      return;
+    }
+    // Always fill the bar — the split between bias² and variance is the
+    // information; the absolute MSE is shown in the readout above.
+    biasBar.style.width = (100 * stats.biasSq / stats.mse) + "%";
+    varBar.style.width  = (100 * stats.variance / stats.mse) + "%";
+  }
+
+  // ─────────────────────────────────────────
+  //  Top-level render
+  // ─────────────────────────────────────────
+  function renderAll() {
+    const stats = statsCompute();
+    renderRow1();
+
+    if (stats) {
+      // Both row 2 (MSE) and row 3 (variance + bias²) share the same zoomed
+      // axis: same centre (θ) and same half-range, so the two strips align
+      // pixel-for-pixel and the lollipops sit at the *same* x in both.
+      const half = zoomHalfRange(THETA_TRUE, [{ x: stats.mean }]);
+
+      // Row 2 — MSE. Each lollipop's deviation arm runs from θ.
+      renderMiniContext(r2.gContext, THETA_TRUE, half, "#dc2626");
+      renderZoomedAxis(r2.gAxis, THETA_TRUE, "#dc2626", half, {
+        showDeviations: true,
+        devAnchor: THETA_TRUE
+      });
+      r2Val.textContent = stats.mse.toFixed(3);
+
+      // Row 3 — Variance and Bias². Same axis as row 2. Each lollipop's arm
+      // runs from mean(θ̂) (the variance contribution, shown dashed); a single
+      // red bracket at the top spans θ → mean(θ̂) (the bias). Hovering or
+      // clicking the readouts (or the plot itself) dims the other component.
+      renderZoomedAxis(r3.gAxis, THETA_TRUE, "#dc2626", half, {
+        showDeviations: true,
+        devAnchor:      stats.mean,
+        dashedArm:      true,
+        showRefLabels:  true,
+        extraMarkers: [{ x: stats.mean, color: "#475569" }],
+        biasArrow:    { from: THETA_TRUE, to: stats.mean, color: "#dc2626" }
+      });
+      r3Val.textContent  = stats.variance.toFixed(3);
+      r3Val2.textContent = stats.biasSq.toFixed(3);
+      attachR3PlotHandlers();
+      setR3Highlight(null);     // re-apply any sticky highlight
+    } else {
+      r2.gContext.selectAll("*").remove(); r2.gAxis.selectAll("*").remove(); r2Val.textContent = "—";
+      r3.gAxis.selectAll("*").remove(); r3Val.textContent = "—"; r3Val2.textContent = "—";
+    }
+    renderDecomp(stats);
+  }
+
+  // ─────────────────────────────────────────
+  //  Event handlers
+  // ─────────────────────────────────────────
+  drawBtn.el.addEventListener("click",  () => addDataset());
+  draw5Btn.el.addEventListener("click", () => {
+    suppressRender = true;
+    for (let i = 0; i < 5; i++) addDataset();
+    suppressRender = false;
+    renderAll();
+  });
+  resetBtn.el.addEventListener("click", () => clearAll());
+  SL.n.input.addEventListener("input", () => SL.n.sync());
+
+  renderAll();
+  return wrapper;
+}
+```
+
+### Bias
+
+**Bias** is a systematic tendency for an estimator to give an inaccurate depiction of reality. Formally, the bias of $\hat{\theta}$ for $\theta$ is
+
+$$\text{Bias}(\hat{\theta}, \theta) = \mathbf{E}[\hat{\theta}] - \theta$$ {#eq-bias}
+
+where the expectation is with respect to the sampling distribution of $\hat{\theta}$. An estimator with zero bias is called **unbiased**: on average, across repeated samples, it lands on $\theta$.
+
+Bias captures one failure mode — a tendency to land systematically off-target. But unbiasedness alone is not enough. An estimator can be unbiased on average and still be useless if it varies wildly from sample to sample.
+
+### Variance
+
+**Variance** captures this second failure mode: the spread of $\hat{\theta}$ around its own mean,
+
+$$\text{Var}(\hat{\theta}) = \mathbf{E}\big[(\hat{\theta} - \mathbf{E}[\hat{\theta}])^2\big]$$ {#eq-variance}
+
+A high-variance estimator may be correct on average but unreliable in any single sample — which is the only sample you have.
+
+The four scenarios below sketch every combination. Click a scenario to switch, and use the **Side / From above** toggle to swap viewpoints: the side view is the axis picture you've been working with, and the *from-above* view treats each estimate as an arrow on a target, with the bullseye at the true $\theta$.
+
+```{ojs}
+//| echo: false
+
+viewof bv_tradeoff = {
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = "font-family:system-ui,-apple-system,sans-serif;max-width:760px;margin:0 auto;";
+
+  // ── Local CSS ────────────────────────────────────────────────────────
+  const styleTag = document.createElement("style");
+  styleTag.textContent = `
+    .bvt-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:14px; }
+    .bvt-tab {
+      padding:12px 8px; border:2px solid #e5e7eb; background:#fff;
+      color:#1f2937; font-size:12.5px; font-weight:600; cursor:pointer;
+      border-radius:10px; text-align:center; line-height:1.35;
+      transition: all 0.15s; font-family:inherit;
+    }
+    .bvt-tab:hover { background:#f3f4f6; border-color:#d1d5db; }
+    .bvt-tab.active { background:#0f172a; color:#fff; border-color:#0f172a; }
+    .bvt-tab small { display:block; opacity:0.7; font-weight:500; font-size:11px; margin-top:2px; }
+    .bvt-view-row { display:flex; gap:6px; margin-bottom:14px; align-items:center; }
+    .bvt-view-label {
+      font-size:11px; color:#64748b; text-transform:uppercase; letter-spacing:0.5px;
+      font-weight:600; margin-right:4px;
+    }
+    .bvt-view-btn {
+      padding:7px 14px; border:1px solid #e5e7eb; background:#fff; color:#374151;
+      font-size:12.5px; font-weight:600; cursor:pointer; border-radius:7px;
+      transition: all 0.15s; font-family:inherit;
+    }
+    .bvt-view-btn:hover { background:#f3f4f6; }
+    .bvt-view-btn.active { background:#3b82f6; color:#fff; border-color:#2563eb; }
+    .bvt-stage {
+      display:flex; justify-content:center; align-items:center;
+      background:linear-gradient(180deg,#fafafb 0%,#f5f5f7 100%);
+      border:1px solid #e5e7eb; border-radius:14px; padding:14px 8px;
+    }
+  `;
+  wrapper.appendChild(styleTag);
+
+  // ── Scenario definitions + deterministic data ────────────────────────
+  // Each scenario lives in 2D — bias is the distance from the cluster centre
+  // to the origin (= true θ), variance is the spread within the cluster.
+  const SCENARIOS = [
+    { id:"hbhv", title:"High bias", sub:"High variance", cx:0.95, cy:0.55, sd:0.42, seed:37 },
+    { id:"hblv", title:"High bias", sub:"Low variance",  cx:0.95, cy:0.55, sd:0.10, seed:23 },
+    { id:"lbhv", title:"Low bias",  sub:"High variance", cx:0.00, cy:0.00, sd:0.42, seed:13 },
+    { id:"lblv", title:"Low bias",  sub:"Low variance",  cx:0.00, cy:0.00, sd:0.10, seed:7  }
+  ];
+
+  function seededRand(seed) {
+    let s = seed >>> 0;
+    return () => {
+      s = (Math.imul(s, 1664525) + 1013904223) >>> 0;
+      return s / 4294967296;
+    };
+  }
+  const NPTS = 12;
+  function genPoints(scenario) {
+    const r = seededRand(scenario.seed);
+    const pts = [];
+    for (let i = 0; i < NPTS; i++) {
+      const u = r() || 1e-10, v = r();
+      const radius = Math.sqrt(-2 * Math.log(u));
+      const theta  = 2 * Math.PI * v;
+      pts.push([
+        scenario.cx + radius * Math.cos(theta) * scenario.sd,
+        scenario.cy + radius * Math.sin(theta) * scenario.sd
+      ]);
+    }
+    return pts;
+  }
+  const SCENARIO_DATA = SCENARIOS.map(s => ({ ...s, points: genPoints(s) }));
+
+  const PALETTE = d3.schemeTableau10;
+
+  // ── State ────────────────────────────────────────────────────────────
+  let scenarioIdx = 0;
+  let viewMode  = "side";       // "side" | "top"
+  let tilt      = 0;            // 0 = side, 1 = top  (= sin of camera angle)
+  let animating = false;
+
+  // ── Scenario tabs ────────────────────────────────────────────────────
+  const tabRow = document.createElement("div");
+  tabRow.className = "bvt-grid";
+  const tabBtns = SCENARIO_DATA.map((s, i) => {
+    const btn = document.createElement("button");
+    btn.className = "bvt-tab";
+    btn.innerHTML = `${s.title}<small>${s.sub}</small>`;
+    btn.addEventListener("click", () => {
+      scenarioIdx = i;
+      tabBtns.forEach((b, j) => b.classList.toggle("active", j === scenarioIdx));
+      applyState();
+    });
+    tabRow.appendChild(btn);
+    return btn;
+  });
+  wrapper.appendChild(tabRow);
+
+  // ── View toggle ──────────────────────────────────────────────────────
+  const viewRow = document.createElement("div");
+  viewRow.className = "bvt-view-row";
+  const viewLbl = document.createElement("span");
+  viewLbl.className = "bvt-view-label";
+  viewLbl.textContent = "View";
+  const sideBtn = document.createElement("button");
+  sideBtn.className = "bvt-view-btn";
+  sideBtn.textContent = "Side";
+  sideBtn.addEventListener("click", () => animateTo("side"));
+  const topBtn = document.createElement("button");
+  topBtn.className = "bvt-view-btn";
+  topBtn.textContent = "Above";
+  topBtn.addEventListener("click", () => animateTo("top"));
+  viewRow.append(viewLbl, sideBtn, topBtn);
+
+  // ── Bias / Variance highlight legend ───────────────────────────────
+  // Sits next to the View buttons; hover (or click for sticky) dims the
+  // other component so the user can isolate the bias bracket or the
+  // variance arms.
+  const legendCss = "display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;padding:4px 10px;border-radius:5px;font-size:12px;font-weight:600;transition:background 0.15s;font-family:inherit;margin-left:auto;";
+
+  const biasLeg = document.createElement("span");
+  biasLeg.style.cssText = legendCss;
+  biasLeg.style.color = "#dc2626";
+  biasLeg.innerHTML = `<span style="display:inline-block;width:18px;height:3px;background:#dc2626;border-radius:1px;"></span><span>Bias</span>`;
+
+  const varLeg = document.createElement("span");
+  varLeg.style.cssText = legendCss + "margin-left:0;";
+  varLeg.style.color = "#3b82f6";
+  varLeg.innerHTML = `<span style="display:inline-block;width:18px;height:0;border-top:2px dashed #3b82f6;"></span><span>Variance</span>`;
+
+  viewRow.append(biasLeg, varLeg);
+  wrapper.appendChild(viewRow);
+
+  // ── Highlight handlers ──────────────────────────────────────────────
+  let hoverMode  = null;       // "bias" | "variance" | null
+  let stickyMode = null;       // "bias" | "variance" | null
+  function applyHighlight() {
+    const mode = hoverMode || stickyMode;
+    const root = svg.node();
+    // dim=true → set inline style.opacity=0.15 (overrides any attribute)
+    // dim=false → clear inline style so the attribute (set by applyState
+    // for tilt-driven fading) shows through unchanged.
+    const setDim = (selector, dim) => {
+      root.querySelectorAll(selector).forEach(el => { el.style.opacity = dim ? "0.15" : ""; });
+    };
+    setDim(".bvt-var-group",   mode === "bias");
+    setDim(".bvt-theta-group", mode === "variance");
+    setDim(".bvt-bias-group",  mode === "variance");
+    biasLeg.style.background = stickyMode === "bias"     ? "#fee2e2" : "transparent";
+    varLeg.style.background  = stickyMode === "variance" ? "#dbeafe" : "transparent";
+  }
+  function toggleSticky(mode) {
+    stickyMode = (stickyMode === mode) ? null : mode;
+    applyHighlight();
+  }
+  biasLeg.addEventListener("mouseenter", () => { hoverMode = "bias";     applyHighlight(); });
+  biasLeg.addEventListener("mouseleave", () => { hoverMode = null;       applyHighlight(); });
+  biasLeg.addEventListener("click",      () => toggleSticky("bias"));
+  varLeg .addEventListener("mouseenter", () => { hoverMode = "variance"; applyHighlight(); });
+  varLeg .addEventListener("mouseleave", () => { hoverMode = null;       applyHighlight(); });
+  varLeg .addEventListener("click",      () => toggleSticky("variance"));
+
+  // ── Stage and persistent SVG ────────────────────────────────────────
+  // Both views share one SVG. Each visual element lives in 3D — the
+  // "floor" is at z = 0 and the side-view stagger heights are encoded as
+  // z-values. Tilting the camera (parameter t = sin φ) projects the same
+  // scene from horizontal (t = 0, side) to straight-down (t = 1, top).
+  const stage = document.createElement("div");
+  stage.className = "bvt-stage";
+  wrapper.appendChild(stage);
+
+  const W = 720, H = 480;
+  const cx_screen = W / 2;
+  const cy_floor  = H * 0.55;            // floor centre on screen
+  const pxPerUnit = 130;                  // shared scale for x and y
+
+  const svg = d3.create("svg")
+    .attr("viewBox", `0 0 ${W} ${H}`)
+    .style("width", "100%").style("max-width", `${W}px`)
+    .style("height", "auto").style("display", "block");
+
+  // Layer order (back → front). Classes mark which groups participate in the
+  // bias / variance highlight: bvt-bias-group + bvt-theta-group dim together
+  // when the user picks Variance; bvt-var-group dims when they pick Bias.
+  const gAxis        = svg.append("g");                                                // axis (side-only)
+  const gRings       = svg.append("g");                                                // target rings (top-only)
+  const gCrosshairs  = svg.append("g");                                                // top-view crosshairs
+  const gArms        = svg.append("g").attr("class", "bvt-var-group");                 // variance arms
+  const gStems       = svg.append("g").attr("class", "bvt-var-group");                 // lollipop poles (variance side)
+  const gThetaLine   = svg.append("g").attr("class", "bvt-theta-group");               // θ pole + label
+  const gMeanLine    = svg.append("g").attr("class", "bvt-mean-group");                // E[θ̂] pole + label
+  const gBracket     = svg.append("g").attr("class", "bvt-bias-group");                // bias bracket
+  const gHeads       = svg.append("g").attr("class", "bvt-var-group");                 // lollipop heads (variance side)
+
+  // Heights of side-view elements above the floor, in pixels
+  const H_BRACKET_PX  = 200;
+  const H_THETA_PX    = 192;
+  const H_MEAN_PX     = 192;
+  const H_ARM_TOP_PX  = 184;             // lollipop closest to bracket
+  const H_ARM_BOT_PX  = 28;              // lollipop closest to floor
+  const armHeightPx = i => H_ARM_TOP_PX - (i / Math.max(NPTS - 1, 1)) * (H_ARM_TOP_PX - H_ARM_BOT_PX);
+
+  // Target ring radii (data units) — outermost is the floor outline.
+  // Outlines only; no colour fills, so the eye lands on the lollipops and
+  // arms instead of the target.
+  const RING_RADII = [1.55, 1.16, 0.77, 0.38];
+
+  // ── Pre-create persistent elements ──────────────────────────────────
+  // Side-view axis (horizontal line + ticks below)
+  const axisLine = gAxis.append("line")
+    .attr("x1", cx_screen - RING_RADII[0] * pxPerUnit)
+    .attr("x2", cx_screen + RING_RADII[0] * pxPerUnit)
+    .attr("y1", cy_floor).attr("y2", cy_floor)
+    .attr("stroke", "#94a3b8").attr("stroke-width", 1.4);
+
+  const tickValues = [-1.5, -1, -0.5, 0, 0.5, 1, 1.5];
+  const tickEls = tickValues.map(v => {
+    const x = cx_screen + v * pxPerUnit;
+    const tickL = gAxis.append("line")
+      .attr("x1", x).attr("x2", x)
+      .attr("y1", cy_floor).attr("y2", cy_floor + 5)
+      .attr("stroke", "#94a3b8").attr("stroke-width", 1);
+    const tickT = gAxis.append("text")
+      .attr("x", x).attr("y", cy_floor + 18)
+      .attr("text-anchor", "middle")
+      .style("font-size", "10px").style("fill", "#475569")
+      .text(v.toFixed(1).replace(/\.0$/, ""));
+    return { tickL, tickT };
+  });
+
+  // Target rings (ellipses; ry = 0 collapses them to a flat line in side view).
+  // Outlines only — no fills — so the dots and arms are the focus.
+  const ringEls = RING_RADII.map((r) =>
+    gRings.append("ellipse")
+      .attr("cx", cx_screen).attr("cy", cy_floor)
+      .attr("rx", r * pxPerUnit).attr("ry", 0)
+      .attr("fill", "none")
+      .attr("stroke", "#cbd5e1").attr("stroke-width", 1.2)
+      .attr("stroke-opacity", 0.7)
+  );
+
+  // Crosshairs (collapsed at side view)
+  const crossH = gCrosshairs.append("line")
+    .attr("stroke", "#94a3b8").attr("stroke-opacity", 0.35)
+    .attr("stroke-width", 1).attr("stroke-dasharray", "3,4");
+  const crossV = gCrosshairs.append("line")
+    .attr("stroke", "#94a3b8").attr("stroke-opacity", 0.35)
+    .attr("stroke-width", 1).attr("stroke-dasharray", "3,4");
+
+  // Bias bracket
+  const bracketLine = gBracket.append("line")
+    .attr("stroke", "#dc2626").attr("stroke-width", 3)
+    .attr("stroke-linecap", "round");
+
+  // Theta pole
+  const thetaLine = gThetaLine.append("line")
+    .attr("stroke", "#dc2626").attr("stroke-width", 2.5)
+    .attr("stroke-dasharray", "6,4").attr("stroke-opacity", 0.95);
+
+  // Mean pole
+  const meanLine = gMeanLine.append("line")
+    .attr("stroke", "#475569").attr("stroke-width", 2.5)
+    .attr("stroke-dasharray", "6,4").attr("stroke-opacity", 0.95);
+
+  // Variance arms, stems, heads — one per dataset point
+  const armEls = Array.from({ length: NPTS }, (_, i) =>
+    gArms.append("line")
+      .attr("stroke", PALETTE[i % PALETTE.length])
+      .attr("stroke-width", 2)
+      .attr("stroke-dasharray", "5,3")
+  );
+  const stemEls = Array.from({ length: NPTS }, (_, i) =>
+    gStems.append("line")
+      .attr("stroke", PALETTE[i % PALETTE.length])
+      .attr("stroke-width", 1.5)
+      .attr("stroke-opacity", 0.65)
+  );
+  const headEls = Array.from({ length: NPTS }, (_, i) =>
+    gHeads.append("circle").attr("r", 5)
+      .attr("fill", PALETTE[i % PALETTE.length])
+      .attr("stroke", "#fff").attr("stroke-width", 1.6)
+  );
+
+  // θ and E[θ̂] glyphs (the "flags" on top of the poles). They live inside
+  // their pole's group, so the highlight inherits.
+  const thetaText = gThetaLine.append("text")
+    .attr("text-anchor", "middle")
+    .style("font-size", "13px").style("font-style", "italic")
+    .style("font-family", '"Latin Modern Math","STIX Two Math","Cambria Math",serif')
+    .style("fill", "#dc2626").style("font-weight", 700)
+    .text("θ");
+  const meanText = gMeanLine.append("text")
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px").style("font-style", "italic")
+    .style("font-family", '"Latin Modern Math","STIX Two Math","Cambria Math",serif')
+    .style("fill", "#475569").style("font-weight", 700)
+    .text("E[θ̂]");
+
+  stage.appendChild(svg.node());
+
+  // ── Project a 3-D point given the current tilt ──────────────────────
+  // Camera tilts around the horizontal axis. t = sin φ.
+  //   φ = 0     → side view  (cos = 1, sin = 0; Y collapses)
+  //   φ = π/2  → top view   (cos = 0, sin = 1; Z collapses)
+  function project(X, Y, Zpx, t) {
+    const sinPhi = t;
+    const cosPhi = Math.sqrt(Math.max(0, 1 - t * t));
+    return [
+      cx_screen + X * pxPerUnit,
+      cy_floor - (Zpx * cosPhi + Y * pxPerUnit * sinPhi)
+    ];
+  }
+
+  // ── Apply current state to all elements ─────────────────────────────
+  function applyState() {
+    const s = SCENARIO_DATA[scenarioIdx];
+    const t = tilt;
+    const cosPhi = Math.sqrt(Math.max(0, 1 - t * t));
+    const sinPhi = t;
+
+    const meanX = s.points.reduce((a, p) => a + p[0], 0) / NPTS;
+    const meanY = s.points.reduce((a, p) => a + p[1], 0) / NPTS;
+
+    // Side-view axis fades out as we tilt up
+    axisLine.style("opacity", cosPhi);
+    tickEls.forEach(({ tickL, tickT }) => {
+      tickL.style("opacity", cosPhi);
+      tickT.style("opacity", cosPhi);
+    });
+
+    // Target rings: ry grows from 0 to full radius. Hide entirely at t=0
+    // so the side-view axis line reads cleanly. Inner rings need a touch
+    // more tilt before they appear so the rings reveal in sequence.
+    ringEls.forEach((el, i) => {
+      el.attr("ry", RING_RADII[i] * pxPerUnit * sinPhi)
+        .style("opacity", i === 0 ? sinPhi : Math.max(0, sinPhi * 1.15 - 0.15));
+    });
+
+    // Crosshairs visible only in (or near) the top view
+    const baseR = RING_RADII[0] * pxPerUnit;
+    crossH.attr("x1", cx_screen - baseR).attr("x2", cx_screen + baseR)
+          .attr("y1", cy_floor).attr("y2", cy_floor)
+          .style("opacity", Math.max(0, sinPhi - 0.15) * 0.9);
+    crossV.attr("x1", cx_screen).attr("x2", cx_screen)
+          .attr("y1", cy_floor - baseR * sinPhi).attr("y2", cy_floor + baseR * sinPhi)
+          .style("opacity", Math.max(0, sinPhi - 0.15) * 0.9);
+
+    // Theta pole — from (0,0,0) up to (0,0,h_theta)
+    {
+      const [x1, y1] = project(0, 0, 0, t);
+      const [x2, y2] = project(0, 0, H_THETA_PX, t);
+      thetaLine.attr("x1", x1).attr("y1", y1).attr("x2", x2).attr("y2", y2);
+    }
+
+    // Mean pole — from (meanX, meanY, 0) up to (meanX, meanY, h_mean)
+    {
+      const [x1, y1] = project(meanX, meanY, 0, t);
+      const [x2, y2] = project(meanX, meanY, H_MEAN_PX, t);
+      meanLine.attr("x1", x1).attr("y1", y1).attr("x2", x2).attr("y2", y2);
+    }
+
+    // Bias bracket — from (0,0,h_bracket) to (meanX, meanY, h_bracket).
+    // At side view this is a horizontal segment up high. As the camera
+    // tilts down, it sweeps onto the floor and becomes the 2-D bias arrow
+    // pointing from θ to the cluster centre.
+    {
+      const [x1, y1] = project(0, 0, H_BRACKET_PX, t);
+      const [x2, y2] = project(meanX, meanY, H_BRACKET_PX, t);
+      bracketLine.attr("x1", x1).attr("y1", y1).attr("x2", x2).attr("y2", y2);
+    }
+
+    // Per-dataset elements
+    s.points.forEach((pt, i) => {
+      const [Xi, Yi] = pt;
+      const hArm = armHeightPx(i);
+
+      // Variance arm — at side view, horizontal segment connecting mean to θ̂_i
+      // at lollipop height. At top view, lies flat on the floor pointing from
+      // the cluster centre to the shot.
+      const [aX1, aY1] = project(meanX, meanY, hArm, t);
+      const [aX2, aY2] = project(Xi, Yi, hArm, t);
+      armEls[i].attr("x1", aX1).attr("y1", aY1).attr("x2", aX2).attr("y2", aY2);
+
+      // Stem (the vertical pole). Length = hArm * cos φ, so it's full-length
+      // at side view and collapses to zero at top view.
+      const [sX1, sY1] = project(Xi, Yi, 0, t);
+      const [sX2, sY2] = project(Xi, Yi, hArm, t);
+      // Use attr (presentation attribute) for the tilt-driven fade so the
+      // highlight's inline style.opacity (".15" when dimmed) can override it
+      // and clear cleanly back to the attribute value when un-dimmed.
+      stemEls[i].attr("x1", sX1).attr("y1", sY1).attr("x2", sX2).attr("y2", sY2)
+        .attr("opacity", cosPhi * 0.85);
+
+      // Lollipop head — the pole's tip. Same projection as the stem's top.
+      headEls[i].attr("cx", sX2).attr("cy", sY2);
+    });
+
+    // Glyphs at the very top of θ and E[θ̂] poles — as the poles fold down
+    // these slide onto the bullseye and the cluster centre respectively.
+    const labelOffset = 12;        // glyph sits this many px above the pole tip
+    {
+      const [tx, ty] = project(0, 0, H_THETA_PX + labelOffset, t);
+      thetaText.attr("x", tx).attr("y", ty);
+    }
+    {
+      const [mx, my] = project(meanX, meanY, H_MEAN_PX + labelOffset, t);
+      meanText.attr("x", mx).attr("y", my);
+    }
+  }
+
+  // ── Animation ───────────────────────────────────────────────────────
+  function animateTo(targetView) {
+    if (viewMode === targetView && !animating) return;
+    viewMode = targetView;
+    sideBtn.classList.toggle("active", viewMode === "side");
+    topBtn.classList.toggle("active",  viewMode === "top");
+
+    const targetT = (viewMode === "top") ? 1 : 0;
+    const fromT   = tilt;
+    const start   = performance.now();
+    const duration = 750;
+    animating = true;
+
+    function frame(now) {
+      const k = Math.min(1, (now - start) / duration);
+      const eased = k < 0.5 ? 4*k*k*k : 1 - Math.pow(-2*k + 2, 3) / 2;   // easeInOutCubic
+      tilt = fromT + (targetT - fromT) * eased;
+      applyState();
+      if (k < 1) requestAnimationFrame(frame);
+      else { tilt = targetT; animating = false; applyState(); }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  // Initial paint
+  tabBtns[scenarioIdx].classList.add("active");
+  sideBtn.classList.add("active");
+  applyState();
+
+  return wrapper;
+}
+```
+
+## Prediction
+
+Now we predict a random outcome $Y$ using a variable $x$.
+
+$$Y = f(x) + \varepsilon, \quad \mathbf{E}[\varepsilon] = 0, \quad \text{Var}(\varepsilon) = \sigma^2$$
+
+Your predictor $\hat{f}(x)$ is trained on random data. The prediction MSE is:
+
+$$\begin{aligned}
+\mathbf{E}[(\underbrace{Y}_{f(x) + \varepsilon} - \hat{f}(x))^2] &= \mathbf{E}\left[\left((f(x) - \hat{f}(x)) + \varepsilon\right)^2\right] \\
+&= \mathbf{E}\left[(f(x) - \hat{f}(x))^2\right] + \underbrace{2 \cdot \mathbf{E}[(f(x) - \hat{f}(x))\varepsilon]}_{= 2 \cdot \mathbf{E}[f(x) - \hat{f}(x)] \cdot \underbrace{\mathbf{E}[\varepsilon]}_{= 0}} + \mathbf{E}[\varepsilon^2] \\
+&= \mathbf{E}\left[(f(x) - \hat{f}(x))^2\right] + \mathbf{E}[\varepsilon^2]
+\end{aligned}$$
+
+The first term $\mathbf{E}[(f(x) - \hat{f}(x))^2]$ can be treated like $\mathbf{E}\big[(\hat{\theta} - \theta)^2\big]$ from the @eq-mse-theta, therefore:
+
+$$\mathbf{E}\left[(f(x) - \hat{f}(x))^2\right] = \underbrace{\mathbf{E}\left[\left(\hat{f}(x) - \mathbf{E}[\hat{f}(x)]\right)^2\right]}_{\text{variance}} + \underbrace{\left(\mathbf{E}[\hat{f}(x)] - f(x)\right)^2}_{\text{bias}^2}$$
+
+The second term is $\mathbf{E}[\varepsilon^2]$. By definition, the error is centred at zero, so let $\mu = \mathbf{E}[\varepsilon] = 0$, and remember that $\text{Var}(\varepsilon) = \sigma^2$.
+
+$$\begin{aligned}\text{Var}(\varepsilon) &= \mathbf{E}\left[(\varepsilon - \mu)^2\right] \\ &= \mathbf{E}[\varepsilon^2 - 2\varepsilon\mu + \mu^2] \\ &= \mathbf{E}[\varepsilon^2] - \mathbf{E}[2\varepsilon\mu] + \mathbf{E}[\mu^2] \\ &= \mathbf{E}[\varepsilon^2] - 2\mu\mathbf{E}[\varepsilon] + \mu^2 \\ &= \mathbf{E}[\varepsilon^2] - 2\mu(\mu) + \mu^2 \\ &= \mathbf{E}[\varepsilon^2] - \underbrace{\mu^2}_{= 0} \\ &= \mathbf{E}[\varepsilon^2]\end{aligned}$$
+
+Now plug them back to the MSE:
+
+$$MSE = \underbrace{\mathbf{E}\left[\left(\hat{f}(x) - \mathbf{E}[\hat{f}(x)]\right)^2\right]}_{\text{variance}} + \underbrace{\vphantom{\mathbf{E}\left[\left(\hat{f}(x) - \mathbf{E}[\hat{f}(x)]\right)^2\right]}\left(\mathbf{E}[\hat{f}(x)] - f(x)\right)^2}_{\text{bias}^2} + \underbrace{\vphantom{\mathbf{E}\left[\left(\hat{f}(x) - \mathbf{E}[\hat{f}(x)]\right)^2\right]}\text{Var}(\varepsilon)}_{\text{irreducible error}}$$
+
+### Tradeoff
+
+So far the picture has been static — one estimator, one decomposition. In practice you choose the *complexity* of your model, and that choice trades bias against variance directly. To make this concrete, take the canonical example: **polynomial regression**. Given training data $\{(x_i, y_i)\}$, fit
+
+$$\hat f(x) = \beta_0 + \beta_1 x + \beta_2 x^2 + \dots + \beta_d x^d$$
+
+by ordinary least squares. The single knob is the degree $d$, which is also the number of fitted parameters minus one:
+
+- Small $d$ → the polynomial is too rigid to follow $f(x)$. Across different training sets the predictions stay close to each other (**low variance**), but they systematically miss the truth (**high bias**).
+- Large $d$ → the polynomial bends to chase every wiggle in the noise. Averaged over training sets the predictions track the truth (**low bias**), but any single fit swings wildly (**high variance**).
+
+The plot on top shows what happens at the current $d$: the dashed red curve is the truth $f$, the gray dots are one training sample, the solid teal line is $\mathbf{E}[\hat f(x)]$ averaged over many training sets, the teal band is $\pm$ one standard deviation around it (variance), and the red band between the truth and the mean prediction is the bias. The plot below traces those two quantities — averaged over $x$ — as $d$ varies. The gray dashed curve is their sum plus the irreducible $\sigma^2$, so its minimum is the best $d$ for this problem.
+
+```{ojs}
+//| echo: false
+
+viewof bv_poly = {
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = "font-family:system-ui,-apple-system,sans-serif;max-width:760px;margin:0 auto;";
+  wrapper.appendChild(injectStyle());
+
+  // ── Local CSS ──────────────────────────────────────────────────────
+  const styleTag = document.createElement("style");
+  styleTag.textContent = `
+    .poly-readout { display:flex; align-items:baseline; gap:18px; margin-top:6px; flex-wrap:wrap; }
+    .poly-readout-label { font-size:11px; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; }
+    .poly-readout-val { font-size:18px; font-weight:800; font-variant-numeric:tabular-nums; font-family:'SF Mono',SFMono-Regular,Menlo,Consolas,monospace; }
+    .poly-pair { display:inline-flex; gap:8px; align-items:baseline; padding:4px 10px; border-radius:8px; cursor:pointer; transition:background 0.15s, box-shadow 0.15s; user-select:none; -webkit-tap-highlight-color:transparent; }
+    .poly-pair-bias:hover, .poly-pair-bias.is-active { background:#fef2f2; box-shadow:inset 0 0 0 1px #fecaca; }
+    .poly-pair-var:hover,  .poly-pair-var.is-active  { background:#ecfeff; box-shadow:inset 0 0 0 1px #a5f3fc; }
+  `;
+  wrapper.appendChild(styleTag);
+
+  // ── Constants ──────────────────────────────────────────────────────
+  // Polynomial regression of degree d on noisy y = f(x) + ε. Slider runs
+  // d directly so "more parameters → more complex" reads left-to-right in
+  // plot 2 (no axis inversion). f(x) = sin(2x) on [0,5] is ~1.6 cycles —
+  // low-d polynomials cannot follow it (high bias), high-d fits chase the
+  // noise (high variance, especially near the boundaries: Runge effect).
+  // σ = 0.5 keeps the irreducible floor (= σ²) modest so the U valley
+  // stays prominent.
+  const W = 720;
+  const X_MIN = 0, X_MAX = 5;
+  const Y_MIN = -2.8, Y_MAX = 2.8;
+  const SIGMA = 0.5;
+  const N_TRAIN = 50;
+  const N_DATASETS = 16;
+  const D_MIN = 1, D_MAX = 11;
+  const M = { left: 36, right: 12 };
+  const innerW = W - M.left - M.right;
+
+  const trueF = x => Math.sin(2 * x);
+
+  // Deterministic random for reproducible training data
+  function seededRand(seed) {
+    let s = seed >>> 0;
+    return () => {
+      s = (Math.imul(s, 1664525) + 1013904223) >>> 0;
+      return s / 4294967296;
+    };
+  }
+  function randn(rand) {
+    const u = rand() || 1e-10, v = rand();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+
+  // Generate training datasets (loop var dd — `d` is reserved for degree)
+  const trainingSets = [];
+  for (let dd = 0; dd < N_DATASETS; dd++) {
+    const rand = seededRand(123 + dd * 17);
+    const xs = [], ys = [];
+    for (let i = 0; i < N_TRAIN; i++) {
+      const x = X_MIN + rand() * (X_MAX - X_MIN);
+      xs.push(x);
+      ys.push(trueF(x) + SIGMA * randn(rand));
+    }
+    trainingSets.push({ xs, ys });
+  }
+
+  // Test grid
+  const N_TEST = 100;
+  const xTest = [];
+  for (let i = 0; i <= N_TEST; i++) xTest.push(X_MIN + (X_MAX - X_MIN) * i / N_TEST);
+  const trueY = xTest.map(trueF);
+
+  // ── Polynomial regression in Chebyshev basis ──────────────────────
+  // The monomial basis on a wide x range becomes Hilbert-like at high
+  // degree (cond ≈ 10⁹+ at d=12). Chebyshev T_n(z) on z ∈ [-1,1] keeps
+  // X^T X well conditioned, so plain Gaussian elimination solves cleanly
+  // up to d ≈ 15. Each fit is still a polynomial of degree d in x — only
+  // the basis used to express it is different.
+  const xMid  = (X_MIN + X_MAX) / 2;
+  const xHalf = (X_MAX - X_MIN) / 2;
+  const norm  = x => (x - xMid) / xHalf;
+
+  function chebBasis(z, deg) {
+    const T = new Array(deg + 1);
+    T[0] = 1;
+    if (deg >= 1) T[1] = z;
+    for (let n = 2; n <= deg; n++) T[n] = 2 * z * T[n-1] - T[n-2];
+    return T;
+  }
+
+  // Solve Aβ = b via Gaussian elimination with partial pivoting.
+  function gaussSolve(A, b) {
+    const n = A.length;
+    const Aug = A.map((row, i) => [...row, b[i]]);
+    for (let i = 0; i < n; i++) {
+      let pi = i;
+      for (let k = i + 1; k < n; k++)
+        if (Math.abs(Aug[k][i]) > Math.abs(Aug[pi][i])) pi = k;
+      [Aug[i], Aug[pi]] = [Aug[pi], Aug[i]];
+      const piv = Aug[i][i] || 1e-20;
+      for (let k = i + 1; k < n; k++) {
+        const f = Aug[k][i] / piv;
+        for (let j = i; j <= n; j++) Aug[k][j] -= f * Aug[i][j];
+      }
+    }
+    const x = new Array(n);
+    for (let i = n - 1; i >= 0; i--) {
+      let s = Aug[i][n];
+      for (let j = i + 1; j < n; j++) s -= Aug[i][j] * x[j];
+      x[i] = s / (Aug[i][i] || 1e-20);
+    }
+    return x;
+  }
+
+  function polyFit(ts, deg) {
+    const n = ts.xs.length, p = deg + 1;
+    const X = new Array(n);
+    for (let i = 0; i < n; i++) X[i] = chebBasis(norm(ts.xs[i]), deg);
+    const XtX = new Array(p).fill(0).map(() => new Array(p).fill(0));
+    const Xty = new Array(p).fill(0);
+    for (let a = 0; a < p; a++) {
+      for (let b = a; b < p; b++) {
+        let s = 0;
+        for (let k = 0; k < n; k++) s += X[k][a] * X[k][b];
+        XtX[a][b] = s; XtX[b][a] = s;
+      }
+      let s = 0;
+      for (let k = 0; k < n; k++) s += X[k][a] * ts.ys[k];
+      Xty[a] = s;
+    }
+    return gaussSolve(XtX, Xty);
+  }
+
+  function polyEval(beta, x) {
+    const T = chebBasis(norm(x), beta.length - 1);
+    let s = 0;
+    for (let j = 0; j < beta.length; j++) s += beta[j] * T[j];
+    return s;
+  }
+
+  // Pre-compute all metrics so slider updates are instant. Keep `curves`
+  // so the render can draw the individual ⌃f_i(x) lines — those are what
+  // give "variance" its visual meaning (spread across training sets).
+  const cache = {};
+  const aggBiasSq = new Array(D_MAX + 1).fill(0);
+  const aggVar    = new Array(D_MAX + 1).fill(0);
+  for (let d = D_MIN; d <= D_MAX; d++) {
+    const curves = trainingSets.map(ts => {
+      const beta = polyFit(ts, d);
+      return xTest.map(x => polyEval(beta, x));
+    });
+    const meanY = xTest.map((_, i) => curves.reduce((s, c) => s + c[i], 0) / curves.length);
+    const varY  = xTest.map((_, i) => {
+      const m = meanY[i];
+      return curves.reduce((s, c) => s + (c[i] - m) ** 2, 0) / curves.length;
+    });
+    const biasSqY = xTest.map((_, i) => (meanY[i] - trueY[i]) ** 2);
+    cache[d] = { curves, meanY, varY, biasSqY };
+    aggBiasSq[d] = biasSqY.reduce((s, v) => s + v, 0) / biasSqY.length;
+    aggVar[d]    = varY.reduce((s, v) => s + v, 0) / varY.length;
+  }
+  const irreducible = SIGMA * SIGMA;
+
+  // Optimum d = where total expected MSE is minimised.
+  let optD = D_MIN, optTotal = Infinity;
+  for (let d = D_MIN; d <= D_MAX; d++) {
+    const t = aggBiasSq[d] + aggVar[d] + irreducible;
+    if (t < optTotal) { optTotal = t; optD = d; }
+  }
+
+  function makeSvg(height) {
+    const svg = d3.create("svg")
+      .attr("viewBox", `0 0 ${W} ${height}`)
+      .style("width", "100%").style("max-width", `${W}px`)
+      .style("height", "auto").style("display", "block")
+      .style("touch-action", "manipulation");
+    const g = svg.append("g").attr("transform", `translate(${M.left},0)`);
+    return { svg, g };
+  }
+
+  // ── Slider ─────────────────────────────────────────────────────────
+  const SL = {};
+  SL.d = createSlider("d", D_MIN, D_MAX, 1, 5, "#7c3aed", "purple");
+  styleMathLabel(SL.d);
+
+  const slRow = document.createElement("div");
+  slRow.style.cssText = "display:flex;gap:24px;margin-bottom:14px;";
+  slRow.appendChild(SL.d.el);
+  wrapper.appendChild(slRow);
+
+  // ── Plot 1: f, training data, mean prediction with bias and variance ──
+  const H1 = 280;
+  const M1 = { top: 14, bottom: 30 };
+  const innerH1 = H1 - M1.top - M1.bottom;
+  const r1 = makeSvg(H1);
+  const xSc1 = d3.scaleLinear().domain([X_MIN, X_MAX]).range([0, innerW]);
+  const ySc1 = d3.scaleLinear().domain([Y_MIN, Y_MAX]).range([M1.top + innerH1, M1.top]);
+
+  // y-axis with subtle gridlines
+  r1.g.append("g")
+    .call(d3.axisLeft(ySc1).ticks(5).tickSize(-innerW))
+    .attr("font-size", 10)
+    .call(s => s.selectAll(".tick line").attr("stroke", "#e2e8f0"))
+    .call(s => s.select(".domain").remove());
+  r1.g.append("g").attr("transform", `translate(0,${M1.top + innerH1})`)
+    .call(d3.axisBottom(xSc1).ticks(6)).attr("font-size", 10);
+
+  // Layer order (back → front):
+  //   variance band → bias area → individual ⌃f_i lines → training points
+  //   → mean ⌃f curve → true f
+  // Classes drive the hover/click highlight: when the user focuses on
+  // "Bias", we keep `.bvpoly-bias-group` bright and dim `.bvpoly-var-group`,
+  // and vice-versa. Mean curve and training dots stay neutral.
+  const r1_varBand  = r1.g.append("g").attr("class", "bvpoly-var-group");
+  const r1_biasArea = r1.g.append("g").attr("class", "bvpoly-bias-group");
+  const r1_fitsG    = r1.g.append("g").attr("class", "bvpoly-var-group"); // faint individual fits
+  const r1_dotsG    = r1.g.append("g");
+  const r1_meanG    = r1.g.append("g");
+  const r1_trueG    = r1.g.append("g").attr("class", "bvpoly-bias-group");
+
+  // Static: training points from one dataset, faint gray
+  for (let i = 0; i < trainingSets[0].xs.length; i++) {
+    r1_dotsG.append("circle")
+      .attr("cx", xSc1(trainingSets[0].xs[i])).attr("cy", ySc1(trainingSets[0].ys[i]))
+      .attr("r", 2.4)
+      .attr("fill", "#475569").attr("fill-opacity", 0.55);
+  }
+
+  // Static: true f(x) — drawn AFTER mean so it's always visible on top
+  {
+    const path = d3.path();
+    for (let i = 0; i <= N_TEST; i++) {
+      const sx = xSc1(xTest[i]), sy = ySc1(trueY[i]);
+      if (i === 0) path.moveTo(sx, sy); else path.lineTo(sx, sy);
+    }
+    r1_trueG.append("path")
+      .attr("d", path.toString())
+      .attr("fill", "none")
+      .attr("stroke", "#dc2626").attr("stroke-width", 2.5)
+      .attr("stroke-dasharray", "6,4");
+  }
+
+  // Legend (top-right corner of plot 1)
+  {
+    const lg = r1.g.append("g").attr("transform", `translate(${innerW - 8},${M1.top + 4})`);
+    const legendItem = (y, color, opts, txt) => {
+      const { dashed = false, faint = false, width = 2.4 } = opts || {};
+      const ln = lg.append("line")
+        .attr("x1", -120).attr("x2", -100).attr("y1", y).attr("y2", y)
+        .attr("stroke", color).attr("stroke-width", width)
+        .attr("stroke-opacity", faint ? 0.45 : 1);
+      if (dashed) ln.attr("stroke-dasharray", "5,3");
+      lg.append("text")
+        .attr("x", -94).attr("y", y + 3)
+        .style("font-size", "11px").style("fill", "#475569").style("font-weight", 600)
+        .text(txt);
+    };
+    legendItem(0,  "#dc2626", { dashed: true },          "f(x)");
+    legendItem(14, "#0891b2", {},                        "E[f̂(x)]");
+    legendItem(28, "#94a3b8", { faint: true, width: 1 }, "individual f̂ᵢ(x)");
+  }
+
+  wrapper.appendChild(r1.svg.node());
+
+  // ── Plot 2: U-curve (bias², variance, total) vs degree d ─────────────
+  // Natural left-to-right reading: low d (simple) on the left, high d
+  // (complex) on the right. Bias² descends and Variance ascends as the
+  // model gets more flexible — the canonical textbook picture.
+  const H2 = 240;
+  const M2 = { top: 16, bottom: 50 };
+  const innerH2 = H2 - M2.top - M2.bottom;
+  const r2 = makeSvg(H2);
+  const xSc2 = d3.scaleLinear().domain([D_MIN, D_MAX]).range([0, innerW]);
+
+  const ds = d3.range(D_MIN, D_MAX + 1);
+  const totals = ds.map(d => aggBiasSq[d] + aggVar[d] + irreducible);
+  const maxMetric = Math.max(d3.max(ds, d => aggBiasSq[d]), d3.max(ds, d => aggVar[d]), d3.max(totals));
+  const ySc2 = d3.scaleLinear().domain([0, maxMetric * 1.08]).range([M2.top + innerH2, M2.top]);
+
+  // axes + gridlines
+  r2.g.append("g")
+    .call(d3.axisLeft(ySc2).ticks(5).tickSize(-innerW))
+    .attr("font-size", 10)
+    .call(s => s.selectAll(".tick line").attr("stroke", "#e2e8f0"))
+    .call(s => s.select(".domain").remove());
+  r2.g.append("g").attr("transform", `translate(0,${M2.top + innerH2})`)
+    .call(d3.axisBottom(xSc2).ticks(D_MAX).tickFormat(d3.format("d"))).attr("font-size", 10);
+  // Two-line x-axis label: top says "d", bottom says complexity direction
+  r2.g.append("text")
+    .attr("x", innerW / 2).attr("y", M2.top + innerH2 + 30)
+    .attr("text-anchor", "middle")
+    .style("font-size", "11px").style("fill", "#475569")
+    .text("d (polynomial degree)");
+  r2.g.append("text")
+    .attr("x", 0).attr("y", M2.top + innerH2 + 44)
+    .style("font-size", "10.5px").style("fill", "#94a3b8").style("font-style", "italic")
+    .text("← simpler (low d)");
+  r2.g.append("text")
+    .attr("x", innerW).attr("y", M2.top + innerH2 + 44)
+    .attr("text-anchor", "end")
+    .style("font-size", "10.5px").style("fill", "#94a3b8").style("font-style", "italic")
+    .text("more complex (high d) →");
+
+  // Helper: smooth path through (d, metric) pairs
+  function curvePath(values) {
+    const path = d3.path();
+    for (let i = 0; i < ds.length; i++) {
+      const sx = xSc2(ds[i]), sy = ySc2(values(ds[i]));
+      if (i === 0) path.moveTo(sx, sy); else path.lineTo(sx, sy);
+    }
+    return path.toString();
+  }
+
+  // Optimum-d vertical guide (dashed gray) with label
+  {
+    const xOpt = xSc2(optD);
+    r2.g.append("line")
+      .attr("x1", xOpt).attr("x2", xOpt)
+      .attr("y1", M2.top).attr("y2", M2.top + innerH2)
+      .attr("stroke", "#0f172a").attr("stroke-width", 1)
+      .attr("stroke-dasharray", "2,3").attr("stroke-opacity", 0.55);
+    r2.g.append("text")
+      .attr("x", xOpt).attr("y", M2.top - 4)
+      .attr("text-anchor", "middle")
+      .style("font-size", "10.5px").style("fill", "#475569").style("font-style", "italic")
+      .text(`optimum d = ${optD}`);
+  }
+
+  // Total = Bias² + Variance + Irreducible (drawn first so it sits behind)
+  r2.g.append("path")
+    .attr("d", curvePath(d => aggBiasSq[d] + aggVar[d] + irreducible))
+    .attr("fill", "none")
+    .attr("stroke", "#0f172a").attr("stroke-width", 1.6)
+    .attr("stroke-dasharray", "4,3").attr("stroke-opacity", 0.6);
+
+  // Bias² (red) and Variance (teal) — solid, prominent
+  r2.g.append("path")
+    .attr("d", curvePath(d => aggBiasSq[d]))
+    .attr("fill", "none")
+    .attr("stroke", "#dc2626").attr("stroke-width", 2.5);
+  r2.g.append("path")
+    .attr("d", curvePath(d => aggVar[d]))
+    .attr("fill", "none")
+    .attr("stroke", "#0891b2").attr("stroke-width", 2.5);
+
+  // End-of-curve labels — Bias² is high at LEFT (low d), Variance is high
+  // at RIGHT (high d), so each label sits at the side where its curve is.
+  r2.g.append("text")
+    .attr("x", xSc2(D_MIN) + 4).attr("y", ySc2(aggBiasSq[D_MIN]) - 4)
+    .style("font-size", "12px").style("font-weight", 700)
+    .style("fill", "#dc2626")
+    .text("Bias²");
+  r2.g.append("text")
+    .attr("x", xSc2(D_MAX) - 4).attr("y", ySc2(aggVar[D_MAX]) - 4)
+    .attr("text-anchor", "end")
+    .style("font-size", "12px").style("font-weight", 700)
+    .style("fill", "#0891b2")
+    .text("Variance");
+  r2.g.append("text")
+    .attr("x", xSc2(D_MAX) - 4).attr("y", ySc2(aggBiasSq[D_MAX] + aggVar[D_MAX] + irreducible) - 4)
+    .attr("text-anchor", "end")
+    .style("font-size", "11px").style("font-weight", 600)
+    .style("fill", "#0f172a").style("opacity", 0.75)
+    .text("Total");
+
+  // Dynamic group: vertical line at current d + dots on each curve
+  const r2_currentG = r2.g.append("g");
+
+  wrapper.appendChild(r2.svg.node());
+
+  // ── Readouts ───────────────────────────────────────────────────────
+  const readout = document.createElement("div");
+  readout.className = "poly-readout";
+
+  const mkPair = (label, color, extraClass) => {
+    const box = document.createElement("span");
+    box.className = "poly-pair" + (extraClass ? " " + extraClass : "");
+    if (!extraClass) box.style.cursor = "default";
+    const lbl = document.createElement("span"); lbl.className = "poly-readout-label"; lbl.textContent = label;
+    const val = document.createElement("span"); val.className = "poly-readout-val";   val.style.color = color; val.textContent = "—";
+    box.append(lbl, val);
+    return { box, val };
+  };
+  const { box: biasBox, val: biasVal } = mkPair("Bias²",     "#dc2626", "poly-pair-bias");
+  const { box: varBox,  val: varVal  } = mkPair("Variance",  "#0891b2", "poly-pair-var");
+  const { box: totBox,  val: totVal  } = mkPair("Total MSE", "#0f172a");
+  readout.append(biasBox, varBox, totBox);
+  wrapper.appendChild(readout);
+
+  // ── Highlight system ───────────────────────────────────────────────
+  // hoverMode is transient (mouseenter/leave); stickyMode persists across
+  // slider changes (click toggles). The active mode is whichever is non-null
+  // — hover takes precedence so the user always sees what they're pointing at.
+  let hoverMode  = null;            // "bias" | "var" | null
+  let stickyMode = null;            // "bias" | "var" | null
+  const DIM = 0.18;
+
+  function applyHighlight() {
+    const mode = hoverMode || stickyMode;
+    const root = r1.svg;
+    // Reset
+    root.selectAll(".bvpoly-bias-group").style("opacity", "");
+    root.selectAll(".bvpoly-var-group").style("opacity", "");
+    biasBox.classList.toggle("is-active", stickyMode === "bias");
+    varBox.classList.toggle("is-active",  stickyMode === "var");
+    if (!mode) return;
+    if (mode === "bias") {
+      // Focus on bias → dim the variance side
+      root.selectAll(".bvpoly-var-group").style("opacity", DIM);
+    } else if (mode === "var") {
+      // Focus on variance → dim the bias side (true f + bias area)
+      root.selectAll(".bvpoly-bias-group").style("opacity", DIM);
+    }
+  }
+
+  function wireHighlight(box, mode) {
+    box.addEventListener("mouseenter", () => { hoverMode = mode; applyHighlight(); });
+    box.addEventListener("mouseleave", () => { hoverMode = null; applyHighlight(); });
+    box.addEventListener("click", () => {
+      stickyMode = (stickyMode === mode) ? null : mode;
+      applyHighlight();
+    });
+  }
+  wireHighlight(biasBox, "bias");
+  wireHighlight(varBox,  "var");
+
+  // ── Renderer ───────────────────────────────────────────────────────
+  function render() {
+    const d = +SL.d.input.value;
+    const data = cache[d];
+
+    r1_varBand.selectAll("*").remove();
+    r1_biasArea.selectAll("*").remove();
+    r1_fitsG.selectAll("*").remove();
+    r1_meanG.selectAll("*").remove();
+
+    // Variance band — ±SD around E[f̂(x)] (matches the formula
+    // Var = E[(f̂ - E[f̂])²], visualised as the spread).
+    const varAreaGen = d3.area()
+      .x((_, i) => xSc1(xTest[i]))
+      .y0((_, i) => ySc1(data.meanY[i] - Math.sqrt(data.varY[i])))
+      .y1((_, i) => ySc1(data.meanY[i] + Math.sqrt(data.varY[i])));
+    r1_varBand.append("path")
+      .attr("d", varAreaGen(xTest))
+      .attr("fill", "#0891b2").attr("fill-opacity", 0.16);
+
+    // Bias area — between f(x) and E[f̂(x)]; visualises Bias = E[f̂] − f.
+    const biasAreaGen = d3.area()
+      .x((_, i) => xSc1(xTest[i]))
+      .y0((_, i) => ySc1(trueY[i]))
+      .y1((_, i) => ySc1(data.meanY[i]));
+    r1_biasArea.append("path")
+      .attr("d", biasAreaGen(xTest))
+      .attr("fill", "#dc2626").attr("fill-opacity", 0.16);
+
+    // Individual fits — one faint gray curve per training set. Their spread
+    // is exactly what the variance band summarises.
+    data.curves.forEach(curve => {
+      const gen = d3.line()
+        .x((_, i) => xSc1(xTest[i]))
+        .y((_, i) => ySc1(curve[i]));
+      r1_fitsG.append("path")
+        .attr("d", gen(xTest))
+        .attr("fill", "none")
+        .attr("stroke", "#94a3b8").attr("stroke-width", 1)
+        .attr("stroke-opacity", 0.35);
+    });
+
+    // Mean prediction E[f̂(x)] — the centerline of the variance band.
+    const meanLineGen = d3.line()
+      .x((_, i) => xSc1(xTest[i]))
+      .y((_, i) => ySc1(data.meanY[i]));
+    r1_meanG.append("path")
+      .attr("d", meanLineGen(xTest))
+      .attr("fill", "none")
+      .attr("stroke", "#0891b2").attr("stroke-width", 2.5);
+
+    // Plot 2: vertical guide + dots at current d
+    r2_currentG.selectAll("*").remove();
+    const xD = xSc2(d);
+    r2_currentG.append("line")
+      .attr("x1", xD).attr("x2", xD)
+      .attr("y1", M2.top).attr("y2", M2.top + innerH2)
+      .attr("stroke", "#7c3aed").attr("stroke-width", 1.5)
+      .attr("stroke-dasharray", "4,4").attr("stroke-opacity", 0.75);
+    const dotAt = (yVal, color) => {
+      r2_currentG.append("circle")
+        .attr("cx", xD).attr("cy", ySc2(yVal))
+        .attr("r", 5)
+        .attr("fill", color)
+        .attr("stroke", "#fff").attr("stroke-width", 1.6);
+    };
+    dotAt(aggBiasSq[d], "#dc2626");
+    dotAt(aggVar[d],    "#0891b2");
+    dotAt(aggBiasSq[d] + aggVar[d] + irreducible, "#0f172a");
+
+    // Readouts
+    biasVal.textContent = aggBiasSq[d].toFixed(3);
+    varVal.textContent  = aggVar[d].toFixed(3);
+    totVal.textContent  = (aggBiasSq[d] + aggVar[d] + irreducible).toFixed(3);
+
+    // Re-apply highlight — slider re-renders rebuild the dynamic groups,
+    // so any sticky/hover dimming must be re-imposed on the fresh nodes.
+    applyHighlight();
+  }
+
+  SL.d.input.addEventListener("input", () => { SL.d.sync(); render(); });
+
+  render();
+  return wrapper;
+}
+```
+
+The U-curve is the bias-variance tradeoff in one picture. There's no $d$ that makes both terms small at once — you slide along the trade. The minimum of the gray dashed *Total* curve is where the two errors balance, and is the best $d$ for this particular function and noise level. Pick a different $f(x)$, or change $\sigma$, and the optimum moves. Other complexity knobs (number of spline knots, hidden units in a small neural net, depth of a decision tree) tell exactly the same story — only the parameter on the x-axis changes.
+

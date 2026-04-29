@@ -35,6 +35,7 @@ book:
         - mle.qmd
         - mcmc.qmd
         - pmcmc.qmd
+    - part: mod-sel.qmd
     - part: rnum.qmd
       chapters:
         - gen-int.qmd
