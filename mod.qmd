@@ -10,9 +10,9 @@ A model is a simplified representation of a complex phenomenon [@vynnycky2010].
 
 We all use models in our daily lives, often without realizing it. Imagine a colleague asks, "How long will it take to get to the restaurant?". There are different ways you might answer this question, each reflecting a different "model" in your head:
 
--   Experience-based model: You might think, "Last week it took me 20 minutes to get to this restaurant". This model simplifies by assuming past experiences are a reliable predictor of future outcomes, ignoring daily variations like traffic or weather.
+- Experience-based model: You might think, "Last week it took me 20 minutes to get to this restaurant". This model simplifies by assuming past experiences are a reliable predictor of future outcomes, ignoring daily variations like traffic or weather.
 
--   Distance and speed model: You might think, "The restaurant is 15 kilometers away, and I drive at 45 km/h, so it should take about 20 minutes". This model uses the formula $\text{time} = \frac{\text{distance}}{\text{speed}}$. It simplifies by assuming a constant speed, and not accounting for real-world complexities like traffic lights or congestion.
+- Distance and speed model: You might think, "The restaurant is 15 kilometers away, and I drive at 45 km/h, so it should take about 20 minutes". This model uses the formula $\text{time} = \frac{\text{distance}}{\text{speed}}$. It simplifies by assuming a constant speed, and not accounting for real-world complexities like traffic lights or congestion.
 
 Models help us navigate and make decisions about complex situations by focusing on the most relevant factors and ignoring the less critical details.
 
@@ -20,8 +20,8 @@ Models help us navigate and make decisions about complex situations by focusing 
 
 > Despite the advances in modelling that will arise in the coming decades, models will **never** be able to accurately predict if, or when, a particular person, farm or community will become infected. This is for two reasons:
 >
-> -   The transmission of infection is a stochastic process, such that no two epidemics are identical.
-> -   Models will always be an approximation, and rare or unforeseen behavioural events can have a significant impact on the disease dynamics
+> - The transmission of infection is a stochastic process, such that no two epidemics are identical.
+> - Models will always be an approximation, and rare or unforeseen behavioural events can have a significant impact on the disease dynamics
 >
 > Keeling M (2006) *State-of-science review: predictive and real-time epidemiological modelling*. London: Office of Science and Innovation [@keeling2006; @christley2013].
 
@@ -41,50 +41,40 @@ $$\hat{y} = X \hat{\beta}$$
 
 of which $\hat{y}$ is a vector of predicted response, $X$ is the data matrix, $\hat{\beta}$ is a vector of parameters.
 
-**Inference** is about $\hat{\beta}$, to answer these questions:
+**Inference** is about $\hat{\beta}$ (the parameters), to answer these questions:
 
--   Which coefficients are non-zero, implying meaningful associations between covariates and the response?
--   Which non-zero effects are positive, and which are negative?
+- Which coefficients are non-zero, implying meaningful associations between covariates and the response?
+- Which non-zero effects are positive, and which are negative?
 
-We model using a small fraction sampling from the population, and try to draw some statements about the whole population. In **inference**, we estimate parameters or conduct hypothesis testing.
+We model using a small fraction sampling from the population, and try to draw some statements about the whole population. In **inference**, we either: (i) estimate parameters or (ii) conduct hypothesis testing.
 
-**Prediction** is about $\hat{y}$. In **prediction**, the key goal is to find a model that can ***accurately predict*** y for new observations of $X$.
+**Prediction** concerns $\hat{y}$ (the predicted response). Prediction is further distinguished into two activities [@brouwer2026]:
 
-+------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
-| Col1                                                                                                                                     | Col2                                                                                                                   |
-+==========================================================================================================================================+========================================================================================================================+
-| theoretical: general insight into the working of processes                                                                               | applied: describe and predict how a system functions                                                                   |
-|                                                                                                                                          |                                                                                                                        |
-| mathematically difficult but ecologically oversimplified                                                                                 | mathematically simpler but ecologically complex                                                                        |
-+------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
-| mathematical modelling: deterministic, dynamic model                                                                                     | statistical modelling: stochastic, static model                                                                        |
-+------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
-| mechanistic: focus on the underlying processes, using functions and distributions based on theoretical expectations\*                    | phenomenological: focus on observed patterns in the data, using functions and distributions that are the right shape\* |
-|                                                                                                                                          |                                                                                                                        |
-| more powerful because the underlying process drives the patterns, so it's more correct when extrapolating beyond the observed conditions |                                                                                                                        |
-+------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
+1.  **Forecasting**: predicting future cases, hospitalisations, and deaths. The main focus is ***predictive performance*** (how accurate the forecasts are when compared with observed outcomes), and the aim is to support situational awareness. Statistical and machine learning tools are commonly used and, particularly at short horizons, can match or outperform mechanistic models.
 
-\*Note: The same function could be either mechanistic or phenomenological depending on why it was chosen.
+2.  **Projection / scenario modelling**: projecting what these quantities would be under "what-if" scenarios. The main focus is comparing the ***status quo with alternative scenarios***. It can be thought of as an in-silico experiment to explore the impact of response strategies under various conditions. This mostly relies on mechanistic models.
 
-Technical details
+Quantifying and communicating **uncertainty** is essential in both.
 
-+--------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| analytical: equations solved with algebra and calculus (closed-form solution)                                            | computational/numerical: use computer programme to provide approximate solution |
-+--------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| dynamic: the response variables (state of the system) at time t feed back to affect the response variables in the future | static                                                                          |
-+--------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| continuous                                                                                                               | discrete                                                                        |
-+--------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| population-based (Lagrangian)                                                                                            | individual-based (Eulerian)                                                     |
-+--------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| deterministic: the expected (average) behaviour of a system in the absence of random variation                           | stochastic: incorporate noise and randomness                                    |
-|                                                                                                                          |                                                                                 |
-| only for qualitative comparison with data because they never match the data exactly                                      |                                                                                 |
-+--------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+## Key modelling dichotomies
 
-explicit modelling (direct) states the form directly. the model itself is written in a direct form, such as a query that produces an output or a model that defines a density explicitly
+Before looking at specific model types, it helps to see the contrasting axes along which models are commonly described. The summary table below gives a quick overview [@bolker2008].
 
-implicit modelling (indirect) describes it indirectly through conditions, constraints, or a generating mechanism; by a logical specification or by a transformation process that generates samples without writing the density in closed form
+| Attribute | Option A | Option B |
+|---|---|---|
+| Aim | **Theoretical**: general insight into the working of processes; often mathematically difficult but ecologically oversimplified | **Applied**: describe and predict how a real system functions; often mathematically simpler but ecologically complex |
+| Disciplinary framing | **Mathematical modelling**: typically deterministic and dynamic | **Statistical modelling**: typically stochastic and static |
+| Approach\* | **Mechanistic**: focuses on the underlying processes; uses functions and distributions based on theoretical expectations | **Phenomenological**: focuses on observed patterns in the data; uses functions and distributions chosen because they are the right shape |
+| Specification | **Explicit (direct)**: the model is written in a direct form, such as an equation that produces an output or a density defined in closed form | **Implicit (indirect)**: described through conditions, constraints, or a generating mechanism that produces samples without writing the density in closed form |
+| Solution method | **Analytical**: equations solved with algebra and calculus (closed-form solution) | **Computational / numerical**: uses a computer programme to produce an approximate solution |
+| Time dynamics | **Static**: the system does not change over time | **Dynamic**: state variables at time *t* feed back to affect the system in the future |
+| Time representation | **Continuous**: events occur on a continuum | **Discrete**: events occur at fixed intervals |
+| Randomness | **Deterministic**: the expected (average) behaviour with no random variation | **Stochastic**: incorporates noise and randomness |
+| Behaviour representation | **Population-based (Eulerian)**: tracks aggregate compartments over time | **Individual-based (Lagrangian)**: follows each individual through the system |
+
+\*The same function can be either mechanistic or phenomenological depending on why it was chosen. Mechanistic models are often more powerful when extrapolating beyond the observed conditions, because the underlying process drives the patterns.
+
+A deterministic model is useful mainly for *qualitative* comparison with data, since each run gives the same output and the model can never match noisy data exactly. A stochastic model produces different results on every run, so it must be executed many times to characterise the full range of possible outcomes.
 
 ## Types of model
 
@@ -139,8 +129,8 @@ Solving a model means finding a function that satisfies the given conditions. Co
 
 $$\frac{dP}{dt} = rP$$
 
--   $r$: the growth rate.
--   $P$: the population size.
+- $r$: the growth rate.
+- $P$: the population size.
 
 Solving this model means to write a function of $P$ that satisfies the derivative. This model can be solved analytically by:
 

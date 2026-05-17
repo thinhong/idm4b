@@ -510,6 +510,7 @@ window.Quarto = {
   <li><a href="#exploration" id="toc-exploration" class="nav-link" data-scroll-target="#exploration">Exploration</a></li>
   <li><a href="#inference-and-prediction" id="toc-inference-and-prediction" class="nav-link" data-scroll-target="#inference-and-prediction">Inference and Prediction</a></li>
   </ul></li>
+  <li><a href="#key-modelling-dichotomies" id="toc-key-modelling-dichotomies" class="nav-link" data-scroll-target="#key-modelling-dichotomies">Key modelling dichotomies</a></li>
   <li><a href="#types-of-model" id="toc-types-of-model" class="nav-link" data-scroll-target="#types-of-model">Types of model</a>
   <ul>
   <li><a href="#static-vs-dynamic" id="toc-static-vs-dynamic" class="nav-link" data-scroll-target="#static-vs-dynamic">Static vs dynamic</a></li>
@@ -580,76 +581,86 @@ window.Quarto = {
 <p>Consider a regression model,</p>
 <p><span class="math display">\[\hat{y} = X \hat{\beta}\]</span></p>
 <p>of which <span class="math inline">\(\hat{y}\)</span> is a vector of predicted response, <span class="math inline">\(X\)</span> is the data matrix, <span class="math inline">\(\hat{\beta}\)</span> is a vector of parameters.</p>
-<p><strong>Inference</strong> is about <span class="math inline">\(\hat{\beta}\)</span>, to answer these questions:</p>
+<p><strong>Inference</strong> is about <span class="math inline">\(\hat{\beta}\)</span> (the parameters), to answer these questions:</p>
 <ul>
 <li>Which coefficients are non-zero, implying meaningful associations between covariates and the response?</li>
 <li>Which non-zero effects are positive, and which are negative?</li>
 </ul>
-<p>We model using a small fraction sampling from the population, and try to draw some statements about the whole population. In <strong>inference</strong>, we estimate parameters or conduct hypothesis testing.</p>
-<p><strong>Prediction</strong> is about <span class="math inline">\(\hat{y}\)</span>. In <strong>prediction</strong>, the key goal is to find a model that can <strong><em>accurately predict</em></strong> y for new observations of <span class="math inline">\(X\)</span>.</p>
+<p>We model using a small fraction sampling from the population, and try to draw some statements about the whole population. In <strong>inference</strong>, we either: (i) estimate parameters or (ii) conduct hypothesis testing.</p>
+<p><strong>Prediction</strong> concerns <span class="math inline">\(\hat{y}\)</span> (the predicted response). Prediction is further distinguished into two activities <span class="citation" data-cites="brouwer2026">(<a href="references.html#ref-brouwer2026" role="doc-biblioref">Brouwer et al., 2026</a>)</span>:</p>
+<ol type="1">
+<li><p><strong>Forecasting</strong>: predicting future cases, hospitalisations, and deaths. The main focus is <strong><em>predictive performance</em></strong> (how accurate the forecasts are when compared with observed outcomes), and the aim is to support situational awareness. Statistical and machine learning tools are commonly used and, particularly at short horizons, can match or outperform mechanistic models.</p></li>
+<li><p><strong>Projection / scenario modelling</strong>: projecting what these quantities would be under “what-if” scenarios. The main focus is comparing the <strong><em>status quo with alternative scenarios</em></strong>. It can be thought of as an in-silico experiment to explore the impact of response strategies under various conditions. This mostly relies on mechanistic models.</p></li>
+</ol>
+<p>Quantifying and communicating <strong>uncertainty</strong> is essential in both.</p>
+</section>
+</section>
+<section id="key-modelling-dichotomies" class="level2">
+<h2 class="anchored" data-anchor-id="key-modelling-dichotomies">Key modelling dichotomies</h2>
+<p>Before looking at specific model types, it helps to see the contrasting axes along which models are commonly described. The summary table below gives a quick overview <span class="citation" data-cites="bolker2008">(<a href="references.html#ref-bolker2008" role="doc-biblioref">Bolker, 2008</a>)</span>.</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 53%">
-<col style="width: 46%">
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Col1</th>
-<th>Col2</th>
+<th>Attribute</th>
+<th>Option A</th>
+<th>Option B</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><p>theoretical: general insight into the working of processes</p>
-<p>mathematically difficult but ecologically oversimplified</p></td>
-<td><p>applied: describe and predict how a system functions</p>
-<p>mathematically simpler but ecologically complex</p></td>
+<td>Aim</td>
+<td><strong>Theoretical</strong>: general insight into the working of processes; often mathematically difficult but ecologically oversimplified</td>
+<td><strong>Applied</strong>: describe and predict how a real system functions; often mathematically simpler but ecologically complex</td>
 </tr>
 <tr class="even">
-<td>mathematical modelling: deterministic, dynamic model</td>
-<td>statistical modelling: stochastic, static model</td>
+<td>Disciplinary framing</td>
+<td><strong>Mathematical modelling</strong>: typically deterministic and dynamic</td>
+<td><strong>Statistical modelling</strong>: typically stochastic and static</td>
 </tr>
 <tr class="odd">
-<td><p>mechanistic: focus on the underlying processes, using functions and distributions based on theoretical expectations*</p>
-<p>more powerful because the underlying process drives the patterns, so it’s more correct when extrapolating beyond the observed conditions</p></td>
-<td>phenomenological: focus on observed patterns in the data, using functions and distributions that are the right shape*</td>
+<td>Approach*</td>
+<td><strong>Mechanistic</strong>: focuses on the underlying processes; uses functions and distributions based on theoretical expectations</td>
+<td><strong>Phenomenological</strong>: focuses on observed patterns in the data; uses functions and distributions chosen because they are the right shape</td>
+</tr>
+<tr class="even">
+<td>Specification</td>
+<td><strong>Explicit (direct)</strong>: the model is written in a direct form, such as an equation that produces an output or a density defined in closed form</td>
+<td><strong>Implicit (indirect)</strong>: described through conditions, constraints, or a generating mechanism that produces samples without writing the density in closed form</td>
+</tr>
+<tr class="odd">
+<td>Solution method</td>
+<td><strong>Analytical</strong>: equations solved with algebra and calculus (closed-form solution)</td>
+<td><strong>Computational / numerical</strong>: uses a computer programme to produce an approximate solution</td>
+</tr>
+<tr class="even">
+<td>Time dynamics</td>
+<td><strong>Static</strong>: the system does not change over time</td>
+<td><strong>Dynamic</strong>: state variables at time <em>t</em> feed back to affect the system in the future</td>
+</tr>
+<tr class="odd">
+<td>Time representation</td>
+<td><strong>Continuous</strong>: events occur on a continuum</td>
+<td><strong>Discrete</strong>: events occur at fixed intervals</td>
+</tr>
+<tr class="even">
+<td>Randomness</td>
+<td><strong>Deterministic</strong>: the expected (average) behaviour with no random variation</td>
+<td><strong>Stochastic</strong>: incorporates noise and randomness</td>
+</tr>
+<tr class="odd">
+<td>Behaviour representation</td>
+<td><strong>Population-based (Eulerian)</strong>: tracks aggregate compartments over time</td>
+<td><strong>Individual-based (Lagrangian)</strong>: follows each individual through the system</td>
 </tr>
 </tbody>
 </table>
-<p>*Note: The same function could be either mechanistic or phenomenological depending on why it was chosen.</p>
-<p>Technical details</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 60%">
-<col style="width: 40%">
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>analytical: equations solved with algebra and calculus (closed-form solution)</td>
-<td>computational/numerical: use computer programme to provide approximate solution</td>
-</tr>
-<tr class="even">
-<td>dynamic: the response variables (state of the system) at time t feed back to affect the response variables in the future</td>
-<td>static</td>
-</tr>
-<tr class="odd">
-<td>continuous</td>
-<td>discrete</td>
-</tr>
-<tr class="even">
-<td>population-based (Lagrangian)</td>
-<td>individual-based (Eulerian)</td>
-</tr>
-<tr class="odd">
-<td><p>deterministic: the expected (average) behaviour of a system in the absence of random variation</p>
-<p>only for qualitative comparison with data because they never match the data exactly</p></td>
-<td>stochastic: incorporate noise and randomness</td>
-</tr>
-</tbody>
-</table>
-<p>explicit modelling (direct) states the form directly. the model itself is written in a direct form, such as a query that produces an output or a model that defines a density explicitly</p>
-<p>implicit modelling (indirect) describes it indirectly through conditions, constraints, or a generating mechanism; by a logical specification or by a transformation process that generates samples without writing the density in closed form</p>
-</section>
+<p>*The same function can be either mechanistic or phenomenological depending on why it was chosen. Mechanistic models are often more powerful when extrapolating beyond the observed conditions, because the underlying process drives the patterns.</p>
+<p>A deterministic model is useful mainly for <em>qualitative</em> comparison with data, since each run gives the same output and the model can never match noisy data exactly. A stochastic model produces different results on every run, so it must be executed many times to characterise the full range of possible outcomes.</p>
 </section>
 <section id="types-of-model" class="level2">
 <h2 class="anchored" data-anchor-id="types-of-model">Types of model</h2>
@@ -712,6 +723,12 @@ window.Quarto = {
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
 <div id="ref-handbook2023" class="csl-entry" role="listitem">
 Bishai, D., Brenzel, L., &amp; Padula, W. (Eds.). (2023). <em>Handbook of applied health economics in vaccines</em>. Oxford University Press. <a href="https://doi.org/10.1093/oso/9780192896087.001.0001">https://doi.org/10.1093/oso/9780192896087.001.0001</a>
+</div>
+<div id="ref-bolker2008" class="csl-entry" role="listitem">
+Bolker, B. M. (2008). <em>Ecological Models and Data in R</em>. Princeton University Press. <a href="https://doi.org/10.1515/9781400840908">https://doi.org/10.1515/9781400840908</a>
+</div>
+<div id="ref-brouwer2026" class="csl-entry" role="listitem">
+Brouwer, A. F., Eisenberg, M. C., Dean, N. E., Hochheiser, H., Huang, P., Coyle, J. R., &amp; Rennert, L. (2026). Infectious disease modeling for public health practice: Projections, scenarios, and uncertainty in 3 phases of outbreak response. <em>American Journal of Epidemiology</em>, kwag058. <a href="https://doi.org/10.1093/aje/kwag058">https://doi.org/10.1093/aje/kwag058</a>
 </div>
 <div id="ref-christley2013" class="csl-entry" role="listitem">
 Christley, R. M., Mort, M., Wynne, B., Wastling, J. M., Heathwaite, A. L., Pickup, R., Austin, Z., &amp; Latham, S. M. (2013). <span>“</span>Wrong, but Useful<span>”</span>: Negotiating Uncertainty in Infectious Disease Modelling. <em>PLOS ONE</em>, <em>8</em>(10), e76277. <a href="https://doi.org/10.1371/journal.pone.0076277">https://doi.org/10.1371/journal.pone.0076277</a>
