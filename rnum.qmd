@@ -62,7 +62,7 @@ $R_t$ can be defined in 2 ways:
 
 > Figure illustrates the Cori method [@gostic2020].
 
-Measures transmission at a specific point in time [@gostic2020]. The instantaneous reproduction number quantifies the number of new infections at a single point in time $t_i$ (blue arrow), using the number of infections in the previous generation (green arrows) and their current infectiousness (green curve) [@gostic2020]. The analyses can be done **near real-time**.
+Measures transmission at a specific point in time [@gostic2020]. The instantaneous reproduction number quantifies the number of new infections at a single point in time $t_i$ (blue arrow), using the number of infections in the previous generation (green arrows) and their current infectiousness (green curve) [@gostic2020]. The analyses can be done **near real-time**, in contrast to the case reproduction number (see @sec-rt-case).
 
 Methods to estimate instantaneous reproduction number includes Cori and colleagues [@cori2013] (the best for near real-time estimation [@gostic2020]), and Bettencourt and Ribeiro [@bettencourt2008] (use with caution because they implicitly assume the generation interval follows an exponential distribution, as in SIR model, which does not include alatent period).
 
@@ -74,7 +74,9 @@ Methods to estimate instantaneous reproduction number includes Cori and colleagu
 
 Measures transmission by a specific cohort of individuals [@gostic2020]. A cohort is a group of individuals with the **same date of infection** or the **same date of symptom onset**. The case reproduction number is the average number of new infections that an individual who becomes infected on day $t_i$ (green arrows in B) or symptomatic on day $t_s$ (yellow arrows in C) will eventually go on to cause (blue downward arrows in B and C). It is a more natural choice for analyses that consider heterogeneity among individuals [@gostic2020].
 
-Methods to estimate instantaneous reproduction number includes Wallinga and Teunis method [@wallinga2004].
+Methods to estimate case reproduction number includes Wallinga and Teunis method [@wallinga2004].
+
+Unlike the instantaneous reproduction number, the case reproduction number **cannot be estimated reliably in near real-time**. Because $R_t^c$ counts all the secondary infections that a cohort infected at time $t$ will *eventually* cause, estimating it requires observing infections that occur after $t$, often spanning several generations into the future. Near the end of the observation window (i.e. the present), those downstream infections have not yet happened or have not yet been reported, so the recent data are **right-censored**. This causes $R_t^c$ to be **biased downward** for the most recent time points, which is why the Wallinga and Teunis method is best suited to **retrospective** analysis rather than real-time monitoring [@gostic2020].
 
 ## Growth rate $r$ and basic reproduction number $R_0$ {#sec-rnum-growthrate-r0}
 
