@@ -1,5 +1,57 @@
 # Dictionary
 
+**Shannon entropy** measures how uncertain you are about the outcome of a random event before you see it. Equivalently, it is the average "surprise" (or information) you gain when the outcome is revealed. We build the formula in two small steps, using the simplest random event: a single coin toss.
+
+**Step 1: the surprise of one outcome.** Suppose an outcome has probability $p$. How surprised should you be when it actually happens? Three things feel right about "surprise":
+
+- A certain outcome ($p = 1$) is no surprise at all, so its surprise is $0$.
+- A rarer outcome (smaller $p$) is more surprising, so surprise grows as $p$ shrinks.
+- The surprise of two independent outcomes should add up. Independent events with probabilities $p$ and $q$ have joint probability $p \cdot q$, and we want the surprise of $p \cdot q$ to equal the surprise of $p$ plus the surprise of $q$.
+
+The one operation that turns multiplication into addition is the logarithm. Together with "$p = 1$ gives $0$" and "smaller $p$ is more surprising", this pins down the surprise, also called the information content, of an outcome:
+
+$$I(x) = -\log p(x) = \log \frac{1}{p(x)}$$
+
+Using $\log_2$ measures it in bits (natural log gives nats, base 10 gives dits; the base only sets the unit, not the shape). Drag the slider, or press sweep, to see how $-\log_2 p$ changes with $p$:
+
+```{ojs}
+//| echo: false
+import { createSlider, createButton, injectStyle, styleMathLabel } from "./_slider.js"
+import { coinSurprise, coinEntropy } from "./_entropy-anim.js"
+d3 = require("d3@7")
+ui = ({ createSlider, createButton, injectStyle, styleMathLabel })
+```
+
+```{ojs}
+//| echo: false
+coinSurprise(d3, ui)
+```
+
+Every time the probability halves, the surprise rises by exactly $1$ bit. A fair coin ($p = 0.5$) carries $1$ bit, a "1 in 4" outcome carries $2$ bits, a "1 in 8" outcome carries $3$ bits, and so on. As $p \to 0$ the surprise grows without bound; as $p \to 1$ it vanishes.
+
+**Step 2: from surprise to entropy.** A random event usually has several possible outcomes, each with its own surprise. Entropy is the average surprise, weighting each outcome by how often it happens. That probability-weighted average is the expected value:
+
+$$H(X) = \mathbb{E}[-\log p(X)] = -\sum_x p(x) \log p(x)$$
+
+A single coin toss has two outcomes: heads with probability $p$, and tails with probability $1 - p$. Substituting gives the binary entropy:
+
+$$H(p) = -p \log_2 p - (1 - p)\log_2(1 - p)$$
+
+Each term is "how often the outcome happens" times "how surprising it is when it does". Drag the slider to change the coin's bias and watch the two weighted surprises combine into the total:
+
+```{ojs}
+//| echo: false
+coinEntropy(d3, ui)
+```
+
+Entropy is largest, exactly $1$ bit, for a fair coin ($p = 0.5$): that is when you are most uncertain about the result. As the coin becomes biased toward heads or tails, the flip gets more predictable and the entropy falls. A two-headed coin ($p = 1$) or a two-tailed coin ($p = 0$) has entropy $0$: there is no uncertainty, and nothing to learn from the flip.
+
+**The general formula.** The coin is just the two-outcome case. For any random variable $X$ with outcomes $x$ and probabilities $p(x)$, the same recipe (average the surprise $-\log p(x)$ over every outcome) gives Shannon's entropy:
+
+$$H(X) = -\sum_x p(x)\log p(x) = \sum_x p(x)\log\frac{1}{p(x)}$$
+
+
+
 Poisson process is a model for a series of discrete events where the average time between events is known ($\lambda$), but the exact timing of events is random. The arrival of an event is independent of the event before (waiting time between events is memoryless). The number of events in any given finite interval of length $t$ follows a Poisson distribution ([source](https://builtin.com/data-science/poisson-process)).
 
 Interpreted as a homogeneous **stochastic counting** process $\{ N(t), t \geq 0 \}$, it has 3 key properties:

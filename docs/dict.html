@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -100,6 +135,8 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-X391ZN63GG', { 'anonymize_ip': true});
 </script>
+<script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -523,6 +560,75 @@ window.Quarto = {
 </header>
 
 
+<p><strong>Shannon entropy</strong> measures how uncertain you are about the outcome of a random event before you see it. Equivalently, it is the average “surprise” (or information) you gain when the outcome is revealed. We build the formula in two small steps, using the simplest random event: a single coin toss.</p>
+<p><strong>Step 1: the surprise of one outcome.</strong> Suppose an outcome has probability <span class="math inline">\(p\)</span>. How surprised should you be when it actually happens? Three things feel right about “surprise”:</p>
+<ul>
+<li>A certain outcome (<span class="math inline">\(p = 1\)</span>) is no surprise at all, so its surprise is <span class="math inline">\(0\)</span>.</li>
+<li>A rarer outcome (smaller <span class="math inline">\(p\)</span>) is more surprising, so surprise grows as <span class="math inline">\(p\)</span> shrinks.</li>
+<li>The surprise of two independent outcomes should add up. Independent events with probabilities <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> have joint probability <span class="math inline">\(p \cdot q\)</span>, and we want the surprise of <span class="math inline">\(p \cdot q\)</span> to equal the surprise of <span class="math inline">\(p\)</span> plus the surprise of <span class="math inline">\(q\)</span>.</li>
+</ul>
+<p>The one operation that turns multiplication into addition is the logarithm. Together with “<span class="math inline">\(p = 1\)</span> gives <span class="math inline">\(0\)</span>” and “smaller <span class="math inline">\(p\)</span> is more surprising”, this pins down the surprise, also called the information content, of an outcome:</p>
+<p><span class="math display">\[I(x) = -\log p(x) = \log \frac{1}{p(x)}\]</span></p>
+<p>Using <span class="math inline">\(\log_2\)</span> measures it in bits (natural log gives nats, base 10 gives dits; the base only sets the unit, not the shape). Drag the slider, or press sweep, to see how <span class="math inline">\(-\log_2 p\)</span> changes with <span class="math inline">\(p\)</span>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb1" data-startfrom="19" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 18;"><span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { createSlider<span class="op">,</span> createButton<span class="op">,</span> injectStyle<span class="op">,</span> styleMathLabel } <span class="im">from</span> <span class="st">"./_slider.js"</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { coinSurprise<span class="op">,</span> coinEntropy } <span class="im">from</span> <span class="st">"./_entropy-anim.js"</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>d3 <span class="op">=</span> <span class="pp">require</span>(<span class="st">"d3@7"</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>ui <span class="op">=</span> ({ createSlider<span class="op">,</span> createButton<span class="op">,</span> injectStyle<span class="op">,</span> styleMathLabel })</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-4" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb2" data-startfrom="26" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 25;"><span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="fu">coinSurprise</span>(d3<span class="op">,</span> ui)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Every time the probability halves, the surprise rises by exactly <span class="math inline">\(1\)</span> bit. A fair coin (<span class="math inline">\(p = 0.5\)</span>) carries <span class="math inline">\(1\)</span> bit, a “1 in 4” outcome carries <span class="math inline">\(2\)</span> bits, a “1 in 8” outcome carries <span class="math inline">\(3\)</span> bits, and so on. As <span class="math inline">\(p \to 0\)</span> the surprise grows without bound; as <span class="math inline">\(p \to 1\)</span> it vanishes.</p>
+<p><strong>Step 2: from surprise to entropy.</strong> A random event usually has several possible outcomes, each with its own surprise. Entropy is the average surprise, weighting each outcome by how often it happens. That probability-weighted average is the expected value:</p>
+<p><span class="math display">\[H(X) = \mathbb{E}[-\log p(X)] = -\sum_x p(x) \log p(x)\]</span></p>
+<p>A single coin toss has two outcomes: heads with probability <span class="math inline">\(p\)</span>, and tails with probability <span class="math inline">\(1 - p\)</span>. Substituting gives the binary entropy:</p>
+<p><span class="math display">\[H(p) = -p \log_2 p - (1 - p)\log_2(1 - p)\]</span></p>
+<p>Each term is “how often the outcome happens” times “how surprising it is when it does”. Drag the slider to change the coin’s bias and watch the two weighted surprises combine into the total:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb3" data-startfrom="43" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 42;"><span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="fu">coinEntropy</span>(d3<span class="op">,</span> ui)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-3" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Entropy is largest, exactly <span class="math inline">\(1\)</span> bit, for a fair coin (<span class="math inline">\(p = 0.5\)</span>): that is when you are most uncertain about the result. As the coin becomes biased toward heads or tails, the flip gets more predictable and the entropy falls. A two-headed coin (<span class="math inline">\(p = 1\)</span>) or a two-tailed coin (<span class="math inline">\(p = 0\)</span>) has entropy <span class="math inline">\(0\)</span>: there is no uncertainty, and nothing to learn from the flip.</p>
+<p><strong>The general formula.</strong> The coin is just the two-outcome case. For any random variable <span class="math inline">\(X\)</span> with outcomes <span class="math inline">\(x\)</span> and probabilities <span class="math inline">\(p(x)\)</span>, the same recipe (average the surprise <span class="math inline">\(-\log p(x)\)</span> over every outcome) gives Shannon’s entropy:</p>
+<p><span class="math display">\[H(X) = -\sum_x p(x)\log p(x) = \sum_x p(x)\log\frac{1}{p(x)}\]</span></p>
 <p>Poisson process is a model for a series of discrete events where the average time between events is known (<span class="math inline">\(\lambda\)</span>), but the exact timing of events is random. The arrival of an event is independent of the event before (waiting time between events is memoryless). The number of events in any given finite interval of length <span class="math inline">\(t\)</span> follows a Poisson distribution (<a href="https://builtin.com/data-science/poisson-process">source</a>).</p>
 <p>Interpreted as a homogeneous <strong>stochastic counting</strong> process <span class="math inline">\(\{ N(t), t \geq 0 \}\)</span>, it has 3 key properties:</p>
 <ul>
@@ -684,6 +790,17 @@ Texier, G., Farouh, M., Pellegrin, L., Jackson, M. L., Meynard, J.-B., Deparis, 
 </div>
 
 </main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6ImltcG9ydCB7IGNyZWF0ZVNsaWRlciwgY3JlYXRlQnV0dG9uLCBpbmplY3RTdHlsZSwgc3R5bGVNYXRoTGFiZWwgfSBmcm9tIFwiLi9fc2xpZGVyLmpzXCJcclxuaW1wb3J0IHsgY29pblN1cnByaXNlLCBjb2luRW50cm9weSB9IGZyb20gXCIuL19lbnRyb3B5LWFuaW0uanNcIlxyXG5kMyA9IHJlcXVpcmUoXCJkM0A3XCIpXHJcbnVpID0gKHsgY3JlYXRlU2xpZGVyLCBjcmVhdGVCdXR0b24sIGluamVjdFN0eWxlLCBzdHlsZU1hdGhMYWJlbCB9KVxyXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTIiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJjb2luU3VycHJpc2UoZDMsIHVpKVxyXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTMiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJjb2luRW50cm9weShkMywgdWkpXHJcbiJ9XX0=
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../..";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

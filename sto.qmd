@@ -295,7 +295,12 @@ df <- readRDS("data/simpi.rds")
 
 ```{r}
 #| echo: false
-ojs_define(data2 = df)
+# simpi.rds stores every iteration 100..3000 for each of the 50 sample
+# sizes = 145k rows, the single biggest thing bloating sto.html. The plot
+# below is one convergence line across a 600px axis, so every 5th iteration
+# is visually identical. Thinning here shrinks the embedded data about 5x.
+df2 <- df[df$n_sims %% 5 == 0, ]
+ojs_define(data2 = df2)
 ```
 
 ```{ojs}
