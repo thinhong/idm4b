@@ -1,0 +1,222 @@
+# Dictionary
+
+**Shannon entropy** measures how uncertain you are about the outcome of a random event before you see it. Equivalently, it is the average "surprise" (or information) you gain when the outcome is revealed. We build the formula in two small steps, using the simplest random event: a single coin toss.
+
+**Step 1: the surprise of one outcome.** Suppose an outcome has probability $p$. How surprised should you be when it actually happens? Three things feel right about "surprise":
+
+- A certain outcome ($p = 1$) is no surprise at all, so its surprise is $0$.
+- A rarer outcome (smaller $p$) is more surprising, so surprise grows as $p$ shrinks.
+- The surprise of two independent outcomes should add up. Independent events with probabilities $p$ and $q$ have joint probability $p \cdot q$, and we want the surprise of $p \cdot q$ to equal the surprise of $p$ plus the surprise of $q$.
+
+The one operation that turns multiplication into addition is the logarithm. Together with "$p = 1$ gives $0$" and "smaller $p$ is more surprising", this pins down the surprise, also called the information content, of an outcome:
+
+$$I(x) = -\log p(x) = \log \frac{1}{p(x)}$$
+
+Using $\log_2$ measures it in bits (natural log gives nats, base 10 gives dits; the base only sets the unit, not the shape). Drag the slider, or press sweep, to see how $-\log_2 p$ changes with $p$:
+
+```{ojs}
+//| echo: false
+import { createSlider, createButton, injectStyle, styleMathLabel } from "../assets/js/_slider.js"
+import { coinSurprise, coinEntropy } from "../assets/js/_entropy-anim.js"
+d3 = require("d3@7")
+ui = ({ createSlider, createButton, injectStyle, styleMathLabel })
+```
+
+```{ojs}
+//| echo: false
+coinSurprise(d3, ui)
+```
+
+Every time the probability halves, the surprise rises by exactly $1$ bit. A fair coin ($p = 0.5$) carries $1$ bit, a "1 in 4" outcome carries $2$ bits, a "1 in 8" outcome carries $3$ bits, and so on. As $p \to 0$ the surprise grows without bound; as $p \to 1$ it vanishes.
+
+**Step 2: from surprise to entropy.** A random event usually has several possible outcomes, each with its own surprise. Entropy is the average surprise, weighting each outcome by how often it happens. That probability-weighted average is the expected value:
+
+$$H(X) = \mathbb{E}[-\log p(X)] = -\sum_x p(x) \log p(x)$$
+
+A single coin toss has two outcomes: heads with probability $p$, and tails with probability $1 - p$. Substituting gives the binary entropy:
+
+$$H(p) = -p \log_2 p - (1 - p)\log_2(1 - p)$$
+
+Each term is "how often the outcome happens" times "how surprising it is when it does". Drag the slider to change the coin's bias and watch the two weighted surprises combine into the total:
+
+```{ojs}
+//| echo: false
+coinEntropy(d3, ui)
+```
+
+Entropy is largest, exactly $1$ bit, for a fair coin ($p = 0.5$): that is when you are most uncertain about the result. As the coin becomes biased toward heads or tails, the flip gets more predictable and the entropy falls. A two-headed coin ($p = 1$) or a two-tailed coin ($p = 0$) has entropy $0$: there is no uncertainty, and nothing to learn from the flip.
+
+**The general formula.** The coin is just the two-outcome case. For any random variable $X$ with outcomes $x$ and probabilities $p(x)$, the same recipe (average the surprise $-\log p(x)$ over every outcome) gives Shannon's entropy:
+
+$$H(X) = -\sum_x p(x)\log p(x) = \sum_x p(x)\log\frac{1}{p(x)}$$
+
+
+
+Poisson process is a model for a series of discrete events where the average time between events is known ($\lambda$), but the exact timing of events is random. The arrival of an event is independent of the event before (waiting time between events is memoryless). The number of events in any given finite interval of length $t$ follows a Poisson distribution ([source](https://builtin.com/data-science/poisson-process)).
+
+Interpreted as a homogeneous **stochastic counting** process $\{ N(t), t \geq 0 \}$, it has 3 key properties:
+
+- Starts at zero: $N(0) = 0$
+- Independent increments: counts in disjoint time intervals are independent
+- Stationary increments: for any interval of length $t$, the event count follows a Poisson distribution $N(t) \sim Pois(\lambda)$
+
+An **inhomogeneous** Poisson process allows the rate $\lambda(t)$ to vary with time. The independent-increments property is retained, but the mean event count in any interval $(s, s + t]$ is Poisson with mean $\int_s^{s+t} \lambda(u) du$.
+
+Trajectory or sample path: is the path or a simulation that a system's state follows over time within its state-space. Different initial states result in different trajectories. Each path in @fig-ar-plot is a trajectory.
+
+::: {#def-dsl}
+Domain-specific language (DSL): is a computer language designed for a specific purpose or "domain". DSLs act as a bridge, allowing users to write models in a familiar syntax while benefiting from the speed of compiled languages [@fitzjohn2021].
+:::
+
+Bifurcation: a small change in a system's parameters causes the system to split into two distinct behaviors or paths.
+
+::: {#def-state-space-mod}
+State-space models are models that use state variables to describe a system by a set of first-order differential or difference equations, rather than by one or more nth-order differential or difference equations ([source](https://www.mathworks.com/help/ident/ug/what-are-state-space-models.html)). "State" refers to a set of variables that describe the current condition of the system, while "space" represents the collection of all possible values these state variables can assume.
+
+State-space model: is a Hidden Markov Process where the system has unobservable (hidden) "state variables" which change over time, each state depends only on the current state (Markov property). Hidden states are not directly measured, but we have observation data which may contain (potentially limited) information on the state variables. In infectious disease modelling, SIR and its stochastic extensions follow this framework. The true state of the system is often unknown, but we have observed data with measurement errors (e.g., underreporting or diagnostic errors) and a plausible understanding of the measurement process that translate the hidden states into the observed data [@endo2019].
+
+![](../img/dict/hmp.svg)
+:::
+
+A sufficient statistic $g(x)$ for a parameter $\theta$ is a function of the data that captures all the information in the dataset about that parameter. If you have a sufficient statistic, you no longer need the entire dataset to do inference on $\theta$.
+
+::: {#def-func}
+Function: A relationship that assigns exactly one output $Y_i$ to each input $X_i$.
+
+![](../img/dict/function.svg)
+:::
+
+::: {#def-func-form}
+Functional form: The explicit mathematical expression that describes this relationship of a function. Example:
+
+$$f(x) = 2x + 3$$
+
+In probability distributions, functional form refers to the probability density function (PDF) or probability mass function (PMF).
+:::
+
+::: {#def-func-form-up-to}
+Functional form "up to a constant": we know the shape or structure of the distribution but not the exact scaling factor that makes it a valid probability distribution (i.e., sums or integrates to 1).
+:::
+
+::: {#def-white-noise}
+White noise process: a sequence of serially uncorrelated (no correlation between its values at different times) random variables with zero mean and finite variance.
+:::
+
+Ad hoc: (literally Latin for "for this") means built for a particular purpose, usually quickly and temporarily, generally signifies a solution designed for a specific problem or task, non-generalizable, and not intended to be able to be adapted to other purposes, [source](https://math.stackexchange.com/questions/203254/the-usage-of-ad-hoc-vs-a-priori-in-mathematical-papers).
+
+::: {#def-cfr}
+Case fatality rate (CFR): the number of deaths divided by the number of **confirmed cases** [@meyerowitz-katz2020].
+:::
+
+::: {#def-ifr}
+Infection fatality rate (IFR): the number of deaths divided by the number of **infected individuals** [@meyerowitz-katz2020].
+:::
+
+::: {#def-forecast}
+Forecast: predictions about what **will** happen, helpful for situation awareness.
+:::
+
+::: {#def-projection}
+Projection: estimates about what **could** happen, considering multiple possible outcomes, helpful for intervention planning when faced with uncertainty.
+:::
+
+::: {#def-epidemic}
+Epidemic is "the occurrence of more cases of disease than expected in a given area or among a specific group of people over a particular period of time" (US-CDC) [@texier2016]. Epidemic is derived from the Greek *epi* and *demos* meaning "that which is upon the people", to describe the burden of some phenomenon on "the people" [@nelson2014].
+:::
+
+::: {#def-tractable}
+Tractable: can be solved [(source)](https://en.wikipedia.org/wiki/Tractable)
+:::
+
+::: {#def-micsim}
+Microsimulation: an analysis in which individual instantiations of a system - such as a patient's lifetime or the course of an epidemic - are generated using a random process to 'draw' from probability distributions a large number of times, in order to examine the central tendency and possibly the distribution of outcomes [@kim2008].
+:::
+
+::: {#def-iid}
+iid (**independent** and **identically distributed** random variables): each random variable has the **same probability distribution** as the others and **all** are **mutually independent**.
+:::
+
+::: {#def-closedform-sol}
+**Closed-form solution** (or closed form expression) is any formula that can be evaluated in a finite number of standard operations ([source](https://riskencyclopedia.com/articles/closed_form_solution/)).
+:::
+
+infection fatality ratio (IFR) and case fatality ratio (CFR) and serology data.
+
+::: {#def-residual}
+**Residual**: is the difference between the observed value and the **estimated** value.
+:::
+
+::: {#def-error}
+**Error**: is the deviation of the observed value from the **true** value.
+:::
+
+Matrix and linear transformation:
+
+-   Linear transformation is a function (transformation = function) that take in a vector and spit out a vector.
+-   Lines remain lines, and origin remains fixed.
+
+::: {.callout-note collapse="true"}
+## Visualisation of linear transformation
+
+![](../img/dict/litrans.webp)
+:::
+
+Eigenvector ($\vec{v}$):
+
+Eigenvalue ($\lambda$):
+
+::: {#def-inv-matrix}
+Inverse matrix:
+
+$$\begin{bmatrix} a & b \\ c & d \end{bmatrix}^{-1} = \frac{1}{ad - bc} \begin{bmatrix} d & -b \\ -c & a \end{bmatrix}$$
+:::
+
+::: {#def-monte-carlo}
+Monte Carlo methods or Monte Carlo experiments: using repeated random sampling simulation to obtain numerical results.
+:::
+
+Transpose: flips a matrix/vector such that row become column and column become row. Notation: $A^\intercal$
+
+$$\begin{align}
+A &= \begin{bmatrix} a & b & c \\ d & e & f \end{bmatrix} \\
+A^\intercal &= \begin{bmatrix} a & d \\ b & e \\ c & f \end{bmatrix}
+\end{align}$$
+
+$$\begin{align}
+A &= \begin{bmatrix} a & b & c \end{bmatrix} \\
+A^\intercal &= \begin{bmatrix} a \\ b \\ c \end{bmatrix}
+\end{align}$$
+
+Tensor: an object with \> 1 dimension
+
+Matrix: an object with 2 dimensions
+
+A **probability** is between 0 and 1 and is the chance (or risk) that an event (death, infection, etc...) happens. In general this probability is defined ***over a period of time*** and will necessarily increase as the duration of this period of time increases.
+
+::: {#def-rate}
+A **rate** is the number of new events that occur during specified time period [@selvin2004]. It is thus always positive (because both the number of events and time period are positive) and always expressed per unit of time (like speed km/h or m/s). Rate can be \> 1. Mathematically, it is the limit of the above-mentioned probability when the duration of the period of time tends towards zero (i.e. very small, i.e. instantaneous measure).
+:::
+
+A **proportion** is the ratio of a numerator and a denominator and by definition is between 0 and 1.
+
+What is the difference between **proportion** and **probability**? Consider this example:
+
+A bag is filled with 100 balls, of which 30 are [blue]{style="color: blue"} and 70 are [green]{style="color: green"}. Without looking, you pull out a ball, write down the color, then put it back to the bag. You repeat the action 10,000 times. The number of times you pulled out a [blue]{style="color: blue"} ball is 3011.
+
+-   The proportion of [blue]{style="color: blue"} balls in the bag is 30/100 = 0.3
+-   A **Frequentist** say: The probability of pulling out a [blue]{style="color: blue"} ball is 3011/10,000 = 0.3011 because you did experiment in long-run (10,000 times).
+-   A **Bayesian** say: The probability of pulling out a [blue]{style="color: blue"} ball is 0.3 because you know that you have a proportion of 0.3 [blue]{style="color: blue"} balls in the bag.
+
+::: {#def-hazard}
+Hazard: is the probability an event occurs at time $t$, conditionally on being at risk.
+
+$$h(t) = \mathbb{P}(T = t|Survive = 1)$$
+
+In infectious disease modelling, hazard is the force of infection [@hay2024].
+:::
+
+::: {#def-cum-inc}
+Cumulative incidence or cumulative distribution function: is the probability an event occurs at anytime before time $t$.
+
+$$I(t) = \mathbb{P}(T \leq t)$$
+:::

@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en" data-theme="oxford">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IDM4b · Design System Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   IDM4b DESIGN SYSTEM STUDIO
+   Three clean-modern directions on a white canvas, anchored
+   on Oxford Blue with a rich, harmonized multi-hue palette.
+   ============================================================ */
+
+/* ---- Shared accent palette (harmonized with Oxford navy) ---- */
+:root{
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-display: 'Inter', system-ui, sans-serif;
+
+  /* Accent hues (AA-safe as text on white) */
+  --a-blue:    #175CA6;
+  --a-teal:    #0A6E7D;
+  --a-emerald: #0E7A54;
+  --a-amber:   #9A5B00;
+  --a-coral:   #C1343F;
+  --a-violet:  #6742BE;
+  --a-magenta: #A83A72;
+
+  /* Chart series (graphic brightness) */
+  --s-navy:    #1B3F73;
+  --s-teal:    #0E9AAB;
+  --s-emerald: #16A06B;
+  --s-amber:   #E0960A;
+  --s-coral:   #E0574E;
+  --s-violet:  #7E5AD6;
+
+  --maxw: 1180px;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* ================== THEME 1 · OXFORD ==================
+   The anchor. Deep navy, crisp borders, restrained.       */
+[data-theme="oxford"]{
+  --bg:#ffffff;
+  --ink:#12263b; --ink-2:#41556a; --ink-3:#647587;
+  --primary:#002147; --primary-2:#0a3161; --primary-tint:#eaf0f7;
+  --link:#0F4C86; --link-hover:#002147;
+  --surface:#f6f8fb; --surface-2:#eef2f7;
+  --border:#e0e7ef; --border-strong:#cbd6e2;
+  --radius:8px; --radius-lg:12px;
+  --shadow:0 1px 2px rgba(2,18,40,.06), 0 1px 3px rgba(2,18,40,.05);
+  --shadow-lg:0 6px 18px rgba(2,18,40,.09);
+  --btn-bg:#002147; --btn-bg-hover:#0a3161; --btn-fg:#ffffff;
+  --focus:#2050bf;
+  --eyebrow-color:var(--primary); --eyebrow-transform:none; --eyebrow-spacing:.02em; --eyebrow-weight:600;
+  --callout-radius:8px;
+  --card-radius:12px;
+}
+
+/* ================== THEME 2 · HARBOR ==================
+   Fresh and friendly. Cobalt interaction, soft elevation,
+   tinted callouts, generous rounding.                      */
+[data-theme="harbor"]{
+  --bg:#ffffff;
+  --ink:#14263b; --ink-2:#42566b; --ink-3:#647587;
+  --primary:#002147; --primary-2:#0a3161; --primary-tint:#e8f0fc;
+  --link:#1B4DC7; --link-hover:#12329a;
+  --surface:#f1f6fd; --surface-2:#e6f0fb;
+  --border:#e3edf9; --border-strong:#cfe0f2;
+  --radius:14px; --radius-lg:18px;
+  --shadow:0 6px 20px rgba(4,33,71,.08);
+  --shadow-lg:0 14px 34px rgba(4,33,71,.13);
+  --btn-bg:#1B4DC7; --btn-bg-hover:#143aa6; --btn-fg:#ffffff;
+  --focus:#1B4DC7;
+  --eyebrow-color:var(--link); --eyebrow-transform:none; --eyebrow-spacing:.01em; --eyebrow-weight:700;
+  --callout-radius:14px;
+  --card-radius:18px;
+}
+
+/* ================== THEME 3 · MERIDIAN ==================
+   Premium editorial-modern. High contrast, crisp corners,
+   hairline structure, gold accents, letterspaced labels.   */
+[data-theme="meridian"]{
+  --bg:#ffffff;
+  --ink:#0d2033; --ink-2:#3a4d61; --ink-3:#647587;
+  --primary:#002147; --primary-2:#0a3161; --primary-tint:#eef1f6;
+  --link:#0A4A7A; --link-hover:#002147;
+  --gold:#9A6B12;
+  --surface:#f7f9fb; --surface-2:#eef2f6;
+  --border:#dde4ec; --border-strong:#c6d1dd;
+  --radius:6px; --radius-lg:8px;
+  --shadow:0 1px 0 rgba(2,18,40,.05);
+  --shadow-lg:0 2px 0 rgba(2,18,40,.06), 0 8px 24px rgba(2,18,40,.06);
+  --btn-bg:#002147; --btn-bg-hover:#0a3161; --btn-fg:#ffffff;
+  --focus:#9A6B12;
+  --eyebrow-color:var(--gold); --eyebrow-transform:uppercase; --eyebrow-spacing:.14em; --eyebrow-weight:700;
+  --callout-radius:6px;
+  --card-radius:8px;
+}
+
+/* ---------------------- Base ---------------------- */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-sans);
+  font-size:17px; line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+body,.card,.callout,.btn,.swatch,.chip,.seg,.seg-btn,.tok,table,th,td,.codeblock,.eq{
+  transition:background-color .34s var(--ease), border-color .34s var(--ease),
+             color .34s var(--ease), box-shadow .34s var(--ease);
+}
+a{color:var(--link); text-decoration:underline; text-underline-offset:2px; text-decoration-thickness:1.5px; text-decoration-color:color-mix(in srgb,var(--link) 40%, transparent);}
+a:hover{color:var(--link-hover); text-decoration-color:currentColor}
+h1,h2,h3,h4{color:var(--primary); font-family:var(--font-display); line-height:1.2; letter-spacing:-.015em; margin:0}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--focus) 55%, transparent); outline-offset:2px; border-radius:4px}
+
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 clamp(18px,4vw,40px)}
+
+/* ---------------------- Top bar ---------------------- */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  background:color-mix(in srgb,var(--bg) 88%, transparent);
+  backdrop-filter:saturate(1.4) blur(12px);
+  -webkit-backdrop-filter:saturate(1.4) blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.topbar-in{display:flex; align-items:center; gap:18px; padding:12px clamp(18px,4vw,40px); max-width:var(--maxw); margin:0 auto; flex-wrap:wrap}
+.brand{display:flex; align-items:center; gap:11px; font-weight:800; letter-spacing:-.02em; color:var(--primary); font-size:19px}
+.brand .logo{width:34px; height:34px; flex:0 0 auto}
+.brand small{display:block; font-weight:500; font-size:11.5px; letter-spacing:.02em; color:var(--ink-3); margin-top:-2px}
+.spacer{flex:1 1 auto; min-width:8px}
+
+/* Segmented theme switcher */
+.seg{display:inline-flex; background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-lg); padding:4px; gap:3px}
+.seg-btn{
+  appearance:none; border:0; cursor:pointer; font-family:inherit;
+  font-size:13.5px; font-weight:600; color:var(--ink-2);
+  padding:9px 15px; min-height:40px; border-radius:calc(var(--radius-lg) - 4px);
+  background:transparent; display:inline-flex; align-items:center; gap:8px; white-space:nowrap;
+}
+.seg-btn .dot{width:11px; height:11px; border-radius:50%; box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.seg-btn[aria-selected="true"]{background:var(--bg); color:var(--primary); box-shadow:var(--shadow)}
+.seg-btn:hover{color:var(--primary)}
+
+/* ---------------------- Hero ---------------------- */
+.hero{padding:clamp(40px,7vw,84px) 0 clamp(28px,4vw,48px); position:relative; overflow:hidden}
+.hero .eyebrow{color:var(--eyebrow-color); text-transform:var(--eyebrow-transform); letter-spacing:var(--eyebrow-spacing); font-weight:var(--eyebrow-weight); font-size:13px}
+.hero h1{font-size:clamp(34px,6vw,60px); margin:.28em 0 .18em; letter-spacing:-.03em}
+.hero h1 .accent{color:var(--link)}
+.hero .lead{font-size:clamp(17px,2.2vw,21px); color:var(--ink-2); max-width:60ch; line-height:1.55}
+.theme-tag{display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:8px 15px; border-radius:999px; background:var(--primary-tint); color:var(--primary); font-weight:600; font-size:13.5px; border:1px solid color-mix(in srgb,var(--primary) 12%, transparent)}
+.theme-tag b{font-weight:700}
+[data-theme="harbor"] .hero::before{
+  content:""; position:absolute; inset:-40% -20% auto auto; width:60%; height:120%;
+  background:radial-gradient(60% 60% at 70% 30%, rgba(27,77,199,.10), transparent 70%); pointer-events:none;
+}
+[data-theme="meridian"] .hero .eyebrow{position:relative; padding-left:44px}
+[data-theme="meridian"] .hero .eyebrow::before{content:""; position:absolute; left:0; top:50%; width:32px; height:2px; background:var(--gold)}
+
+/* ---------------------- Section scaffold ---------------------- */
+section.block{padding:clamp(30px,5vw,58px) 0; border-top:1px solid var(--border)}
+.sec-head{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:26px}
+.sec-head .num{font-family:var(--font-mono); font-size:13px; color:var(--ink-3); font-weight:600}
+.sec-head h2{font-size:clamp(23px,3.4vw,32px); letter-spacing:-.02em}
+.sec-head p{margin:2px 0 0; color:var(--ink-2); font-size:15.5px; flex:1 1 260px; min-width:220px}
+
+/* ---------------------- Palette ---------------------- */
+.pal-group{margin-bottom:26px}
+.pal-group h3{font-size:13px; text-transform:uppercase; letter-spacing:.09em; color:var(--ink-3); font-weight:700; margin-bottom:12px}
+.swatches{display:grid; grid-template-columns:repeat(auto-fill,minmax(148px,1fr)); gap:12px}
+.swatch{
+  border:1px solid var(--border); border-radius:var(--card-radius); overflow:hidden; cursor:pointer;
+  background:var(--bg); box-shadow:var(--shadow); text-align:left;
+}
+.swatch:hover{transform:translateY(-3px); box-shadow:var(--shadow-lg)}
+.swatch .chipcolor{height:74px; width:100%; display:flex; align-items:flex-end; justify-content:flex-end; padding:8px}
+.swatch .copyhint{font-size:11px; font-weight:600; color:#fff; background:rgba(0,0,0,.28); border-radius:6px; padding:3px 7px; opacity:0; transition:opacity .2s}
+.swatch:hover .copyhint{opacity:1}
+.swatch .meta{padding:10px 12px}
+.swatch .meta .role{font-weight:600; font-size:13.5px; color:var(--ink)}
+.swatch .meta .hex{font-family:var(--font-mono); font-size:12px; color:var(--ink-3); margin-top:1px}
+
+/* ---------------------- Typography ---------------------- */
+.type-card{border:1px solid var(--border); border-radius:var(--card-radius); padding:clamp(20px,3vw,34px); box-shadow:var(--shadow); background:var(--bg)}
+.type-row{display:flex; align-items:baseline; gap:18px; padding:14px 0; border-bottom:1px dashed var(--border); flex-wrap:wrap}
+.type-row:last-child{border-bottom:0}
+.type-row .label{font-family:var(--font-mono); font-size:11.5px; color:var(--ink-3); width:150px; flex:0 0 auto; line-height:1.5}
+.type-row .spec{color:var(--ink); flex:1 1 auto; min-width:0}
+.t-display{font-size:clamp(30px,5vw,50px); font-weight:800; letter-spacing:-.03em; color:var(--primary)}
+.t-h1{font-size:32px; font-weight:700; letter-spacing:-.02em; color:var(--primary)}
+.t-h2{font-size:24px; font-weight:700; color:var(--primary)}
+.t-body{font-size:17px; color:var(--ink)}
+.t-small{font-size:13.5px; color:var(--ink-2)}
+.t-mono{font-family:var(--font-mono); font-size:14.5px; color:var(--ink)}
+[data-theme="meridian"] .t-display{font-family:var(--font-display)}
+
+/* ---------------------- Textbook page preview ---------------------- */
+.paper{
+  border:1px solid var(--border); border-radius:var(--card-radius); background:var(--bg);
+  box-shadow:var(--shadow-lg); overflow:hidden;
+}
+.paper-top{display:flex; align-items:center; gap:7px; padding:12px 16px; border-bottom:1px solid var(--border); background:var(--surface)}
+.paper-top .d{width:11px; height:11px; border-radius:50%; background:var(--border-strong)}
+.paper-top .path{margin-left:8px; font-family:var(--font-mono); font-size:12px; color:var(--ink-3)}
+.paper-body{padding:clamp(22px,4vw,46px)}
+.chapter-eyebrow{color:var(--eyebrow-color); text-transform:var(--eyebrow-transform); letter-spacing:var(--eyebrow-spacing); font-weight:var(--eyebrow-weight); font-size:12.5px}
+.paper-body h1.doc{font-size:clamp(27px,4vw,38px); margin:.3em 0 .1em; letter-spacing:-.025em}
+.paper-body .doc-lead{font-size:clamp(16px,1.8vw,18.5px); color:var(--ink-2); line-height:1.6; margin:.2em 0 1.4em}
+.paper-body h2.doc{font-size:23px; margin:1.7em 0 .5em; padding-bottom:.3em; position:relative}
+[data-theme="meridian"] .paper-body h2.doc{border-bottom:1px solid var(--border)}
+.paper-body p{margin:0 0 1.1em; color:var(--ink)}
+.paper-body code:not(pre code){font-family:var(--font-mono); font-size:.86em; background:var(--surface-2); color:var(--a-violet); padding:.12em .4em; border-radius:5px; border:1px solid var(--border)}
+.pill{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600; padding:4px 11px; border-radius:999px; line-height:1}
+
+/* Callouts */
+.callout{
+  border:1px solid var(--border); border-radius:var(--callout-radius);
+  padding:15px 17px 15px 17px; margin:0 0 14px; background:var(--bg); position:relative;
+  border-left:4px solid var(--c);
+}
+[data-theme="harbor"] .callout{background:color-mix(in srgb,var(--c) 7%, var(--bg)); border-color:color-mix(in srgb,var(--c) 22%, var(--border))}
+[data-theme="meridian"] .callout{border-left:0; border-top:2px solid var(--c); border-radius:0 0 var(--callout-radius) var(--callout-radius)}
+.callout .co-head{display:flex; align-items:center; gap:9px; font-weight:700; color:var(--c); font-size:14.5px; margin-bottom:5px; letter-spacing:-.01em}
+[data-theme="meridian"] .callout .co-head{text-transform:uppercase; letter-spacing:.08em; font-size:12.5px}
+.callout .ico{width:20px; height:20px; flex:0 0 auto; display:grid; place-items:center; border-radius:6px; background:color-mix(in srgb,var(--c) 14%, transparent); color:var(--c)}
+.callout p{margin:0; color:var(--ink); font-size:14.8px; line-height:1.55}
+.co-note{--c:var(--a-blue)} .co-tip{--c:var(--a-emerald)} .co-warn{--c:var(--a-amber)}
+.co-imp{--c:var(--a-coral)} .co-key{--c:var(--primary)}
+
+/* Code block */
+.codeblock{
+  background:#0b1f33; color:#d7e3f0; border-radius:var(--radius-lg); padding:16px 18px; overflow:auto;
+  font-family:var(--font-mono); font-size:13.7px; line-height:1.7; border:1px solid #0b1f33; margin:0 0 1.3em;
+  box-shadow:var(--shadow);
+}
+[data-theme="meridian"] .codeblock{border-radius:var(--radius)}
+.codeblock .cm{color:#7f9bb3}       /* comment */
+.codeblock .fn{color:#63b3ff}       /* function */
+.codeblock .st{color:#7ee0b0}       /* string */
+.codeblock .nu{color:#f2b866}       /* number */
+.codeblock .kw{color:#c3a0ff}       /* keyword */
+.codeblock .op{color:#9fb4c9}
+
+/* Table */
+.tbl-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:var(--card-radius); box-shadow:var(--shadow)}
+table{border-collapse:collapse; width:100%; font-size:14.5px; min-width:440px}
+thead th{background:var(--primary); color:#fff; text-align:left; padding:11px 15px; font-weight:600; font-size:13px; letter-spacing:.01em}
+[data-theme="meridian"] thead th{text-transform:uppercase; letter-spacing:.06em; font-size:12px}
+tbody td{padding:11px 15px; border-top:1px solid var(--border); color:var(--ink)}
+tbody tr:nth-child(even) td{background:var(--surface)}
+tbody td .mono{font-family:var(--font-mono); font-size:13px; color:var(--a-blue)}
+
+/* Equation */
+.eq{background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--a-teal); border-radius:var(--callout-radius); padding:16px 18px; margin:0 0 1.3em; font-family:var(--font-mono); font-size:15px; color:var(--ink); overflow-x:auto}
+[data-theme="meridian"] .eq{border-left:0; border-top:2px solid var(--a-teal); border-radius:0 0 var(--callout-radius) var(--callout-radius)}
+.eq .var{color:var(--a-coral); font-style:italic}
+
+/* Buttons + chips */
+.btns{display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin:6px 0 0}
+.btn{appearance:none; cursor:pointer; font-family:inherit; font-weight:600; font-size:15px; border-radius:var(--radius); padding:11px 20px; min-height:46px; display:inline-flex; align-items:center; gap:9px; border:1px solid transparent; text-decoration:none}
+.btn-primary{background:var(--btn-bg); color:var(--btn-fg)}
+.btn-primary:hover{background:var(--btn-bg-hover); color:#fff; transform:translateY(-1px); box-shadow:var(--shadow-lg)}
+[data-theme="harbor"] .btn-primary{background:linear-gradient(180deg,#2a5cd6,#1B4DC7)}
+.btn-secondary{background:var(--bg); color:var(--primary); border-color:var(--border-strong)}
+.btn-secondary:hover{background:var(--surface); border-color:var(--primary); color:var(--primary)}
+.btn-ghost{background:transparent; color:var(--link); padding-left:8px; padding-right:8px}
+.btn-ghost:hover{background:var(--surface)}
+.chips{display:flex; gap:9px; flex-wrap:wrap; margin-top:2px}
+.chip{font-size:12.5px; font-weight:600; padding:6px 12px; border-radius:999px; border:1px solid color-mix(in srgb,var(--cc) 26%, transparent); color:var(--cc); background:color-mix(in srgb,var(--cc) 8%, var(--bg))}
+
+/* Preview grid layout */
+.preview-grid{display:grid; grid-template-columns:1.3fr .9fr; gap:22px; align-items:start}
+.mini-card{border:1px solid var(--border); border-radius:var(--card-radius); background:var(--bg); box-shadow:var(--shadow); padding:18px}
+.mini-card h4{font-size:15px; margin:0 0 12px; color:var(--primary)}
+.tok{display:flex; justify-content:space-between; gap:10px; font-size:13px; padding:8px 0; border-bottom:1px dashed var(--border); color:var(--ink-2)}
+.tok:last-child{border-bottom:0}
+.tok b{color:var(--ink); font-family:var(--font-mono); font-size:12.5px}
+.tok .demo-radius{width:34px; height:20px; background:var(--primary-tint); border:1.5px solid var(--primary); border-radius:var(--radius)}
+.tok .demo-shadow{width:34px; height:20px; background:var(--bg); border:1px solid var(--border); border-radius:6px; box-shadow:var(--shadow-lg)}
+
+/* Chart */
+.chartcard{border:1px solid var(--border); border-radius:var(--card-radius); background:var(--bg); box-shadow:var(--shadow); padding:18px 18px 14px}
+.chartcard .ct{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px}
+.chartcard h4{font-size:15px; margin:0; color:var(--primary)}
+.legend{display:flex; gap:14px; flex-wrap:wrap; font-size:12.5px; color:var(--ink-2)}
+.legend span{display:inline-flex; align-items:center; gap:6px}
+.legend i{width:12px; height:3px; border-radius:2px; display:inline-block}
+svg .axis{stroke:var(--border-strong); stroke-width:1}
+svg .grid{stroke:var(--border); stroke-width:1; stroke-dasharray:3 4}
+svg .lbl{fill:var(--ink-3); font-size:11px; font-family:var(--font-mono)}
+.epi-line{fill:none; stroke-width:3; stroke-linecap:round; stroke-linejoin:round;
+  stroke-dasharray:var(--len); stroke-dashoffset:var(--len);
+  animation:draw 1.5s var(--ease) forwards;}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+/* Footer */
+.foot{border-top:1px solid var(--border); padding:34px 0 60px; color:var(--ink-3); font-size:14px}
+.foot .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
+
+/* Toast */
+.toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(20px); opacity:0;
+  background:var(--primary); color:#fff; font-size:14px; font-weight:600; padding:11px 18px; border-radius:999px;
+  box-shadow:0 10px 30px rgba(2,18,40,.28); pointer-events:none; transition:opacity .25s, transform .25s; z-index:99}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+.toast .hx{font-family:var(--font-mono); opacity:.85}
+
+/* Responsive */
+@media (max-width:820px){
+  .preview-grid{grid-template-columns:1fr}
+  .type-row .label{width:100%}
+  body{font-size:16px}
+}
+@media (max-width:560px){
+  .seg{width:100%; justify-content:stretch}
+  .seg-btn{flex:1; justify-content:center; padding:11px 6px; font-size:12.5px}
+  .seg-btn .txt{display:none}
+  .brand small{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important}
+  .epi-line{animation:none; stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== TOP BAR ===================== -->
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 235 240" aria-hidden="true">
+        <path fill="var(--link)" d="M124.5 127.1c1.4-18.4 2.7-36.5 4.1-54.9 1.3-.1 2.5-.2 3.8-.2 31 0 62 0 93 0 2.9 0 4.3.8 5.5 3.5 28.9 71.6-18.7 152.8-95.4 162.6-6.3.8-12.6.9-19.5 1.4 2.9-37.9 5.7-74.9 8.5-112.4z"/>
+        <path fill="var(--primary)" d="M1.2 102.9C3.7 93.3 6 84.1 8.7 75c.4-1.3 2.6-2.8 3.9-2.8 30.6-.1 61.2-.1 91.7-.1.3 0 .5.1 1.6.4C101.9 127 97.8 181.5 93.6 236.2 34.5 223.6-7.7 166.1 1.2 102.9z"/>
+        <path fill="var(--primary)" d="M51.1 21.5C111.6-19.9 185.3 3.4 216.3 50c-64.5 0-128.9 0-193.9 0 7.8-11.4 17.4-20.5 28.6-28.5z"/>
+      </svg>
+      <div>IDM4b<small>Design System Studio</small></div>
+    </div>
+    <div class="spacer"></div>
+    <div class="seg" role="tablist" aria-label="Choose a design direction">
+      <button class="seg-btn" role="tab" aria-selected="true" data-set="oxford">
+        <span class="dot" style="background:#002147"></span><span class="txt">Oxford</span>
+      </button>
+      <button class="seg-btn" role="tab" aria-selected="false" data-set="harbor">
+        <span class="dot" style="background:#1B4DC7"></span><span class="txt">Harbor</span>
+      </button>
+      <button class="seg-btn" role="tab" aria-selected="false" data-set="meridian">
+        <span class="dot" style="background:#9A6B12"></span><span class="txt">Meridian</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<div class="wrap">
+  <section class="hero">
+    <div class="eyebrow">A design language for your textbook</div>
+    <h1>One system. <span class="accent">Three</span> ways to feel modern and trusted.</h1>
+    <p class="lead">Every direction is built on a white canvas and an Oxford blue core, with a rich, harmonized palette that carries callouts, code, tables, and charts. Switch themes above and watch the whole page respond live.</p>
+    <div class="theme-tag">Now viewing: <b id="tagName">Oxford</b> · <span id="tagDesc">the anchor</span></div>
+  </section>
+</div>
+
+<!-- ===================== 1 · PALETTE ===================== -->
+<div class="wrap">
+<section class="block">
+  <div class="sec-head">
+    <span class="num">01</span>
+    <div>
+      <h2>Color palette</h2>
+      <p>Oxford blue anchors the system. A wide, harmonized accent range gives every semantic role its own voice while staying calm on white. Tap any swatch to copy its hex.</p>
+    </div>
+  </div>
+
+  <div class="pal-group">
+    <h3>Core</h3>
+    <div class="swatches" id="palCore"></div>
+  </div>
+  <div class="pal-group">
+    <h3>Accents · semantic + chart</h3>
+    <div class="swatches" id="palAccent"></div>
+  </div>
+  <div class="pal-group">
+    <h3>Neutrals · surfaces + ink</h3>
+    <div class="swatches" id="palNeutral"></div>
+  </div>
+</section>
+</div>
+
+<!-- ===================== 2 · TYPOGRAPHY ===================== -->
+<div class="wrap">
+<section class="block">
+  <div class="sec-head">
+    <span class="num">02</span>
+    <div>
+      <h2>Typography</h2>
+      <p>Inter for interface and prose, JetBrains Mono for code and figures. A tight, screen-optimized scale that stays readable from equations to captions.</p>
+    </div>
+  </div>
+  <div class="type-card">
+    <div class="type-row"><div class="label">Display · 800</div><div class="spec"><span class="t-display">Reproduction number</span></div></div>
+    <div class="type-row"><div class="label">H1 · 700 / -0.02em</div><div class="spec"><span class="t-h1">The SIR compartmental model</span></div></div>
+    <div class="type-row"><div class="label">H2 · 700</div><div class="spec"><span class="t-h2">Estimating the transmission rate</span></div></div>
+    <div class="type-row"><div class="label">Body · 400 / 1.65</div><div class="spec"><span class="t-body">An epidemic grows while the effective reproduction number stays above one, then bends as susceptibles are depleted.</span></div></div>
+    <div class="type-row"><div class="label">Small · 400</div><div class="spec"><span class="t-small">Figure 1. Simulated incidence for a measles-like pathogen, R0 = 15.</span></div></div>
+    <div class="type-row"><div class="label">Mono · 400</div><div class="spec"><span class="t-mono">beta &lt;- R0 * gamma  # per-contact rate</span></div></div>
+  </div>
+</section>
+</div>
+
+<!-- ===================== 3 · IN CONTEXT ===================== -->
+<div class="wrap">
+<section class="block">
+  <div class="sec-head">
+    <span class="num">03</span>
+    <div>
+      <h2>The system on a real page</h2>
+      <p>The same components you use every chapter: headings, prose, callouts, an R chunk, a parameter table, and a live epidemic curve. This is what your readers would actually see.</p>
+    </div>
+  </div>
+
+  <div class="preview-grid">
+    <!-- LEFT: the textbook page -->
+    <div class="paper">
+      <div class="paper-top"><span class="d"></span><span class="d"></span><span class="d"></span><span class="path">det/sir.qmd</span></div>
+      <div class="paper-body">
+        <div class="chapter-eyebrow">Chapter 3 · Deterministic models</div>
+        <h1 class="doc">The SIR model</h1>
+        <p class="doc-lead">We split a closed population into three compartments and track how people flow from susceptible to infectious to recovered over time.</p>
+
+        <p>The model is governed by a transmission rate <code>beta</code> and a recovery rate <code>gamma</code>. Their ratio defines the basic reproduction number, the average number of secondary cases produced by one infectious person in a fully susceptible population.</p>
+
+        <div class="callout co-key">
+          <div class="co-head"><span class="ico">★</span>Key idea</div>
+          <p>When R0 &gt; 1 the pathogen can invade; when R0 &lt; 1 each chain of transmission shrinks and the outbreak fades.</p>
+        </div>
+
+        <h2 class="doc">Defining the flows</h2>
+        <p>The system of ordinary differential equations moves probability mass between compartments at each time step:</p>
+
+        <div class="eq">dS/dt = &minus;<span class="var">β</span>·S·I / N&nbsp;&nbsp;&nbsp; dI/dt = <span class="var">β</span>·S·I / N &minus; <span class="var">γ</span>·I&nbsp;&nbsp;&nbsp; dR/dt = <span class="var">γ</span>·I</div>
+
+        <div class="callout co-note">
+          <div class="co-head"><span class="ico">i</span>Note</div>
+          <p>N is assumed constant, so births, deaths, and migration are ignored on the timescale of a single outbreak.</p>
+        </div>
+
+        <p>We solve this numerically in R with <code>deSolve</code>:</p>
+
+        <div class="codeblock"><span class="cm"># SIR model in R</span>
+<span class="fn">sir</span> <span class="op">&lt;-</span> <span class="kw">function</span>(t, state, p) {
+  <span class="fn">with</span>(<span class="fn">as.list</span>(<span class="op">c</span>(state, p)), {
+    dS <span class="op">&lt;-</span> <span class="op">-</span>beta <span class="op">*</span> S <span class="op">*</span> I <span class="op">/</span> N
+    dI <span class="op">&lt;-</span>  beta <span class="op">*</span> S <span class="op">*</span> I <span class="op">/</span> N <span class="op">-</span> gamma <span class="op">*</span> I
+    dR <span class="op">&lt;-</span>  gamma <span class="op">*</span> I
+    <span class="fn">list</span>(<span class="op">c</span>(dS, dI, dR))
+  })
+}
+R0 <span class="op">&lt;-</span> beta <span class="op">/</span> gamma   <span class="cm"># reproduction number</span></div>
+
+        <div class="callout co-tip">
+          <div class="co-head"><span class="ico">✓</span>Tip</div>
+          <p>Start with <code>R0</code> and a mean infectious period, then back out <code>beta</code>. It is far easier to reason about than a raw contact rate.</p>
+        </div>
+
+        <div class="callout co-warn">
+          <div class="co-head"><span class="ico">!</span>Warning</div>
+          <p>The deterministic model hides randomness. With few infectives, stochastic fade-out can end an outbreak even when R0 &gt; 1.</p>
+        </div>
+
+        <div class="callout co-imp">
+          <div class="co-head"><span class="ico">!</span>Important</div>
+          <p>Always check units. If time is in days, <code>gamma</code> must be a per-day rate, not a period.</p>
+        </div>
+
+        <h2 class="doc">Default parameters</h2>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Parameter</th><th>Symbol</th><th>Value</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td>Transmission</td><td><span class="mono">beta</span></td><td><span class="mono">0.50</span></td><td>per day</td></tr>
+              <tr><td>Recovery</td><td><span class="mono">gamma</span></td><td><span class="mono">0.20</span></td><td>per day</td></tr>
+              <tr><td>Reproduction no.</td><td><span class="mono">R0</span></td><td><span class="mono">2.50</span></td><td>beta / gamma</td></tr>
+              <tr><td>Population</td><td><span class="mono">N</span></td><td><span class="mono">1e6</span></td><td>closed cohort</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="chips" style="margin-top:18px">
+          <span class="chip" style="--cc:var(--a-blue)">deterministic</span>
+          <span class="chip" style="--cc:var(--a-emerald)">ODE</span>
+          <span class="chip" style="--cc:var(--a-amber)">deSolve</span>
+          <span class="chip" style="--cc:var(--a-violet)">R0</span>
+          <span class="chip" style="--cc:var(--a-coral)">measles</span>
+        </div>
+
+        <div class="btns" style="margin-top:22px">
+          <a class="btn btn-primary" href="#">Run the simulation</a>
+          <a class="btn btn-secondary" href="#">View source</a>
+          <a class="btn btn-ghost" href="#">Next: SEIR →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: chart + tokens -->
+    <div style="display:flex; flex-direction:column; gap:22px">
+      <div class="chartcard">
+        <div class="ct"><h4>Epidemic curve</h4></div>
+        <div class="legend" style="margin-bottom:8px">
+          <span><i style="background:var(--s-navy)"></i>Susceptible</span>
+          <span><i style="background:var(--s-coral)"></i>Infectious</span>
+          <span><i style="background:var(--s-emerald)"></i>Recovered</span>
+        </div>
+        <svg id="epi" viewBox="0 0 420 240" width="100%" role="img" aria-label="Simulated SIR epidemic curves">
+          <line class="grid" x1="40" y1="40" x2="404" y2="40"/>
+          <line class="grid" x1="40" y1="100" x2="404" y2="100"/>
+          <line class="grid" x1="40" y1="160" x2="404" y2="160"/>
+          <line class="axis" x1="40" y1="16" x2="40" y2="200"/>
+          <line class="axis" x1="40" y1="200" x2="404" y2="200"/>
+          <text class="lbl" x="8" y="44">1M</text>
+          <text class="lbl" x="20" y="204">0</text>
+          <text class="lbl" x="200" y="224">time (days)</text>
+          <path class="epi-line" id="lineS" stroke="var(--s-navy)"/>
+          <path class="epi-line" id="lineR" stroke="var(--s-emerald)"/>
+          <path class="epi-line" id="lineI" stroke="var(--s-coral)"/>
+        </svg>
+      </div>
+
+      <div class="mini-card">
+        <h4>Design tokens</h4>
+        <div class="tok"><span>Corner radius</span><span style="display:flex;align-items:center;gap:10px"><b id="tRadius">8px</b><i class="demo-radius"></i></span></div>
+        <div class="tok"><span>Elevation</span><span style="display:flex;align-items:center;gap:10px"><b id="tShadow">crisp</b><i class="demo-shadow"></i></span></div>
+        <div class="tok"><span>Interaction</span><b id="tLink">#0F4C86</b></div>
+        <div class="tok"><span>Callout style</span><b id="tCall">left rule</b></div>
+        <div class="tok"><span>Body / code</span><b>Inter · JetBrains Mono</b></div>
+      </div>
+
+      <div class="mini-card">
+        <h4>Buttons &amp; states</h4>
+        <div class="btns">
+          <button class="btn btn-primary">Primary</button>
+          <button class="btn btn-secondary">Secondary</button>
+        </div>
+        <div class="chips" style="margin-top:14px">
+          <span class="chip" style="--cc:var(--a-teal)">badge</span>
+          <span class="chip" style="--cc:var(--a-magenta)">tag</span>
+          <span class="chip" style="--cc:var(--primary)">label</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- ===================== FOOTER ===================== -->
+<div class="wrap">
+  <div class="foot">
+    <div class="sec-head" style="margin-bottom:8px"><span class="num">→</span><div><h2 style="font-size:22px">Pick a direction</h2></div></div>
+    <p style="max-width:66ch; color:var(--ink-2)">Tell me which one feels right (Oxford, Harbor, or Meridian) and I will wire it straight into <b>assets/theme.scss</b> and <b>_quarto.yml</b>: Google Fonts, Bootstrap variables, sidebar, callouts, code, tables, and a matched chart palette for your R figures. You can also mix, for example Harbor's color with Meridian's typography.</p>
+    <div class="cta">
+      <span class="theme-tag">Oxford · trust and clarity</span>
+      <span class="theme-tag">Harbor · fresh and friendly</span>
+      <span class="theme-tag">Meridian · premium and editorial</span>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Copied <span class="hx" id="toastHex"></span></div>
+
+<script>
+/* ---------- Theme metadata ---------- */
+const THEMES = {
+  oxford:   {name:'Oxford',   desc:'the anchor',              radius:'8px',  shadow:'crisp',  call:'left rule',    link:'#0F4C86'},
+  harbor:   {name:'Harbor',   desc:'fresh and friendly',      radius:'14px', shadow:'soft',   call:'tinted fill',  link:'#1B4DC7'},
+  meridian: {name:'Meridian', desc:'premium and editorial',   radius:'6px',  shadow:'hairline',call:'top bar',     link:'#0A4A7A'}
+};
+
+/* ---------- Palette definitions ---------- */
+const CORE = [
+  {role:'Oxford Blue', hex:'#002147', fg:'#fff'},
+  {role:'Primary 2',   hex:'#0A3161', fg:'#fff'},
+  {role:'Logo Cobalt', hex:'#2050BF', fg:'#fff'},
+  {role:'Link',        hex:'var(--link)', dyn:true, fg:'#fff'}
+];
+const ACCENT = [
+  {role:'Blue · note',     hex:'#175CA6', fg:'#fff'},
+  {role:'Teal',            hex:'#0A6E7D', fg:'#fff'},
+  {role:'Emerald · tip',   hex:'#0E7A54', fg:'#fff'},
+  {role:'Amber · warning', hex:'#9A5B00', fg:'#fff'},
+  {role:'Coral · danger',  hex:'#C1343F', fg:'#fff'},
+  {role:'Violet',          hex:'#6742BE', fg:'#fff'},
+  {role:'Magenta',         hex:'#A83A72', fg:'#fff'}
+];
+const NEUTRAL = [
+  {role:'Canvas',      hex:'#FFFFFF', fg:'#12263b', bd:true},
+  {role:'Surface',     hex:'var(--surface)', dyn:true, fg:'#12263b', bd:true},
+  {role:'Surface 2',   hex:'var(--surface-2)', dyn:true, fg:'#12263b', bd:true},
+  {role:'Border',      hex:'var(--border-strong)', dyn:true, fg:'#12263b', bd:true},
+  {role:'Ink muted',   hex:'var(--ink-3)', dyn:true, fg:'#fff'},
+  {role:'Ink',         hex:'var(--ink)', dyn:true, fg:'#fff'}
+];
+
+function resolve(hex){
+  if(!hex.startsWith('var(')) return hex;
+  const name = hex.slice(4,-1).trim();
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return v || '#888';
+}
+function buildSwatches(el, list){
+  el.innerHTML = list.map(s=>{
+    return `<button class="swatch" data-dyn="${s.dyn?1:0}" data-raw="${s.hex}">
+      <div class="chipcolor" style="background:${s.hex}; ${s.bd?'border-bottom:1px solid var(--border)':''}">
+        <span class="copyhint">copy</span>
+      </div>
+      <div class="meta"><div class="role">${s.role}</div><div class="hex">${s.dyn?resolve(s.hex):s.hex}</div></div>
+    </button>`;
+  }).join('');
+}
+function refreshDynHex(){
+  document.querySelectorAll('.swatch[data-dyn="1"]').forEach(sw=>{
+    sw.querySelector('.hex').textContent = resolve(sw.dataset.raw);
+  });
+}
+
+/* ---------- Toast ---------- */
+let toastT;
+function toast(hex){
+  const t=document.getElementById('toast');
+  document.getElementById('toastHex').textContent=hex;
+  t.classList.add('show'); clearTimeout(toastT);
+  toastT=setTimeout(()=>t.classList.remove('show'),1400);
+}
+
+/* ---------- Copy on click ---------- */
+document.addEventListener('click', e=>{
+  const sw=e.target.closest('.swatch');
+  if(!sw) return;
+  const hex = sw.dataset.dyn==='1' ? resolve(sw.dataset.raw) : sw.dataset.raw;
+  navigator.clipboard && navigator.clipboard.writeText(hex);
+  toast(hex);
+});
+
+/* ---------- Theme switch ---------- */
+const tabs=[...document.querySelectorAll('.seg-btn')];
+function setTheme(key){
+  document.documentElement.setAttribute('data-theme', key);
+  tabs.forEach(t=>t.setAttribute('aria-selected', String(t.dataset.set===key)));
+  const m=THEMES[key];
+  document.getElementById('tagName').textContent=m.name;
+  document.getElementById('tagDesc').textContent=m.desc;
+  document.getElementById('tRadius').textContent=m.radius;
+  document.getElementById('tShadow').textContent=m.shadow;
+  document.getElementById('tCall').textContent=m.call;
+  document.getElementById('tLink').textContent=m.link;
+  // let CSS vars settle, then refresh dynamic hex + replay chart
+  requestAnimationFrame(()=>{ refreshDynHex(); replayChart(); });
+}
+tabs.forEach(t=>t.addEventListener('click', ()=>setTheme(t.dataset.set)));
+
+/* ---------- SIR curve generation ---------- */
+function sirPaths(){
+  // simple Euler integration for a nice-looking curve
+  let S=0.99, I=0.01, R=0, beta=0.5, gamma=0.2, N=1, dt=1;
+  const xs=[], ys={S:[],I:[],R:[]};
+  for(let t=0;t<=120;t++){
+    xs.push(t);
+    ys.S.push(S); ys.I.push(I); ys.R.push(R);
+    const dS=-beta*S*I, dI=beta*S*I-gamma*I, dR=gamma*I;
+    S+=dS*dt; I+=dI*dt; R+=dR*dt;
+  }
+  const x0=40,x1=404,y0=200,y1=24;
+  const sx=t=> x0+(t/120)*(x1-x0);
+  const sy=v=> y0+(v)*(y1-y0);   // v in [0,1]
+  const toPath=arr=> 'M'+arr.map((v,i)=>`${sx(xs[i]).toFixed(1)},${sy(v).toFixed(1)}`).join(' L');
+  return {S:toPath(ys.S), I:toPath(ys.I), R:toPath(ys.R)};
+}
+function replayChart(){
+  const p=sirPaths();
+  [['lineS',p.S],['lineI',p.I],['lineR',p.R]].forEach(([id,d])=>{
+    const el=document.getElementById(id);
+    el.setAttribute('d', d);
+    const len=el.getTotalLength();
+    el.style.setProperty('--len', len);
+    el.style.animation='none'; void el.getBBox(); el.style.animation='';
+  });
+}
+
+/* ---------- Init ---------- */
+buildSwatches(document.getElementById('palCore'), CORE);
+buildSwatches(document.getElementById('palAccent'), ACCENT);
+buildSwatches(document.getElementById('palNeutral'), NEUTRAL);
+setTheme('oxford');
+</script>
+</body>
+</html>

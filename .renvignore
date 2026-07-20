@@ -1,0 +1,5 @@
+# Skip non-source folders so renv dependency discovery stays fast
+docs/
+_freeze/
+_drafts/
+.quarto/

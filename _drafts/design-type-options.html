@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en" data-type="source" data-size="balanced">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IDM4b · Source type, balanced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   HARBOR · SOURCE TYPE, BALANCED
+   Same Harbor shell (white, cobalt, soft shadows, rounded).
+   One balanced modular scale (ratio 1.2) from a single --base.
+   Text size is adjustable: Compact 15 / Balanced 16 / Relaxed 17.
+   ============================================================ */
+
+:root{
+  /* --- Harbor palette (fixed) --- */
+  --bg:#ffffff;
+  --ink:#14263b; --ink-2:#42566b; --ink-3:#647587;
+  --primary:#002147; --primary-2:#0a3161; --primary-tint:#e8f0fc;
+  --link:#1B4DC7; --link-hover:#12329a;
+  --surface:#f1f6fd; --surface-2:#e6f0fb;
+  --border:#e3edf9; --border-strong:#cfe0f2;
+  --radius:14px; --radius-lg:18px;
+  --shadow:0 6px 20px rgba(4,33,71,.08);
+  --shadow-lg:0 14px 34px rgba(4,33,71,.13);
+  --btn-bg:#1B4DC7; --btn-bg-hover:#143aa6;
+  --focus:#1B4DC7;
+  --a-blue:#175CA6; --a-emerald:#0E7A54; --a-amber:#9A5B00; --a-coral:#C1343F; --a-violet:#6742BE;
+
+  --maxw:1120px; --measure:68ch;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --mono:'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+  /* Balanced modular scale (ratio ~1.2) derived from --base */
+  --base:16px;
+  --f-cap:calc(var(--base) * 0.82);   /* captions, small */
+  --f-body:var(--base);               /* reading text */
+  --f-lead:calc(var(--base) * 1.15);  /* chapter lead */
+  --f-h3:calc(var(--base) * 1.18);
+  --f-h2:calc(var(--base) * 1.42);
+  --f-quote:calc(var(--base) * 1.32);
+  --f-h1:clamp(26px, calc(var(--base) * 1.7 + 0.5vw), 34px);
+}
+
+/* Text-size steps (override --base; higher specificity than [data-type]) */
+html[data-size="compact"]  { --base:15px; }
+html[data-size="balanced"] { --base:16px; }
+html[data-size="relaxed"]  { --base:17px; }
+
+/* =============== TYPE SYSTEMS (typeface + rhythm only) =============== */
+[data-type="source"]{
+  --font-head:'Source Serif 4', Georgia, serif;
+  --font-body:'Inter', system-ui, sans-serif;
+  --font-mono:var(--mono);
+  --head-weight:600; --head-track:-.012em; --body-lh:1.62;
+}
+[data-type="newsreader"]{
+  --font-head:'Newsreader', Georgia, serif;
+  --font-body:'Inter', system-ui, sans-serif;
+  --font-mono:var(--mono);
+  --head-weight:600; --head-track:-.006em; --body-lh:1.62;
+}
+[data-type="journal"]{
+  --font-head:'Inter', system-ui, sans-serif;
+  --font-body:'Source Serif 4', Georgia, serif;
+  --font-mono:var(--mono);
+  --head-weight:700; --head-track:-.02em; --body-lh:1.7;
+}
+[data-type="scholarly"]{
+  --font-head:'Newsreader', Georgia, serif;
+  --font-body:'Source Serif 4', Georgia, serif;
+  --font-mono:var(--mono);
+  --head-weight:600; --head-track:-.006em; --body-lh:1.7;
+}
+[data-type="plex"]{
+  --font-head:'IBM Plex Serif', Georgia, serif;
+  --font-body:'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono:'IBM Plex Mono', ui-monospace, monospace;
+  --head-weight:600; --head-track:-.004em; --body-lh:1.6;
+}
+
+/* =============== Base =============== */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--font-body); font-size:var(--f-body); line-height:var(--body-lh);
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+body,.paper,.card,.callout,.btn,.seg,.seg-btn,.scale-row,.spec,.sizer button{
+  transition:font-size .22s var(--ease), background-color .3s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+h1,h2,h3,h4{font-family:var(--font-head); font-weight:var(--head-weight); letter-spacing:var(--head-track); color:var(--primary); line-height:1.2; margin:0}
+a{color:var(--link); text-decoration:underline; text-underline-offset:2px; text-decoration-thickness:1.5px; text-decoration-color:color-mix(in srgb,var(--link) 40%, transparent)}
+a:hover{color:var(--link-hover); text-decoration-color:currentColor}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--focus) 55%, transparent); outline-offset:2px; border-radius:6px}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 clamp(18px,4vw,40px)}
+
+/* =============== Top bar =============== */
+.topbar{position:sticky; top:0; z-index:50; background:color-mix(in srgb,var(--bg) 86%, transparent);
+  backdrop-filter:saturate(1.4) blur(12px); -webkit-backdrop-filter:saturate(1.4) blur(12px); border-bottom:1px solid var(--border)}
+.topbar-in{display:flex; align-items:center; gap:16px; padding:12px clamp(18px,4vw,40px); max-width:var(--maxw); margin:0 auto; flex-wrap:wrap}
+.brand{display:flex; align-items:center; gap:11px; font-family:var(--font-head); font-weight:var(--head-weight); letter-spacing:-.01em; color:var(--primary); font-size:19px}
+.brand .logo{width:32px; height:32px; flex:0 0 auto}
+.brand small{display:block; font-family:'Inter',sans-serif; font-weight:500; font-size:11.5px; letter-spacing:.02em; color:var(--ink-3); margin-top:-2px}
+.spacer{flex:1 1 auto; min-width:6px}
+.seg{display:inline-flex; flex-wrap:wrap; background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-lg); padding:4px; gap:3px}
+.seg-btn{appearance:none; border:0; cursor:pointer; font-family:'Inter',sans-serif; font-size:13px; font-weight:600; color:var(--ink-2);
+  padding:9px 13px; min-height:42px; border-radius:calc(var(--radius-lg) - 4px); background:transparent; display:inline-flex; align-items:center; gap:8px; white-space:nowrap}
+.seg-btn[aria-selected="true"]{background:var(--bg); color:var(--primary); box-shadow:var(--shadow)}
+.seg-btn:hover{color:var(--primary)}
+.seg-btn .n{font-family:var(--mono); font-size:11px; opacity:.6}
+
+/* =============== Intro + controls =============== */
+.intro{padding:clamp(30px,5vw,52px) 0 8px}
+.intro .eyebrow{font-family:'Inter',sans-serif; color:var(--link); font-weight:700; font-size:12.5px; letter-spacing:.02em}
+.intro h1{font-size:clamp(28px,4.6vw,42px); margin:.3em 0 .25em; letter-spacing:-.02em}
+.intro p{color:var(--ink-2); max-width:62ch; font-family:'Inter',sans-serif; font-size:16px; line-height:1.6}
+
+.sizer{display:inline-flex; align-items:center; gap:8px; margin-top:20px; flex-wrap:wrap}
+.sizer .lab{font-family:'Inter',sans-serif; font-size:12.5px; font-weight:600; color:var(--ink-3); text-transform:uppercase; letter-spacing:.07em; margin-right:2px}
+.sizer .grp{display:inline-flex; background:var(--surface-2); border:1px solid var(--border); border-radius:999px; padding:4px; gap:3px}
+.sizer button{appearance:none; border:0; cursor:pointer; font-family:'Inter',sans-serif; font-weight:600; font-size:13px; color:var(--ink-2);
+  padding:8px 15px; min-height:40px; border-radius:999px; background:transparent}
+.sizer button[aria-pressed="true"]{background:var(--bg); color:var(--primary); box-shadow:var(--shadow)}
+.sizer button:hover{color:var(--primary)}
+
+.spec{display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px; margin:22px 0 6px; padding:15px 18px;
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow)}
+.spec .pin{font-family:var(--font-head); font-weight:var(--head-weight); color:var(--primary); font-size:19px; letter-spacing:var(--head-track)}
+.spec .kv{font-family:'Inter',sans-serif; font-size:13px; color:var(--ink-2)}
+.spec .kv b{color:var(--ink); font-weight:600}
+.spec .why{flex:1 1 300px; min-width:230px; font-family:'Inter',sans-serif; font-size:13px; color:var(--ink-2); border-left:3px solid var(--link); padding-left:12px}
+
+/* =============== Layout =============== */
+.grid{display:grid; grid-template-columns:minmax(0,1.55fr) minmax(258px,.95fr); gap:26px; align-items:start; padding:22px 0 20px}
+
+/* Reading sample */
+.paper{background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-lg); box-shadow:var(--shadow-lg); overflow:hidden}
+.paper-top{display:flex; align-items:center; gap:7px; padding:12px 16px; border-bottom:1px solid var(--border); background:var(--surface)}
+.paper-top .d{width:11px;height:11px;border-radius:50%;background:var(--border-strong)}
+.paper-top .path{margin-left:8px; font-family:var(--mono); font-size:12px; color:var(--ink-3)}
+.doc{padding:clamp(24px,4vw,46px)}
+.doc .measure{max-width:var(--measure)}
+.doc .ch-eyebrow{font-family:'Inter',sans-serif; color:var(--link); font-weight:700; font-size:var(--f-cap); letter-spacing:.03em}
+.doc h1{font-size:var(--f-h1); margin:.34em 0 .2em; line-height:1.16}
+.doc .lead{color:var(--ink-2); font-size:var(--f-lead); line-height:1.5; margin:.2em 0 1.25em}
+.doc h2{font-size:var(--f-h2); margin:1.6em 0 .5em; line-height:1.25}
+.doc p{margin:0 0 1.05em; color:var(--ink)}
+.doc code{font-family:var(--font-mono); font-size:.88em; background:var(--surface-2); color:var(--a-violet); padding:.1em .4em; border-radius:6px; border:1px solid var(--border)}
+.doc .cite{color:var(--ink-3); font-size:.9em}
+
+blockquote{margin:1.4em 0; padding:4px 0 4px 20px; border-left:4px solid var(--link);
+  font-family:var(--font-head); font-weight:var(--head-weight); color:var(--primary);
+  font-size:var(--f-quote); line-height:1.4; letter-spacing:var(--head-track)}
+blockquote .by{display:block; margin-top:9px; font-family:'Inter',sans-serif; font-weight:600; font-size:var(--f-cap); color:var(--ink-3); letter-spacing:0}
+
+.callout{border:1px solid color-mix(in srgb,var(--c) 22%, var(--border)); background:color-mix(in srgb,var(--c) 7%, var(--bg));
+  border-left:4px solid var(--c); border-radius:var(--radius); padding:14px 16px; margin:1.25em 0}
+.callout .co-head{display:flex; align-items:center; gap:9px; font-family:'Inter',sans-serif; font-weight:700; color:var(--c); font-size:calc(var(--base) * 0.9); margin-bottom:4px}
+.callout .ico{width:20px;height:20px;display:grid;place-items:center;border-radius:6px;background:color-mix(in srgb,var(--c) 15%, transparent); color:var(--c); font-family:'Inter',sans-serif; font-weight:700}
+.callout p{margin:0; color:var(--ink); font-size:calc(var(--base) * 0.94); line-height:1.55}
+.co-note{--c:var(--a-blue)}
+
+.figcap{margin-top:10px; font-family:'Inter',sans-serif; color:var(--ink-3); font-size:var(--f-cap); line-height:1.5}
+.figbox{margin:1.35em 0 .3em; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); height:140px; position:relative; overflow:hidden}
+.figbox svg{position:absolute; inset:0; width:100%; height:100%}
+
+/* Right column */
+.side{display:flex; flex-direction:column; gap:22px; position:sticky; top:78px}
+.card{background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-lg); box-shadow:var(--shadow); padding:18px}
+.card h3{font-family:'Inter',sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:.09em; color:var(--ink-3); font-weight:700; margin:0 0 12px}
+.scale-row{display:flex; align-items:baseline; gap:12px; padding:10px 0; border-bottom:1px dashed var(--border)}
+.scale-row:last-child{border-bottom:0}
+.scale-row .lab{font-family:var(--mono); font-size:10.5px; color:var(--ink-3); width:74px; flex:0 0 auto}
+.scale-row .px{font-family:var(--mono); font-size:10px; color:var(--ink-3); margin-left:auto; flex:0 0 auto}
+.s-h1{font-family:var(--font-head); font-weight:var(--head-weight); color:var(--primary); font-size:var(--f-h2); letter-spacing:var(--head-track)}
+.s-h2{font-family:var(--font-head); font-weight:var(--head-weight); color:var(--primary); font-size:var(--f-h3); letter-spacing:var(--head-track)}
+.s-body{font-family:var(--font-body); font-size:var(--f-body); color:var(--ink)}
+.s-cap{font-family:'Inter',sans-serif; font-size:var(--f-cap); color:var(--ink-2)}
+.s-mono{font-family:var(--font-mono); font-size:calc(var(--base) * 0.86); color:var(--ink)}
+
+.meter .row{display:flex; justify-content:space-between; font-family:'Inter',sans-serif; font-size:13px; color:var(--ink-2); padding:7px 0; border-bottom:1px dashed var(--border)}
+.meter .row:last-child{border-bottom:0}
+.meter b{color:var(--ink); font-family:var(--mono); font-size:12.5px}
+
+.btns{display:flex; gap:12px; flex-wrap:wrap; margin-top:6px}
+.btn{appearance:none; cursor:pointer; font-family:'Inter',sans-serif; font-weight:600; font-size:15px; border-radius:var(--radius); padding:11px 20px; min-height:46px; display:inline-flex; align-items:center; gap:8px; border:1px solid transparent; text-decoration:none}
+.btn-primary{background:linear-gradient(180deg,#2a5cd6,var(--btn-bg)); color:#fff}
+.btn-primary:hover{transform:translateY(-1px); box-shadow:var(--shadow-lg)}
+.btn-secondary{background:var(--bg); color:var(--primary); border-color:var(--border-strong)}
+.btn-secondary:hover{background:var(--surface); border-color:var(--primary)}
+
+.foot{border-top:1px solid var(--border); margin-top:20px; padding:26px 0 60px; color:var(--ink-3); font-family:'Inter',sans-serif; font-size:14px; line-height:1.6}
+.toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(20px); opacity:0; background:var(--primary); color:#fff; font-family:'Inter',sans-serif; font-size:14px; font-weight:600; padding:11px 18px; border-radius:999px; box-shadow:0 10px 30px rgba(2,18,40,.28); pointer-events:none; transition:opacity .25s, transform .25s; z-index:99}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+
+@media (max-width:860px){ .grid{grid-template-columns:1fr} .side{position:static} }
+@media (max-width:560px){
+  .seg{width:100%} .seg-btn{flex:1 1 auto; justify-content:center; padding:10px 8px}
+  .brand small{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 235 240" aria-hidden="true">
+        <path fill="var(--link)" d="M124.5 127.1c1.4-18.4 2.7-36.5 4.1-54.9 1.3-.1 2.5-.2 3.8-.2 31 0 62 0 93 0 2.9 0 4.3.8 5.5 3.5 28.9 71.6-18.7 152.8-95.4 162.6-6.3.8-12.6.9-19.5 1.4 2.9-37.9 5.7-74.9 8.5-112.4z"/>
+        <path fill="var(--primary)" d="M1.2 102.9C3.7 93.3 6 84.1 8.7 75c.4-1.3 2.6-2.8 3.9-2.8 30.6-.1 61.2-.1 91.7-.1.3 0 .5.1 1.6.4C101.9 127 97.8 181.5 93.6 236.2 34.5 223.6-7.7 166.1 1.2 102.9z"/>
+        <path fill="var(--primary)" d="M51.1 21.5C111.6-19.9 185.3 3.4 216.3 50c-64.5 0-128.9 0-193.9 0 7.8-11.4 17.4-20.5 28.6-28.5z"/>
+      </svg>
+      <div>IDM4b<small>Source type · balanced</small></div>
+    </div>
+    <div class="spacer"></div>
+    <div class="seg" role="tablist" aria-label="Compare typeface">
+      <button class="seg-btn" role="tab" aria-selected="true" data-set="source"><span class="n">1</span><span class="txt">Source</span></button>
+      <button class="seg-btn" role="tab" aria-selected="false" data-set="newsreader"><span class="n">2</span><span class="txt">Newsreader</span></button>
+      <button class="seg-btn" role="tab" aria-selected="false" data-set="journal"><span class="n">3</span><span class="txt">Journal</span></button>
+      <button class="seg-btn" role="tab" aria-selected="false" data-set="scholarly"><span class="n">4</span><span class="txt">Scholarly</span></button>
+      <button class="seg-btn" role="tab" aria-selected="false" data-set="plex"><span class="n">5</span><span class="txt">Plex</span></button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="intro">
+    <div class="eyebrow">Source, rebalanced · Harbor colors and shapes unchanged</div>
+    <h1>An appropriate, balanced text scale</h1>
+    <p>The reading text is now set on a calm modular scale (ratio 1.2) from a 16px base, with a tighter line height and a slightly wider column. Use the control below to fine tune the body size. The typeface switcher up top keeps every option at the same size, so you are comparing letterforms, not scale.</p>
+
+    <div class="sizer" role="group" aria-label="Text size">
+      <span class="lab">Text size</span>
+      <span class="grp">
+        <button data-size-set="compact" aria-pressed="false">Compact</button>
+        <button data-size-set="balanced" aria-pressed="true">Balanced</button>
+        <button data-size-set="relaxed" aria-pressed="false">Relaxed</button>
+      </span>
+    </div>
+  </section>
+
+  <div class="spec">
+    <span class="pin" id="specPin">Source</span>
+    <span class="kv">Headings <b id="specHead">Source Serif 4</b></span>
+    <span class="kv">Body <b id="specBody">Inter</b></span>
+    <span class="kv">Base <b id="specBase">16 px</b></span>
+    <span class="why" id="specWhy">Neutral serif titles over a clean Inter body, now sized for balance. The body reads calm and professional, the serif titles carry authority.</span>
+  </div>
+
+  <div class="grid">
+    <article class="paper">
+      <div class="paper-top"><span class="d"></span><span class="d"></span><span class="d"></span><span class="path">det/sir.qmd</span></div>
+      <div class="doc">
+        <div class="measure">
+          <div class="ch-eyebrow">Chapter 3 · Deterministic models</div>
+          <h1>The SIR model</h1>
+          <p class="lead">We split a closed population into three compartments and follow how people move from susceptible to infectious to recovered as an epidemic unfolds.</p>
+
+          <p>The dynamics are governed by two rates: a transmission rate <code>beta</code> and a recovery rate <code>gamma</code>. Their ratio defines the basic reproduction number, written R0, the average number of secondary infections produced by a single case in a fully susceptible population <span class="cite">(Anderson and May, 1991)</span>.</p>
+
+          <p>When R0 sits above one, the pathogen can invade and case counts grow. When it falls below one, each chain of transmission shrinks and the outbreak fades. This single threshold underpins much of how we reason about outbreaks and their control.</p>
+
+          <blockquote>One number decides whether an outbreak grows or dies away. Almost everything else in the model is detail added on top of that idea.
+            <span class="by">A rule of thumb for the SIR model</span>
+          </blockquote>
+
+          <h2>Why the threshold works</h2>
+          <p>In code we set <code>beta &lt;- R0 * gamma</code>, then integrate the system with <code>deSolve</code>. The mean infectious period is <code>1 / gamma</code>, so a five day period gives a recovery rate of 0.2 per day. Reasoning in terms of R0 and a period is far more intuitive than a raw contact rate.</p>
+
+          <div class="callout co-note">
+            <div class="co-head"><span class="ico">i</span>Note</div>
+            <p>The population N is held constant, so births, deaths, and migration are ignored over the timescale of a single outbreak.</p>
+          </div>
+
+          <div class="figbox">
+            <svg viewBox="0 0 520 140" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0,20 C120,22 190,60 260,95 C330,125 420,132 520,134" fill="none" stroke="var(--a-emerald)" stroke-width="3"/>
+              <path d="M0,132 C120,130 175,70 250,55 C340,38 430,120 520,132" fill="none" stroke="var(--a-coral)" stroke-width="3"/>
+              <path d="M0,24 C120,26 200,80 300,110 C380,130 450,134 520,136" fill="none" stroke="var(--primary)" stroke-width="3" opacity=".85"/>
+            </svg>
+          </div>
+          <div class="figcap">Figure 1. Simulated incidence for R0 = 2.5. The epidemic peaks as susceptibility crosses the one over R0 threshold, then declines.</div>
+
+          <div class="btns" style="margin-top:22px">
+            <a class="btn btn-primary" href="#">Run the simulation</a>
+            <a class="btn btn-secondary" href="#">View source</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <aside class="side">
+      <div class="card">
+        <h3>Type scale</h3>
+        <div class="scale-row"><span class="lab">H1 title</span><span class="s-h1">SIR model</span><span class="px" id="pxH1">27</span></div>
+        <div class="scale-row"><span class="lab">H2</span><span class="s-h2">Transmission</span><span class="px" id="pxH2">23</span></div>
+        <div class="scale-row"><span class="lab">Body</span><span class="s-body">Reading text.</span><span class="px" id="pxBody">16</span></div>
+        <div class="scale-row"><span class="lab">Caption</span><span class="s-cap">Figure 1.</span><span class="px" id="pxCap">13</span></div>
+        <div class="scale-row"><span class="lab">Code</span><span class="s-mono">R0 * gamma</span><span class="px" id="pxMono">14</span></div>
+      </div>
+      <div class="card meter">
+        <h3>Reading comfort</h3>
+        <div class="row"><span>Body base</span><b id="mBase">16 px</b></div>
+        <div class="row"><span>Line height</span><b id="mLh">1.62</b></div>
+        <div class="row"><span>Scale ratio</span><b>1.2 modular</b></div>
+        <div class="row"><span>Measure</span><b>68 ch</b></div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="foot">
+    <b style="color:var(--primary)">Balanced default is 16px.</b> Compact drops to 15px for a denser, reference feel; Relaxed lifts to 17px. Whatever you land on, tell me the size and typeface and I will set it as the base scale in <code style="font-family:var(--mono)">assets/theme.scss</code>, with headings, code, callouts, tables, and figures all keyed to the same rhythm.
+  </div>
+</div>
+
+<div class="toast" id="toast">Balanced</div>
+
+<script>
+const T={
+  source:{pin:'Source', head:'Source Serif 4', body:'Inter', why:'Neutral serif titles over a clean Inter body, now sized for balance. The body reads calm and professional, the serif titles carry authority.'},
+  newsreader:{pin:'Newsreader', head:'Newsreader', body:'Inter', why:'Editorial, slightly warm serif titles over a clean Inter body. Trust with a published, human feel.'},
+  journal:{pin:'Journal', head:'Inter', body:'Source Serif 4', why:'Clean sans titles over a serif reading body. The serif text feels calm and booklike for long passages.'},
+  scholarly:{pin:'Scholarly', head:'Newsreader', body:'Source Serif 4', why:'All serif, the most classic and booklike option, with maximum scholarly gravity.'},
+  plex:{pin:'Plex', head:'IBM Plex Serif', body:'IBM Plex Sans', why:'IBM Plex, engineered and institutional. Precise, a natural fit for a modelling text.'}
+};
+const SIZE={compact:15, balanced:16, relaxed:17};
+const LH={source:'1.62', newsreader:'1.62', journal:'1.70', scholarly:'1.70', plex:'1.60'};
+const $=id=>document.getElementById(id);
+const root=document.documentElement;
+let tt;
+function toast(msg){const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),1300);}
+
+function readout(){
+  const type=root.getAttribute('data-type');
+  const base=SIZE[root.getAttribute('data-size')];
+  const m=T[type];
+  $('specPin').textContent=m.pin; $('specHead').textContent=m.head; $('specBody').textContent=m.body; $('specWhy').textContent=m.why;
+  $('specBase').textContent=base+' px'; $('mBase').textContent=base+' px'; $('mLh').textContent=LH[type];
+  // derived px, rounded, matching the CSS ratios
+  $('pxH1').textContent=Math.round(base*1.7); $('pxH2').textContent=Math.round(base*1.42);
+  $('pxBody').textContent=base; $('pxCap').textContent=Math.round(base*0.82); $('pxMono').textContent=Math.round(base*0.86);
+}
+document.querySelectorAll('.seg-btn').forEach(b=>b.addEventListener('click',()=>{
+  root.setAttribute('data-type', b.dataset.set);
+  document.querySelectorAll('.seg-btn').forEach(x=>x.setAttribute('aria-selected', String(x===b)));
+  readout(); toast(T[b.dataset.set].pin+' · '+T[b.dataset.set].head+' + '+T[b.dataset.set].body);
+}));
+document.querySelectorAll('.sizer button').forEach(b=>b.addEventListener('click',()=>{
+  root.setAttribute('data-size', b.dataset.sizeSet);
+  document.querySelectorAll('.sizer button').forEach(x=>x.setAttribute('aria-pressed', String(x===b)));
+  readout(); toast(b.textContent+' · '+SIZE[b.dataset.sizeSet]+'px body');
+}));
+readout();
+</script>
+</body>
+</html>

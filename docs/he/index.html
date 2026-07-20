@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Health economics – Infectious disease modelling for babies</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../he/etr.html" rel="next">
+<link href="../intv/vax-measles.html" rel="prev">
+<link href="../assets/logo-icon.svg" rel="icon" type="image/svg+xml">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-452e82b5fdc6925848d8869b1cdec60b.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-66aa14e9e62bc61e3928e42c7c8f8237.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-X391ZN63GG"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-X391ZN63GG', { 'anonymize_ip': true});
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;600&amp;family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&amp;display=swap" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../assets/tokens.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../he/index.html">Health economics</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Infectious disease modelling for babies</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../mod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Modelling</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../det/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deterministic models</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../det/sir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">SIR</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../det/seir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">SEIR</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../det/het.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Heterogeneities</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../det/tsir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">tsiR</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../sto/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Stochastic models</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sto/sir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">SIR</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sto/seir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">SEIR</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sto/ar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Autoregressive model</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sto/branch-proc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Branching process</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../fit/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model fitting</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fit/lse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Least squares estimation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fit/lik.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Likelihood</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fit/mle.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Maximum likelihood estimation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fit/mcmc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">MCMC</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fit/pmcmc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Particle filter</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../sel/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model selection</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sel/cv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Cross validation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../rnum/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Reproduction number</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../rnum/gen-int.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Generation interval</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../rnum/r0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../rnum/rt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../rnum/rt-prac.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title"><span class="math inline">\(R_t\)</span> in practice</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../intv/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Interventions</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../intv/ftc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Flattening the curve</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../intv/vax.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Vaccination</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../intv/vax-perf.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Vaccine performance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../intv/vax-mod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Model vaccination</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../intv/vax-measles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Measles vaccine</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../he/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Health economics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../he/etr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">EtR Process</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../sero/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Serological data</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sero/cat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Serocatalytic models</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../stat/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Statistical models</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../stat/glm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Generalised linear models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../stat/gam.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Generalised additive model</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../stat/nlin.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Nonlinear models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../stat/surv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Survival analysis</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../stat/bayes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Bayesian</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../stat/ts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Time series</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appx/dict.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Dictionary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appx/math.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Math</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="3">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#types-of-analyses" id="toc-types-of-analyses" class="nav-link active" data-scroll-target="#types-of-analyses">Types of analyses</a></li>
+  <li><a href="#models-in-health-economics" id="toc-models-in-health-economics" class="nav-link" data-scroll-target="#models-in-health-economics">Models in health economics</a>
+  <ul>
+  <li><a href="#proportionate-outcomes-model" id="toc-proportionate-outcomes-model" class="nav-link" data-scroll-target="#proportionate-outcomes-model">Proportionate outcomes model</a></li>
+  <li><a href="#markov-model" id="toc-markov-model" class="nav-link" data-scroll-target="#markov-model">Markov model</a></li>
+  <li><a href="#compartmental-dynamic-model" id="toc-compartmental-dynamic-model" class="nav-link" data-scroll-target="#compartmental-dynamic-model">Compartmental dynamic model</a></li>
+  <li><a href="#individual-based-model" id="toc-individual-based-model" class="nav-link" data-scroll-target="#individual-based-model">Individual-based model</a></li>
+  <li><a href="#choice-of-model" id="toc-choice-of-model" class="nav-link" data-scroll-target="#choice-of-model">Choice of model</a></li>
+  </ul></li>
+  <li><a href="#measuring-consequences" id="toc-measuring-consequences" class="nav-link" data-scroll-target="#measuring-consequences">Measuring consequences</a>
+  <ul>
+  <li><a href="#utility" id="toc-utility" class="nav-link" data-scroll-target="#utility">Utility</a>
+  <ul>
+  <li><a href="#qaly" id="toc-qaly" class="nav-link" data-scroll-target="#qaly">QALY</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#measuring-costs" id="toc-measuring-costs" class="nav-link" data-scroll-target="#measuring-costs">Measuring costs</a>
+  <ul>
+  <li><a href="#perspectives" id="toc-perspectives" class="nav-link" data-scroll-target="#perspectives">Perspectives</a></li>
+  <li><a href="#discounting-vs-inflation" id="toc-discounting-vs-inflation" class="nav-link" data-scroll-target="#discounting-vs-inflation">Discounting vs inflation</a></li>
+  </ul></li>
+  <li><a href="#define-methods-of-value-analysis" id="toc-define-methods-of-value-analysis" class="nav-link" data-scroll-target="#define-methods-of-value-analysis">Define methods of value analysis</a>
+  <ul>
+  <li><a href="#net-monetary-benefit-nmb-or-benefit-cost-ratio" id="toc-net-monetary-benefit-nmb-or-benefit-cost-ratio" class="nav-link" data-scroll-target="#net-monetary-benefit-nmb-or-benefit-cost-ratio">Net monetary benefit (NMB) or benefit-cost ratio</a></li>
+  <li><a href="#incremental-cost-effectiveness-ratio-icer" id="toc-incremental-cost-effectiveness-ratio-icer" class="nav-link" data-scroll-target="#incremental-cost-effectiveness-ratio-icer">Incremental cost effectiveness ratio (ICER)</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Health economics</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Acknowledgement
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>I am deeply grateful to Dr.&nbsp;Hugo Turner and Asst Prof.&nbsp;Kiesha Prem for their invaluable support and guidance throughout the writing of this chapter.</p>
+</div>
+</div>
+<p>Health economics focuses on how to <strong>allocate</strong> healthcare <strong>resources efficiently</strong> to <strong>maximize health outcomes</strong> with limited resources <span class="citation" data-cites="goeree2013">(<a href="../references.html#ref-goeree2013" role="doc-biblioref">Goeree &amp; Diaby, 2013</a>)</span>. Health economics is used to support <strong>decision-making</strong> in situations where we must choose between different options. For example, given the current budget, should we buy HPV vaccines or COVID-19 vaccines?</p>
+<p>Health economics emphasizes <strong>opportunity costs</strong>, which are the <strong>benefits sacrificed</strong> when choosing one option over another. For example, the opportunity cost of purchasing COVID-19 vaccines is the potential benefits lost from not buying HPV vaccines.</p>
+<section id="types-of-analyses" class="level2">
+<h2 class="anchored" data-anchor-id="types-of-analyses">Types of analyses</h2>
+<p><strong>Partial</strong> economic evaluations: studies that either <strong>only</strong> examine <strong>cost or consequences</strong>, or examine both costs and consequences but for only one intervention (<strong>without a comparator</strong>). This analysis <strong>cannot</strong> guide decision-making <span class="citation" data-cites="turner2021">(<a href="../references.html#ref-turner2021" role="doc-biblioref">Turner et al., 2021</a>)</span>.</p>
+<p><strong>Full</strong> economic evaluations: compare <strong>both</strong> the <strong>costs and consequences</strong> of the intervention to a <strong>comparator</strong>. There are 3 most popular types of full economic evaluations, the key difference lies in how they express the <strong>consequences</strong> <span class="citation" data-cites="turner2021">(<a href="../references.html#ref-turner2021" role="doc-biblioref">Turner et al., 2021</a>)</span>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 20%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Costs</th>
+<th>Consequences</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Cost-effectiveness</td>
+<td>$</td>
+<td>A single natural unit (life-years gained, cases averted, cases detected)</td>
+</tr>
+<tr class="even">
+<td>Cost-utility</td>
+<td>$</td>
+<td>QALYs, DALYs</td>
+</tr>
+<tr class="odd">
+<td>Cost-benefit</td>
+<td>$</td>
+<td>$</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<ul>
+<li>Cost-utility is sometimes considered as a special type of cost-effectiveness.</li>
+<li>There are 2 more types of full economic evaluations: cost-minimisation and cost-consequence, but they are less commonly used.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="models-in-health-economics" class="level2">
+<h2 class="anchored" data-anchor-id="models-in-health-economics">Models in health economics</h2>
+<section id="proportionate-outcomes-model" class="level3">
+<h3 class="anchored" data-anchor-id="proportionate-outcomes-model">Proportionate outcomes model</h3>
+<p>Also known as <strong>decision tree</strong> although exact definitions differ. Group flows divided into proportional outcomes over a single time period <span class="citation" data-cites="handbook2023">(<a href="../references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>.</p>
+<p>All decision trees have 3 key components <span class="citation" data-cites="handbook2023">(<a href="../references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>:</p>
+<ul>
+<li><strong>Decision nodes</strong>: where different comparators are compared.</li>
+<li><strong>Chance nodes</strong>: where potential outcomes are weighted by their probabilities.</li>
+<li><strong>Terminal nodes</strong>: endpoints of pathways, where costs and effectiveness calculated.</li>
+</ul>
+<div id="fig-he-dtree" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-he-dtree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="../img/he/he-dtree.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: Decision tree, adapted from [@handbook2023]"><img src="../img/he/he-dtree.svg" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-he-dtree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Decision tree, adapted from <span class="citation" data-cites="handbook2023">(<a href="../references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>
+</figcaption>
+</figure>
+</div>
+<p>We have to specify a <strong>fixed time horizon</strong> represents the period over which probabilities and outcomes are considered <span class="citation" data-cites="kuntz2013">(<a href="../references.html#ref-kuntz2013" role="doc-biblioref">Kuntz et al., 2013</a>)</span>. If a decision tree uses a 50-year time horizon, the probabilities of outcomes are based on what could occur within those 50 years.</p>
+<ul>
+<li>Decision nodes (or the comparators) are either “No vaccine” or “Vaccine” available.</li>
+<li>Chance nodes (or outcomes and their probabilities), are the nodes branch out from Decision nodes.</li>
+<li>Terminal nodes (or the endpoints for costs and effectiveness) are “No infection”, “Recovered”, and “Death”.</li>
+</ul>
+</section>
+<section id="markov-model" class="level3">
+<h3 class="anchored" data-anchor-id="markov-model">Markov model</h3>
+<p>A Markov model is a <strong>repeated</strong> decision tree <span class="citation" data-cites="heeg2008">(<a href="../references.html#ref-heeg2008" role="doc-biblioref">Heeg et al., 2008</a>)</span>. The core elements of a Markov model are <strong>health states</strong> and <strong>transition</strong> <span class="citation" data-cites="handbook2023">(<a href="../references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>:</p>
+<ul>
+<li><p><strong>Health states</strong> represent different conditions such as being healthy, sick, disease stages, or vaccinated. States must be mutually exclusive (a person can’t be in two states at once) and exhaustive (cover all relevant conditions).</p></li>
+<li><p><strong>Transition</strong> is the probability (ranges between 0 and 1) of moving from one state to another.</p></li>
+</ul>
+<p>Markov models are used for problems that involve risk over time, or when the timing of events is important <span class="citation" data-cites="kuntz2013">(<a href="../references.html#ref-kuntz2013" role="doc-biblioref">Kuntz et al., 2013</a>)</span>. We can use a Markov model to represent the endpoints shown in the decision tree <a href="#fig-he-dtree" class="quarto-xref">Figure&nbsp;<span>1</span></a>.</p>
+<div id="fig-he-markov" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-he-markov-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="../img/he/he-markov.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: Markov model, adapted from [@handbook2023]"><img src="../img/he/he-markov.svg" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-he-markov-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Markov model, adapted from <span class="citation" data-cites="handbook2023">(<a href="../references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>
+</figcaption>
+</figure>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 15%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: left;"><strong>S</strong></th>
+<th style="text-align: left;"><strong>V</strong></th>
+<th style="text-align: left;"><strong>I</strong></th>
+<th style="text-align: left;"><strong>R</strong></th>
+<th style="text-align: left;"><strong>D</strong></th>
+<th style="text-align: left;"><strong>Check</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Susceptible (S)</strong></td>
+<td style="text-align: left;">0.198</td>
+<td style="text-align: left;">0.100</td>
+<td style="text-align: left;">0.700</td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.002</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+<tr class="even">
+<td><strong>Vaccinated (V)</strong></td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.998</td>
+<td style="text-align: left;">0.000045</td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.002</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+<tr class="odd">
+<td><strong>Infected (I)</strong></td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.129</td>
+<td style="text-align: left;">0.865</td>
+<td style="text-align: left;">0.006</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+<tr class="even">
+<td><strong>Recovered (R)</strong></td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.998</td>
+<td style="text-align: left;">0.002</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+<tr class="odd">
+<td><strong>Deaths (D)</strong></td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">1.000</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+</tbody>
+</table>
+<p>The key disadvantage of a Markov model is its <strong>memoryless property</strong> or <strong>Markov assumption</strong>, which assumes that transitions between health states depend only on the current state, not on the past history or duration spent in a state <span class="citation" data-cites="handbook2023">(<a href="../references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>.</p>
+</section>
+<section id="compartmental-dynamic-model" class="level3">
+<h3 class="anchored" data-anchor-id="compartmental-dynamic-model">Compartmental dynamic model</h3>
+<p>Static models (decision tree, Markov model) assumes that the force of infection is constant or changes only as a function of age and other individual characteristics. Dynamic model assumes that the <strong>force of infection</strong> can <strong>vary</strong> throughout the course of <strong>time</strong> and as a function of population <strong>interactions</strong>. Dynamic models are preferable for modeling the impact of a vaccine when considerations of herd immunity <span class="citation" data-cites="handbook2023">(<a href="../references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>.</p>
+<p>We can adjust the Markov model <a href="#fig-he-markov" class="quarto-xref">Figure&nbsp;<span>2</span></a> to become a compartmental dynamic model by specifying that the force of infection varies over time.</p>
+<div id="fig-he-comp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-he-comp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="../img/he/he-comp.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: Compartmental dynamic model, adapted from [@handbook2023]"><img src="../img/he/he-comp.svg" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-he-comp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Compartmental dynamic model, adapted from <span class="citation" data-cites="handbook2023">(<a href="../references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="individual-based-model" class="level3">
+<h3 class="anchored" data-anchor-id="individual-based-model">Individual-based model</h3>
+<p>Individual-based model, also called <strong>microsimulation</strong> model, keeps track of each individual’s behaviour <span class="citation" data-cites="kim2008">(<a href="../references.html#ref-kim2008" role="doc-biblioref">Kim &amp; Goldie, 2008</a>)</span>. This is done by repeatedly sampling from probability distributions a large number of times to understand the average and spread of potential results. The disadvantage is that they are time-consuming, as they require sometimes the simulation of millions of individuals to obtain stable estimates <span class="citation" data-cites="handbook2023">(<a href="../references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>.</p>
+<p><a href="../img/he/he-abm.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="../img/he/he-abm.jpg" class="img-fluid"></a></p>
+</section>
+<section id="choice-of-model" class="level3">
+<h3 class="anchored" data-anchor-id="choice-of-model">Choice of model</h3>
+<p>The most difficult decision in model building is “How complex should the model be?” <span class="citation" data-cites="hilborn1997">(<a href="../references.html#ref-hilborn1997" role="doc-biblioref">Hilborn &amp; Mangel, 1997</a>)</span>. Most modellers agree on 2 basic rules for choosing a model:</p>
+<ol type="1">
+<li>Let the data tell you <span class="citation" data-cites="hilborn1997">(<a href="../references.html#ref-hilborn1997" role="doc-biblioref">Hilborn &amp; Mangel, 1997</a>)</span>.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="../img/he/he-mod-choice.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."><img src="../img/he/he-mod-choice.svg" class="img-fluid figure-img" alt="Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."></a></p>
+<figcaption>Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024.</figcaption>
+</figure>
+</div>
+<p>Simpler models need less data to estimate parameters but might overlook important system components. In contrast, complex models can capture more details but we may not have sufficient data to determine the parameters <span class="citation" data-cites="hilborn1997">(<a href="../references.html#ref-hilborn1997" role="doc-biblioref">Hilborn &amp; Mangel, 1997</a>)</span>.</p>
+<ol start="2" type="1">
+<li>The use of the model <span class="citation" data-cites="hilborn1997">(<a href="../references.html#ref-hilborn1997" role="doc-biblioref">Hilborn &amp; Mangel, 1997</a>)</span>.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="../img/he/he-mod.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Adapted from Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."><img src="../img/he/he-mod.svg" class="img-fluid figure-img" alt="Adapted from Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."></a></p>
+<figcaption>Adapted from Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024.</figcaption>
+</figure>
+</div>
+<p>Simple models are useful if their assumptions are reasonable. For accurate predictions, a “wrong” but simpler model can do better than the “right” but complex model when parameters are estimated <span class="citation" data-cites="hilborn1997">(<a href="../references.html#ref-hilborn1997" role="doc-biblioref">Hilborn &amp; Mangel, 1997</a>)</span>. However, a complex model provides a better representation of uncertainty <span class="citation" data-cites="hilborn1997">(<a href="../references.html#ref-hilborn1997" role="doc-biblioref">Hilborn &amp; Mangel, 1997</a>)</span>.</p>
+<p>Given the close connection between health economics and policy, guidelines are available for every step of the process. Be sure to read and follow these guidelines when conducting your analysis. Below is guidance on choosing between static and dynamic models.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="../img/he/he-mod-choice-guideline.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="How the choice of a static model, static model with approximation for herd immunity or dynamic model could be made [@jit2011]"><img src="../img/he/he-mod-choice-guideline.svg" class="img-fluid figure-img" alt="How the choice of a static model, static model with approximation for herd immunity or dynamic model could be made (Jit &amp; Brisson, 2011)"></a></p>
+<figcaption>How the choice of a static model, static model with approximation for herd immunity or dynamic model could be made <span class="citation" data-cites="jit2011">(<a href="../references.html#ref-jit2011" role="doc-biblioref">Jit &amp; Brisson, 2011</a>)</span></figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="measuring-consequences" class="level2">
+<h2 class="anchored" data-anchor-id="measuring-consequences">Measuring consequences</h2>
+<section id="utility" class="level3">
+<h3 class="anchored" data-anchor-id="utility">Utility</h3>
+<p>Utility of health states are expressed on a scale from 0 to 1, where 0 represents the utility of being “dead” and 1 represents the utility of “perfect health” <span class="citation" data-cites="prieto2003">(<a href="../references.html#ref-prieto2003" role="doc-biblioref">Prieto &amp; Sacristán, 2003</a>)</span>.</p>
+<section id="qaly" class="level4">
+<h4 class="anchored" data-anchor-id="qaly">QALY</h4>
+<p>The quality-adjusted life year (QALY) measure “years lived in perfect health”. One year in perfect health equals 1 QALY (1 Year <span class="math inline">\(\times\)</span> 1 Utility = 1 QALY). A year lived in less than perfect health is worth less than 1 QALY <span class="citation" data-cites="prieto2003">(<a href="../references.html#ref-prieto2003" role="doc-biblioref">Prieto &amp; Sacristán, 2003</a>)</span>.</p>
+<p><span class="math display">\[\text{QALY} = \sum_{i = 0}^{\text{lifetime}} \text{Year} \times \text{Utility}\]</span></p>
+<p>For example, 0.5 years in perfect health equals 0.5 QALYs (0.5 years <span class="math inline">\(\times\)</span> 1 Utility), the same as 1 year with a utility of 0.5 (1 year <span class="math inline">\(\times\)</span> 0.5 Utility) <span class="citation" data-cites="prieto2003">(<a href="../references.html#ref-prieto2003" role="doc-biblioref">Prieto &amp; Sacristán, 2003</a>)</span>. The area under the curve equates to the total QALY value <span class="citation" data-cites="whitehead2010">(<a href="../references.html#ref-whitehead2010" role="doc-biblioref">Whitehead &amp; Ali, 2010</a>)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="../img/he/qaly.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."><img src="../img/he/qaly.svg" class="img-fluid figure-img" alt="Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024."></a></p>
+<figcaption>Asst Prof.&nbsp;Kiesha Prem’s lecture at MIDSEA Summer School 2024.</figcaption>
+</figure>
+</div>
+</section>
+</section>
+</section>
+<section id="measuring-costs" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="measuring-costs">Measuring costs</h2>
+<section id="perspectives" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="perspectives">Perspectives</h3>
+<div class="column-page">
+<table class="caption-top table">
+<caption>Overview of the perspectives included costs <span class="citation" data-cites="sittimart2024">(<a href="../references.html#ref-sittimart2024" role="doc-biblioref">Sittimart et al., 2024</a>)</span></caption>
+<colgroup>
+<col style="width: 30%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Costs</th>
+<th>Health care payer</th>
+<th>Health care providers</th>
+<th>Healthcare sector</th>
+<th>Health system</th>
+<th>Patient/ household</th>
+<th>Societal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Direct medical costs paid by health care payer/providers</td>
+<td>Y (only payer)</td>
+<td>Y (both payer + provider)</td>
+<td>Y</td>
+<td>Y</td>
+<td></td>
+<td>Y</td>
+</tr>
+<tr class="even">
+<td>Direct medical costs paid by patients (i.e., out-of-pocket)</td>
+<td></td>
+<td></td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr class="odd">
+<td>Direct non-medical costs incurred by patients (travel, food, and accommodation)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr class="even">
+<td>Productivity costs (e.g., monetized productivity</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>Varies</td>
+<td>Varies</td>
+</tr>
+<tr class="odd">
+<td>Non-health sector costs (e.g., spillover impacts affecting other sectors such as education, criminal justice, etc.)</td>
+<td></td>
+<td></td>
+<td></td>
+<td>Y*</td>
+<td></td>
+<td>Y*</td>
+</tr>
+<tr class="even">
+<td>Total</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="discounting-vs-inflation" class="level3">
+<h3 class="anchored" data-anchor-id="discounting-vs-inflation">Discounting vs inflation</h3>
+<p>Discounting is needed if a longer time horizon than 1-2 years is being considered. For most health economic evaluations, guidelines recommend a discount rate of 3% (high-income countries) to 5% (low- and middle-income countries) <span class="citation" data-cites="handbook2023">(<a href="../references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>.</p>
+<p>Discounting is adjusting future costs and outcomes of health-care interventions to “present value” <span class="citation" data-cites="severens2004">(<a href="../references.html#ref-severens2004" role="doc-biblioref">Severens &amp; Milne, 2004</a>)</span>. Discounting is based on the concept of “positive time preference”, meaning that people prefers to benefit sooner rather than later <span class="citation" data-cites="severens2004">(<a href="../references.html#ref-severens2004" role="doc-biblioref">Severens &amp; Milne, 2004</a>)</span>.</p>
+<p><span class="math display">\[\text{Present value} = \frac{\text{Future value}}{(1 + \text{annual discount rate})^\text{n years}}\]</span></p>
+<p>Imagine you can choose between getting (A) $1000 today or (B) $1000 in 5 years. Most people prefer option A because having $1000 today allows you to use it immediately or invest it. The value of $1000 today is greater than $1000 in 5 years due to the opportunity to earn interest or invest it.</p>
+<p>Now imagine you can choose between getting $500 today or $1000 in 10 years. To make a fair comparison, you need to adjust the future value to present value. Let’s say the discount rate is 5%. How much does $1000 in 10 years worth today?</p>
+<p><span class="math display">\[\text{Present value} = \frac{1000}{(1 + 0.05)^{10}} \approx 613.91\]</span></p>
+<p>So $1000 in 10 years is worth about $614 in today’s dollars.</p>
+<p>Discounting should not be confused with adjusting for inflation. <strong>Both are needed</strong>. Discounting reflects the loss in value when there is a delay in obtaining an item of value (e.g., adjusting for future value). The inflation adjustment reflects the change in purchasing power of currency (e.g., adjusting past costs to current values).</p>
+<ul>
+<li><p>Discounting: This is about the idea that a dollar today is worth more than a dollar in the future. It reflects our preference for receiving benefits or money sooner rather than later. It’s used to adjust future costs or benefits to their present value.</p></li>
+<li><p>Inflation: This is about how the general price level of goods and services increases over time. Inflation means that money loses its purchasing power, so what $1 buys today might cost more in the future.</p></li>
+</ul>
+</section>
+</section>
+<section id="define-methods-of-value-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="define-methods-of-value-analysis">Define methods of value analysis</h2>
+<section id="net-monetary-benefit-nmb-or-benefit-cost-ratio" class="level3">
+<h3 class="anchored" data-anchor-id="net-monetary-benefit-nmb-or-benefit-cost-ratio">Net monetary benefit (NMB) or benefit-cost ratio</h3>
+<p>Compares alternative interventions in terms of their net social cost, defined as the difference of the social cost and social benefit, expressed in monetary value.</p>
+<p><span class="math display">\[\text{NMB} = \text{Benefit of intervention} - \text{Cost of intervention}\]</span></p>
+<p>Sometime, this value assessment is done by calculating the benefit-cost ratio:</p>
+<p><span class="math display">\[\text{Benefit-cost ratio} = \frac{\text{Benefit of intervention}}{\text{Cost of intervention}}\]</span></p>
+<p>When benefit &gt; cost, meaning that NMB &gt; 0 or benefit-cost ratio &gt; 1, the intervention is said to be cost beneficial, and to represent good value for money.</p>
+<p>When two interventions are being compared, report the incremental NMB which shows how intervention 1 is better than intervention 2.</p>
+<p><span class="math display">\[\text{Incremental NMB} = \text{NMB}_1 - \text{NMB}_2\]</span></p>
+</section>
+<section id="incremental-cost-effectiveness-ratio-icer" class="level3">
+<h3 class="anchored" data-anchor-id="incremental-cost-effectiveness-ratio-icer">Incremental cost effectiveness ratio (ICER)</h3>
+<p>The ICER is the single most important interpretation of a CEA <span class="citation" data-cites="handbook2023">(<a href="../references.html#ref-handbook2023" role="doc-biblioref">Bishai et al., 2023</a>)</span>. Compares two or more alternative interventions in terms of their efficiency, by relating their cost and outcomes.</p>
+<p><span class="math display">\[\text{ICER} = \frac{\Delta \text{Cost}}{\Delta \text{Effectiveness}} = \frac{\text{Cost}_1 - \text{Cost}_2}{\text{Effectiveness}_1 - \text{Effectiveness}_2}\]</span></p>
+<ul>
+<li>ICER &lt; 0:
+<ul>
+<li><span class="math inline">\(\Delta \text{Cost} &lt; 0\)</span> and <span class="math inline">\(\Delta \text{Effectiveness} &gt; 0\)</span>: Intervention 1 is cheaper and has greater effectiveness (good).</li>
+<li><span class="math inline">\(\Delta \text{Cost} &gt; 0\)</span> and <span class="math inline">\(\Delta \text{Effectiveness} &lt; 0\)</span>: Intervention 1 is more expensive and has less effectiveness (bad).</li>
+</ul></li>
+<li>ICER &gt; 0: Intervention 1 is more expensive, but also has greater effectiveness. In this case, the ICER has to be compared to the decision maker’s willingness-to-pay threshold per unit of the outcome.</li>
+</ul>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-handbook2023" class="csl-entry" role="listitem">
+Bishai, D., Brenzel, L., &amp; Padula, W. (Eds.). (2023). <em>Handbook of applied health economics in vaccines</em>. Oxford University Press. <a href="https://doi.org/10.1093/oso/9780192896087.001.0001">https://doi.org/10.1093/oso/9780192896087.001.0001</a>
+</div>
+<div id="ref-goeree2013" class="csl-entry" role="listitem">
+Goeree, R., &amp; Diaby, V. (2013). Introduction to health economics and decision-making: Is economics relevant for the frontline clinician? <em>Best Practice &amp; Research Clinical Gastroenterology</em>, <em>27</em>(6), 831–844. <a href="https://doi.org/10.1016/j.bpg.2013.08.016">https://doi.org/10.1016/j.bpg.2013.08.016</a>
+</div>
+<div id="ref-heeg2008" class="csl-entry" role="listitem">
+Heeg, B. M. S., Damen, J., Buskens, E., Caleo, S., Charro, F. de, &amp; Hout, B. A. van. (2008). Modelling Approaches. <em>PharmacoEconomics</em>, <em>26</em>(8), 633–648. <a href="https://doi.org/10.2165/00019053-200826080-00002">https://doi.org/10.2165/00019053-200826080-00002</a>
+</div>
+<div id="ref-hilborn1997" class="csl-entry" role="listitem">
+Hilborn, R., &amp; Mangel, M. (1997). <em>The ecological detective: Confronting models with data</em>. Princeton University Press. <a href="https://www.jstor.org/stable/j.ctt24hqnx">https://www.jstor.org/stable/j.ctt24hqnx</a>
+</div>
+<div id="ref-jit2011" class="csl-entry" role="listitem">
+Jit, M., &amp; Brisson, M. (2011). Modelling the Epidemiology of Infectious Diseases for Decision Analysis. <em>PharmacoEconomics</em>, <em>29</em>(5), 371–386. <a href="https://doi.org/10.2165/11539960-000000000-00000">https://doi.org/10.2165/11539960-000000000-00000</a>
+</div>
+<div id="ref-kim2008" class="csl-entry" role="listitem">
+Kim, S.-Y., &amp; Goldie, S. J. (2008). Cost-Effectiveness Analyses of Vaccination Programmes. <em>PharmacoEconomics</em>, <em>26</em>(3), 191–215. <a href="https://doi.org/10.2165/00019053-200826030-00004">https://doi.org/10.2165/00019053-200826030-00004</a>
+</div>
+<div id="ref-kuntz2013" class="csl-entry" role="listitem">
+Kuntz, K., Sainfort, F., Butler, M., Taylor, B., Kulasingam, S., Gregory, S., Mann, E., Anderson, J. M., &amp; Kane, R. L. (2013). <em>Decision and Simulation Modeling Alongside Systematic Reviews</em>. Agency for Healthcare Research; Quality (US). <a href="https://www.ncbi.nlm.nih.gov/books/NBK127478/">https://www.ncbi.nlm.nih.gov/books/NBK127478/</a>
+</div>
+<div id="ref-prieto2003" class="csl-entry" role="listitem">
+Prieto, L., &amp; Sacristán, J. A. (2003). Problems and solutions in calculating quality-adjusted life years (QALYs). <em>Health and Quality of Life Outcomes</em>, <em>1</em>(1), 80. <a href="https://doi.org/10.1186/1477-7525-1-80">https://doi.org/10.1186/1477-7525-1-80</a>
+</div>
+<div id="ref-severens2004" class="csl-entry" role="listitem">
+Severens, J. L., &amp; Milne, R. J. (2004). Discounting Health Outcomes in Economic Evaluation: The Ongoing Debate. <em>Value in Health</em>, <em>7</em>(4), 397–401. <a href="https://doi.org/10.1111/j.1524-4733.2004.74002.x">https://doi.org/10.1111/j.1524-4733.2004.74002.x</a>
+</div>
+<div id="ref-sittimart2024" class="csl-entry" role="listitem">
+Sittimart, M., Rattanavipapong, W., Mirelman, A. J., Hung, T. M., Dabak, S., Downey, L. E., Jit, M., Teerawattananon, Y., &amp; Turner, H. C. (2024). An overview of the perspectives used in health economic evaluations. <em>Cost Effectiveness and Resource Allocation</em>, <em>22</em>(1), 41. <a href="https://doi.org/10.1186/s12962-024-00552-1">https://doi.org/10.1186/s12962-024-00552-1</a>
+</div>
+<div id="ref-turner2021" class="csl-entry" role="listitem">
+Turner, H. C., Archer, R. A., Downey, L. E., Isaranuwatchai, W., Chalkidou, K., Jit, M., &amp; Teerawattananon, Y. (2021). An introduction to the main types of economic evaluations used for informing priority setting and resource allocation in healthcare: Key features, uses, and limitations. <em>Frontiers in Public Health</em>, <em>9</em>. <a href="https://www.frontiersin.org/articles/10.3389/fpubh.2021.722927">https://www.frontiersin.org/articles/10.3389/fpubh.2021.722927</a>
+</div>
+<div id="ref-whitehead2010" class="csl-entry" role="listitem">
+Whitehead, S. J., &amp; Ali, S. (2010). Health outcomes in economic evaluation: The QALY and utilities. <em>British Medical Bulletin</em>, <em>96</em>(1), 5–21. <a href="https://doi.org/10.1093/bmb/ldq033">https://doi.org/10.1093/bmb/ldq033</a>
+</div>
+</div>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark">
+<script>
+  function loadGiscus() {
+    // Function to get the theme based on body class
+    const getTheme = () => {
+      let baseTheme = document.getElementById('giscus-base-theme').value;
+      let altTheme = document.getElementById('giscus-alt-theme').value;
+      return document.body.classList.contains('quarto-dark') ? altTheme : baseTheme;
+    };
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.async = true;
+    script.dataset.repo = "thinhong/idm4b";
+    script.dataset.repoId = "R_kgDOL-8Pvg";
+    script.dataset.category = "General";
+    script.dataset.categoryId = "DIC_kwDOL-8Pvs4CoZe6";
+    script.dataset.mapping = "title";
+    script.dataset.reactionsEnabled = "1";
+    script.dataset.emitMetadata = "0";
+    script.dataset.inputPosition = "top";
+    script.dataset.theme = getTheme();
+    script.dataset.lang = "en";
+    script.crossOrigin = "anonymous";
+    // Append the script to the desired div instead of at the end of the body
+    document.getElementById("quarto-content").appendChild(script);
+  }
+  loadGiscus();
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../intv/vax-measles.html" class="pagination-link" aria-label="Measles vaccine">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Measles vaccine</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../he/etr.html" class="pagination-link" aria-label="EtR Process">
+        <span class="nav-page-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">EtR Process</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>

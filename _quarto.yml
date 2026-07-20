@@ -1,9 +1,10 @@
 project:
   type: book
   output-dir: docs
+  execute-dir: project
 
 book:
-  favicon: logo-icon.svg
+  favicon: assets/logo-icon.svg
   google-analytics: "G-X391ZN63GG"
   title: "Infectious disease modelling for babies"
   author:
@@ -16,59 +17,59 @@ book:
   chapters:
     - index.qmd
     - mod.qmd
-    - part: det.qmd
-      chapters: 
-        - sir-det.qmd
-        - seir-det.qmd
-        - het-det.qmd
-        - tsir.qmd
-    - part: sto.qmd
+    - part: det/index.qmd
       chapters:
-        - ar.qmd
-        - sir-sto.qmd
-        - seir-sto.qmd
-        - branch-proc.qmd
-    - part: mod-fit.qmd
+        - det/sir.qmd
+        - det/seir.qmd
+        - det/het.qmd
+        - det/tsir.qmd
+    - part: sto/index.qmd
       chapters:
-        - lse.qmd
-        - lik.qmd
-        - mle.qmd
-        - mcmc.qmd
-        - pmcmc.qmd
-    - part: mod-sel.qmd
+        - sto/sir.qmd
+        - sto/seir.qmd
+        - sto/ar.qmd
+        - sto/branch-proc.qmd
+    - part: fit/index.qmd
       chapters:
-        - cv.qmd
-    - part: rnum.qmd
+        - fit/lse.qmd
+        - fit/lik.qmd
+        - fit/mle.qmd
+        - fit/mcmc.qmd
+        - fit/pmcmc.qmd
+    - part: sel/index.qmd
       chapters:
-        - gen-int.qmd
-        - r0.qmd
-        - rt.qmd
-        - rt-prac.qmd
-    - part: intv.qmd
-      chapters: 
-        - ftc.qmd
-        - vax.qmd
-        - vax-perf.qmd
-        - vax-mod.qmd
-        - vax-measles.qmd
-    - part: he.qmd
+        - sel/cv.qmd
+    - part: rnum/index.qmd
       chapters:
-        - he-etr.qmd
-    - part: sero.qmd
-      chapters: 
-        - serocat.qmd
-    - part: stat-mod.qmd
+        - rnum/gen-int.qmd
+        - rnum/r0.qmd
+        - rnum/rt.qmd
+        - rnum/rt-prac.qmd
+    - part: intv/index.qmd
       chapters:
-        - stat-glm.qmd
-        - stat-gam.qmd
-        - stat-nlin.qmd
-        - stat-surv.qmd
-        - stat-bayes.qmd
-        - stat-ts.qmd
+        - intv/ftc.qmd
+        - intv/vax.qmd
+        - intv/vax-perf.qmd
+        - intv/vax-mod.qmd
+        - intv/vax-measles.qmd
+    - part: he/index.qmd
+      chapters:
+        - he/etr.qmd
+    - part: sero/index.qmd
+      chapters:
+        - sero/cat.qmd
+    - part: stat/index.qmd
+      chapters:
+        - stat/glm.qmd
+        - stat/gam.qmd
+        - stat/nlin.qmd
+        - stat/surv.qmd
+        - stat/bayes.qmd
+        - stat/ts.qmd
     - references.qmd
   appendices:
-    - dict.qmd
-    - math.qmd
+    - appx/dict.qmd
+    - appx/math.qmd
 
 bibliography: references.bib
 csl: apa.csl
@@ -78,7 +79,10 @@ execute:
 
 format:
   html:
-    theme: [cosmo, theme.scss]
+    theme: [cosmo, assets/theme.scss]
+    include-in-header: assets/head-fonts.html
+    css: assets/tokens.css
+    code-copy: true
     code-overflow: wrap
     fig-format: svg
     df-print: paged
@@ -90,4 +94,3 @@ comments:
   giscus:
     repo: thinhong/idm4b
     repo-id: R_kgDOL-8Pvg
-

@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>16&nbsp; Estimating R_0 – Infectious disease modelling for babies</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../rnum/rt.html" rel="next">
+<link href="../rnum/gen-int.html" rel="prev">
+<link href="../assets/logo-icon.svg" rel="icon" type="image/svg+xml">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-452e82b5fdc6925848d8869b1cdec60b.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-66aa14e9e62bc61e3928e42c7c8f8237.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/quarto-contrib/downloadthis-1.9.1/downloadthis.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-X391ZN63GG"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-X391ZN63GG', { 'anonymize_ip': true});
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;600&amp;family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&amp;display=swap" rel="stylesheet">
+<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+
+<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../assets/tokens.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../rnum/index.html">Reproduction number</a></li><li class="breadcrumb-item"><a href="../rnum/r0.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Infectious disease modelling for babies</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../mod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Modelling</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../det/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deterministic models</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../det/sir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">SIR</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../det/seir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">SEIR</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../det/het.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Heterogeneities</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../det/tsir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">tsiR</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../sto/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Stochastic models</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sto/sir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">SIR</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sto/seir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">SEIR</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sto/ar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Autoregressive model</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sto/branch-proc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Branching process</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../fit/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model fitting</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fit/lse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Least squares estimation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fit/lik.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Likelihood</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fit/mle.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Maximum likelihood estimation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fit/mcmc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">MCMC</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fit/pmcmc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Particle filter</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../sel/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model selection</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sel/cv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Cross validation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../rnum/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Reproduction number</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../rnum/gen-int.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Generation interval</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../rnum/r0.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../rnum/rt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../rnum/rt-prac.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title"><span class="math inline">\(R_t\)</span> in practice</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../intv/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Interventions</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../intv/ftc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Flattening the curve</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../intv/vax.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Vaccination</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../intv/vax-perf.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Vaccine performance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../intv/vax-mod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Model vaccination</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../intv/vax-measles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Measles vaccine</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../he/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Health economics</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../he/etr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">EtR Process</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../sero/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Serological data</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sero/cat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Serocatalytic models</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../stat/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Statistical models</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../stat/glm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Generalised linear models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../stat/gam.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Generalised additive model</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../stat/nlin.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Nonlinear models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../stat/surv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Survival analysis</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../stat/bayes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Bayesian</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../stat/ts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Time series</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appx/dict.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Dictionary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appx/math.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Math</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="3">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#contact-tracing" id="toc-contact-tracing" class="nav-link active" data-scroll-target="#contact-tracing"><span class="header-section-number">16.1</span> Contact tracing</a></li>
+  <li><a href="#population-level" id="toc-population-level" class="nav-link" data-scroll-target="#population-level"><span class="header-section-number">16.2</span> Population-level</a>
+  <ul>
+  <li><a href="#exponential-growth-rate" id="toc-exponential-growth-rate" class="nav-link" data-scroll-target="#exponential-growth-rate"><span class="header-section-number">16.2.1</span> Exponential growth rate</a></li>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code"><span class="header-section-number">16.2.2</span> Code</a></li>
+  <li><a href="#simple-compartmental-models" id="toc-simple-compartmental-models" class="nav-link" data-scroll-target="#simple-compartmental-models"><span class="header-section-number">16.2.3</span> Simple compartmental models</a></li>
+  <li><a href="#next-generation-matrix" id="toc-next-generation-matrix" class="nav-link" data-scroll-target="#next-generation-matrix"><span class="header-section-number">16.2.4</span> Next generation matrix</a></li>
+  </ul></li>
+  <li><a href="#epidemic-final-size" id="toc-epidemic-final-size" class="nav-link" data-scroll-target="#epidemic-final-size"><span class="header-section-number">16.3</span> Epidemic final size</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../rnum/index.html">Reproduction number</a></li><li class="breadcrumb-item"><a href="../rnum/r0.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_0\)</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Preparation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Download COVID-19 incidence data here:</p>
+<p><a href="#dnldts46868" onclick="fetch('data:text/csv;base64,77u/ZGF5LGluYw0KMSwxDQoyLDMNCjMsMg0KNCwyDQo1LDMNCjYsMQ0KNyw0DQo4LDEyDQo5LDYNCjEwLDE4DQoxMSwxNA0KMTIsMjINCjEzLDUzDQoxNCw5Mg0KMTUsMTgzDQoxNiwxNjUNCjE3LDEzNg0KMTgsMTQ5DQoxOSwxNjUNCjIwLDIzNA0KMjEsMzEwDQoyMiwzNTYNCjIzLDMzMw0KMjQsNDI2DQoyNSwzNTENCjI2LDQzNw0KMjcsNjg5DQoyOCw2MzYNCjI5LDc1OA0KMzAsNzY2DQozMSw4MjENCjMyLDU3Nw0KMzMsNTk0DQozNCw4NjgNCjM1LDkzNg0KMzYsOTc5DQozNywxMDcxDQozOCw5ODQNCjM5LDc2NQ0KNDAsNjM0DQo0MSw4NjENCjQyLDk1Mw0KNDMsODc1DQo0NCw3OTgNCjQ1LDYxOQ0KNDYsNTE4DQo0Nyw1MDANCjQ4LDYwMw0KNDksNjU5DQo=').then(res => res.blob()).then(blob => {
+      const downloadURL = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.href = downloadURL;
+      a.download = 'covid_uk.csv'; a.click();
+      window.URL.revokeObjectURL(downloadURL);
+      document.body.removeChild(a);
+        });"><button class="btn btn-light downloadthis  " id="dnldts46868"><i class="bi bi-download"></i> covid_uk.csv </button></a></p>
+</div>
+</div>
+<p>There are 2 approaches to estimating <span class="math inline">\(R_0\)</span>, depending on the type of data available:</p>
+<ol type="1">
+<li><p>Individual-level modelling: used when individual-level data (e.g.&nbsp;contact tracing) is available and is often considered prospective <span class="citation" data-cites="pandit2020">(<a href="../references.html#ref-pandit2020" role="doc-biblioref">Pandit, 2020</a>)</span>.</p></li>
+<li><p>Population-level modelling: used when population-level data (e.g.&nbsp;incidence) is available and is often considered retrospective <span class="citation" data-cites="pandit2020">(<a href="../references.html#ref-pandit2020" role="doc-biblioref">Pandit, 2020</a>)</span>.</p></li>
+</ol>
+<p>The 2 approaches may produce very different numbers because:</p>
+<ul>
+<li>Individual-level calculates the value of <span class="math inline">\(R_0\)</span>, while the population-level calculates the value of a threshold parameter <span class="citation" data-cites="breban2007">(<a href="../references.html#ref-breban2007" role="doc-biblioref">Breban et al., 2007</a>)</span>.</li>
+<li>Individual-level assumes a social contact network with a structure that is different from the all-to-all network assumed by ODE models <span class="citation" data-cites="breban2007">(<a href="../references.html#ref-breban2007" role="doc-biblioref">Breban et al., 2007</a>)</span>.</li>
+<li>Population-level predictions based upon an ODE model that use the <span class="math inline">\(R_0\)</span> value from contact tracing as a threshold parameter may be inaccurate. Only an <strong>epidemic threshold</strong> (from population-level modelling) can be used to design <strong>control strategies</strong> <span class="citation" data-cites="breban2007">(<a href="../references.html#ref-breban2007" role="doc-biblioref">Breban et al., 2007</a>)</span>.</li>
+<li><span class="math inline">\(R_0\)</span> value from contact tracing is useful in conjunction with population-level epidemic data to understand the possible <strong>transmission mechanisms</strong> of the epidemic at the individual-level.</li>
+</ul>
+<section id="contact-tracing" class="level2" data-number="16.1">
+<h2 data-number="16.1" class="anchored" data-anchor-id="contact-tracing"><span class="header-section-number">16.1</span> Contact tracing</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../img/rnum/contact-tracing.png" class="img-fluid figure-img"></p>
+<figcaption>Contact tracing figure from <span class="citation" data-cites="bradshaw2021">(<a href="../references.html#ref-bradshaw2021" role="doc-biblioref">Bradshaw et al., 2021</a>)</span></figcaption>
+</figure>
+</div>
+<p>This approach is based upon the definition of <span class="math inline">\(R_0\)</span>. Once an individual is diagnosed, his/her contacts are traced and tested. <span class="math inline">\(R_0\)</span> is then computed by averaging over the number of secondary cases of many diagnosed individuals <span class="citation" data-cites="breban2007">(<a href="../references.html#ref-breban2007" role="doc-biblioref">Breban et al., 2007</a>)</span>.</p>
+</section>
+<section id="population-level" class="level2" data-number="16.2">
+<h2 data-number="16.2" class="anchored" data-anchor-id="population-level"><span class="header-section-number">16.2</span> Population-level</h2>
+<section id="exponential-growth-rate" class="level3" data-number="16.2.1">
+<h3 data-number="16.2.1" class="anchored" data-anchor-id="exponential-growth-rate"><span class="header-section-number">16.2.1</span> Exponential growth rate</h3>
+<p>Step 1. Find an estimate for the mean generation time <span class="math inline">\(T_g\)</span>.</p>
+<p>Step 2. Identify the exponential phase of the epidemic curve: the period of which <span class="math inline">\(\log(\text{incidence})\)</span> is linear.</p>
+<p>Step 3. Estimate the growth rate <span class="math inline">\(r\)</span> for that phase by finding the slope from the linear regression on the <span class="math inline">\(\log(\text{incidence})\)</span>.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Proof
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>See <a href="index.html#sec-rnum-growthrate-r0" class="quarto-xref"><span>Section 4</span></a> for more details. During the exponential phase, the incidence at time <span class="math inline">\(t\)</span> is given by:</p>
+<p><span class="math display">\[C_t = C_0 e^{rt}\]</span></p>
+<p>Take the natural logarithm:</p>
+<p><span class="math display">\[\log C_t = log C_0 + rt\]</span></p>
+<p>Therefore <span class="math inline">\(r\)</span> is the slope from the linear regression on the <span class="math inline">\(\log(\text{incidence})\)</span>.</p>
+</div>
+</div>
+</div>
+<p>Step 4. Given the exponential growth rate <span class="math inline">\(r\)</span> and the <span class="math inline">\(T_g\)</span>, calculate the basic reproduction number:</p>
+<ul>
+<li>Discrete generation:</li>
+</ul>
+<p><span class="math display">\[R_0 = e^{rT_g}\]</span></p>
+<ul>
+<li>In an SIR model <span class="math inline">\(T_g = \frac{1}{\gamma}\)</span> so:</li>
+</ul>
+<p><span class="math display">\[R_0 \approx 1 + rD = 1 + \frac{r}{\gamma}\]</span></p>
+<ul>
+<li>In an SEIR model <span class="math inline">\(T_g = \frac{1}{\gamma} + \frac{1}{\sigma}\)</span> so:</li>
+</ul>
+<p><span class="math display">\[R_0 \approx (1 + rD)(1 + rL) = \left( 1 + \frac{r}{\gamma} \right) \left( 1 + \frac{r}{\sigma} \right)\]</span></p>
+<p>In which:</p>
+<ul>
+<li><span class="math inline">\(D\)</span> is the mean duration of the infectiousness.</li>
+<li><span class="math inline">\(L\)</span> is the mean duration of latency.</li>
+</ul>
+</section>
+<section id="code" class="level3" data-number="16.2.2">
+<h3 data-number="16.2.2" class="anchored" data-anchor-id="code"><span class="header-section-number">16.2.2</span> Code</h3>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Read the data</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/covid_uk.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> inc)) <span class="sc">+</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Day"</span>, <span class="at">y =</span> <span class="st">"Incidence"</span>) <span class="sc">+</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_idm</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="r0_files/figure-html/unnamed-chunk-3-1.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Step 1. Find an estimate for the mean generation time <span class="math inline">\(T_g\)</span>. Let say <span class="math inline">\(T_g = D = 6.6\)</span> for COVID-19.</p>
+<p>Step 2. Identify the exponential phase of the epidemic curve: the period of which <span class="math inline">\(\log(\text{incidence})\)</span> is linear.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>loginc <span class="ot">&lt;-</span> <span class="fu">log</span>(df<span class="sc">$</span>inc)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> inc)) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Incidence"</span>) <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_idm</span>()</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> loginc)) <span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Day"</span>, <span class="at">y =</span> <span class="st">"Log incidence"</span>) <span class="sc">+</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_idm</span>()</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">/</span> p2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="r0_files/figure-html/unnamed-chunk-4-1.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Looks like day 1 to 21 is the exponential phase.</p>
+<p>Step 3. Estimate the growth rate <span class="math inline">\(r\)</span> for that phase by finding the slope from the linear regression on the <span class="math inline">\(\log(\text{incidence})\)</span>.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(loginc <span class="sc">~</span> day, <span class="at">data =</span> df[<span class="dv">1</span><span class="sc">:</span><span class="dv">21</span>,])</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">day =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">21</span>, <span class="at">loginc =</span> <span class="fu">predict</span>(mod, <span class="at">data =</span> df[<span class="dv">1</span><span class="sc">:</span><span class="dv">21</span>,]))</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> loginc)) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> pred, <span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Day"</span>, <span class="at">y =</span> <span class="st">"Log incidence"</span>) <span class="sc">+</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_idm</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="r0_files/figure-html/unnamed-chunk-5-1.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Look at the linear regression:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = loginc ~ day, data = df[1:21, ])
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.45946 -0.32865 -0.05379  0.36148  0.98657 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -0.38285    0.25339  -1.511    0.147    
+day          0.30705    0.02018  15.216 4.28e-12 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.56 on 19 degrees of freedom
+Multiple R-squared:  0.9242,    Adjusted R-squared:  0.9202 
+F-statistic: 231.5 on 1 and 19 DF,  p-value: 4.28e-12</code></pre>
+</div>
+</div>
+<p>The slope is 0.3070509.</p>
+<p>Step 4. Given the exponential growth rate <span class="math inline">\(r\)</span> and the <span class="math inline">\(T_g\)</span>, calculate the basic reproduction number.</p>
+<p>Discrete generation: <span class="math inline">\(R_0 = e^{rT_g}\)</span></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">unname</span>(mod<span class="sc">$</span>coefficients[<span class="dv">2</span>]) <span class="sc">*</span> <span class="fl">6.6</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7.587758</code></pre>
+</div>
+</div>
+<p>SIR model: <span class="math inline">\(R_0 \approx 1 + rD\)</span></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="fu">unname</span>(mod<span class="sc">$</span>coefficients[<span class="dv">2</span>]) <span class="sc">*</span> <span class="fl">6.6</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.026536</code></pre>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><span class="math inline">\(R_0\)</span> estimates are affected by the mean, variance and shape of the generation time distribution.</p>
+<ul>
+<li>A larger mean <span class="math inline">\(T_g\)</span> leads to larger <span class="math inline">\(R_0\)</span>.</li>
+<li>For the 2 models with the same mean but different distributions <span class="math inline">\(T_g\)</span>, <span class="math inline">\(R_0\)</span> estimates are different:
+<ul>
+<li>Discrete generation assumes a uniform <span class="math inline">\(T_g\)</span>.</li>
+<li>SIR model assumes an exponential <span class="math inline">\(T_g\)</span>.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<p>Package <code>R0</code> provide a ready-to-use function <code>est.R0.EG()</code> to estimate <span class="math inline">\(R_0\)</span> using exponential growth rate method. We can define different shape of <span class="math inline">\(T_g\)</span>, let try a <span class="math inline">\(\Gamma(6.6, 4)\)</span>:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(R0)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>gt <span class="ot">&lt;-</span> <span class="fu">generation.time</span>(<span class="st">"gamma"</span>, <span class="fu">c</span>(<span class="fl">6.6</span>, <span class="dv">4</span>))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gt)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="r0_files/figure-html/unnamed-chunk-9-1.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now compute <span class="math inline">\(R_0\)</span>:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">est.R0.EG</span>(df<span class="sc">$</span>inc, gt, <span class="at">begin =</span> <span class="dv">1</span>, <span class="at">end =</span> <span class="dv">21</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Waiting for profiling to be done...</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reproduction number estimate using  Exponential Growth  method.
+R :  3.949484[ 3.716905 , 4.198451 ]</code></pre>
+</div>
+</div>
+</section>
+<section id="simple-compartmental-models" class="level3" data-number="16.2.3">
+<h3 data-number="16.2.3" class="anchored" data-anchor-id="simple-compartmental-models"><span class="header-section-number">16.2.3</span> Simple compartmental models</h3>
+<p>Consider a simple closed population SIR model.</p>
+<p><span class="math display">\[\begin{align} \frac{dS}{dt} &amp; = -\beta SI \\ \frac{dI}{dt} &amp; = \beta SI - \gamma I\\ \frac{dR}{dt} &amp; = \gamma I \end{align}\]</span></p>
+<p>Focusing on the <span class="math inline">\(I\)</span> equation:</p>
+<p><span class="math display">\[\frac{dI}{dt} = \beta SI - \gamma I = I (\beta S - \gamma)\]</span></p>
+<p>A disease spreads when:</p>
+<p><span class="math display">\[\begin{align} \frac{dI}{dt} &amp; &gt; 0 \\ \Leftrightarrow I (\beta S - \gamma) &amp; &gt; 0 \\ \Leftrightarrow \beta S - \gamma &amp; &gt; 0 \\ \Leftrightarrow \beta S &amp; &gt; \gamma \\ \Leftrightarrow \frac{\beta S}{\gamma} &amp; &gt; 1 \end{align}\]</span></p>
+<p>This leads to the definition of <span class="math inline">\(R_0\)</span>. By <a href="index.html#def-r0" class="quarto-xref">Definition&nbsp;<span>1</span></a>, <span class="math inline">\(R_0\)</span> is the <span class="math inline">\(R\)</span> in a fully susceptible population <span class="math inline">\(S_0\)</span>:</p>
+<p><span class="math display">\[R_0 = \frac{\beta S_0}{\gamma}\]</span></p>
+<p>Therefore:</p>
+<ul>
+<li><span class="math inline">\(R_0 &gt; 1\)</span> meaning that <span class="math inline">\(\frac{dI}{dt} &gt; 0\)</span>, then the disease will spread.</li>
+<li><span class="math inline">\(R_0 &lt; 1\)</span> meaning that <span class="math inline">\(\frac{dI}{dt} &lt; 0\)</span>, then no epidemic occurs.</li>
+</ul>
+<p>For more complex compartmental models, especially those with more infected compartments, as proposed by <span class="citation" data-cites="diekmann1990">(<a href="../references.html#ref-diekmann1990" role="doc-biblioref">Diekmann et al., 1990</a>)</span> and <span class="citation" data-cites="vandendriessche2002">(<a href="../references.html#ref-vandendriessche2002" role="doc-biblioref">Driessche &amp; Watmough, 2002</a>)</span>, <span class="math inline">\(R_0\)</span> can be determined using the next generation matrix <span class="citation" data-cites="vandendriessche2017">(<a href="../references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span>.</p>
+</section>
+<section id="next-generation-matrix" class="level3" data-number="16.2.4">
+<h3 data-number="16.2.4" class="anchored" data-anchor-id="next-generation-matrix"><span class="header-section-number">16.2.4</span> Next generation matrix</h3>
+<p><span class="math inline">\(R_0\)</span> is the maximum absolute eigenvalue (also called the spectral radius) of the next generation matrix (NGM) <span class="citation" data-cites="vandendriessche2017">(<a href="../references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span>.</p>
+<p>Consider an SEIR model with equal birth and death rate <span class="math inline">\(\mu\)</span>.</p>
+<p><span class="math display">\[\begin{align} \frac{dS}{dt} &amp; = \mu (S + E + I + R) -\beta SI - \mu S \\ \frac{dE}{dt} &amp; = \beta SI - \sigma E - \mu E \\ \frac{dI}{dt} &amp; = \sigma E - \gamma I - \mu I \\ \frac{dR}{dt} &amp; = \gamma I - \mu R \end{align}\]</span></p>
+<p><strong>Step 1. Identify the infected compartments</strong></p>
+<p>For our SEIR model, the infected compartments are <span class="math inline">\(E\)</span> and <span class="math inline">\(I\)</span>.</p>
+<p><strong>Step 2. Write the NGM functions</strong></p>
+<ul>
+<li><span class="math inline">\(\mathcal{F}_i(x)\)</span>: is the rate of appearance of new infections in compartment <span class="math inline">\(i\)</span> <span class="citation" data-cites="vandendriessche2017">(<a href="../references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span> (caused by contact).</li>
+<li><span class="math inline">\(\mathcal{V}_i(x)\)</span>: is the rate of other transitions between compartment <span class="math inline">\(i\)</span> and other infected compartments <span class="citation" data-cites="vandendriessche2017">(<a href="../references.html#ref-vandendriessche2017" role="doc-biblioref">Driessche, 2017</a>)</span> (caused by transition between compartments).</li>
+</ul>
+<p>For our SEIR model, we would write <span class="math inline">\(\mathcal{F}\)</span> and <span class="math inline">\(\mathcal{V}\)</span> as follows:</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><span class="math display">\[\mathcal{F} = \begin{bmatrix} \beta SI \\ 0 \end{bmatrix}\]</span> <span class="math inline">\(\mathcal{F}\)</span> is a vector contains of <span class="math inline">\(\begin{bmatrix} \mathcal{F}_1 \\ \mathcal{F}_2 \end{bmatrix}\)</span>:</p>
+<ul>
+<li><span class="math inline">\(\mathcal{F}_1 = \beta SI\)</span>: the rate of new infections (caused by contact) in compartment <span class="math inline">\(E\)</span>.</li>
+<li><span class="math inline">\(\mathcal{F}_2 = 0\)</span>: as there is no new infections (caused by contact) in compartment <span class="math inline">\(I\)</span>.</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><span class="math display">\[\mathcal{V} = \begin{bmatrix} \sigma E + \mu E \\ - \sigma E + \gamma I + \mu I \end{bmatrix}\]</span></p>
+<p><span class="math inline">\(\mathcal{V}\)</span> is a vector contains of <span class="math inline">\(\begin{bmatrix} \mathcal{V}_1 \\ \mathcal{V}_2 \end{bmatrix}\)</span>:</p>
+<ul>
+<li><span class="math inline">\(\mathcal{V}_1 = \sigma E + \mu E\)</span>: is the rate of other transitions to and from compartment <span class="math inline">\(E\)</span>.</li>
+<li><span class="math inline">\(\mathcal{V}_2 = - \sigma E + \gamma I + \mu I\)</span>: is the rate of other transitions to and from compartment <span class="math inline">\(I\)</span>.</li>
+</ul>
+</div>
+</div>
+<p><span class="math inline">\(\mathcal{F}\)</span> and <span class="math inline">\(\mathcal{V}\)</span> are written such that:</p>
+<p><span class="math display">\[\frac{dx}{dt} = \mathcal{F} - \mathcal{V}\]</span></p>
+<p>Here we have:</p>
+<p><span class="math display">\[\frac{dE}{dt} = \mathcal{F}_1 - \mathcal{V}_1 = \beta SI - (\sigma E + \mu E)\]</span></p>
+<p><span class="math display">\[\frac{dI}{dt} = \mathcal{F}_2 - \mathcal{V}_2 = 0 - (- \sigma E + \gamma I + \mu I)\]</span></p>
+<p><strong>Step 3. Find the Jacobian matrix</strong></p>
+<p>Jacobian matrix <span class="math inline">\(F\)</span> for <span class="math inline">\(\mathcal{F}\)</span>, and <span class="math inline">\(V\)</span> for <span class="math inline">\(\mathcal{V}\)</span>. Jacobian matrix is a matrix contain all partial derivatives of a vector function.</p>
+<p><span class="math display">\[\begin{align} F &amp; = \begin{bmatrix} \frac{\partial \mathcal{F}_1}{\partial E} &amp; \frac{\partial \mathcal{F}_1}{\partial I} \\ \frac{\partial \mathcal{F}_2}{\partial E} &amp; \frac{\partial \mathcal{F}_2}{\partial I} \end{bmatrix} \\ &amp; = \begin{bmatrix} \frac{\partial [\beta SI]}{\partial E} &amp; \frac{\partial [\beta SI]}{\partial I} \\ \frac{\partial [0]}{\partial E} &amp; \frac{\partial [0]}{\partial I} \end{bmatrix} \\ &amp; = \begin{bmatrix} 0 &amp; \beta S \\ 0 &amp; 0 \end{bmatrix} \end{align}\]</span></p>
+<p>In which:</p>
+<ul>
+<li><span class="math inline">\(\frac{\partial [\beta SI]}{\partial E} = 0\)</span>: because there is no <span class="math inline">\(E\)</span> in <span class="math inline">\(\beta SI\)</span>.</li>
+<li><span class="math inline">\(\frac{\partial [\beta SI]}{\partial I} = \beta S\)</span>.</li>
+</ul>
+<p><span class="math display">\[\begin{align} V &amp; = \begin{bmatrix} \frac{\partial \mathcal{V}_1}{\partial E} &amp; \frac{\partial \mathcal{V}_1}{\partial I} \\ \frac{\partial \mathcal{V}_2}{\partial E} &amp; \frac{\partial \mathcal{V}_2}{\partial I} \end{bmatrix} \\ &amp; = \begin{bmatrix} \frac{\partial [\sigma E + \mu E]}{\partial E} &amp; \frac{\partial [\sigma E + \mu E]}{\partial I} \\ \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial E} &amp; \frac{\partial [- \sigma E + \gamma I + \mu I]}{\partial I} \end{bmatrix} \\ &amp; = \begin{bmatrix} \sigma + \mu &amp; 0 \\ - \sigma &amp; \gamma + \mu \end{bmatrix} \end{align}\]</span></p>
+<p><strong>Step 4. Compute the NGM</strong></p>
+<p>Use <a href="../appx/dict.html#def-inv-matrix" class="quarto-xref">Definition&nbsp;<span>A.18</span></a> to compute inverse matrix <span class="math inline">\(V^{-1}\)</span>:</p>
+<p><span class="math display">\[\begin{align} V^{-1} &amp; = \frac{1}{(\sigma + \mu)(\gamma + \mu)} \begin{bmatrix} \gamma + \mu &amp; - 0 \\ - \sigma &amp; \sigma + \mu \end{bmatrix} \\&amp; = \begin{bmatrix} \frac{1}{\sigma + \mu} &amp; 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{1}{\gamma + \mu} \end{bmatrix} \end{align}\]</span></p>
+<p><span class="math display">\[\begin{align} K &amp; = FV^{-1} \\ &amp; = \begin{bmatrix} 0 &amp; \beta S \\ 0 &amp; 0 \end{bmatrix} \begin{bmatrix} \frac{1}{\sigma + \mu} &amp; 0 \\ \frac{\sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{1}{\gamma + \mu} \end{bmatrix} \\ &amp; = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} &amp; \frac{\beta S}{\gamma + \mu} \\ 0 &amp; 0 \end{bmatrix} \end{align}\]</span></p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>What is a next generation matrix?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Source: quantpie’s <a href="https://www.youtube.com/watch?v=xJ5mizenTII">video</a>.</p>
+<p>A population consists of two groups: young and old.</p>
+<ul>
+<li>A young person on average infects 3 young and 2 old: <span class="math inline">\(\begin{bmatrix} 3 \\ 2 \end{bmatrix}\)</span>.</li>
+<li>An old person on average infects 1 young and 2 old: <span class="math inline">\(\begin{bmatrix} 1 \\ 2 \end{bmatrix}\)</span>.</li>
+</ul>
+<p>Each group becomes a column in the next generation matrix (NGM):</p>
+<p><span class="math display">\[\text{NGM} = \begin{bmatrix} 3 &amp; 1 \\ 2 &amp; 2 \end{bmatrix}\]</span></p>
+<p><span class="math inline">\(R_0\)</span> is the root of equation:</p>
+<p><span class="math display">\[\begin{align} \begin{bmatrix} 3 - \lambda &amp; 1 \\ 2 &amp; 2 - \lambda \end{bmatrix} &amp; = 0 \\ \Leftrightarrow (3 - \lambda) \times (2 - \lambda) - 2 \times 1 &amp; = 0 \\ \Leftrightarrow \lambda^2 - 5 \lambda + 6 - 2 &amp; = 0 \\ \Leftrightarrow \lambda^2 - 5 \lambda + 4 &amp; = 0 \end{align}\]</span></p>
+<p>There are two roots <span class="math inline">\(\lambda = 4\)</span> and <span class="math inline">\(\lambda = 1\)</span>, for an outbreak to occur <span class="math inline">\(R_0 &gt; 1\)</span>, so here <span class="math inline">\(R_0 = 4\)</span>.</p>
+</div>
+</div>
+</div>
+<p><strong>Step 5. Compute</strong> <span class="math inline">\(R_0\)</span></p>
+<p><span class="math inline">\(R_0\)</span> is the eigenvalues of the NGM.</p>
+<p><span class="math display">\[\begin{align} det(K - \lambda) &amp; = \begin{bmatrix} \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda &amp; \frac{\beta S}{\gamma + \mu} \\ 0 &amp; 0 - \lambda \end{bmatrix} \\ &amp; = [\frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)} - \lambda][0 - \lambda] \end{align}\]</span></p>
+<p><span class="math display">\[R_0 = \frac{\beta S \sigma}{(\sigma + \mu)(\gamma + \mu)}\]</span></p>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Use NGM to compute <span class="math inline">\(R_0\)</span> for SIR model
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Consider a simple closed population SIR model.</p>
+<p><span class="math display">\[\begin{align} \frac{dS}{dt} &amp; = -\beta SI \\ \frac{dI}{dt} &amp; = \beta SI - \gamma I\\ \frac{dR}{dt} &amp; = \gamma I \end{align}\]</span></p>
+<p><strong>Step 1. Identify the infected compartments</strong></p>
+<p>For our SIR model, the infected compartment is <span class="math inline">\(I\)</span>.</p>
+<p><strong>Step 2. Write the NGM functions</strong></p>
+<p><span class="math display">\[\mathcal{F} = \beta SI\]</span></p>
+<p><span class="math display">\[\mathcal{V} = \gamma I\]</span></p>
+<p>Such that we have:</p>
+<p><span class="math display">\[\frac{dI}{dt} = \mathcal{F} - \mathcal{V} = \beta SI - \gamma I\]</span></p>
+<p><strong>Step 3. Find the Jacobian matrix</strong></p>
+<p><span class="math display">\[F = \frac{\partial \mathcal{F}}{\partial I} = \frac{\partial [\beta SI]}{\partial I} = \beta S\]</span></p>
+<p><span class="math display">\[V = \frac{\partial \mathcal{V}}{\partial I} = \frac{\partial [\gamma I]}{\partial I} = \gamma\]</span></p>
+<p><strong>Step 4 and 5. Compute the NGM and</strong> <span class="math inline">\(R_0\)</span></p>
+<p><span class="math display">\[V^{-1} = \gamma^{-1} = \frac{1}{\gamma}\]</span></p>
+<p><span class="math display">\[K = FV^{-1} = \frac{\beta S}{\gamma}\]</span></p>
+<p>Here we also have <span class="math inline">\(R_0\)</span>.</p>
+<p><span class="math display">\[R_0 = \frac{\beta S}{\gamma}\]</span></p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="epidemic-final-size" class="level2" data-number="16.3">
+<h2 data-number="16.3" class="anchored" data-anchor-id="epidemic-final-size"><span class="header-section-number">16.3</span> Epidemic final size</h2>
+<p>If there were no interventions or changes in behavior, the proportion of the population infected during the entire course of an epidemic would be approximately the non-zero solution of the equation:</p>
+<p>$$$$</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-bradshaw2021" class="csl-entry" role="listitem">
+Bradshaw, W. J., Alley, E. C., Huggins, J. H., Lloyd, A. L., &amp; Esvelt, K. M. (2021). Bidirectional contact tracing could dramatically improve COVID-19 control. <em>Nature Communications</em>, <em>12</em>(1), 232. <a href="https://doi.org/10.1038/s41467-020-20325-7">https://doi.org/10.1038/s41467-020-20325-7</a>
+</div>
+<div id="ref-breban2007" class="csl-entry" role="listitem">
+Breban, R., Vardavas, R., &amp; Blower, S. (2007). Theory versus Data: How to Calculate R0? <em>PLOS ONE</em>, <em>2</em>(3), e282. <a href="https://doi.org/10.1371/journal.pone.0000282">https://doi.org/10.1371/journal.pone.0000282</a>
+</div>
+<div id="ref-diekmann1990" class="csl-entry" role="listitem">
+Diekmann, O., Heesterbeek, J. A. P., &amp; Metz, J. A. J. (1990). On the definition and the computation of the basic reproduction ratio R0 in models for infectious diseases in heterogeneous populations. <em>Journal of Mathematical Biology</em>, <em>28</em>(4), 365–382. <a href="https://doi.org/10.1007/BF00178324">https://doi.org/10.1007/BF00178324</a>
+</div>
+<div id="ref-vandendriessche2017" class="csl-entry" role="listitem">
+Driessche, P. van den. (2017). Reproduction numbers of infectious disease models. <em>Infectious Disease Modelling</em>, <em>2</em>(3), 288–303. <a href="https://doi.org/10.1016/j.idm.2017.06.002">https://doi.org/10.1016/j.idm.2017.06.002</a>
+</div>
+<div id="ref-vandendriessche2002" class="csl-entry" role="listitem">
+Driessche, P. van den, &amp; Watmough, J. (2002). Reproduction numbers and sub-threshold endemic equilibria for compartmental models of disease transmission. <em>Mathematical Biosciences</em>, <em>180</em>(1), 29–48. <a href="https://doi.org/10.1016/S0025-5564(02)00108-6">https://doi.org/10.1016/S0025-5564(02)00108-6</a>
+</div>
+<div id="ref-pandit2020" class="csl-entry" role="listitem">
+Pandit, J. J. (2020). Managing the R0 of COVID-19: mathematics fights back. <em>Anaesthesia</em>, <em>75</em>(12), 1643–1647. <a href="https://doi.org/10.1111/anae.15151">https://doi.org/10.1111/anae.15151</a>
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark">
+<script>
+  function loadGiscus() {
+    // Function to get the theme based on body class
+    const getTheme = () => {
+      let baseTheme = document.getElementById('giscus-base-theme').value;
+      let altTheme = document.getElementById('giscus-alt-theme').value;
+      return document.body.classList.contains('quarto-dark') ? altTheme : baseTheme;
+    };
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.async = true;
+    script.dataset.repo = "thinhong/idm4b";
+    script.dataset.repoId = "R_kgDOL-8Pvg";
+    script.dataset.category = "General";
+    script.dataset.categoryId = "DIC_kwDOL-8Pvs4CoZe6";
+    script.dataset.mapping = "title";
+    script.dataset.reactionsEnabled = "1";
+    script.dataset.emitMetadata = "0";
+    script.dataset.inputPosition = "top";
+    script.dataset.theme = getTheme();
+    script.dataset.lang = "en";
+    script.crossOrigin = "anonymous";
+    // Append the script to the desired div instead of at the end of the body
+    document.getElementById("quarto-content").appendChild(script);
+  }
+  loadGiscus();
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../rnum/gen-int.html" class="pagination-link" aria-label="Generation interval">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Generation interval</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../rnum/rt.html" class="pagination-link" aria-label="Estimating $R_t$">
+        <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Estimating <span class="math inline">\(R_t\)</span></span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,194 @@
+```{r}
+#| include: false
+source("_common.R")
+```
+
+# Least squares estimation
+
+::: {.callout-note}
+
+## Preparation
+
+Download influenza incidence data here:
+
+{{< downloadthis ../data/flu_inc.csv dname="flu_inc" label="flu_inc.csv" type=light >}}
+
+:::
+
+## Methods
+
+Refer to @def-residual, the residual sum of squares (RSS) is the sum of the squares of residuals.
+
+$$RSS = \sum_{i = 1}^{n}[y_i - f(x_i)]^2$$
+
+-   $y_i$: the observed value.
+-   $f(x_i)$: the predicted value.
+-   $y_i - f(x_i)$: the residual.
+
+The least squares method finds the optimal parameters by **minimizing the RSS**.
+
+## Code {#sec-lse-code}
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyr)
+library(odin)
+library(ggplot2)
+library(RColorBrewer)
+```
+
+We will use data collected during a H1N1 influenza outbreak in an elementary school in Pennsylvania [@cauchemez2011]. Let load the data and have a look.
+
+```{r}
+#| fig-width: 4
+#| fig-height: 2.5
+#| out-width: "100%"
+df <- read.csv("data/flu_inc.csv")
+
+ggplot(df, aes(x = day, y = inc)) +
+  geom_point() +
+  labs(x = "Day", y = "Incidence") +
+  theme_idm()
+```
+
+We will fit a deterministic SEIR model and reuse the code from @lst-seir-det. Let plug some initial values for the parameters and run the model.
+
+```{r, results=FALSE, message=FALSE, echo=FALSE}
+odin_seir <- odin::odin({
+  # Derivatives
+  deriv(S) <- -beta * S * I
+  deriv(E) <- beta * S * I - sigma * E
+  deriv(I) <- sigma * E - gamma * I
+  deriv(R) <- gamma * I
+  deriv(CInc) <- sigma * E
+  
+  # Initial conditions
+  initial(S) <- S_init
+  initial(E) <- E_init
+  initial(I) <- I_init
+  initial(R) <- R_init
+  initial(CInc) <- CInc_init
+  
+  # Parameters and initial values
+  beta <- user(0.004)
+  sigma <- user(0.5)
+  gamma <- user(0.5)
+  S_init <- user(369)
+  E_init <- user(0)
+  I_init <- user(1)
+  R_init <- user(0)
+  CInc_init <- user(0)
+})
+
+seir_mod <- function(beta, sigma, gamma, S0, E0, I0, R0, times) {
+  # Set values for a new run
+  odin_run <- odin_seir$new(beta = beta, sigma = sigma, gamma = gamma, S_init = S0, E_init = E0, I_init = I0, R_init = R0)
+  
+  # Run the model
+  out <- data.frame(odin_run$run(times))
+
+  # Compute incidence from cumulative incidence
+  out$Inc <- c(I0, diff(out$CInc))
+  out$CInc <- NULL
+  out
+}
+```
+
+Looking at the original paper, the school has 370 students [@cauchemez2011]. So we set the initial values as below.
+
+```{r}
+S0 <- 369
+E0 <- 0
+I0 <- 1
+R0 <- 0
+```
+
+```{r}
+#| code-fold: true
+#| fig-width: 4
+#| fig-height: 2.5
+#| out-width: "100%"
+pred <- seir_mod(beta = 0.004, sigma = 0.5, gamma = 0.5, S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = df$day)
+
+df_plot <- pivot_longer(pred, cols = S:Inc, names_to = "comp", values_to = "n")
+
+# my_palette: centralized named compartment colors (see R/idm-theme.R)
+
+ggplot(df_plot, aes(x = t, y = n, color = comp)) +
+  geom_line(linewidth = 1.2) +
+  scale_color_manual(values = my_palette, breaks = c("S", "E", "Inc", "I", "R")) +
+  labs(color = NULL, y = NULL, x = "Day") +
+  theme_idm() +
+  theme(legend.position = "bottom")
+```
+
+Now just plot the incidence to compare with our data.
+
+```{r}
+#| code-fold: true
+#| fig-width: 4
+#| fig-height: 2.5
+#| out-width: "100%"
+df_plot <- pred[,c("t", "Inc")]
+ggplot(df_plot, aes(x = t, y = Inc)) +
+  geom_line(color = my_palette["Inc"], linewidth = 1.2) +
+  geom_point(data = df, aes(x = day, y = inc)) +
+  labs(x = "Day", y = "Incidence") +
+  theme_idm()
+```
+
+We need to calculate the residual sum of squares. The `rss()` function must be defined this way with 2 arguments `data` and `par` so that it could be passed to the `optim()` function.
+
+```{r}
+rss <- function(data, par) {
+  pred <- seir_mod(beta = par[1], sigma = par[2], gamma = par[3], S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = 0:(length(data) - 1))
+  sum((data - pred$Inc)^2)
+}
+```
+
+The `optim()` function needs at least 2 inputs:
+
+- `par`: a vector of initial values for the parameters to be optimized over.
+- `fn`: a function to be minimized.
+- `...`: other arguments will be passed to `fn`, here our function `rss()` needs an additional argument `data`, so we pass `data = df$inc`.
+
+```{r}
+seir_optim <- optim(par = c(0.004, 0.5, 0.5), fn = rss, data = df$inc)
+seir_optim
+```
+
+Let plug these values into the model and compare with our data.
+
+::: {#fig-lse-seir}
+
+```{r}
+#| code-fold: true
+#| fig-width: 4
+#| fig-height: 2.5
+#| out-width: "100%"
+pred <- seir_mod(beta = seir_optim$par[1], sigma = seir_optim$par[2], gamma = seir_optim$par[3], S0 = S0, E0 = E0, I0 = I0, R0 = R0, times = df$day)
+df_plot <- pred[,c("t", "Inc")]
+ggplot(df_plot, aes(x = t, y = Inc)) +
+  geom_line(color = my_palette["Inc"], linewidth = 1.2) +
+  geom_point(data = df, aes(x = day, y = inc)) +
+  labs(x = "Day", y = "Incidence") +
+  theme_idm()
+```
+
+Deterministic SEIR model fitted with least squares estimation.
+
+:::
+
+Since we are using a "closed population" SEIR model, $R_0 = \frac{\beta}{\gamma} S_0$.
+
+::: {#lst-lse-r0}
+
+```{r}
+rnum0 <- seir_optim$par[1] * S0 / seir_optim$par[3]
+rnum0
+```
+
+$R_0$ from deterministic SEIR model fitted with least squares estimation.
+
+:::
+
+This is quite close to 1.4 (95% CI: 1.2, 1.5) as reported by [@cauchemez2011], considering that they used more complicated methods.

@@ -37,21 +37,21 @@ ggplot() +
            label = "Declining",
            size = 5.5,
            fontface = 2,
-           family = "PT Sans Narrow") +
+           family = "Inter") +
   annotate("text",
            x = 17.5,
            y = 0.5,
            label = "Likely declining",
            size = 5.5,
            fontface = 2,
-           family = "PT Sans Narrow") +
+           family = "Inter") +
   annotate("text",
            x = 50,
            y = 0.5,
            label = "Uncertain trend or stable",
            size = 5.5,
            fontface = 2,
-           family = "PT Sans Narrow") +
+           family = "Inter") +
   annotate("text",
            x = 82.5,
            y = 0.5,
@@ -59,7 +59,7 @@ ggplot() +
            color = "white",
            size = 5.5,
            fontface = 2,
-           family = "PT Sans Narrow") +
+           family = "Inter") +
   annotate("text",
            x = 95,
            y = 0.5,
@@ -67,7 +67,7 @@ ggplot() +
            color = "white",
            size = 5.5,
            fontface = 2,
-           family = "PT Sans Narrow") +
+           family = "Inter") +
   scale_x_continuous(
     breaks = c(0, 10, 25, 75, 90, 100),
     expand = c(0, 0),
@@ -83,8 +83,8 @@ ggplot() +
     axis.line.y = element_blank(),
     axis.ticks.y = element_blank(),
     plot.margin = margin(5, 20, 5, 20),
-    axis.title.x = element_text(size = 17, family = "PT Sans Narrow", hjust = 0),
-    axis.text = element_text(size = 17, family = "PT Sans Narrow")
+    axis.title.x = element_text(size = 17, family = "Inter", hjust = 0),
+    axis.text = element_text(size = 17, family = "Inter")
   )
 
 gsave("img/rnum/rt-uscdc.svg", width = 9, height = 1.3)

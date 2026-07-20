@@ -1,0 +1,298 @@
+```{r}
+#| include: false
+source("_common.R")
+```
+
+# Stochastic models
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+library(ggplot2)
+library(dplyr)
+```
+
+## Concepts of stochasticity
+
+The dynamics of every population has both deterministic and stochastic forces [@lande2003]. These two processes act at the same time, so real-world data often look "noisy". We can split that noise into three basic forms of stochasticity [@bolker2008], that can be classified into 2 groups:
+
+1.  **Process noise**: the randomness within the process that generates the data. It has two forms of stochasticity [@bolker2008]:
+
+    -   **Demographic stochasticity (statistical noise)**: random events which are usually conceived as being independent among individuals [@lande2003]. For example, **each individual** might die or survive with a certain probability per unit time [@lande2003]. Because this stochasticity operates independently among individuals, it tends to average out in large populations and has a greater impact on small populations [@lande2003].
+
+    -   **Environmental stochasticity**: random temporal changes that affect **all individuals equally**, no matter the population size [@lande2003]. It **overtakes demographic stochasticity in large populations** [@ganyani2021]. Examples include external unpredictable events (temperature, rainfall, humidity) and individual variation (variability in contact patterns, superspreaders). These factors translate into fluctuations in the transmission parameter, often captured by overdispersion in Poisson models [@ganyani2021]. Noted that predictable changes such as seasonal changes in temperature which can be incorporate into our model in deterministic way are not counted as environmental stochasticity [@bolker2008].
+
+2.  **Sampling/observational/measurement error**: refers to errors caused by observation or sampling methods [@dennis2006], because real data collection is never perfect. It is usually modelled by adding normally distributed variability around a mean value [@bolker2008].
+
+A hidden Markov process (aka state-space model) [@endo2019] can illustrate these noises.
+
+![](../img/dict/hmp.svg)
+
+$$x_{t + 1} = \underbrace{f(x_t)}_{\text{deterministic}} + \underbrace{\varepsilon_{\text{process}}}_{\text{stochastic}}$$
+
+$$y_{t + 1} = x_{t + 1} + \underbrace{\varepsilon_{\text{observation}}}_{\text{stochastic}}$$
+
+Process noise $\varepsilon_{\text{process}}$ is propagated over time because the state feeds into itself:
+
+$$\begin{align}x_{t + 2} &= f(x_{t + 1}) + \varepsilon_{\text{process}} \\ 
+&= f(f(x_t) + \varepsilon_{\text{process}}) + \varepsilon_{\text{process}} \end{align}$$
+
+Observation noise $\varepsilon_{\text{observation}}$ only shows up once when we measure the system. It doesn't affect later steps:
+
+$$y_{t + 2} = x_{t + 2} + \varepsilon_{\text{observation}}$$
+
+## A general stochastic SIR model
+
+Most stochastic models for compartmental epidemic models are Markov processes, whereby the future state of the population at time $t + 1$ depends only on the current state at time $t$ [@ganyani2021]. Recall that a deterministic SIR model follows:
+
+$$\frac{dS}{dt} = -\frac{\beta SI}{N}$$
+
+$$\frac{dI}{dt} = \frac{\beta SI}{N} - \gamma I$$
+
+$$\frac{dR}{dt} = \gamma I$$
+
+### Demographic stochasticity
+
+Let $I_t$ and $R_t$ be Poisson processes that denote the number of individuals who have been infected and the number of individuals who have recovered at time $t$. The probability of having a new infection or new recovery occur at time $t + h$ is:
+
+$$\mathbb{P}(I_{t + h} = I_t + 1 | I_t) = \frac{\beta S_t I_t}{N} h + o(h)$$
+
+$$\mathbb{P}(R_{t + h} = R_t + 1 | R_t) = \gamma I_t h + o(h)$$
+
+#### Gillespie algorithm
+
+The algorithm proceeds in two steps [@ganyani2021]:
+
+1.  Simulate time at which the next event will occur: The time until the next event occurs follows an **exponential distribution** with a rate equal to the sum of the rates over all possible events
+2.  Given the simulated time, simulate which event occurs
+
+### Environmental stochasticity
+
+Environmental stochasticity is typically modeled by randomising the transmission rate with white noise [@ganyani2021]. One way to incorporate it in the SIR model is to multiply the transmission rate by a Lévy white noise process $\xi_t$ which fluctuates around one. For instance, let $\xi_t = \frac{d \Gamma(t)}{dt}$, with $\Gamma(t)$ having Gamma increments so that:
+
+$$\Gamma(t + h) - \Gamma(t) \sim Gamma(\frac{h}{\sigma^2}, \sigma^2)$$
+
+Then the infection event probability becomes:
+
+$$\mathbb{P}(I_{t + h} = I_t + 1 | I_t) = \frac{\beta \xi_t S_t I_t}{N} h + o(h)$$
+
+This lets random environment-driven fluctuations scale the transmission rate for everyone, on top of individual-level randomness.
+
+### Observational error
+
+A typical example of observation error in infectious disease modelling is under-reporting. Not everyone who falls ill goes to the GP or hospital, and many aren't correctly diagnosed. We often capture this by a binomial process, with a reporting probability $\varepsilon$ that covers both missed cases and diagnosis errors [@endo2019].
+
+$$g(y_t | x_t) = Bin(y_t; x_t, \varepsilon)$$
+
+In a hidden Markov process, the measurement model links our observed data ${Y_t}_n$ (collected at discrete times $\{t_1, \cdots, t_N\}$) to the underlying process. To separate environmental noise from possibly overdispersed observational stochasticity, we often choose a measurement model that can handle overdispersion [@ganyani2021]. For count data, a Poisson or negative binomial model is typically used [@ganyani2021].
+
+## Types of stochastic epidemic models
+
+Stochastic models can conveniently be classified according to their contact structure [@britton2015]:
+
+1.  Global: no structure, often referred to as homogeneous mixing. Individuals' probabilities of interaction do not depend on their location in the population.
+
+2.  Network: Any individual-based epidemic model can be thought of as a network or random graph: with individuals as nodes, and infection of one by another as a link.
+
+3.  Metapopulation: The population is partitioned into non-overlapping groups, e.g. households; individuals have one contact rate with individuals in different groups, and another (higher) rate for individuals in the same group. More general metapopulation models allow an individual to belong to several different types of group, each with its own contact rate, or allow more levels of mixing.
+
+4.  Spatial: vary from simple lattices with only nearest–neighbour interactions, for which some theoretical analysis is possible, to complex models with long-distance interactions, for which only qualitative and approximate results are known. A key feature of spatial models is that they display slower than exponential growth, even in their earliest stage; this makes it difficult to approximate them adequately by deterministic models, and even to define threshold parameters.
+
+## Monte Carlo simulation {#sec-mc-sim}
+
+Monte Carlo simulation is a method that uses repeated random sampling to obtain numerical results.
+
+We will use Monte Carlo simulation to create a circle and estimate $\pi$.
+
+### Create a circle
+
+To create a circle of radius $r = 1$ centered at $(0, 0)$, we first define a square with side length 2, extending from $[-1, 1]$ in both $x$ and $y$ directions. We generate random points uniformly within this square by drawing $x$ and $y$ values from the interval $[-1, 1]$.
+
+```{r}
+#| echo: false
+set.seed(7)
+
+n_points <- 10000
+xs <- runif(n_points, min = -1, max = 1)
+ys <- runif(n_points, min = -1, max = 1)
+```
+
+::::: grid
+::: g-col-5
+```{r}
+#| echo: false
+#| fig-width: 3
+#| fig-height: 3
+
+df_plot <- data.frame(xs, ys)
+ggplot(df_plot[1:1000, ], aes(x = xs, y = ys)) +
+  geom_point(color = "#5fc7a6") +
+  labs(x = NULL, y = NULL) +
+  scale_x_continuous(expand = c(0, 0), limits = c(-1, 1)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(-1, 1)) +
+  theme_idm()
+```
+:::
+
+::: g-col-7
+```{r}
+#| eval: false
+set.seed(7)
+
+n_points <- 1000
+xs <- runif(n_points, min = -1, max = 1)
+ys <- runif(n_points, min = -1, max = 1)
+```
+:::
+:::::
+
+The distance from each point to the center $(0, 0)$ is $\sqrt{x^2 + y^2}$. A point lies within the circle if $\sqrt{x^2 + y^2} \leq 1$.
+
+```{r}
+#| echo: false
+in_circle <- xs ^ 2 + ys ^ 2 <= 1
+df <- data.frame(n_points = 1:n_points, xs, ys, in_circle)
+```
+
+::::: grid
+::: g-col-5
+```{r}
+#| echo: false
+#| fig-width: 3
+#| fig-height: 3
+
+ggplot(df[1:1000, ], aes(x = xs, y = ys, color = in_circle)) +
+  geom_point() +
+  labs(x = NULL, y = NULL) +
+  scale_x_continuous(expand = c(0, 0), limits = c(-1, 1)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(-1, 1)) +
+  scale_color_manual(values = c("#16A06B", "#E0574E")) +
+  theme_idm() +
+  theme(legend.position = "none")
+```
+:::
+
+::: g-col-7
+```{r}
+#| eval: false
+in_circle <- xs ^ 2 + ys ^ 2 <= 1
+df <- data.frame(n_points = 1:n_points, xs, ys, in_circle)
+```
+:::
+:::::
+
+### Estimate $\pi$
+
+The area of a circle is $\pi r^2$.
+
+The area of the bounding square is $(2r)^2 = 4r^2$.
+
+Dividing the area of the circle by the area of the square, we get a ratio:
+
+$$\frac{\text{area of circle}}{\text{area of square}} = \frac{\pi r^2}{4r^2} = \frac{\pi}{4}$$
+
+Therefore,
+
+$$\pi = 4 \times \frac{\text{area of circle}}{\text{area of square}}$$
+
+If we approximate the area of circle by the number of simulated points within the circle, and the area of square by the total number of simulated points, we have:
+
+$$\pi \approx 4 \times \frac{\text{simulated points within circle}}{\text{total number of simulated points}}$$
+
+#### One simulation
+
+Here we we run a single simulation to estimate $\pi$. Let explore how the approximation of $\pi$ changes as more points are sampled.
+
+```{r}
+#| echo: false
+# Embed only raw coordinates + the inside flag; the figure derives the running
+# estimate and the point counts in the browser, keeping the page lightweight.
+ojs_define(data = df[c("xs", "ys", "in_circle")])
+```
+
+```{ojs}
+//| echo: false
+import { createSlider, injectStyle } from "../assets/js/_slider.js"
+import { montecarloPi, montecarloSims } from "../assets/js/_montecarlo-pi.js"
+
+montecarlo_fig = {
+  const d3 = await require("d3@7");
+  return montecarloPi(d3, { createSlider, injectStyle }, transpose(data));
+}
+```
+
+As more points are sampled, the approximation of $\pi$ improves. In the left figure, you can see that increasing the number of points better estimates the areas of the circle and square, leading to a closer approximation of the true value of $\pi$.
+
+#### Multiple simulations {#sec-mc-multi-sims}
+
+Instead of a single simulation with many points, we run $N$ smaller simulations. In each simulation, we sample a small number of points to estimate $\pi_i$. The final estimation is then averaged across simulations:
+
+$$\pi = \frac{1}{N}\sum_{i = 1}^{N} \pi_i$$
+
+```{r}
+#| echo: false
+# library(future.apply)
+# plan(multisession)
+# 
+# calc_pi <- function(n_sample, n_sim) {
+#   set.seed(7)
+#   xs_iter <- matrix(sample(xs, n_sample * n_sim, replace = T), ncol = n_sim)
+#   ys_iter <- matrix(sample(ys, n_sample * n_sim, replace = T), ncol = n_sim)
+#   in_circle <- xs_iter ^ 2 + ys_iter ^ 2 <= 1
+#   mean(4 * colSums(in_circle) / n_sample)
+# }
+# 
+# set.seed(7)
+# xs <- runif(1000000, min = -1, max = 1)
+# ys <- runif(1000000, min = -1, max = 1)
+# 
+# n_samples <- seq(10, 500, 10)
+# n_sims <- 100:3000
+# 
+# df <- expand.grid(n_samples, n_sims)
+# colnames(df) <- c("n_samples", "n_sims")
+# 
+# df$my_pi <- future_mapply(calc_pi, df$n_samples, df$n_sims, future.seed = T)
+# saveRDS(df, "data/simpi.rds")
+
+df <- readRDS("data/simpi.rds")
+```
+
+```{r}
+#| echo: false
+# simpi.rds stores every iteration 100..3000 for each of the 50 sample
+# sizes = 145k rows, the single biggest thing bloating sto.html. The plot
+# below is one convergence line across a 600px axis, so every 5th iteration
+# is visually identical. Thinning here shrinks the embedded data about 5x.
+df2 <- df[df$n_sims %% 5 == 0, ]
+ojs_define(data2 = df2)
+```
+
+```{ojs}
+//| echo: false
+montecarlo_sims = {
+  const d3 = await require("d3@7");
+  return montecarloSims(d3, { createSlider, injectStyle }, transpose(data2));
+}
+```
+
+As shown in the one-simulation section, increasing the number of points improves accuracy. However, even with fewer points per simulation (e.g., 50), running many simulations and averaging the results enhances the approximation of $\pi$. This technique leverages the law of large numbers, where the average of repeated estimates converges to the true value.
+
+## Have I run enough simulations?
+
+The optimal number of simulations is reached when results stabilize, showing approximate convergence. This means additional simulations don't significantly change the outcome. See @sec-mc-multi-sims for a demonstration of this convergence.
+
+Steps to calculate the needed number of simulations ([source](https://stats.stackexchange.com/a/29626)):
+
+1.  Run the simulation with a default number of runs $R_0$ (usually $R_0 = 1000$). Now you should have a vector with the results $x_0$ where $\text{length}(x_0) = R_0$.
+
+2.  Calculate the mean value $\overline{x_0}$ and standard deviation $\sigma_0$.
+
+3.  Specify the allowed level of error $\epsilon$ and the uncertainty $\alpha$ you are willing to accept. Normally you choose $\epsilon = \alpha = 0.05\%$.
+
+4.  Use this equation to get the required number of simulations:
+
+$$R \geq \left( \frac{Z_{1 - \frac{\alpha}{2}} \times \sigma_0}{\epsilon \times x_0} \right)^2$$
+
+5.  Use the Student t-distribution rather than the normal distribution for small $R_0$.
