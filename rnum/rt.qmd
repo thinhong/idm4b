@@ -559,7 +559,7 @@ coriUserData = {
     // Formula readout
     const rtColor = isNaN(Rt) ? "#647587" : "#0E9AAB";
     fMain.innerHTML =
-      `<span>R<sub>t</sub></span>` +
+      `<span style="color:${rtColor};font-weight:700;">R<sub>t</sub></span>` +
       `<span class="op">=</span>` +
       `<span class="frac">` +
         `<span class="num hl-num" data-hl="num">I<sub>t</sub></span>` +
