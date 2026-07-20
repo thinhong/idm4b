@@ -274,7 +274,7 @@ export function coinEntropy(d3, ui) {
   barLbl.textContent = "Entropy = sum of weighted surprises";
   const bar = document.createElement("div");
   bar.style.cssText = "position:relative;height:22px;border-radius:5px;background:#f1f5f9;overflow:hidden;display:flex;";
-  const barH = document.createElement("div"); barH.style.cssText = "height:100%;background:#E0960A;transition:width 0.05s;";
+  const barH = document.createElement("div"); barH.style.cssText = "height:100%;background:#E5A800;transition:width 0.05s;";
   const barT = document.createElement("div"); barT.style.cssText = "height:100%;background:#647587;transition:width 0.05s;";
   bar.appendChild(barH); bar.appendChild(barT);
   card.appendChild(barLbl); card.appendChild(bar);

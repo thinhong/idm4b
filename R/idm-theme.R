@@ -12,7 +12,7 @@ idm_col <- list(
   ink     = "#14263b", ink2 = "#42566b", ink3 = "#647587",
   surface = "#f1f6fd", border = "#e3edf9", border_strong = "#cfe0f2",
   s = "#2A5CD6", i = "#E0574E", r = "#16A06B",
-  e = "#E0960A", v = "#7E5AD6", aux = "#0E9AAB"
+  e = "#E5A800", v = "#7E5AD6", aux = "#0E9AAB"
 )
 
 # ---- Canonical compartment palette (named, matched by name) ----

@@ -29,9 +29,15 @@ vivid "line" value (strokes/fills) and an AA-safe "ink" value (text on white):
 | Susceptible / blue | `#2A5CD6` | `#1B4DC7` |
 | Infectious / red | `#E0574E` | `#C1343F` |
 | Recovered / green | `#16A06B` | `#0E7A54` |
-| Exposed / amber | `#E0960A` | `#9A5B00` |
+| Exposed / amber | `#E5A800` | `#9A5B00` |
 | Vaccinated / violet | `#7E5AD6` | `#6742BE` |
 | Auxiliary / teal | `#0E9AAB` | `#0A6E7D` |
+
+Amber (Exposed) was shifted from `#E0960A` to a more golden `#E5A800` so it
+reads as a different color from the coral Infectious, not just a different
+shade (red vs orange is a common confusion). Where amber is a large fill next
+to coral, as in the R_t widget's denominator bars, use a bolder gold
+`#EAB308` (a fill does not need the line contrast a thin plot line needs).
 
 The same role uses the same color everywhere: the static ggplot line, the
 interactive widget, the formula label, and the value readout. In the R_t

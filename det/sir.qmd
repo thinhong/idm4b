@@ -61,7 +61,7 @@ viewof sir_sim = (() => {
   SL.s0    = createSlider("Initial Susceptible", 50, 400, 10, 200, "#2A5CD6", "blue");
   SL.i0    = createSlider("Initial Infected",     1,  50,  1,   5, "#E0574E", "red");
   SL.r0    = createSlider("Initial Recovered",    0, 100,  5,   0, "#16A06B", "green");
-  SL.beta  = createSlider("β", 0.05, 1.00, 0.05, 0.40, "#E0960A", "amber");
+  SL.beta  = createSlider("β", 0.05, 1.00, 0.05, 0.40, "#E5A800", "amber");
   SL.gamma = createSlider("γ", 0.05, 0.50, 0.05, 0.10, "#7E5AD6", "purple");
   styleMathLabel(SL.beta, SL.gamma);
 
@@ -581,7 +581,7 @@ viewof df_compare = (() => {
   // ══════════════════════════════════════════════════════
   const panels = [
     {
-      key: 'DD', label: 'DENSITY-DEPENDENT', color: '#E0960A',
+      key: 'DD', label: 'DENSITY-DEPENDENT', color: '#E5A800',
       contactExpr: '<em>β</em> · <em>N</em>',
       // Step-3 algebra with strikethrough on the cancelling N's
       infMathHTML: `<em>β</em> · <s style="color:#E0574E;text-decoration-thickness:2px"><em>N</em></s> · ${frac('I', '<s style="color:#E0574E;text-decoration-thickness:2px">N</s>')} &nbsp;=&nbsp; <strong><em>β</em> · <em>I</em></strong>`,
@@ -709,7 +709,7 @@ viewof df_compare = (() => {
   // ══════════════════════════════════════════════════════
   const note = document.createElement("div");
   note.style.cssText = `font-size:12px;color:#647587;margin-top:14px;text-align:center;line-height:1.7;max-width:760px;`;
-  note.innerHTML = `Both rooms hold the <em>same fixed area</em>. The blue dot is "you" — one focal susceptible — and ~30% of the others are red (infected). Every ${(PULSE_INTERVAL/1000).toFixed(1)}s "you" make contact with people: <strong style="color:#E0960A">DD</strong> reaches everyone in the dashed circle (denser room ⇒ more contacts), <strong style="color:#0E9AAB">FD</strong> reaches your ${FD_PARTNERS} closest neighbours (dashed teal lines) regardless of crowd size. Drag the slider, or <strong>grab the blue dot</strong> and walk through the crowd. Then read the math underneath each panel: it's the same recipe in both — (contact rate) × (chance contact is with <em>I</em>) = infection rate. The only difference is whether the contact rate has an <em>N</em> in it that cancels with the <em>N</em> in <em>I/N</em>.`;
+  note.innerHTML = `Both rooms hold the <em>same fixed area</em>. The blue dot is "you" — one focal susceptible — and ~30% of the others are red (infected). Every ${(PULSE_INTERVAL/1000).toFixed(1)}s "you" make contact with people: <strong style="color:#E5A800">DD</strong> reaches everyone in the dashed circle (denser room ⇒ more contacts), <strong style="color:#0E9AAB">FD</strong> reaches your ${FD_PARTNERS} closest neighbours (dashed teal lines) regardless of crowd size. Drag the slider, or <strong>grab the blue dot</strong> and walk through the crowd. Then read the math underneath each panel: it's the same recipe in both — (contact rate) × (chance contact is with <em>I</em>) = infection rate. The only difference is whether the contact rate has an <em>N</em> in it that cancels with the <em>N</em> in <em>I/N</em>.`;
   wrapper.appendChild(note);
 
   // ══════════════════════════════════════════════════════

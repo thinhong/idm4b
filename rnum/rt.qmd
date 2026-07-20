@@ -212,11 +212,16 @@ coriUserData = {
     .cori-formula .frac { display:inline-flex; flex-direction:column;
       text-align:center; line-height:1.15; }
     .cori-formula .hl-num { color:#C1343F; font-weight:700; }
-    .cori-formula .hl-den { color:#b45309; font-weight:700; }
+    .cori-formula .hl-den { color:#B45309; font-weight:700; }
     .cori-formula [data-hl] { cursor:pointer; user-select:none;
       -webkit-tap-highlight-color:transparent; touch-action:manipulation;
-      background-color:rgba(148,163,184,0.12);
+      background-color:rgba(148,163,184,0.10);
       transition:background-color 0.15s, box-shadow 0.15s; }
+    /* Each part sits on a soft tint of its own colour so they are easy to
+       tell apart even where the text colours are close. */
+    .cori-formula [data-hl="num"] { background-color:rgba(224,87,78,0.16); }
+    .cori-formula [data-hl="den"] { background-color:rgba(234,179,8,0.24); }
+    .cori-formula [data-hl="rt"]  { background-color:rgba(14,154,171,0.15); }
     .cori-formula .frac .num { padding:4px 10px 5px; border-bottom:1.5px solid #647587; border-radius:6px 6px 0 0; }
     .cori-formula .frac .den { padding:5px 10px 4px; border-radius:0 0 6px 6px; }
     .cori-formula .rtv { font-size:24px; font-weight:800; padding:4px 10px; border-radius:6px; }
@@ -309,7 +314,7 @@ coriUserData = {
         .node();
       weightBars[i] = gIncContrib.append("rect")
         .attr("x", barX[i]).attr("width", xBW)
-        .attr("fill", "#E0960A").attr("opacity", 0)
+        .attr("fill", "#EAB308").attr("opacity", 0)
         .node();
     }
     tBar = gIncToday.append("rect")
@@ -883,7 +888,7 @@ wtSteps = {
       color:#42566b; font-size:14px; margin-left:auto; }
     .wtsteps-wrap .panel.step1 { --c:#2A5CD6; --bg:#eff6ff; }
     .wtsteps-wrap .panel.step2 { --c:#16A06B; --bg:#ecfdf5; }
-    .wtsteps-wrap .panel.step3 { --c:#E0960A; --bg:#fffbeb; }
+    .wtsteps-wrap .panel.step3 { --c:#E5A800; --bg:#fffbeb; }
     .wtsteps-wrap svg { display:block; width:100%; height:auto; }
     .wtsteps-wrap .node-grp { cursor:pointer; }
     .wtsteps-wrap .node-grp circle { transition: stroke-width 0.12s; }
@@ -1259,7 +1264,7 @@ wtSteps = {
       .attr("x", boxLeft).attr("y", yC - boxH / 2)
       .attr("width", boxRight - boxLeft).attr("height", boxH)
       .attr("rx", 12).attr("ry", 12)
-      .attr("fill", "#fffbeb").attr("stroke", "#E0960A").attr("stroke-width", 1.5)
+      .attr("fill", "#fffbeb").attr("stroke", "#E5A800").attr("stroke-width", 1.5)
       .attr("stroke-dasharray", "5,4").attr("opacity", 0.85).node());
   }
 
@@ -1502,7 +1507,7 @@ wtSteps = {
     p3Net.nodes.forEach((n, idx) => {
       const c = cases[idx];
       n.circle.setAttribute("fill", "#fffbeb");
-      n.circle.setAttribute("stroke", "#E0960A");
+      n.circle.setAttribute("stroke", "#E5A800");
       n.circle.setAttribute("stroke-width", 2);
       n.text.style.fill = "#9A5B00";
       n.grp.setAttribute("opacity", 1);
@@ -1514,7 +1519,7 @@ wtSteps = {
     p3Net.arcs.forEach((a, k) => {
       const p = pairs[k];
       const pij = computePij(p.i, p.j);
-      a.path.setAttribute("stroke", "#E0960A");
+      a.path.setAttribute("stroke", "#E5A800");
       a.path.setAttribute("stroke-width", Math.max(0.5, pij * 10));
       a.path.setAttribute("opacity", 0.22);
       a.lgrp.setAttribute("opacity", 0);

@@ -27,7 +27,7 @@ export const TOKENS = {
   s:   ["#2A5CD6", "#1B4DC7"], // Susceptible  (blue)
   i:   ["#E0574E", "#C1343F"], // Infectious   (red)
   r:   ["#16A06B", "#0E7A54"], // Recovered    (green)
-  e:   ["#E0960A", "#9A5B00"], // Exposed      (amber)
+  e:   ["#E5A800", "#9A5B00"], // Exposed      (amber)
   v:   ["#7E5AD6", "#6742BE"], // Vaccinated   (violet)
   aux: ["#0E9AAB", "#0A6E7D"], // Auxiliary    (teal)
 };
